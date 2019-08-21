@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "OptiProErpSFES": {
+    "OptiProErpAdminPortal": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/OptiProErpSFES",
+            "outputPath": "dist/OptiProErpAdminPortal",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -71,18 +71,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "OptiProErpSFES:build"
+            "browserTarget": "OptiProErpAdminPortal:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "OptiProErpSFES:build:production"
+              "browserTarget": "OptiProErpAdminPortal:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "OptiProErpSFES:build"
+            "browserTarget": "OptiProErpAdminPortal:build"
           }
         },
         "test": {
@@ -120,15 +120,15 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "OptiProErpSFES:serve"
+            "devServerTarget": "OptiProErpAdminPortal:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "OptiProErpSFES:serve:production"
+              "devServerTarget": "OptiProErpAdminPortal:serve:production"
             }
           }
         }
       }
     }},
-  "defaultProject": "OptiProErpSFES"
+  "defaultProject": "OptiProErpAdminPortal"
 }
