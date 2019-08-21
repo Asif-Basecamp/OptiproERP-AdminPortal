@@ -1,0 +1,195 @@
+@import './themes/default';
+@import './variables';
+
+html, body{
+    min-height: 100vh;
+}
+.icon {
+  width: 16px;
+  height: auto;
+  fill: #fff;
+}
+//Layout
+.compact-layout {
+  & app-header .navbar-inner, & .layout-mode{
+    margin-left: auto;
+    margin-right: auto;
+    @media screen and (min-width: 576px){
+      max-width: 540px !important;
+    }
+    @media screen and (min-width: 768px){
+      max-width: 720px !important;
+    }
+    @media screen and (min-width: 992px){
+      max-width: 960px !important;
+    }
+    @media screen and (min-width: 1200px){
+      max-width: 1140px !important;
+    }
+  }
+}
+body.no-header .content{
+  max-height: 100vh !important;
+}
+//Gradiant
+.bg-primary-gradient {
+    background: $primay-gradiant !important;
+}
+.bg-purple-gradient {
+    background: $purple-gradient!important;
+}
+
+.bg-peach-gradient {
+    background: $peach-gradient !important;
+}
+
+.bg-aqua-gradient {
+    background: $aqua-gradient!important;
+}
+
+.bg-blue-gradient {
+    background: $blue-gradiant !important;
+}
+//custom-ui
+button.btn.btn-icon {
+  padding: 4px 5px;
+  &.btn-outline-secondary{
+    &:hover, &:active{
+      & svg{
+        fill:#fff;
+      }
+    }
+    & svg{
+      fill:$secondary;
+    }
+  }
+}
+
+//bootstrap-custom
+.card{
+  box-shadow: 0 1px 10px 0 rgba(69, 90, 100, 0.08);
+  border:none;
+  border-radius: 5px;
+}
+
+//Form control
+.custom-checkbox {
+    position: relative; // take it out of document flow
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    user-select: none;
+
+    & input[type="checkbox"]{
+        opacity:0;
+        width: 0;
+        height: 0;
+        overflow: hidden;        
+    }
+    & input[type="checkbox"] + span {
+      position: relative;
+      width:16px;
+      height:16px;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    & input[type=checkbox] + span + span {
+        margin-left: 8px;
+        line-height: 1px;
+    }
+    & input[type="checkbox"] + span:before {
+      content: '';
+      display: inline-block;
+      vertical-align: text-top;
+      width: 16px;
+      height: 16px;
+      border-radius: 2px;
+      background: white;
+      // background-image: url(~src/assets/images/svg/svg-sprite.svg#checkbox);
+      // background-image: url("~/images/svg/svg-sprite.svg#checkbox");
+    }
+    & input[type="checkbox"]:hover + span:before {
+      background: theme-color("primary");
+    }
+    & input[type="checkbox"]:focus + span {
+      box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.12);
+    }
+    & input[type="checkbox"]:checked + span:before {
+      background: theme-color("primary");
+    }
+    & input[type="checkbox"]:disabled + span {
+      color: #b8b8b8;
+      cursor: auto;
+    }
+    & input[type="checkbox"]:disabled + span:before {
+      box-shadow: none;
+      background: #ddd;
+    }
+    & input[type="checkbox"]:checked + span:after {
+      content: '';
+      position: absolute;
+      left: 3px;
+      top: 7px;
+      background: white;
+      width: 2px;
+      height: 2px;
+      box-shadow: 
+        2px 0 0 white,
+        4px 0 0 white,
+        4px -2px 0 white,
+        4px -4px 0 white,
+        4px -6px 0 white,
+        4px -8px 0 white;
+      transform: rotate(45deg);
+    }
+  }
+
+// Kendo Custom
+body .k-input, body .k-textbox > input{
+  font-size: 12px !important;
+}
+body .k-widget, body .k-reset{
+  font-size: 12px;
+}
+body .k-popup.k-menu-popup {
+  padding: 0;
+  margin: 0;
+  font-size:12px;
+  min-width: 135px;
+}
+// body .k-tabstrip > .k-content{
+//   border:none;
+// }
+// body .k-tabstrip-top > .k-tabstrip-items .k-item{
+//   border-top: none;
+// }
+body .k-tabstrip-top > .k-tabstrip-items .k-item:not(:first-of-type){
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+}
+body .k-tabstrip-top > .k-tabstrip-items .k-item:first-of-type {
+  // border-left: none;  
+  border-top-right-radius: 0;
+}
+body .k-tabstrip-items {
+  background: #00e4d0;
+  background: $primay-gradiant !important;  
+  border-radius: 5px 5px 0 0;
+}
+body .k-tabstrip-items .k-item{
+  // color:#212529;
+  color:#fff;
+}
+body .k-tabstrip-items .k-item:not(.k-state-active):hover{
+  border-color: transparent;
+  color: #fff;
+  background-color: rgba(255,255,255,0.2);
+}
+body .k-tabstrip > .k-content {
+  padding: 1rem;
+}
+.k-dropdown .k-dropdown-wrap{
+  border-color: #fff;
+  background-color: #fff;
+  color:#495057 !important
+}
