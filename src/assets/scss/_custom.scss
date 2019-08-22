@@ -31,9 +31,45 @@ html, body{
 body.no-header .content{
   max-height: 100vh !important;
 }
+//sidebar
+app-sidebar.toggle  {
+  @media screen and (max-width:991px){ 
+    & + .content-area {
+      & > app-header{
+        & .navbar-toggle-btn{
+          & .menu-icon{
+            display: none;
+          }
+          & .menu-icon-mobile{
+            display: flex;
+            width: 14px;
+          }
+        }
+      }
+      & > .content{    
+        overflow: hidden;
+        & > *:not(router-outlet) {
+          position: relative;
+          &:before{
+            content: "";
+            background-color: rgba(0,0,0,.06);
+            user-select: none;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top:0;
+            left:0;
+            z-index: 1;
+          }
+        }
+      }
+    }
+  }
+}
+
 //Gradiant
 .bg-primary-gradient {
-    background: $primay-gradiant !important;
+    background: $primary-gradiant !important;
 }
 .bg-purple-gradient {
     background: $purple-gradient!important;
@@ -156,37 +192,6 @@ body .k-popup.k-menu-popup {
   margin: 0;
   font-size:12px;
   min-width: 135px;
-}
-// body .k-tabstrip > .k-content{
-//   border:none;
-// }
-// body .k-tabstrip-top > .k-tabstrip-items .k-item{
-//   border-top: none;
-// }
-body .k-tabstrip-top > .k-tabstrip-items .k-item:not(:first-of-type){
-  border-top-right-radius: 0;
-  border-top-left-radius: 0;
-}
-body .k-tabstrip-top > .k-tabstrip-items .k-item:first-of-type {
-  // border-left: none;  
-  border-top-right-radius: 0;
-}
-body .k-tabstrip-items {
-  background: #00e4d0;
-  background: $primay-gradiant !important;  
-  border-radius: 5px 5px 0 0;
-}
-body .k-tabstrip-items .k-item{
-  // color:#212529;
-  color:#fff;
-}
-body .k-tabstrip-items .k-item:not(.k-state-active):hover{
-  border-color: transparent;
-  color: #fff;
-  background-color: rgba(255,255,255,0.2);
-}
-body .k-tabstrip > .k-content {
-  padding: 1rem;
 }
 .k-dropdown .k-dropdown-wrap{
   border-color: #fff;

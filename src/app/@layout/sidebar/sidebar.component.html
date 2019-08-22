@@ -1,1 +1,17 @@
-<a class="navbar-brand" routerLink="/"><img src="./../../../assets/images/logo/OptiProERP.png" title="OptiPro-ERP" /></a>
+<div class="sidebar-inner" id="sidebar-inner" fxLayout="column" fxFlex>
+    <a class="navbar-brand ml-auto mr-auto my-2" routerLink="/"><img src="./../../../assets/images/logo/OptiProERP.png" title="OptiPro-ERP-Admin Portal" /></a>
+    <nav class="main-nav ">
+        <ul>
+            <ng-container *ngFor="let item of navList">
+                <li *ngIf="item.permission" routerLinkActive="active">
+                    <a *ngIf="item.itemNav" [attr.title]="item.itemName" [routerLink]="item.itemNav" routerLinkActive="active" class="sidebar-link" (click)="sidebarCloseMobile()">
+                        <svg [attr.viewBox]="item.itemIconSize" class="sidebar-link-icon">
+                            <use [attr.xlink:href]="item.itemIcon"></use>
+                        </svg>
+                        <span>{{item.itemName}}</span>
+                    </a>
+                </li>
+            </ng-container>
+        </ul>
+    </nav>
+</div>
