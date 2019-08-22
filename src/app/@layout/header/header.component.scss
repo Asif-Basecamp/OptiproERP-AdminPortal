@@ -17,7 +17,7 @@
     .nav-link {
         display: flex;
         align-items: stretch;
-        padding: 0;
+        padding: 5px 0;
         ::ng-deep{
           .user-name{
             display: flex;
@@ -93,6 +93,28 @@
     & .icon-caret{
       transform: rotateX(180deg);      
     }
+  }
+}
+.navbar-toggle-btn{
+  background: transparent;
+  border: none;
+  color: #fff;
+  height: 25px;
+  ::ng-deep{
+    & > svg{
+      fill:#fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      &.menu-icon-mobile{
+        display: none;
+      }
+    }   
+  }  
+  &:hover, &:active, &:focus{
+    background-color: rgba(0, 0, 0, 0.06);
+    border-radius: 3px;
+    outline: none;
   }
 }
 @media (min-width: 992px) {

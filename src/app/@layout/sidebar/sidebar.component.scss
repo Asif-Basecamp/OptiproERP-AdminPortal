@@ -1,4 +1,79 @@
+@import "./../../../assets/scss/themes/default";
+
 :host {
-  background: #fff;
-  padding: 30px
+  background: #fff;  
+  ::ng-deep{
+    .main-nav{    
+      & > ul{
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        & > li{
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+          & > a{
+            padding:10px 20px;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            color:$primary-text-color;
+            width: 100%;
+            & > svg.sidebar-link-icon{
+              width: 25px;
+              height:auto;
+              margin-right: 10px;
+            }
+            &:hover, &:active, &:focus{
+              text-decoration: none;
+              background-color: lighten($color: $siderbar-link-active-bg, $amount: 2);
+            }
+          }
+          &.active{
+            & > a{
+              background-color: $siderbar-link-active-bg;
+            }
+          }
+        }
+      }
+    }
+  } 
+  &.toggle{
+    flex: 1 1 75px !important;
+    max-width: 75px !important;
+    min-width: 75px !important;
+    ::ng-deep{
+      & .main-nav{
+        & > ul > li > a {
+          padding: 10px 20px;
+          & > span{
+            display: none;
+          }
+        }
+      }
+    }
+  } 
+  @media screen and (max-width:1199px){
+    flex: 1 1 200px !important;
+    max-width: 200px !important;
+    min-width: 200px !important;
+  }
+  @media screen and (max-width:991px){
+    display: none !important;
+    &.toggle{
+      display: flex !important;
+      flex: 1 1 240px !important;
+      max-width: 240px !important;
+      min-width: 240px !important;
+      ::ng-deep{
+        & .main-nav{
+          & > ul > li > a {
+            & > span{
+              display: flex;
+            }
+          }
+        }
+      }
+    }
+  }
 }
