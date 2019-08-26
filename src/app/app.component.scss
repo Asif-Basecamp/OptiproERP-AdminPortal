@@ -16,7 +16,7 @@
 }
 .content{
     background-color: $content-bg;
-    max-height: calc(100vh - 40px) !important;
+    max-height: 100vh !important;
     overflow: auto;
     display: flex;
     flex: 1 1 100%;

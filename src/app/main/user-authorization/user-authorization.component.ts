@@ -3,11 +3,12 @@ import { products } from 'src/app/dummyData/data';
 import { GridComponent } from '@progress/kendo-angular-grid';
 
 @Component({
-  selector: 'app-user-group',
-  templateUrl: './user-group.component.html',
-  styleUrls: ['./user-group.component.scss']
+  selector: 'app-user-authorization',
+  templateUrl: './user-authorization.component.html',
+  styleUrls: ['./user-authorization.component.scss']
 })
-export class UserGroupComponent implements OnInit {
+export class UserAuthorizationComponent implements OnInit {
+
   // public paginationButtonCount = 5;
   // public paginationInfo = true;
   // public paginationType: 'input';

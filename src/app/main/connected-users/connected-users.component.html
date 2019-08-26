@@ -1,0 +1,97 @@
+<div class="layout-mode" fxFlex fxLayout="column">
+    <div class="page-header">
+        <h4>Connected Users</h4>
+    </div>
+    <div class="card" fxFlex>
+        <div class="card-body" fxFlex fxLayout="column">
+            <form>
+                <div class="form-group row mb-0">
+                    <div class="col-sm-12 col-md-8 col-lg-6 col-xl-5">
+                        <div class="row align-items-center">
+                            <label for="staticEmail" class="col-sm-2 col-md-2 col-lg-3 col-xl-3 col-form-label py-0">Product<span class="text-danger">*</span></label>
+                            <div class="col-sm-10 col-md-10 col-lg-9 col-xl-9">
+                                <div class="d-flex align-items-center">
+                                    <kendo-dropdownlist class="w-100" id="mappes_user" name="mappes_user" class="form-control-sm form-control"></kendo-dropdownlist>
+                                    <button class="btn btn-success btn-sm ml-2" type="button">Display</button>
+                                </div>                        
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Kendo Grid Start -->
+            <div fxLayout="column" fxFlex="100%" class="kendo-grid-wrapper mt-3">
+
+                <kendo-grid [kendoGridBinding]="gridData" [resizable]="true" [sortable]="true" class="full-height-grid kendo-responsive-grid" [filterable]=isColumnFilter
+                    [groupable]=isColumnGroup [columnMenu]="false">
+                    <!-- [pageSize]="10" 
+                    [pageable]="{
+                        buttonCount: paginationButtonCount,
+                        info: paginationInfo,
+                        type: paginationType,
+                        pageSizes: paginationPageSizes,
+                        previousNext: paginationInfoPreviousNext
+                    }"> -->
+                    <!-- grid template start -->
+                    <ng-template kendoGridToolbarTemplate >
+                        <div class="d-flex align-items-center">
+                            <!-- show hide column start show hide -->
+                            <!-- <kendo-grid-column-chooser class="float-left opti_hide-in-mobile"></kendo-grid-column-chooser> -->
+
+                            <!-- checkbox -->
+                            <label class="custom-checkbox mb-0 mr-2">
+                                <input type="checkbox" [(ngModel)]="isColumnFilter">
+                                <span class="checkbox"></span>
+                                <span>Enable filter</span>
+                            </label>
+                            <label class="custom-checkbox mb-0">
+                                <input type="checkbox" [(ngModel)]="isColumnGroup">
+                                <span class="checkbox"></span>
+                                <span>Enable grouping</span>
+                            </label>
+                            <!-- export -->
+                            <button type="button" kendoGridExcelCommand title="Export to excel file" class="ml-auto btn btn-link btn-sm btn-icon p-0">
+                                <svg viewBox="0 0 512 512" class="icon">
+                                    <use xlink:href="#download"></use>
+                                </svg>
+                            </button>
+                        </div>
+                    </ng-template>
+
+                    <!-- Mobile view column -->
+                    <kendo-grid-column media="(max-width: 767px)" title="Items">
+                        <ng-template kendoGridCellTemplate let-dataItem>
+                            <div class="d-flex">
+                                <dl class="mb-0 w-50 pr-1">
+                                    <dt>User Name</dt>
+                                    <dd>{{ dataItem.ProductName }}</dd>
+    
+                                    <dt>Last Transaction Date Time</dt>
+                                    <dd class="mb-0">{{ dataItem.Category.CategoryName }}</dd>
+                                </dl>                                
+                                <dl class="mb-0 w-50">
+                                    <dt>GUID</dt>
+                                    <dd>{{ dataItem.Category.Description }}</dd>
+                                    <dt>Logout</dt>
+                                    <dd class="mb-0">{{ dataItem.ProductName }}</dd>
+                                </dl>
+                            </div>
+                        </ng-template>
+                    </kendo-grid-column>
+
+                    <!-- columns for mid-size devices -->
+                    <kendo-grid-column media="(min-width: 768px)" field="ProductName" title="User Name"></kendo-grid-column>
+                    <kendo-grid-column media="(min-width: 768px)" field="Category.Description" title="GUID"></kendo-grid-column>
+                    <kendo-grid-column media="(min-width: 768px)" field="Category.CategoryName" title="Last Transaction Date Time"></kendo-grid-column>
+                    <kendo-grid-column media="(min-width: 768px)" field="Category.Description" title="Logout"></kendo-grid-column>
+
+                    <!-- xlsx template start -->
+                    <kendo-grid-excel fileName="Connected-Users.xlsx"></kendo-grid-excel>
+                    <!-- xlsx template end -->
+                </kendo-grid>
+            </div>
+            <!-- Kendo Grid End -->
+        </div>
+    </div>
+</div>

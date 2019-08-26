@@ -7,6 +7,9 @@
     }
     .k-menu.k-menu-horizontal > .k-item{
       padding: 0 10px;
+      @media screen and (max-width:991px){
+        padding: 0;
+      }  
     }
     .k-menu.k-menu-horizontal > .k-item > .k-link {
       padding: 0;
@@ -22,6 +25,9 @@
           .user-name{
             display: flex;
             align-items: center;
+            @media screen and (max-width:991px){
+              display: none;
+            } 
           }
         }
     }
@@ -62,6 +68,9 @@
     display: block;
     fill:#fff;
     transition: transform 100ms ease-in-out;
+    @media screen and (max-width:991px){
+      display: none;
+    }  
   }
   & .user-avtar{
     max-width: 30px;
@@ -86,12 +95,13 @@
   & .user-name{
     margin:0 0.5rem;
     color:#FFF;
+     
   }
 }
 .open,.show{
   & .dropdown-toggle{
     & .icon-caret{
-      transform: rotateX(180deg);      
+      transform: rotateX(180deg);          
     }
   }
 }
@@ -100,6 +110,9 @@
   border: none;
   color: #fff;
   height: 25px;
+  @media screen and (max-width:991px){
+    margin-left: -5px;
+  }
   ::ng-deep{
     & > svg{
       fill:#fff;

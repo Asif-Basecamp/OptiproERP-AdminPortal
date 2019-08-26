@@ -28,8 +28,14 @@ html, body{
     }
   }
 }
+.no-sidebar .navbar-toggler{
+  display: none !important;
+}
 body.no-header .content{
   max-height: 100vh !important;
+}
+body.with-header .content{
+  max-height: calc(100vh - 40px) !important;
 }
 //sidebar
 app-sidebar.toggle  {
@@ -66,7 +72,30 @@ app-sidebar.toggle  {
     }
   }
 }
-
+//page header
+.page-header {
+  position: fixed;
+  top: 9px;
+  left: 300px;
+  color: #fff;
+  & > h4{
+    margin: 0;
+  }
+  app-sidebar.toggle + .content-area > .content .layout-mode > &{
+    left: 135px;
+  }
+  @media screen and (max-width:991px){
+    left:50px; 
+    top: 12px;   
+    & > h4{
+      font-size:14px;
+    }
+    app-sidebar.toggle + .content-area > .content .layout-mode > &{
+      white-space: nowrap;
+      left: 285px;
+    }
+  }
+}
 //Gradiant
 .bg-primary-gradient {
     background: $primary-gradiant !important;
@@ -99,6 +128,23 @@ button.btn.btn-icon {
       fill:$secondary;
     }
   }
+  &.k-grid-excel{
+    background: transparent;
+    border: none;
+    & > svg {
+      fill: $primary-text-color;
+    }
+    &:hover, &:focus, &:active{
+      box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.08);
+      border: none;
+      background: rgba(0, 0, 0, 0.08);
+      border-radius: 1px;
+    }
+  }
+}
+
+.btn-sm:not(.btn-icon){
+  min-height:28px;
 }
 
 //bootstrap-custom
@@ -131,7 +177,7 @@ button.btn.btn-icon {
     }
     & input[type=checkbox] + span + span {
         margin-left: 8px;
-        line-height: 1px;
+        line-height: 16px;
     }
     & input[type="checkbox"] + span:before {
       content: '';
@@ -141,17 +187,21 @@ button.btn.btn-icon {
       height: 16px;
       border-radius: 2px;
       background: white;
+      border: 1px solid #ced4da;
+      transition: all 100ms ease-in-out;
       // background-image: url(~src/assets/images/svg/svg-sprite.svg#checkbox);
       // background-image: url("~/images/svg/svg-sprite.svg#checkbox");
     }
     & input[type="checkbox"]:hover + span:before {
       background: theme-color("primary");
+      border-color:theme-color("primary");
     }
     & input[type="checkbox"]:focus + span {
       box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.12);
     }
     & input[type="checkbox"]:checked + span:before {
       background: theme-color("primary");
+      border-color:theme-color("primary");
     }
     & input[type="checkbox"]:disabled + span {
       color: #b8b8b8;
@@ -197,4 +247,21 @@ body .k-popup.k-menu-popup {
   border-color: #fff;
   background-color: #fff;
   color:#495057 !important
+}
+body .k-widget.form-control-sm .k-input {
+  padding: 0.25rem 0.5rem;
+  height: auto;
+}
+// Kendo grid
+
+body .k-grid th, body .k-grid td{
+  padding: 5px;
+}
+
+.kendo-responsive-grid{
+  @media screen and (max-width:767px){
+    & .k-grid-header{
+      display: none;
+    }
+  }
 }

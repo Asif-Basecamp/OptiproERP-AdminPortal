@@ -1,0 +1,176 @@
+<div class="layout-mode" fxFlex fxLayout="column">
+    <div class="page-header">
+        <h4>User Management</h4>
+    </div>
+    <div class="card" fxFlex *ngIf="!addUserScreen">
+        <div class="card-body" fxFlex fxLayout="column">
+            <form>
+                <div class="row">
+                    <div class="col-sm-6 col-md-4 mb-sm-0 mb-1">
+                        <div class="d-flex align-items-center">
+                            <div class="input-group">
+                                <input type="text" class="form-control form-control-sm" id="search"
+                                    placeholder="Search">
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary btn-sm btn-icon" type="button">
+                                        <svg viewBox="0 0 410.23 410.23" class="icon">
+                                            <use xlink:href="#search"></use>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <button class="btn btn-success btn-sm ml-2 btn-icon" type="button" (click)="addUserScreenToggle()">
+                                <svg viewBox="0 0 512 512" class="icon">
+                                    <use xlink:href="#add"></use>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Kendo Grid Start -->
+            <div fxLayout="column" fxFlex="100%" class="kendo-grid-wrapper mt-3">
+
+                <kendo-grid [kendoGridBinding]="gridData" [resizable]="true" [sortable]="true" class="full-height-grid kendo-responsive-grid" [filterable]=isColumnFilter
+                    [groupable]=isColumnGroup [columnMenu]="false">
+                    <!-- [pageSize]="10" 
+                    [pageable]="{
+                        buttonCount: paginationButtonCount,
+                        info: paginationInfo,
+                        type: paginationType,
+                        pageSizes: paginationPageSizes,
+                        previousNext: paginationInfoPreviousNext
+                    }"> -->
+                    <!-- grid template start -->
+                    <ng-template kendoGridToolbarTemplate >
+                        <div class="d-flex align-items-center">
+                            <!-- show hide column start show hide -->
+                            <!-- <kendo-grid-column-chooser class="float-left opti_hide-in-mobile"></kendo-grid-column-chooser> -->
+
+                            <!-- checkbox -->
+                            <label class="custom-checkbox mb-0 mr-2">
+                                <input type="checkbox" [(ngModel)]="isColumnFilter">
+                                <span class="checkbox"></span>
+                                <span>Enable filter</span>
+                            </label>
+                            <label class="custom-checkbox mb-0">
+                                <input type="checkbox" [(ngModel)]="isColumnGroup">
+                                <span class="checkbox"></span>
+                                <span>Enable grouping</span>
+                            </label>
+                            <!-- export -->
+                            <button type="button" kendoGridExcelCommand title="Export to excel file" class="ml-auto btn btn-link btn-sm btn-icon p-0">
+                                <svg viewBox="0 0 512 512" class="icon">
+                                    <use xlink:href="#download"></use>
+                                </svg>
+                            </button>
+                        </div>
+                    </ng-template>
+
+                    <!-- Mobile view column -->
+                    <kendo-grid-column media="(max-width: 767px)" title="Items">
+                        <ng-template kendoGridCellTemplate let-dataItem>
+                            <div class="d-flex">
+                                <dl class="mb-0 w-50 pr-1">
+                                    <dt>User Code</dt>
+                                    <dd>{{ dataItem.ProductName }}</dd>
+    
+                                    <dt>User Group</dt>
+                                    <dd class="mb-0">{{ dataItem.Category.CategoryName }}</dd>
+                                </dl>                                
+                                <dl class="mb-0 w-50">
+                                    <dt>User Name</dt>
+                                    <dd>{{ dataItem.Category.Description }}</dd>
+
+                                    <dt>Active</dt>
+                                    <dd class="mb-0">{{ dataItem.Category.Description }}</dd>
+                                </dl>
+                            </div>
+                        </ng-template>
+                    </kendo-grid-column>
+
+                    <!-- columns for mid-size devices -->
+                    <kendo-grid-column media="(min-width: 768px)" field="ProductName" title="User Code"></kendo-grid-column>
+                    <kendo-grid-column media="(min-width: 768px)" field="Category.Description" title="User Name"></kendo-grid-column>
+                    <kendo-grid-column media="(min-width: 768px)" field="Category.CategoryName" title="User Group"></kendo-grid-column>
+                    <kendo-grid-column media="(min-width: 768px)" field="Category.Description" title="Active"></kendo-grid-column>
+
+                    <!-- xlsx template start -->
+                    <kendo-grid-excel fileName="User-management.xlsx"></kendo-grid-excel>
+                    <!-- xlsx template end -->
+                </kendo-grid>
+            </div>
+            <!-- Kendo Grid End -->
+        </div>
+    </div>
+    <!-- add user screen -->
+    <div class="card" fxFlex *ngIf="addUserScreen">
+        <div class="card-body pb-2" fxFlex fxLayout="column">            
+            <div class="" fxFlex="100%">
+                <div class="user-detail">
+                    <div class="section-heading mb-2">
+                        <h4 class="m-0">User Details</h4>
+                    </div>
+                    <form>
+                        <div class="row">
+                            <div class="form-group col-md-3 mb-2">
+                                <label class="mb-0" for="user_id">User Id<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control form-control-sm" id="user_id" name="user_id">
+                            </div>                            
+                            <div class="form-group col-md-3 mb-2">
+                                <label class="mb-0" for="user_name">User Name</label>
+                                <input type="text" class="form-control form-control-sm" id="user_name" name="user_name">
+                            </div>
+                            <div class="form-group col-md-3 mb-2">
+                                <label class="mb-0" for="password">Password<span class="text-danger">*</span></label>
+                                <input type="password" class="form-control form-control-sm" id="password" name="password">
+                            </div>
+                            <div class="form-group col-md-3 mb-2">
+                                <label class="mb-0" for="re_password">Re-Enter Password<span class="text-danger">*</span></label>
+                                <input type="password" class="form-control form-control-sm" id="re_password" name="re_password">
+                            </div>
+                            <div class="form-group col-md-3 mb-2">
+                                <label class="mb-0" for="user_group">User Group<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control form-control-sm" id="user_group" name="user_group">
+                            </div>
+                            <div class="form-group col-md-3 mb-2">
+                                <label class="mb-0" for="mapped_user_id">Mapped SAP B1 User<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control form-control-sm" id="mapped_user_id" name="mapped_user_id">
+                            </div>
+                            <div class="form-group col-md-3 mb-2">
+                                <label class="mb-0" for="mapped_user_password" >Mapped SAP B1 User Pwd<span class="text-danger">*</span></label>
+                                <input type="password" name="mapped_user_password" class="form-control form-control-sm" id="mapped_user_password">
+                            </div>
+                            <div class="form-group col-md-3 mb-2">
+                                <!-- <label class="custom-checkbox mb-0">
+                                    <input type="checkbox" value="">
+                                    <span class="checkbox"></span>
+                                    <span class="text-inverse">Active</span>
+                                </label> -->
+                                <label class="mb-0">Account Status</label>
+                                <div class="custom-control custom-switch mt-1">
+                                    <input type="checkbox" class="custom-control-input" name="account_status" id="account_status" [(ngModel)]="accountStatus">
+                                    <label class="custom-control-label" for="account_status">{{ accountStatus ? 'Active': 'Inactive' }}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- user detail save/cancel option -->
+            <div class="sticky-bottom-toolbar d-flex align-items-center justify-content-start border-top pt-2">                
+                <button class="btn btn-success btn-sm mr-2 d-flex align-items-center" type="button">
+                    <svg viewBox="0 0 512 512" class="icon mr-2">
+                        <use xlink:href="#saveDisk"></use>
+                    </svg> Save
+                </button>
+                <button class="btn btn-danger btn-sm d-flex align-items-center" type="button" (click)="dialougeToggle()"> 
+                    <svg viewBox="0 0 489 489" class="icon mr-2">
+                        <use xlink:href="#cancel"></use>
+                    </svg> Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

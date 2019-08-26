@@ -8,6 +8,8 @@
         padding: 0;
         margin: 0;
         list-style: none;
+        max-height: calc(100vh - 73px);
+        overflow: auto;
         & > li{
           display: flex;
           justify-content: flex-start;
@@ -22,7 +24,9 @@
             & > svg.sidebar-link-icon{
               width: 25px;
               height:auto;
-              margin-right: 10px;
+              @media screen and (min-width:992px){
+                margin-right: 10px;
+              }
             }
             &:hover, &:active, &:focus{
               text-decoration: none;
@@ -39,15 +43,21 @@
     }
   } 
   &.toggle{
-    flex: 1 1 75px !important;
-    max-width: 75px !important;
-    min-width: 75px !important;
+    flex: 1 1 65px !important;
+    max-width: 65px !important;
+    min-width: 65px !important;
     ::ng-deep{
       & .main-nav{
         & > ul > li > a {
           padding: 10px 20px;
           & > span{
             display: none;
+          }
+          & > svg.sidebar-link-icon{
+            margin-right: 0;
+            @media screen and (max-width:991px){
+              margin-right: 10px;
+            }
           }
         }
       }
