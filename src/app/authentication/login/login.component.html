@@ -12,19 +12,20 @@
                 </div>
               </div>
             </div>
-            <form >
+            <form>
               <div class="card-body">
                 <div class="form-group mb-2">
                   <label for="user" class="mb-0">Username<span class="text-danger">*</span></label>
-                  <input type="text" class="form-control" id="user" name="user" aria-describedby="User" required placeholder="Username" autocomplete="off">
+                  <input type="text" class="form-control" id="UserName" name="UserName" [(ngModel)]="model.UserName" aria-describedby="User" required placeholder="Username" autocomplete="off" required>
+                 
                 </div>
                 <div class="form-group mb-2">
                   <label for="user" class="mb-0">Password<span class="text-danger">*</span></label>
-                  <input type="password" id="password" name="password" class="form-control" placeholder="EnterPassword" autocomplete="off">
+                  <input type="password" id="Password" name="Password" [(ngModel)]="model.Password" class="form-control" placeholder="EnterPassword" autocomplete="off" required>
                 </div>
                 <div class="row my-4" >
                   <div class="col-md-12 text-center">
-                    <button type="button" class="btn btn-primary btn-block btn-md" (click)="connect()">Connect</button>
+                    <button type="button" class="btn btn-primary btn-block btn-md" (click)="login()">Connect</button>
                   </div>
                 </div>
                 <ng-container *ngIf="isConnected">
@@ -81,3 +82,4 @@
   </div>
 
 </section>
+
