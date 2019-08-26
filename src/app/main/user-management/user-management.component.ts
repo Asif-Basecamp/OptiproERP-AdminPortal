@@ -3,17 +3,18 @@ import { products } from 'src/app/dummyData/data';
 import { GridComponent } from '@progress/kendo-angular-grid';
 
 @Component({
-  selector: 'app-user-group',
-  templateUrl: './user-group.component.html',
-  styleUrls: ['./user-group.component.scss']
+  selector: 'app-user-management',
+  templateUrl: './user-management.component.html',
+  styleUrls: ['./user-management.component.scss']
 })
-export class UserGroupComponent implements OnInit {
+export class UserManagementComponent implements OnInit {
+
   // public paginationButtonCount = 5;
   // public paginationInfo = true;
   // public paginationType: 'input';
   // public paginationPageSizes = true;
   // public paginationInfoPreviousNext = true;
-  public dialogOpened = false;
+  public addUserScreen = false;
 
   public gridData: any[];
 
@@ -43,7 +44,7 @@ export class UserGroupComponent implements OnInit {
   //   }
   // }
 
-  public dialougeToggle() {
-    this.dialogOpened = !this.dialogOpened;
+  public addUserScreenToggle() {
+    this.addUserScreen = !this.addUserScreen;
   }
 }

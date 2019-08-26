@@ -3,24 +3,23 @@ import { products } from 'src/app/dummyData/data';
 import { GridComponent } from '@progress/kendo-angular-grid';
 
 @Component({
-  selector: 'app-user-group',
-  templateUrl: './user-group.component.html',
-  styleUrls: ['./user-group.component.scss']
+  selector: 'app-connected-users',
+  templateUrl: './connected-users.component.html',
+  styleUrls: ['./connected-users.component.scss']
 })
-export class UserGroupComponent implements OnInit {
+
+export class ConnectedUsersComponent implements OnInit {
   // public paginationButtonCount = 5;
   // public paginationInfo = true;
   // public paginationType: 'input';
   // public paginationPageSizes = true;
   // public paginationInfoPreviousNext = true;
-  public dialogOpened = false;
-
   public gridData: any[];
 
   constructor() { }
 
   ngOnInit() {
-    this.gridData = products;
+    // this.gridData = products;
     // this.isMobile();
   }
 
@@ -42,8 +41,4 @@ export class UserGroupComponent implements OnInit {
   //     this.paginationButtonCount = 3;                 
   //   }
   // }
-
-  public dialougeToggle() {
-    this.dialogOpened = !this.dialogOpened;
-  }
 }

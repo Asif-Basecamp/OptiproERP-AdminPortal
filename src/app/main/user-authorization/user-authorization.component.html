@@ -1,6 +1,6 @@
 <div class="layout-mode" fxFlex fxLayout="column">
     <div class="page-header">
-        <h4>User Group</h4>
+        <h4>User Authorization</h4>
     </div>
     <div class="card" fxFlex>
         <div class="card-body" fxFlex fxLayout="column">
@@ -88,13 +88,14 @@
                     </kendo-grid-column>
 
                     <!-- columns for mid-size devices -->
-                    <kendo-grid-column media="(min-width: 768px)" field="ProductName" title="Group Code"></kendo-grid-column>
+                    <kendo-grid-column media="(min-width: 768px)" field="ProductName" title="Group Code">
+                    </kendo-grid-column>
                     <kendo-grid-column media="(min-width: 768px)" field="Category.Description" title="Group Description"></kendo-grid-column>
                     <kendo-grid-column media="(min-width: 768px)" field="Category.CategoryName" title="Admin">
                     </kendo-grid-column>
 
                     <!-- xlsx template start -->
-                    <kendo-grid-excel fileName="User-group.xlsx"></kendo-grid-excel>
+                    <kendo-grid-excel fileName="User-authorization.xlsx"></kendo-grid-excel>
                     <!-- xlsx template end -->
                 </kendo-grid>
             </div>
