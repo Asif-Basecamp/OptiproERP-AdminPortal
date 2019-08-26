@@ -28,7 +28,7 @@ export class LoginComponent {
         //if(data.Status=="Success") 
         if(data.length>0)   
         {       
-          this.router.navigate(['/dashboard']);    
+          this.router.navigate(['/main']);    
           debugger;    
         }    
         else{    
