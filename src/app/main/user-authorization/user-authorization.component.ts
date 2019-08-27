@@ -14,11 +14,16 @@ export class UserAuthorizationComponent implements OnInit {
   // public paginationType: 'input';
   // public paginationPageSizes = true;
   // public paginationInfoPreviousNext = true;
-  public dialogOpened = false;
+  public addAuthScreen = false;
 
   public gridData: any[];
 
-  constructor() { }
+  public checkedKeys: any[] = [];
+  public dialogOpened: boolean;
+
+  constructor() { 
+    //this.setSelectableSettings();
+  }
 
   ngOnInit() {
     this.gridData = products;
@@ -44,7 +49,20 @@ export class UserAuthorizationComponent implements OnInit {
   //   }
   // }
 
+//   public setSelectableSettings(): void {
+//     this.selectableSettings = {
+//         checkboxOnly: this.checkboxOnly,
+//         mode: this.mode
+//     };
+// }
+
+  public addAuthScreenToggle() {
+    this.addAuthScreen = !this.addAuthScreen;
+  }
+
   public dialougeToggle() {
     this.dialogOpened = !this.dialogOpened;
   }
 }
+
+

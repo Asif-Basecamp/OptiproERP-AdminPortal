@@ -2,7 +2,7 @@
     flex: 1 1 100%;
 }
 .kendo-grid-wrapper{
-    max-height: calc(100vh - 142px) !important;
+    max-height: calc(100vh - 144px) !important;
     ::ng-deep{
         & .full-height-grid{
             height: 100%;
@@ -26,4 +26,14 @@
     & > .card .card-body{
         padding: 15px;
     }
+}
+.addRolesScreen{
+    max-height: calc(100vh - 130px) !important;
+    overflow: hidden;
+    overflow-y: auto;
+}
+
+.custom-height-grid{
+    max-height: calc(100vh - 324px) !important;
+    min-height: 250px;
 }

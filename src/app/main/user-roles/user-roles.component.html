@@ -2,7 +2,7 @@
     <div class="page-header">
         <h4>Roles</h4>
     </div>
-    <div class="card" fxFlex>
+    <div class="card" fxFlex *ngIf="!addRolesScreen">
         <div class="card-body" fxFlex fxLayout="column">
             <form>
                 <div class="row">
@@ -19,7 +19,7 @@
                                     </button>
                                 </div>
                             </div>
-                            <button class="btn btn-success btn-sm ml-2 btn-icon" type="button" (click)="dialougeToggle()">
+                            <button class="btn btn-success btn-sm ml-2 btn-icon" type="button" (click)="addRolesScreenToggle()">
                                 <svg viewBox="0 0 512 512" class="icon">
                                     <use xlink:href="#add"></use>
                                 </svg>
@@ -50,12 +50,12 @@
 
                             <!-- checkbox -->
                             <label class="custom-checkbox mb-0 mr-2">
-                                <input type="checkbox" [(ngModel)]="isColumnFilter">
+                                <input type="checkbox" [(ngModel)]="isColumnFilter" [ngModelOptions]="{standalone: true}">
                                 <span class="checkbox"></span>
                                 <span>Enable filter</span>
                             </label>
                             <label class="custom-checkbox mb-0">
-                                <input type="checkbox" [(ngModel)]="isColumnGroup">
+                                <input type="checkbox" [(ngModel)]="isColumnGroup" [ngModelOptions]="{standalone: true}">
                                 <span class="checkbox"></span>
                                 <span>Enable grouping</span>
                             </label>
@@ -95,53 +95,147 @@
             <!-- Kendo Grid End -->
         </div>
     </div>
-</div>
+    <!-- add user screen -->
+    <div class="card" fxFlex *ngIf="addRolesScreen">
+        <div class="card-body pb-2" fxFlex fxLayout="column">            
+            <div class="addRolesScreen pb-3" fxFlex="100%">
+                <form>
+                    <div class="row">
+                        <div class="col-sm-5 col-md-4 col-lg-4 col-xl-3">
+                            <div class="row">
+                                <div class="form-group col-md-12 mb-2">
+                                    <label class="mb-0" for="user_id">Role Id<span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-sm" id="user_id" name="user_id">
+                                </div>                            
+                                <div class="form-group col-md-12 mb-2">
+                                    <label class="mb-0" for="user_name">Description</label>
+                                    <input type="text" class="form-control form-control-sm" id="user_name" name="user_name">
+                                </div>
+                                <div class="form-group col-md-12 mb-2">
+                                    <label class="mb-0" for="product">Product<span class="text-danger">*</span></label>
+                                    <kendo-dropdownlist id="product" name="product" class="form-control-sm form-control w-100"></kendo-dropdownlist>
+                                </div>
+                            </div>
+                        </div>                           
+                    </div>
+                </form>
+                <div class="mt-3">
+                    <kendo-grid [kendoGridBinding]="gridData" [resizable]="true" [sortable]="true" class="custom-height-grid" [filterable]=isColumnFilter
+                        [groupable]=isColumnGroup [columnMenu]="false" [selectable]="{ checkboxOnly: true, mode: 'multiple' }">
+                        <!-- [pageSize]="10" 
+                        [pageable]="{
+                            buttonCount: paginationButtonCount,
+                            info: paginationInfo,
+                            type: paginationType,
+                            pageSizes: paginationPageSizes,
+                            previousNext: paginationInfoPreviousNext
+                        }"> -->
+                        <!-- grid template start -->
+                        <ng-template kendoGridToolbarTemplate >
+                            <div class="d-flex align-items-center">
+                                <!-- show hide column start show hide -->
+                                <!-- <kendo-grid-column-chooser class="float-left opti_hide-in-mobile"></kendo-grid-column-chooser> -->
 
-<!-- Kendo Dialouge -->
+                                <!-- checkbox -->
+                                <label class="custom-checkbox mb-0 mr-2">
+                                    <input type="checkbox" [(ngModel)]="isColumnFilter" [ngModelOptions]="{standalone: true}">
+                                    <span class="checkbox"></span>
+                                    <span>Enable filter</span>
+                                </label>
+                                <label class="custom-checkbox mb-0">
+                                    <input type="checkbox" [(ngModel)]="isColumnGroup" [ngModelOptions]="{standalone: true}">
+                                    <span class="checkbox"></span>
+                                    <span>Enable grouping</span>
+                                </label>
+                                <!-- export -->
+                                <button type="button" kendoGridExcelCommand title="Export to excel file" class="ml-auto btn btn-link btn-sm btn-icon p-0">
+                                    <svg viewBox="0 0 512 512" class="icon">
+                                        <use xlink:href="#download"></use>
+                                    </svg>
+                                </button>
+                            </div>
+                        </ng-template>
 
-<kendo-dialog *ngIf="dialogOpened" (close)="dialougeToggle()" [minWidth]="250" [width]="450">
-    <kendo-dialog-titlebar>
-        <div > Add New</div>
-    </kendo-dialog-titlebar>
-    <div class="">
-        <form >
-            <div class="form-group mb-2">
-                <label for="user_group" class="mb-0">User Group<span class="text-danger">*</span></label>
-                <input type="text" class="form-control form-control-sm" id="user_group" name="user" autocomplete="off">
-            </div>
-            <div class="form-group mb-2">
-                <label for="description" class="mb-0">Description<span class="text-danger">*</span></label>
-                <input type="text" class="form-control form-control-sm" id="description" name="description" autocomplete="off">
-            </div>            
-            <div class="form-group mb-2" >
-                <label for="mappes_user" class="mb-0">Mapped SAP B1 User <span class="text-danger">*</span></label>
-                <kendo-dropdownlist class="w-100" id="mappes_user" name="mappes_user" class="form-control-sm form-control"></kendo-dropdownlist>
-            </div>
-            <div class="form-group mb-2">
-                <label for="mappes_user_password" class="mb-0">Mapped SAP B1 User Password<span class="text-danger">*</span></label>
-                <input type="password" id="mappes_user_password" name="mappes_user_password" class="form-control form-control-sm" autocomplete="off">
-            </div>
-            <div class="row form-group mb-0">
-                <div class="col-12 d-flex align-items-center my-2">
-                <label class="custom-checkbox mb-0">
-                    <input type="checkbox" value="">
-                    <span class="checkbox"></span>
-                    <span class="text-inverse">Manager/Admin</span>
-                </label>
+                        <kendo-grid-column field="ProductName" title="Screen"></kendo-grid-column>
+
+                        <kendo-grid-column field="code" title="All" width="60" class="text-center" headerClass="text-center">
+                            <ng-template kendoGridCellTemplate let-dataItem>
+                                <label class="custom-checkbox mb-0">
+                                    <input type="checkbox">
+                                    <span class="checkbox"></span>
+                                </label>
+                            </ng-template>
+                        </kendo-grid-column>
+
+                        <kendo-grid-column field="code" title="Add" width="60" class="text-center" headerClass="text-center">
+                            <ng-template kendoGridCellTemplate let-dataItem>
+                                <label class="custom-checkbox mb-0">
+                                    <input type="checkbox">
+                                    <span class="checkbox"></span>
+                                </label>
+                            </ng-template>
+                        </kendo-grid-column>
+
+                        <kendo-grid-column field="code" title="Update" width="60" class="text-center" headerClass="text-center">
+                            <ng-template kendoGridCellTemplate let-dataItem>
+                                <label class="custom-checkbox mb-0">
+                                    <input type="checkbox">
+                                    <span class="checkbox"></span>
+                                </label>
+                            </ng-template>
+                        </kendo-grid-column>
+
+                        <kendo-grid-column field="code" title="Delete" width="60" class="text-center" headerClass="text-center">
+                            <ng-template kendoGridCellTemplate let-dataItem>
+                                <label class="custom-checkbox mb-0">
+                                    <input type="checkbox">
+                                    <span class="checkbox"></span>
+                                </label>
+                            </ng-template>
+                        </kendo-grid-column>
+
+                        <kendo-grid-column field="code" title="Read" width="60" class="text-center" headerClass="text-center">
+                            <ng-template kendoGridCellTemplate let-dataItem>
+                                <label class="custom-checkbox mb-0">
+                                    <input type="checkbox">
+                                    <span class="checkbox"></span>
+                                </label>
+                            </ng-template>
+                        </kendo-grid-column>
+
+                        <!-- xlsx template start -->
+                        <kendo-grid-excel fileName="User-management.xlsx"></kendo-grid-excel>
+                        <!-- xlsx template end -->
+                    </kendo-grid>
                 </div>
             </div>
-        </form>
+
+            <!-- user detail save/cancel option -->
+            <div class="sticky-bottom-toolbar d-flex align-items-center justify-content-start border-top pt-2">     
+                <button class="btn btn-primary btn-sm d-flex align-items-center mr-2" type="button"> 
+                    <svg viewBox="0 0 55.25 55.25" class="icon mr-2">
+                        <use xlink:href="#edit"></use>
+                    </svg> Edit
+                </button>           
+
+                <button class="btn btn-success btn-sm mr-2 d-flex align-items-center mr-2" type="button">
+                    <svg viewBox="0 0 512 512" class="icon mr-2">
+                        <use xlink:href="#saveDisk"></use>
+                    </svg> Save
+                </button>
+
+                <button class="btn btn-danger btn-sm d-flex align-items-center mr-2" type="button"> 
+                    <svg viewBox="0 0 753.23 753.23" class="icon mr-2">
+                        <use xlink:href="#bin"></use>
+                    </svg> Delete
+                </button>
+                <button class="btn btn-danger btn-sm d-flex align-items-center" type="button" (click)="addRolesScreenToggle()"> 
+                    <svg viewBox="0 0 489 489" class="icon mr-2">
+                        <use xlink:href="#cancel"></use>
+                    </svg> Cancel
+                </button>
+            </div>
+        </div>
     </div>
-    <kendo-dialog-actions class="p-2">
-        <button class="btn btn-danger btn-sm d-flex align-items-center" type="button" (click)="dialougeToggle()"> 
-            <svg viewBox="0 0 489 489" class="icon mr-2">
-                <use xlink:href="#cancel"></use>
-            </svg> Cancel
-        </button>
-        <button class="btn btn-success btn-sm ml-2 d-flex align-items-center" type="button">
-            <svg viewBox="0 0 512 512" class="icon mr-2">
-                <use xlink:href="#saveDisk"></use>
-            </svg> Save
-        </button>
-    </kendo-dialog-actions>
-</kendo-dialog>
+</div>
+    

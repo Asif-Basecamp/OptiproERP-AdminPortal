@@ -49,7 +49,7 @@ export const sampleProducts = [
         "Category": {
             "CategoryID": 2,
             "CategoryName": "Condiments",
-            "Description": "Sweet and savory sauces, relishes, spreads, and seasonings"
+            "Description": "Sweet and savory sauces, relishes."
         },
         "FirstOrderedOn": new Date(1996, 8, 26)
     },
@@ -67,7 +67,7 @@ export const sampleProducts = [
         "Category": {
             "CategoryID": 2,
             "CategoryName": "Condiments",
-            "Description": "Sweet and savory sauces, relishes, spreads, and seasonings"
+            "Description": "Sweet and savory sauces, relishes."
         },
         "FirstOrderedOn": new Date(1996, 9, 19)
     },
@@ -85,7 +85,7 @@ export const sampleProducts = [
         "Category": {
             "CategoryID": 2,
             "CategoryName": "Condiments",
-            "Description": "Sweet and savory sauces, relishes, spreads, and seasonings"
+            "Description": "Sweet and savory sauces, relishes."
         },
         "FirstOrderedOn": new Date(1996, 7, 17)
     },
@@ -103,7 +103,7 @@ export const sampleProducts = [
         "Category": {
             "CategoryID": 2,
             "CategoryName": "Condiments",
-            "Description": "Sweet and savory sauces, relishes, spreads, and seasonings"
+            "Description": "Sweet and savory sauces, relishes."
         },
         "FirstOrderedOn": new Date(1996, 9, 19)
     },
@@ -139,7 +139,7 @@ export const sampleProducts = [
         "Category": {
             "CategoryID": 2,
             "CategoryName": "Condiments",
-            "Description": "Sweet and savory sauces, relishes, spreads, and seasonings"
+            "Description": "Sweet and savory sauces, relishes."
         },
         "FirstOrderedOn": new Date(1996, 11, 1)
     },
@@ -227,7 +227,7 @@ export const products = [{
     "Category": {
         "CategoryID": 2,
         "CategoryName": "Condiments",
-        "Description": "Sweet and savory sauces, relishes, spreads, and seasonings"
+        "Description": "Sweet and savory sauces, relishes."
     }
 }, {
     "ProductID": 4,
@@ -243,7 +243,7 @@ export const products = [{
     "Category": {
         "CategoryID": 2,
         "CategoryName": "Condiments",
-        "Description": "Sweet and savory sauces, relishes, spreads, and seasonings"
+        "Description": "Sweet and savory sauces, relishes."
     }
 }, {
     "ProductID": 5,
@@ -259,7 +259,7 @@ export const products = [{
     "Category": {
         "CategoryID": 2,
         "CategoryName": "Condiments",
-        "Description": "Sweet and savory sauces, relishes, spreads, and seasonings"
+        "Description": "Sweet and savory sauces, relishes."
     }
 }, {
     "ProductID": 6,
@@ -275,7 +275,7 @@ export const products = [{
     "Category": {
         "CategoryID": 2,
         "CategoryName": "Condiments",
-        "Description": "Sweet and savory sauces, relishes, spreads, and seasonings"
+        "Description": "Sweet and savory sauces, relishes."
     }
 }, {
     "ProductID": 7,
@@ -307,7 +307,7 @@ export const products = [{
     "Category": {
         "CategoryID": 2,
         "CategoryName": "Condiments",
-        "Description": "Sweet and savory sauces, relishes, spreads, and seasonings"
+        "Description": "Sweet and savory sauces, relishes."
     }
 }, {
     "ProductID": 9,
@@ -419,7 +419,7 @@ export const products = [{
     "Category": {
         "CategoryID": 2,
         "CategoryName": "Condiments",
-        "Description": "Sweet and savory sauces, relishes, spreads, and seasonings"
+        "Description": "Sweet and savory sauces, relishes."
     }
 }, {
     "ProductID": 16,
@@ -435,7 +435,7 @@ export const products = [{
     "Category": {
         "CategoryID": 3,
         "CategoryName": "Confections",
-        "Description": "Desserts, candies, and sweet breads"
+        "Description": "Desserts, candies."
     }
 }, {
     "ProductID": 17,
@@ -483,7 +483,7 @@ export const products = [{
     "Category": {
         "CategoryID": 3,
         "CategoryName": "Confections",
-        "Description": "Desserts, candies, and sweet breads"
+        "Description": "Desserts, candies."
     }
 }, {
     "ProductID": 20,
@@ -499,7 +499,7 @@ export const products = [{
     "Category": {
         "CategoryID": 3,
         "CategoryName": "Confections",
-        "Description": "Desserts, candies, and sweet breads"
+        "Description": "Desserts, candies."
     }
 }, {
     "ProductID": 21,
@@ -515,7 +515,7 @@ export const products = [{
     "Category": {
         "CategoryID": 3,
         "CategoryName": "Confections",
-        "Description": "Desserts, candies, and sweet breads"
+        "Description": "Desserts, candies."
     }
 }, {
     "ProductID": 22,
@@ -531,7 +531,7 @@ export const products = [{
     "Category": {
         "CategoryID": 5,
         "CategoryName": "Grains/Cereals",
-        "Description": "Breads, crackers, pasta, and cereal"
+        "Description": "Breads, crackers."
     }
 }, {
     "ProductID": 23,
@@ -547,7 +547,7 @@ export const products = [{
     "Category": {
         "CategoryID": 5,
         "CategoryName": "Grains/Cereals",
-        "Description": "Breads, crackers, pasta, and cereal"
+        "Description": "Breads, crackers."
     }
 }, {
     "ProductID": 24,
@@ -579,7 +579,7 @@ export const products = [{
     "Category": {
         "CategoryID": 3,
         "CategoryName": "Confections",
-        "Description": "Desserts, candies, and sweet breads"
+        "Description": "Desserts, candies."
     }
 }, {
     "ProductID": 26,
@@ -595,7 +595,7 @@ export const products = [{
     "Category": {
         "CategoryID": 3,
         "CategoryName": "Confections",
-        "Description": "Desserts, candies, and sweet breads"
+        "Description": "Desserts, candies."
     }
 }, {
     "ProductID": 27,
@@ -611,7 +611,7 @@ export const products = [{
     "Category": {
         "CategoryID": 3,
         "CategoryName": "Confections",
-        "Description": "Desserts, candies, and sweet breads"
+        "Description": "Desserts, candies."
     }
 }, {
     "ProductID": 28,
@@ -851,7 +851,7 @@ export const products = [{
     "Category": {
         "CategoryID": 5,
         "CategoryName": "Grains/Cereals",
-        "Description": "Breads, crackers, pasta, and cereal"
+        "Description": "Breads, crackers."
     }
 }, {
     "ProductID": 43,
@@ -883,7 +883,7 @@ export const products = [{
     "Category": {
         "CategoryID": 2,
         "CategoryName": "Condiments",
-        "Description": "Sweet and savory sauces, relishes, spreads, and seasonings"
+        "Description": "Sweet and savory sauces, relishes."
     }
 }, {
     "ProductID": 45,
@@ -931,7 +931,7 @@ export const products = [{
     "Category": {
         "CategoryID": 3,
         "CategoryName": "Confections",
-        "Description": "Desserts, candies, and sweet breads"
+        "Description": "Desserts, candies."
     }
 }, {
     "ProductID": 48,
@@ -947,7 +947,7 @@ export const products = [{
     "Category": {
         "CategoryID": 3,
         "CategoryName": "Confections",
-        "Description": "Desserts, candies, and sweet breads"
+        "Description": "Desserts, candies."
     }
 }, {
     "ProductID": 49,
@@ -963,7 +963,7 @@ export const products = [{
     "Category": {
         "CategoryID": 3,
         "CategoryName": "Confections",
-        "Description": "Desserts, candies, and sweet breads"
+        "Description": "Desserts, candies."
     }
 }, {
     "ProductID": 50,
@@ -979,7 +979,7 @@ export const products = [{
     "Category": {
         "CategoryID": 3,
         "CategoryName": "Confections",
-        "Description": "Desserts, candies, and sweet breads"
+        "Description": "Desserts, candies."
     }
 }, {
     "ProductID": 51,
@@ -1011,7 +1011,7 @@ export const products = [{
     "Category": {
         "CategoryID": 5,
         "CategoryName": "Grains/Cereals",
-        "Description": "Breads, crackers, pasta, and cereal"
+        "Description": "Breads, crackers."
     }
 }, {
     "ProductID": 53,
@@ -1075,7 +1075,7 @@ export const products = [{
     "Category": {
         "CategoryID": 5,
         "CategoryName": "Grains/Cereals",
-        "Description": "Breads, crackers, pasta, and cereal"
+        "Description": "Breads, crackers."
     }
 }, {
     "ProductID": 57,
@@ -1091,7 +1091,7 @@ export const products = [{
     "Category": {
         "CategoryID": 5,
         "CategoryName": "Grains/Cereals",
-        "Description": "Breads, crackers, pasta, and cereal"
+        "Description": "Breads, crackers."
     }
 }, {
     "ProductID": 58,
@@ -1155,7 +1155,7 @@ export const products = [{
     "Category": {
         "CategoryID": 2,
         "CategoryName": "Condiments",
-        "Description": "Sweet and savory sauces, relishes, spreads, and seasonings"
+        "Description": "Sweet and savory sauces, relishes."
     }
 }, {
     "ProductID": 62,
@@ -1171,7 +1171,7 @@ export const products = [{
     "Category": {
         "CategoryID": 3,
         "CategoryName": "Confections",
-        "Description": "Desserts, candies, and sweet breads"
+        "Description": "Desserts, candies."
     }
 }, {
     "ProductID": 63,
@@ -1187,7 +1187,7 @@ export const products = [{
     "Category": {
         "CategoryID": 2,
         "CategoryName": "Condiments",
-        "Description": "Sweet and savory sauces, relishes, spreads, and seasonings"
+        "Description": "Sweet and savory sauces, relishes."
     }
 }, {
     "ProductID": 64,
@@ -1203,7 +1203,7 @@ export const products = [{
     "Category": {
         "CategoryID": 5,
         "CategoryName": "Grains/Cereals",
-        "Description": "Breads, crackers, pasta, and cereal"
+        "Description": "Breads, crackers."
     }
 }, {
     "ProductID": 65,
@@ -1219,7 +1219,7 @@ export const products = [{
     "Category": {
         "CategoryID": 2,
         "CategoryName": "Condiments",
-        "Description": "Sweet and savory sauces, relishes, spreads, and seasonings"
+        "Description": "Sweet and savory sauces, relishes."
     }
 }, {
     "ProductID": 66,
@@ -1235,7 +1235,7 @@ export const products = [{
     "Category": {
         "CategoryID": 2,
         "CategoryName": "Condiments",
-        "Description": "Sweet and savory sauces, relishes, spreads, and seasonings"
+        "Description": "Sweet and savory sauces, relishes."
     }
 }, {
     "ProductID": 67,
@@ -1267,7 +1267,7 @@ export const products = [{
     "Category": {
         "CategoryID": 3,
         "CategoryName": "Confections",
-        "Description": "Desserts, candies, and sweet breads"
+        "Description": "Desserts, candies."
     }
 }, {
     "ProductID": 69,
@@ -1411,6 +1411,6 @@ export const products = [{
     "Category": {
         "CategoryID": 2,
         "CategoryName": "Condiments",
-        "Description": "Sweet and savory sauces, relishes, spreads, and seasonings"
+        "Description": "Sweet and savory sauces, relishes."
     }
 }];

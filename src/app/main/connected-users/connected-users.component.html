@@ -11,7 +11,7 @@
                             <label for="staticEmail" class="col-sm-2 col-md-2 col-lg-3 col-xl-3 col-form-label py-0">Product<span class="text-danger">*</span></label>
                             <div class="col-sm-10 col-md-10 col-lg-9 col-xl-9">
                                 <div class="d-flex align-items-center">
-                                    <kendo-dropdownlist class="w-100" id="mappes_user" name="mappes_user" class="form-control-sm form-control"></kendo-dropdownlist>
+                                    <kendo-dropdownlist class="w-100 form-control-sm form-control" id="mappes_user" name="mappes_user"></kendo-dropdownlist>
                                     <button class="btn btn-success btn-sm ml-2" type="button">Display</button>
                                 </div>                        
                             </div>
@@ -41,12 +41,12 @@
 
                             <!-- checkbox -->
                             <label class="custom-checkbox mb-0 mr-2">
-                                <input type="checkbox" [(ngModel)]="isColumnFilter">
+                                <input type="checkbox" [(ngModel)]="isColumnFilter" [ngModelOptions]="{standalone: true}">
                                 <span class="checkbox"></span>
                                 <span>Enable filter</span>
                             </label>
                             <label class="custom-checkbox mb-0">
-                                <input type="checkbox" [(ngModel)]="isColumnGroup">
+                                <input type="checkbox" [(ngModel)]="isColumnGroup" [ngModelOptions]="{standalone: true}">
                                 <span class="checkbox"></span>
                                 <span>Enable grouping</span>
                             </label>

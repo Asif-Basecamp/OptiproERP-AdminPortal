@@ -5,6 +5,7 @@ import { DialogsModule } from '@progress/kendo-angular-dialog';
 import { GridModule, ExcelModule } from '@progress/kendo-angular-grid';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
+import { TreeViewModule } from '@progress/kendo-angular-treeview';
 
 import { MainRoutingModule } from './main-routing.module';
 import { MainComponent } from './main.component';
@@ -24,7 +25,8 @@ import { ConnectedUsersComponent } from './connected-users/connected-users.compo
     DialogsModule,
     DropDownsModule,
     MainRoutingModule,
-    FlexLayoutModule   
+    FlexLayoutModule,
+    TreeViewModule  
   ],
   declarations: [MainComponent, UserGroupComponent, UserManagementComponent, UserAuthorizationComponent, UserRolesComponent, ConnectedUsersComponent]
 })

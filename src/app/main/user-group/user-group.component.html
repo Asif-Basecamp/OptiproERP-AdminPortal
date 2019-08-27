@@ -50,12 +50,12 @@
 
                             <!-- checkbox -->
                             <label class="custom-checkbox mb-0 mr-2">
-                                <input type="checkbox" [(ngModel)]="isColumnFilter">
+                                <input type="checkbox" [(ngModel)]="isColumnFilter" [ngModelOptions]="{standalone: true}">
                                 <span class="checkbox"></span>
                                 <span>Enable filter</span>
                             </label>
                             <label class="custom-checkbox mb-0">
-                                <input type="checkbox" [(ngModel)]="isColumnGroup">
+                                <input type="checkbox" [(ngModel)]="isColumnGroup" [ngModelOptions]="{standalone: true}">
                                 <span class="checkbox"></span>
                                 <span>Enable grouping</span>
                             </label>
@@ -107,7 +107,7 @@
 
 <kendo-dialog *ngIf="dialogOpened" (close)="dialougeToggle()" [minWidth]="250" [width]="450">
     <kendo-dialog-titlebar>
-        <div > Add New</div>
+        <div> Add New</div>
     </kendo-dialog-titlebar>
     <div class="">
         <form >
@@ -121,7 +121,7 @@
             </div>            
             <div class="form-group mb-2" >
                 <label for="mappes_user" class="mb-0">Mapped SAP B1 User <span class="text-danger">*</span></label>
-                <kendo-dropdownlist class="w-100" id="mappes_user" name="mappes_user" class="form-control-sm form-control"></kendo-dropdownlist>
+                <kendo-dropdownlist class="w-100 form-control-sm form-control" id="mappes_user" name="mappes_user"></kendo-dropdownlist>
             </div>
             <div class="form-group mb-2">
                 <label for="mappes_user_password" class="mb-0">Mapped SAP B1 User Password<span class="text-danger">*</span></label>
@@ -138,16 +138,27 @@
             </div>
         </form>
     </div>
-    <kendo-dialog-actions class="p-2">
+    <kendo-dialog-actions class="p-2 align-items-start">
+        <button class="btn btn-primary btn-sm d-flex align-items-center mr-2" type="button"> 
+            <svg viewBox="0 0 55.25 55.25" class="icon mr-2">
+                <use xlink:href="#edit"></use>
+            </svg> Edit
+        </button>           
+
+        <button class="btn btn-success btn-sm ml-auto mr-2 d-flex align-items-center" type="button">
+            <svg viewBox="0 0 512 512" class="icon mr-2">
+                <use xlink:href="#saveDisk"></use>
+            </svg> Save
+        </button>
+        <button class="btn btn-danger btn-sm d-flex align-items-center mr-2" type="button"> 
+            <svg viewBox="0 0 753.23 753.23" class="icon mr-2">
+                <use xlink:href="#bin"></use>
+            </svg> Delete
+        </button>
         <button class="btn btn-danger btn-sm d-flex align-items-center" type="button" (click)="dialougeToggle()"> 
             <svg viewBox="0 0 489 489" class="icon mr-2">
                 <use xlink:href="#cancel"></use>
             </svg> Cancel
-        </button>
-        <button class="btn btn-success btn-sm ml-2 d-flex align-items-center" type="button">
-            <svg viewBox="0 0 512 512" class="icon mr-2">
-                <use xlink:href="#saveDisk"></use>
-            </svg> Save
         </button>
     </kendo-dialog-actions>
 </kendo-dialog>

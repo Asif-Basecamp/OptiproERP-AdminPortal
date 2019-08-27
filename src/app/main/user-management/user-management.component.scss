@@ -2,7 +2,7 @@
     flex: 1 1 100%;
 }
 .kendo-grid-wrapper{
-    max-height: calc(100vh - 142px) !important;
+    max-height: calc(100vh - 144px) !important;
     ::ng-deep{
         & .full-height-grid{
             height: 100%;
@@ -25,5 +25,40 @@
     }
     & > .card .card-body{
         padding: 15px;
+    }
+}
+.addUserScreen{
+    max-height: calc(100vh - 130px) !important;
+    overflow: hidden;
+    overflow-y: auto;
+}
+
+.custom-height-grid{
+    max-height: calc(100vh - 469px) !important;
+    min-height: 250px;
+}
+
+.form-grid-wrapper .custom-height-grid{
+    max-height: calc(100vh - 799px) !important;
+    min-height: 138px;
+}
+.treeview-wrapper{
+    border: 1px solid #ced4da;
+    font-size: 0.65625rem;
+    border-radius: 0.2rem;;
+    padding: 0.25rem 0.5rem;    
+    max-height: calc(100vh - 759px);
+    overflow: auto;
+    min-height: 100px;
+    ::ng-deep{
+        & .k-treeview{
+            padding: 0;
+            & .k-in{
+                padding: 2px 4px;
+                &.k-state-focused {
+                    box-shadow: 0 0 0 2px #f0f0f0;
+                }
+            }
+        }
     }
 }

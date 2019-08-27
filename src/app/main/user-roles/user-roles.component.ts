@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { products } from 'src/app/dummyData/data';
-import { GridComponent } from '@progress/kendo-angular-grid';
+import { GridComponent, SelectableSettings } from '@progress/kendo-angular-grid';
 
 @Component({
   selector: 'app-user-roles',
@@ -15,11 +15,13 @@ export class UserRolesComponent implements OnInit {
   // public paginationType: 'input';
   // public paginationPageSizes = true;
   // public paginationInfoPreviousNext = true;
-  public dialogOpened = false;
+  public addRolesScreen = false;
 
   public gridData: any[];
+  public checkboxOnly = false;
 
-  constructor() { }
+  constructor() { 
+  }
 
   ngOnInit() {
     this.gridData = products;
@@ -45,7 +47,8 @@ export class UserRolesComponent implements OnInit {
   //   }
   // }
 
-  public dialougeToggle() {
-    this.dialogOpened = !this.dialogOpened;
+
+  public addRolesScreenToggle() {
+    this.addRolesScreen = !this.addRolesScreen;
   }
 }
