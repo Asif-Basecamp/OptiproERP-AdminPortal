@@ -49,12 +49,12 @@
                             <!-- <kendo-grid-column-chooser class="float-left opti_hide-in-mobile"></kendo-grid-column-chooser> -->
 
                             <!-- checkbox -->
-                            <label class="custom-checkbox mb-0 mr-2">
+                            <label class="custom-checkbox mb-0 mr-2 filter-checkbox">
                                 <input type="checkbox" [(ngModel)]="isColumnFilter" [ngModelOptions]="{standalone: true}">
                                 <span class="checkbox"></span>
                                 <span>Enable filter</span>
                             </label>
-                            <label class="custom-checkbox mb-0">
+                            <label class="custom-checkbox mb-0 grouping-checkbox">
                                 <input type="checkbox" [(ngModel)]="isColumnGroup" [ngModelOptions]="{standalone: true}">
                                 <span class="checkbox"></span>
                                 <span>Enable grouping</span>
@@ -118,7 +118,7 @@
                     <div class="col-12">
                         <div class="form-group mb-2">
                             <label class="mb-0">Roles</label>
-                            <kendo-grid [kendoGridBinding]="gridData" [resizable]="true" [sortable]="true" class="custom-height-grid" [filterable]=isColumnFilter
+                            <kendo-grid [kendoGridBinding]="gridData" [resizable]="true" [sortable]="true" class="custom-height-grid kendo-responsive-grid" [filterable]=isColumnFilter
                                 [groupable]=isColumnGroup [columnMenu]="false" [selectable]="{ checkboxOnly: true, mode: 'multiple' }">
                                 <!-- [pageSize]="10" 
                                 [pageable]="{
@@ -135,12 +135,12 @@
                                         <!-- <kendo-grid-column-chooser class="float-left opti_hide-in-mobile"></kendo-grid-column-chooser> -->
         
                                         <!-- checkbox -->
-                                        <label class="custom-checkbox mb-0 mr-2">
+                                        <label class="custom-checkbox mb-0 mr-2 filter-checkbox">
                                             <input type="checkbox" [(ngModel)]="isColumnFilter" [ngModelOptions]="{standalone: true}">
                                             <span class="checkbox"></span>
                                             <span>Enable filter</span>
                                         </label>
-                                        <label class="custom-checkbox mb-0">
+                                        <label class="custom-checkbox mb-0 grouping-checkbox">
                                             <input type="checkbox" [(ngModel)]="isColumnGroup" [ngModelOptions]="{standalone: true}">
                                             <span class="checkbox"></span>
                                             <span>Enable grouping</span>
@@ -154,11 +154,31 @@
                                     </div>
                                 </ng-template>
         
+                                
+                                <kendo-grid-checkbox-column  [width]="38" showSelectAll="true" class="text-center" headerClass="text-center"></kendo-grid-checkbox-column>
+                                <!-- Mobile view column -->
+                                <kendo-grid-column media="(max-width: 767px)" title="Items">
+                                    <ng-template kendoGridCellTemplate let-dataItem>
+                                        <div class="d-flex">
+                                            <dl class="mb-0 w-50 pr-1">
+                                                <dt>Role ID</dt>
+                                                <dd>{{ dataItem.ProductName }}</dd>
+                
+                                                <dt>Product</dt>
+                                                <dd class="mb-0">{{ dataItem.Category.CategoryName }}</dd>
+                                            </dl>                                
+                                            <dl class="mb-0 w-50">
+                                                <dt>Description</dt>
+                                                <dd>{{ dataItem.Category.Description }}</dd>
+                                            </dl>
+                                        </div>
+                                    </ng-template>
+                                </kendo-grid-column>
+
                                 <!-- columns for mid-size devices -->
-                                <kendo-grid-checkbox-column [width]="38" showSelectAll="true" class="text-center" headerClass="text-center"></kendo-grid-checkbox-column>
-                                <kendo-grid-column field="ProductName" title="Role ID"></kendo-grid-column>
-                                <kendo-grid-column field="Category.Description" title="Description"></kendo-grid-column>
-                                <kendo-grid-column field="Category.Description" title="Product"></kendo-grid-column>
+                                <kendo-grid-column media="(min-width: 768px)" field="ProductName" title="Role ID"></kendo-grid-column>
+                                <kendo-grid-column media="(min-width: 768px)" field="Category.Description" title="Description"></kendo-grid-column>
+                                <kendo-grid-column media="(min-width: 768px)" field="Category.Description" title="Product"></kendo-grid-column>
                                 <!-- xlsx template start -->
                                 <kendo-grid-excel fileName="Roles.xlsx"></kendo-grid-excel>
                                 <!-- xlsx template end -->
@@ -168,7 +188,7 @@
                 </div>
                 <div class="border-top py-3 mt-2">
                     <div class="form-row align-items-end">
-                        <div class="col-sm-5 col-md-4 col-lg-4 col-xl-4">
+                        <div class="col-9 col-sm-5 col-md-4 col-lg-4 col-xl-4">
                             <div class="form-group mb-2">
                                 <label class="mb-0" for="user_group">User Id</label>
                                 <div class="input-group">
@@ -184,7 +204,7 @@
                                 </div>
                             </div> 
                         </div>   
-                        <div class="col-sm-7 col-md-8 col-lg-8 col-xl-8">
+                        <div class="col-3 col-sm-7 col-md-8 col-lg-8 col-xl-8">
                             <div class="form-group mb-2">
                                 <button class="btn btn-primary btn-sm btn-icon" type="button">
                                     <svg viewBox="0 0 21.825 21.825" class="icon">
@@ -202,8 +222,53 @@
                     </div>
 
                     <div class="row mt-2">
-                        <div class="col-12">
-                            <kendo-grid [kendoGridBinding]="gridData" [resizable]="true" [sortable]="true" class="custom-height-grid" [filterable]=isColumnFilter2
+                        <div class="col-sm-12 col-md-5 col-lg-5 col-xl-4 mb-3 mb-md-0 mb-lg-0 mb-xl-0">
+                                <kendo-grid [kendoGridBinding]="gridData" [resizable]="true" [sortable]="true" class="custom-height-grid" [filterable]=isColumnFilter2
+                                [groupable]=isColumnGroup2 [columnMenu]="false" [selectable]="{ checkboxOnly: true, mode: 'multiple' }" [rowClass]="rowCallback">
+                                <!-- [pageSize]="10" 
+                                [pageable]="{
+                                    buttonCount: paginationButtonCount,
+                                    info: paginationInfo,
+                                    type: paginationType,
+                                    pageSizes: paginationPageSizes,
+                                    previousNext: paginationInfoPreviousNext
+                                }"> -->
+                                <!-- grid template start -->
+                                <ng-template kendoGridToolbarTemplate >
+                                    <div class="d-flex align-items-center">
+                                        <!-- show hide column start show hide -->
+                                        <!-- <kendo-grid-column-chooser class="float-left opti_hide-in-mobile"></kendo-grid-column-chooser> -->
+
+                                        <!-- checkbox -->
+                                        <label class="custom-checkbox mb-0 mr-2 filter-checkbox">
+                                            <input type="checkbox" [(ngModel)]="isColumnFilter2" [ngModelOptions]="{standalone: true}">
+                                            <span class="checkbox"></span>
+                                            <span>Enable filter</span>
+                                        </label>
+                                        <label class="custom-checkbox mb-0 grouping-checkbox">
+                                            <input type="checkbox" [(ngModel)]="isColumnGroup2" [ngModelOptions]="{standalone: true}">
+                                            <span class="checkbox"></span>
+                                            <span>Enable grouping</span>
+                                        </label>
+                                        <!-- export -->
+                                        <button type="button" kendoGridExcelCommand title="Export to excel file" class="ml-auto btn btn-link btn-sm btn-icon p-0">
+                                            <svg viewBox="0 0 512 512" class="icon">
+                                                <use xlink:href="#download"></use>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </ng-template>
+
+                                <kendo-grid-column field="ProductName" title="User"></kendo-grid-column>
+                                <kendo-grid-column field="Category.Description" title="Description"></kendo-grid-column>
+
+                                <!-- xlsx template start -->
+                                <kendo-grid-excel fileName="user.xlsx"></kendo-grid-excel>
+                                <!-- xlsx template end -->
+                            </kendo-grid>
+                        </div>
+                        <div class="col-sm-12 col-md-7 col-lg-7 col-xl-8">
+                            <kendo-grid [kendoGridBinding]="gridData" [resizable]="true" [sortable]="true" class="custom-height-grid kendo-responsive-grid" [filterable]=isColumnFilter2
                                 [groupable]=isColumnGroup2 [columnMenu]="false" [selectable]="{ checkboxOnly: true, mode: 'multiple' }">
                                 <!-- [pageSize]="10" 
                                 [pageable]="{
@@ -220,12 +285,12 @@
                                         <!-- <kendo-grid-column-chooser class="float-left opti_hide-in-mobile"></kendo-grid-column-chooser> -->
 
                                         <!-- checkbox -->
-                                        <label class="custom-checkbox mb-0 mr-2">
+                                        <label class="custom-checkbox mb-0 mr-2 filter-checkbox">
                                             <input type="checkbox" [(ngModel)]="isColumnFilter2" [ngModelOptions]="{standalone: true}">
                                             <span class="checkbox"></span>
                                             <span>Enable filter</span>
                                         </label>
-                                        <label class="custom-checkbox mb-0">
+                                        <label class="custom-checkbox mb-0 grouping-checkbox">
                                             <input type="checkbox" [(ngModel)]="isColumnGroup2" [ngModelOptions]="{standalone: true}">
                                             <span class="checkbox"></span>
                                             <span>Enable grouping</span>
@@ -239,10 +304,66 @@
                                     </div>
                                 </ng-template>
 
-                                <kendo-grid-column field="ProductName" title="Product"></kendo-grid-column>
-                                <kendo-grid-column field="Category.Description" title="Screen"></kendo-grid-column>
 
-                                <kendo-grid-column field="code" title="Add" width="60" class="text-center" headerClass="text-center">
+                                <!-- Mobile view column -->
+                                <kendo-grid-column media="(max-width: 767px)" title="Items">
+                                    <ng-template kendoGridCellTemplate let-dataItem>
+                                        <div class="d-flex">
+                                            <dl class="pr-1 w-50">
+                                                <dt>Product</dt>
+                                                <dd class="mb-0">{{ dataItem.ProductName }}</dd>
+                                            </dl>                                
+                                            <dl class="w-50">
+                                                <dt>Screen</dt>
+                                                <dd class="mb-0">{{ dataItem.Category.Description }}</dd>                                                                              
+                                            </dl>
+                                        </div>
+                                        <div class="d-flex">
+                                            <dl class="mb-0 pr-1" fxFlex="25%">
+                                                <dt>Add</dt>
+                                                <dd>
+                                                    <label class="custom-checkbox mb-0">
+                                                        <input type="checkbox">
+                                                        <span class="checkbox"></span>
+                                                    </label>
+                                                </dd>
+                                                
+                                            </dl>                                
+                                            <dl class="mb-0 pr-1" fxFlex="25%">
+                                                <dt>Update</dt>
+                                                <dd class="mb-0">
+                                                    <label class="custom-checkbox mb-0">
+                                                        <input type="checkbox">
+                                                        <span class="checkbox"></span>
+                                                    </label>
+                                                </dd>                                                                              
+                                            </dl>
+                                            <dl class="mb-0" fxFlex="25%">                                        
+                                                <dt>Delete</dt>
+                                                <dd class="mb-0">
+                                                    <label class="custom-checkbox mb-0">
+                                                        <input type="checkbox">
+                                                        <span class="checkbox"></span>
+                                                    </label>
+                                                </dd> 
+                                            </dl>
+                                            <dl class="mb-0" fxFlex="25%">                                        
+                                                <dt>Read</dt>
+                                                <dd class="mb-0">
+                                                    <label class="custom-checkbox mb-0">
+                                                        <input type="checkbox">
+                                                        <span class="checkbox"></span>
+                                                    </label>
+                                                </dd> 
+                                            </dl>                                            
+                                        </div>
+                                    </ng-template>
+                                </kendo-grid-column>
+                                
+                                <kendo-grid-column media="(min-width: 768px)" field="ProductName" title="Product"></kendo-grid-column>
+                                <kendo-grid-column media="(min-width: 768px)" field="Category.Description" title="Screen"></kendo-grid-column>
+
+                                <kendo-grid-column media="(min-width: 768px)" field="code" title="Add" width="60" class="text-center" headerClass="text-center">
                                     <ng-template kendoGridCellTemplate let-dataItem>
                                         <label class="custom-checkbox mb-0">
                                             <input type="checkbox">
@@ -251,7 +372,7 @@
                                     </ng-template>
                                 </kendo-grid-column>
 
-                                <kendo-grid-column field="code" title="Update" width="60" class="text-center" headerClass="text-center">
+                                <kendo-grid-column media="(min-width: 768px)" field="code" title="Update" width="60" class="text-center" headerClass="text-center">
                                     <ng-template kendoGridCellTemplate let-dataItem>
                                         <label class="custom-checkbox mb-0">
                                             <input type="checkbox">
@@ -260,7 +381,7 @@
                                     </ng-template>
                                 </kendo-grid-column>
 
-                                <kendo-grid-column field="code" title="Delete" width="60" class="text-center" headerClass="text-center">
+                                <kendo-grid-column media="(min-width: 768px)" field="code" title="Delete" width="60" class="text-center" headerClass="text-center">
                                     <ng-template kendoGridCellTemplate let-dataItem>
                                         <label class="custom-checkbox mb-0">
                                             <input type="checkbox">
@@ -269,7 +390,7 @@
                                     </ng-template>
                                 </kendo-grid-column>
 
-                                <kendo-grid-column field="code" title="Read" width="60" class="text-center" headerClass="text-center">
+                                <kendo-grid-column media="(min-width: 768px)" field="code" title="Read" width="60" class="text-center" headerClass="text-center">
                                     <ng-template kendoGridCellTemplate let-dataItem>
                                         <label class="custom-checkbox mb-0">
                                             <input type="checkbox">
@@ -356,12 +477,12 @@
                     <!-- <kendo-grid-column-chooser class="float-left opti_hide-in-mobile"></kendo-grid-column-chooser> -->
 
                     <!-- checkbox -->
-                    <label class="custom-checkbox mb-0 mr-2">
+                    <label class="custom-checkbox mb-0 mr-2 filter-checkbox">
                         <input type="checkbox" [(ngModel)]="isColumnFilter3" [ngModelOptions]="{standalone: true}">
                         <span class="checkbox"></span>
                         <span>Enable filter</span>
                     </label>
-                    <label class="custom-checkbox mb-0">
+                    <label class="custom-checkbox mb-0 grouping-checkbox">
                         <input type="checkbox" [(ngModel)]="isColumnGroup3" [ngModelOptions]="{standalone: true}">
                         <span class="checkbox"></span>
                         <span>Enable grouping</span>

@@ -3,23 +3,22 @@ import { products } from 'src/app/dummyData/data';
 import { GridComponent, RowClassArgs } from '@progress/kendo-angular-grid';
 
 @Component({
-  selector: 'app-user-authorization',
-  templateUrl: './user-authorization.component.html',
-  styleUrls: ['./user-authorization.component.scss']
+  selector: 'app-tenant',
+  templateUrl: './tenant.component.html',
+  styleUrls: ['./tenant.component.scss']
 })
-export class UserAuthorizationComponent implements OnInit {
+
+export class TenantComponent implements OnInit {
 
   // public paginationButtonCount = 5;
   // public paginationInfo = true;
   // public paginationType: 'input';
   // public paginationPageSizes = true;
   // public paginationInfoPreviousNext = true;
-  public addAuthScreen = false;
 
   public gridData: any[];
 
   public checkedKeys: any[] = [];
-  public dialogOpened: boolean;
 
   constructor() { 
     //this.setSelectableSettings();
@@ -40,13 +39,6 @@ export class UserAuthorizationComponent implements OnInit {
     //grid.filter.filters=[];
   }
 
-  public rowCallback(context: RowClassArgs) {
-      const isEven = context.index % 3 == 0;
-      return {
-        exceptional: isEven,
-      };
-  }
-
   // public isMobile(): void {
   //   if(window.innerWidth <= 991){
   //     // this.paginationInfo = false;
@@ -63,13 +55,6 @@ export class UserAuthorizationComponent implements OnInit {
 //     };
 // }
 
-  public addAuthScreenToggle() {
-    this.addAuthScreen = !this.addAuthScreen;
-  }
-
-  public dialougeToggle() {
-    this.dialogOpened = !this.dialogOpened;
-  }
 }
 
 

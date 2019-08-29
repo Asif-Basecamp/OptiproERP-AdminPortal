@@ -10,7 +10,7 @@
         }
     }
     @media screen and (max-width:767px){
-        max-height: calc(100vh - 116px) !important;        
+        max-height: calc(100vh - 118px) !important;        
     }
 }
 .layout-mode{
@@ -31,9 +31,18 @@
     max-height: calc(100vh - 130px) !important;
     overflow: hidden;
     overflow-y: auto;
+    @media screen and (max-width:767px){
+        max-height: calc(100vh - 100px) !important;
+    }
 }
 
 .custom-height-grid{
     max-height: calc(100vh - 324px) !important;
     min-height: 250px;
+    @media screen and (max-width:991px){
+        max-height: calc(100vh - 324px) !important;
+    }
+    @media screen and (max-width:767px){
+        max-height: calc(100vh - 294px) !important;
+    }
 }

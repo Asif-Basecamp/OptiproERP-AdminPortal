@@ -14,6 +14,7 @@ import { UserManagementComponent } from './user-management/user-management.compo
 import { UserAuthorizationComponent } from './user-authorization/user-authorization.component';
 import { UserRolesComponent } from './user-roles/user-roles.component';
 import { ConnectedUsersComponent } from './connected-users/connected-users.component';
+import { TenantComponent } from './tenant/tenant.component';
 
 
 @NgModule({
@@ -28,6 +29,6 @@ import { ConnectedUsersComponent } from './connected-users/connected-users.compo
     FlexLayoutModule,
     TreeViewModule  
   ],
-  declarations: [MainComponent, UserGroupComponent, UserManagementComponent, UserAuthorizationComponent, UserRolesComponent, ConnectedUsersComponent]
+  declarations: [MainComponent, UserGroupComponent, UserManagementComponent, UserAuthorizationComponent, UserRolesComponent, ConnectedUsersComponent, TenantComponent]
 })
 export class MainModule { }

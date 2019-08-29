@@ -317,12 +317,14 @@ body .k-grid th, body .k-grid td{
 }
 .kendo-responsive-grid{
   @media screen and (max-width:767px){
-    & .k-grid-header{
+    & .k-grid-header, & .filter-checkbox, & .grouping-checkbox{
       display: none;
     }
-  }
+  }  
 }
-
+dd {
+  margin-bottom: 6px;
+}
 //Kendow Modal
 .k-window-titlebar{
   background: $primary-gradiant !important;
@@ -336,4 +338,7 @@ body .k-grid th, body .k-grid td{
 .k-dialog-wrapper .k-dialog{
   border: none !important;
   border-radius: 5px;
+  @media screen and (max-width:1199px){
+    max-width: 100%;
+  }
 }

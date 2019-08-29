@@ -1,0 +1,177 @@
+<div class="layout-mode" fxFlex fxLayout="column">
+        <div class="page-header">
+            <h4>Tenant</h4>
+        </div>
+        <div class="card" fxFlex>
+            <div class="card-body pb-2" fxFlex fxLayout="column">            
+                <div class="tenantScreen pb-3" fxFlex="100%" fxLayout="column">
+                    <form>
+                        <div class="form-group row mb-0">
+                            <div class="col-sm-12 col-md-8 col-lg-6 col-xl-5">
+                                <div class="row align-items-center">
+                                    <label for="tenant_name" class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-form-label py-0">Tenant Name</label>
+                                    <div class="col-sm-9 col-md-9 col-lg-9 col-xl-9">
+                                        <div class="d-flex align-items-center">
+                                            <kendo-dropdownlist class="w-100 form-control-sm form-control" id="tenant_name" name="tenant_name"></kendo-dropdownlist>
+                                        </div>                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+        
+                    <!-- Kendo Grid Start -->
+                    <div fxLayout="column" fxFlex="100%" class="kendo-grid-wrapper mt-3">    
+                        <kendo-grid [kendoGridBinding]="gridData" [resizable]="true" [sortable]="true" class="custom-height-grid kendo-responsive-grid" [filterable]=isColumnFilter
+                            [groupable]=isColumnGroup [columnMenu]="false" [selectable]="{ checkboxOnly: true, mode: 'multiple' }">
+                            <!-- [pageSize]="10" 
+                            [pageable]="{
+                                buttonCount: paginationButtonCount,
+                                info: paginationInfo,
+                                type: paginationType,
+                                pageSizes: paginationPageSizes,
+                                previousNext: paginationInfoPreviousNext
+                            }"> -->
+                            <!-- grid template start -->
+                            <ng-template kendoGridToolbarTemplate >
+                                <div class="d-flex align-items-center">
+                                    <!-- show hide column start show hide -->
+                                    <!-- <kendo-grid-column-chooser class="float-left opti_hide-in-mobile"></kendo-grid-column-chooser> -->
+    
+                                    <!-- checkbox -->
+                                    <label class="custom-checkbox mb-0 mr-2 filter-checkbox">
+                                        <input type="checkbox" [(ngModel)]="isColumnFilter" [ngModelOptions]="{standalone: true}">
+                                        <span class="checkbox"></span>
+                                        <span>Enable filter</span>
+                                    </label>
+                                    <label class="custom-checkbox mb-0 grouping-checkbox">
+                                        <input type="checkbox" [(ngModel)]="isColumnGroup" [ngModelOptions]="{standalone: true}">
+                                        <span class="checkbox"></span>
+                                        <span>Enable grouping</span>
+                                    </label>
+                                    <!-- export -->
+                                    <button type="button" kendoGridExcelCommand title="Export to excel file" class="ml-auto btn btn-link btn-sm btn-icon p-0">
+                                        <svg viewBox="0 0 512 512" class="icon">
+                                            <use xlink:href="#download"></use>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </ng-template>
+    
+                            
+                            <kendo-grid-checkbox-column [width]="38" showSelectAll="true" class="text-center" headerClass="text-center"></kendo-grid-checkbox-column>
+    
+                            <!-- Mobile view column -->
+                            <kendo-grid-column media="(max-width: 767px)" title="Items">
+                                <ng-template kendoGridCellTemplate let-dataItem>
+                                    <div class="d-flex">
+                                        <dl class="mb-0 w-50 pr-1">
+                                            <dt>Product Code</dt>
+                                            <dd>{{ dataItem.ProductName }}</dd>
+            
+                                            <dt>Total License Assigned</dt>
+                                            <dd>{{ dataItem.Category.CategoryName }}</dd>
+                                            
+                                            <dt>Remaining</dt>
+                                            <dd class="mb-0">{{ dataItem.ProductName }}</dd>
+                                        </dl>                                
+                                        <dl class="mb-0 w-50">
+                                            <dt>Product Description</dt>
+                                            <dd>{{ dataItem.Category.Description }}</dd>
+    
+                                            <dt>Tenant License Count</dt>
+                                            <dd class="mb-0">{{ ProductName }}</dd>
+                                        </dl>
+                                    </div>
+                                </ng-template>
+                            </kendo-grid-column>
+    
+                            <!-- columns for mid-size devices -->
+                            <kendo-grid-column media="(min-width: 768px)" field="ProductName" title="Product Code"></kendo-grid-column>
+                            <kendo-grid-column media="(min-width: 768px)" field="Category.Description" title="Product Description"></kendo-grid-column>
+                            <kendo-grid-column media="(min-width: 768px)" field="Category.Description" title="Total License Assigned"></kendo-grid-column>
+                            <kendo-grid-column media="(min-width: 768px)" field="ProductName" title="Tenant License Count">
+                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                    <input type="text" class="form-control form-control-sm" placeholder="" [ngStyle]="{'height.px': '20'}">
+                                </ng-template>
+                            </kendo-grid-column>
+                            <kendo-grid-column media="(min-width: 768px)" field="Category.Description" title="Remaining"></kendo-grid-column>
+                            <!-- xlsx template start -->
+                            <kendo-grid-excel fileName="Tenant.xlsx"></kendo-grid-excel>
+                            <!-- xlsx template end -->
+                        </kendo-grid>
+    
+                        <kendo-grid [kendoGridBinding]="gridData" [resizable]="true" [sortable]="true" class="custom-height-grid mt-3" [filterable]=isColumnFilter
+                            [groupable]=isColumnGroup [columnMenu]="false" [selectable]="{ checkboxOnly: true, mode: 'multiple' }">
+                            <!-- [pageSize]="10" 
+                            [pageable]="{
+                                buttonCount: paginationButtonCount,
+                                info: paginationInfo,
+                                type: paginationType,
+                                pageSizes: paginationPageSizes,
+                                previousNext: paginationInfoPreviousNext
+                            }"> -->
+                            <!-- grid template start -->
+                            <ng-template kendoGridToolbarTemplate >
+                                <div class="d-flex align-items-center">
+                                    <!-- show hide column start show hide -->
+                                    <!-- <kendo-grid-column-chooser class="float-left opti_hide-in-mobile"></kendo-grid-column-chooser> -->
+    
+                                    <!-- checkbox -->
+                                    <!-- <label class="custom-checkbox mb-0 mr-2 filter-checkbox">
+                                        <input type="checkbox" [(ngModel)]="isColumnFilter" [ngModelOptions]="{standalone: true}">
+                                        <span class="checkbox"></span>
+                                        <span>Enable filter</span>
+                                    </label>
+                                    <label class="custom-checkbox mb-0 grouping-checkbox">
+                                        <input type="checkbox" [(ngModel)]="isColumnGroup" [ngModelOptions]="{standalone: true}">
+                                        <span class="checkbox"></span>
+                                        <span>Enable grouping</span>
+                                    </label> -->
+                                    <!-- export -->
+                                    <button type="button" kendoGridExcelCommand title="Export to excel file" class="ml-auto btn btn-link btn-sm btn-icon p-0">
+                                        <svg viewBox="0 0 512 512" class="icon">
+                                            <use xlink:href="#download"></use>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </ng-template>
+    
+                            <!-- columns for mid-size devices -->
+                            <kendo-grid-checkbox-column [width]="38" showSelectAll="true" class="text-center" headerClass="text-center"></kendo-grid-checkbox-column>
+                            <kendo-grid-column field="ProductName" title="Users"></kendo-grid-column>
+                            <!-- xlsx template start -->
+                            <kendo-grid-excel fileName="Tenant-users.xlsx"></kendo-grid-excel>
+                            <!-- xlsx template end -->
+                        </kendo-grid>
+                    </div>
+                    <!-- Kendo Grid End -->
+                </div>
+    
+                <!-- user detail save/cancel option -->
+                <div class="sticky-bottom-toolbar d-flex align-items-center justify-content-start border-top pt-2">                
+                    <button class="btn btn-primary btn-sm d-flex align-items-center mr-2" type="button"> 
+                        <svg viewBox="0 0 55.25 55.25" class="icon mr-2">
+                            <use xlink:href="#edit"></use>
+                        </svg> Edit
+                    </button>
+                    <button class="btn btn-success btn-sm mr-2 d-flex align-items-center" type="button">
+                        <svg viewBox="0 0 64 64" class="icon mr-2">
+                            <use xlink:href="#update"></use>
+                        </svg> Update
+                    </button>
+                    <button class="btn btn-danger btn-sm d-flex align-items-center mr-2" type="button"> 
+                        <svg viewBox="0 0 753.23 753.23" class="icon mr-2">
+                            <use xlink:href="#bin"></use>
+                        </svg> Delete
+                    </button>
+                    <button class="btn btn-danger btn-sm d-flex align-items-center" type="button"> 
+                        <svg viewBox="0 0 489 489" class="icon mr-2">
+                            <use xlink:href="#cancel"></use>
+                        </svg> Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+        

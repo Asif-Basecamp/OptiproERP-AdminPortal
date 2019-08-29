@@ -6,6 +6,7 @@ import { UserManagementComponent } from './user-management/user-management.compo
 import { UserRolesComponent } from './user-roles/user-roles.component';
 import { UserAuthorizationComponent } from './user-authorization/user-authorization.component';
 import { ConnectedUsersComponent } from './connected-users/connected-users.component';
+import { TenantComponent } from './tenant/tenant.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'default', pathMatch: 'full'},
@@ -15,6 +16,7 @@ const routes: Routes = [
   { path: 'roles',  pathMatch: 'full', component: UserRolesComponent },
   { path: 'authorization',  pathMatch: 'full', component: UserAuthorizationComponent },
   { path: 'connected-users',  pathMatch: 'full', component: ConnectedUsersComponent },
+  { path: 'tenant',  pathMatch: 'full', component: TenantComponent },
   // { path: 'user-management',  pathMatch: 'full', component: MainComponent }
 ];
 
