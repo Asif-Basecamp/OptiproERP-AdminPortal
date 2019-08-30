@@ -21,6 +21,8 @@ import { HttpClient, HttpHeaders, HttpClientModule } from '@angular/common/http'
 import { TranslateModule, TranslateLoader} from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { FormsModule } from '@angular/forms';
+import { TreeViewModule } from '@progress/kendo-angular-treeview';
+
 
 
 export function createTranslateLoader(http: HttpClient) {
@@ -53,7 +55,8 @@ export function createTranslateLoader(http: HttpClient) {
       },
       isolate: false
     }),
-    NotificationModule
+    NotificationModule,
+    TreeViewModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,8 +1,11 @@
 :host{
     flex: 1 1 100%;
+    ::ng-deep{
+        & .k-grid tr.exceptional { background: #41f4df; }
+    }
 }
 .kendo-grid-wrapper{
-    max-height: calc(100vh - 142px) !important;
+    max-height: calc(100vh - 144px) !important;
     ::ng-deep{
         & .full-height-grid{
             height: 100%;
@@ -10,7 +13,7 @@
         }
     }
     @media screen and (max-width:767px){
-        max-height: calc(100vh - 116px) !important;        
+        max-height: calc(100vh - 118px) !important;        
     }
 }
 .layout-mode{
@@ -27,3 +30,24 @@
         padding: 15px;
     }
 }
+.addAuthScreen{
+    max-height: calc(100vh - 130px) !important;
+    overflow: hidden;
+    overflow-y: auto;
+    @media screen and (max-width:767px){
+        max-height: calc(100vh - 100px) !important;
+    }
+}
+
+.custom-height-grid{
+    max-height: calc(100vh - 625px) !important;
+    min-height: 250px;
+    @media screen and (max-width:991px){
+        max-height: calc(100vh - 582px) !important;
+    }
+    @media screen and (max-width:575px){
+        max-height: calc(100vh - 750px) !important;        
+    }
+}
+
+

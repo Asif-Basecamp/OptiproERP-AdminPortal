@@ -2,7 +2,7 @@
     flex: 1 1 100%;
 }
 .kendo-grid-wrapper{
-    max-height: calc(100vh - 144px) !important;
+    // max-height: calc(100vh - 144px) !important;
     ::ng-deep{
         & .full-height-grid{
             height: 100%;
@@ -10,7 +10,7 @@
         }
     }
     @media screen and (max-width:767px){
-        max-height: calc(100vh - 118px) !important;        
+        // max-height: calc(100vh - 118px) !important;        
     }
 }
 .layout-mode{
@@ -27,7 +27,19 @@
         padding: 15px;
     }
 }
-.addRolesScreen{
+.custom-height-grid{
+    max-height: calc(100vh - 572px) !important;
+    min-height: 250px;
+    @media screen and (max-width:991px){
+        max-height: calc(100vh - 576px) !important;
+    }
+    @media screen and (max-width:767px){
+        max-height: calc(100vh - 557px) !important;
+    }
+}
+
+
+.tenantScreen{
     max-height: calc(100vh - 130px) !important;
     overflow: hidden;
     overflow-y: auto;
@@ -36,13 +48,3 @@
     }
 }
 
-.custom-height-grid{
-    max-height: calc(100vh - 324px) !important;
-    min-height: 250px;
-    @media screen and (max-width:991px){
-        max-height: calc(100vh - 324px) !important;
-    }
-    @media screen and (max-width:767px){
-        max-height: calc(100vh - 294px) !important;
-    }
-}

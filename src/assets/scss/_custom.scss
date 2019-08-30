@@ -82,7 +82,7 @@ app-sidebar.toggle  {
     margin: 0;
   }
   app-sidebar.toggle + .content-area > .content .layout-mode > &{
-    left: 135px;
+    left: 120px;
   }
   @media screen and (max-width:991px){
     left:50px; 
@@ -118,6 +118,7 @@ app-sidebar.toggle  {
 //custom-ui
 button.btn.btn-icon {
   padding: 4px 5px;
+  height:28px;
   &.btn-outline-secondary{
     &:hover, &:active{
       & svg{
@@ -129,6 +130,7 @@ button.btn.btn-icon {
     }
   }
   &.k-grid-excel{
+    height:auto;
     background: transparent;
     border: none;
     & > svg {
@@ -145,6 +147,7 @@ button.btn.btn-icon {
 
 .btn-sm:not(.btn-icon){
   min-height:28px;
+  line-height: 1;
 }
 
 //bootstrap-custom
@@ -155,6 +158,9 @@ button.btn.btn-icon {
 }
 
 //Form control
+.form-control-sm {
+  height: 28px;
+}
 .custom-checkbox {
     position: relative; // take it out of document flow
     cursor: pointer;
@@ -246,22 +252,127 @@ body .k-popup.k-menu-popup {
 .k-dropdown .k-dropdown-wrap{
   border-color: #fff;
   background-color: #fff;
-  color:#495057 !important
+  color:#495057 !important;
+  height: 100%;
 }
+
 body .k-widget.form-control-sm .k-input {
   padding: 0.25rem 0.5rem;
   height: auto;
 }
+.k-textbox, .k-input.k-textbox {
+  height: 28px;
+}
+.k-i-arrow-60-right, .k-i-expand-e, .k-i-expand, .k-i-sarrow-e, .k-i-arrow-e,
+.k-i-arrow-60-down, .k-i-expand-s, .k-i-collapse, .k-i-sarrow-s, .k-i-arrow-s{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 10px;
+  height: 10px;
+}
+.k-treeview .k-i-expand, .k-treeview .k-i-collapse{
+  margin-right: 5px;
+  margin-top: -2px;
+}
+.k-i-arrow-60-right::before, .k-i-expand-e::before, .k-i-expand::before, .k-i-sarrow-e::before, .k-i-arrow-e::before,
+.k-i-arrow-60-down::before, .k-i-expand-s::before, .k-i-collapse::before, .k-i-sarrow-s::before, .k-i-arrow-s::before{
+  content: "";
+  width: 8px;
+  height: 8px;
+  transition: 0.2s ease;
+  display: block;
+  background-image: url("data:image/svg+xml,%0A%3Csvg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 451.846 451.847' xml:space='preserve'%3E%3Cg fill='%23212529'%3E%3Cpath d='M345.441,248.292L151.154,442.573c-12.359,12.365-32.397,12.365-44.75,0c-12.354-12.354-12.354-32.391,0-44.744 L278.318,225.92L106.409,54.017c-12.354-12.359-12.354-32.394,0-44.748c12.354-12.359,32.391-12.359,44.75,0l194.287,194.284 c6.177,6.18,9.262,14.271,9.262,22.366C354.708,234.018,351.617,242.115,345.441,248.292z'/%3E%3C/g%3E%3C/svg%3E%0A");
+  background-repeat: no-repeat;
+  background-position: center;
+  
+}
+.k-i-arrow-60-down::before, .k-i-expand-s::before, .k-i-collapse::before, .k-i-sarrow-s::before, .k-i-arrow-s::before{
+  transform:rotateZ(90deg);
+}
+//kendo checkbox
+.k-checkbox:checked + .k-checkbox-label::after {
+  border-radius: 2px;
+  transform: scale(0.78);
+}
+.k-checkbox-label::before {
+  border-radius: 2px;
+}
+kendo-checkbox {
+  height: 16px;
+}
 // Kendo grid
-
 body .k-grid th, body .k-grid td{
   padding: 5px;
 }
-
+.k-filtercell > span, .k-filtercell .k-filtercell-wrapper {
+  align-items: center;
+}
+.k-filtercell .k-filtercell-wrapper > .k-textbox{
+  flex: 1 1 100%;
+}
+.text-center[kendogridcell] .k-checkbox-label, 
+.k-grid .text-center .k-checkbox-label{
+    padding-left: 16px;
+}
 .kendo-responsive-grid{
   @media screen and (max-width:767px){
-    & .k-grid-header{
+    & .k-grid-header, & .filter-checkbox, & .grouping-checkbox{
       display: none;
+    }
+  }  
+}
+dd {
+  margin-bottom: 6px;
+}
+.k-filtercell .k-filtercell-operator > .k-button:not(.k-clear-button-visible){
+  width: 0;
+  height: 0;
+  padding: 0;
+  overflow: hidden;
+  border: none;
+}
+kendo-grid-filter-wrapper-cell{
+  & > .k-textbox{
+    font-size:12px;
+    height:28px;
+  }
+  & kendo-grid-filter-cell-operators{
+    & kendo-dropdownlist{
+      & .k-dropdown-wrap{
+        border-color: rgba(33, 37, 41, 0.15);
+        width: 28px;
+        height: 28px;
+        & >span{
+          padding:0;  
+          width: 100%;
+          height:100%;
+        }
+      }
+    }
+    &  > .k-button.k-clear-button-visible{
+      height:28px !important;
+      width:28px;
+      margin-left: 0.375rem;
     }
   }
 }
+//Kendow Modal
+.k-window-titlebar{
+  background: $primary-gradiant !important;
+  padding: 10px 10px;
+  border-radius: 5px 5px 0 0;
+  & .k-dialog-title{
+    color:#fff;
+    font-size:16px;
+  }
+}
+.k-dialog-wrapper .k-dialog{
+  border: none !important;
+  border-radius: 5px;
+  @media screen and (max-width:1199px){
+    max-width: calc(100vw - 30px);
+  }
+}
+
+

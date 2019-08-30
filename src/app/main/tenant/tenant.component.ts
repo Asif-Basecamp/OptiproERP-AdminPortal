@@ -1,26 +1,27 @@
 import { Component, OnInit } from '@angular/core';
 import { products } from 'src/app/dummyData/data';
-import { GridComponent, SelectableSettings } from '@progress/kendo-angular-grid';
+import { GridComponent, RowClassArgs } from '@progress/kendo-angular-grid';
 
 @Component({
-  selector: 'app-user-roles',
-  templateUrl: './user-roles.component.html',
-  styleUrls: ['./user-roles.component.scss']
+  selector: 'app-tenant',
+  templateUrl: './tenant.component.html',
+  styleUrls: ['./tenant.component.scss']
 })
 
-export class UserRolesComponent implements OnInit {
+export class TenantComponent implements OnInit {
 
   // public paginationButtonCount = 5;
   // public paginationInfo = true;
   // public paginationType: 'input';
   // public paginationPageSizes = true;
   // public paginationInfoPreviousNext = true;
-  public addRolesScreen = false;
 
   public gridData: any[];
-  public checkboxOnly = false;
+
+  public checkedKeys: any[] = [];
 
   constructor() { 
+    //this.setSelectableSettings();
   }
 
   ngOnInit() {
@@ -47,8 +48,13 @@ export class UserRolesComponent implements OnInit {
   //   }
   // }
 
+//   public setSelectableSettings(): void {
+//     this.selectableSettings = {
+//         checkboxOnly: this.checkboxOnly,
+//         mode: this.mode
+//     };
+// }
 
-  public addRolesScreenToggle() {
-    this.addRolesScreen = !this.addRolesScreen;
-  }
 }
+
+

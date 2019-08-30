@@ -2,7 +2,7 @@
     flex: 1 1 100%;
 }
 .kendo-grid-wrapper{
-    max-height: calc(100vh - 142px) !important;
+    max-height: calc(100vh - 144px) !important;
     ::ng-deep{
         & .full-height-grid{
             height: 100%;
@@ -10,7 +10,7 @@
         }
     }
     @media screen and (max-width:767px){
-        max-height: calc(100vh - 116px) !important;        
+        max-height: calc(100vh - 118px) !important;        
     }
 }
 .layout-mode{
@@ -26,4 +26,8 @@
     & > .card .card-body{
         padding: 15px;
     }
+}
+
+.k-dialog-buttongroup{
+    align-items: center;
 }
