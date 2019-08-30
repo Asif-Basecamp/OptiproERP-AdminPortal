@@ -101,8 +101,8 @@
                             <!-- xlsx template end -->
                         </kendo-grid>
     
-                        <kendo-grid [kendoGridBinding]="gridData" [resizable]="true" [sortable]="true" class="custom-height-grid mt-3" [filterable]=isColumnFilter
-                            [groupable]=isColumnGroup [columnMenu]="false" [selectable]="{ checkboxOnly: true, mode: 'multiple' }">
+                        <kendo-grid [kendoGridBinding]="gridData" [resizable]="true" [sortable]="true" class="custom-height-grid mt-3" [filterable]=isColumnFilter2
+                            [groupable]=false [columnMenu]="false" [selectable]="{ checkboxOnly: true, mode: 'multiple' }">
                             <!-- [pageSize]="10" 
                             [pageable]="{
                                 buttonCount: paginationButtonCount,
@@ -118,16 +118,16 @@
                                     <!-- <kendo-grid-column-chooser class="float-left opti_hide-in-mobile"></kendo-grid-column-chooser> -->
     
                                     <!-- checkbox -->
-                                    <!-- <label class="custom-checkbox mb-0 mr-2 filter-checkbox">
-                                        <input type="checkbox" [(ngModel)]="isColumnFilter" [ngModelOptions]="{standalone: true}">
+                                    <label class="custom-checkbox mb-0 mr-2 filter-checkbox">
+                                        <input type="checkbox" [(ngModel)]="isColumnFilter2" [ngModelOptions]="{standalone: true}">
                                         <span class="checkbox"></span>
                                         <span>Enable filter</span>
                                     </label>
-                                    <label class="custom-checkbox mb-0 grouping-checkbox">
+                                    <!-- <label class="custom-checkbox mb-0 grouping-checkbox">
                                         <input type="checkbox" [(ngModel)]="isColumnGroup" [ngModelOptions]="{standalone: true}">
                                         <span class="checkbox"></span>
                                         <span>Enable grouping</span>
-                                    </label> -->
+                                    </label>  -->
                                     <!-- export -->
                                     <button type="button" kendoGridExcelCommand title="Export to excel file" class="ml-auto btn btn-link btn-sm btn-icon p-0">
                                         <svg viewBox="0 0 512 512" class="icon">

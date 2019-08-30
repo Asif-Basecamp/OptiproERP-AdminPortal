@@ -33,6 +33,9 @@
     @media screen and (max-width:991px){
         max-height: calc(100vh - 576px) !important;
     }
+    @media screen and (max-width:767px){
+        max-height: calc(100vh - 557px) !important;
+    }
 }
 
 
