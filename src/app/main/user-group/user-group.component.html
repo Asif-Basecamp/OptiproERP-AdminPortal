@@ -32,8 +32,10 @@
             <!-- Kendo Grid Start -->
             <div fxLayout="column" fxFlex="100%" class="kendo-grid-wrapper mt-3">
 
-                <kendo-grid [kendoGridBinding]="gridData" [resizable]="true" [sortable]="true" class="full-height-grid kendo-responsive-grid" [filterable]=isColumnFilter
-                    [groupable]=isColumnGroup [columnMenu]="false">
+                <kendo-grid #gridUser [kendoGridBinding]="gridData" [resizable]="true" [sortable]="true" class="full-height-grid kendo-responsive-grid" [filterable]=isColumnFilter
+                    [groupable]=isColumnGroup [columnMenu]="false"
+                    [selectable]="true" 
+                    (selectionChange)="gridUserSelectionChange(gridUser, $event)">
                     <!-- [pageSize]="10" 
                     [pageable]="{
                         buttonCount: paginationButtonCount,
@@ -71,26 +73,31 @@
                     <!-- Mobile view column -->
                     <kendo-grid-column media="(max-width: 767px)" title="Items">
                         <ng-template kendoGridCellTemplate let-dataItem>
+                            debugger
                             <div class="d-flex">
                                 <dl class="mb-0 w-50 pr-1">
-                                    <dt>Group Code</dt>
-                                    <dd>{{ dataItem.ProductName }}</dd>
-    
-                                    <dt>Admin</dt>
-                                    <dd class="mb-0">{{ dataItem.Category.CategoryName }}</dd>
+                                    <dt>Group Codeaaaaa</dt>
+                                    <dd>{{ dataItem.OPTM_GROUPCODE}}</dd>
+                                    {{ dataItem.OPTM_GROUPCODE}}
+                                    <!-- <dt>Admin</dt>
+                                    <dd class="mb-0">{{ dataItem.Category.CategoryName }}</dd> -->
                                 </dl>                                
                                 <dl class="mb-0 w-50">
                                     <dt>Group Description</dt>
-                                    <dd>{{ dataItem.Category.Description }}</dd>
+                                    <dd>{{ dataItem.OPTM_DESCRIPTION}}</dd>
                                 </dl>
+                                <dl class="mb-0 w-50">
+                                        <dt>Group Admin</dt>
+                                        <dd>{{ dataItem.OPTM_ISADMIN }}</dd>
+                                    </dl>
                             </div>
                         </ng-template>
                     </kendo-grid-column>
-
+                  
                     <!-- columns for mid-size devices -->
-                    <kendo-grid-column media="(min-width: 768px)" field="ProductName" title="Group Code"></kendo-grid-column>
-                    <kendo-grid-column media="(min-width: 768px)" field="Category.Description" title="Group Description"></kendo-grid-column>
-                    <kendo-grid-column media="(min-width: 768px)" field="Category.CategoryName" title="Admin">
+                    <kendo-grid-column media="(min-width: 768px)" field="OPTM_GROUPCODE" title="Group Code"></kendo-grid-column>
+                    <kendo-grid-column media="(min-width: 768px)" field="OPTM_DESCRIPTION" title="Group Description"></kendo-grid-column>
+                    <kendo-grid-column media="(min-width: 768px)" field="OPTM_ISADMIN" title="Admin">
                     </kendo-grid-column>
 
                     <!-- xlsx template start -->
@@ -113,24 +120,27 @@
         <form >
             <div class="form-group mb-2">
                 <label for="user_group" class="mb-0">User Group<span class="text-danger">*</span></label>
-                <input type="text" class="form-control form-control-sm" id="user_group" name="user" autocomplete="off">
+                <input type="text" #UserGrpId class="form-control form-control-sm" id="UserGroupId" name="UserGroupId" [(ngModel)]="model.UserGroupId"  (change)="onChange(UserGrpId.value)"  autocomplete="off">
             </div>
             <div class="form-group mb-2">
                 <label for="description" class="mb-0">Description<span class="text-danger">*</span></label>
-                <input type="text" class="form-control form-control-sm" id="description" name="description" autocomplete="off">
+                <input type="text" class="form-control form-control-sm" id="UserGroupDesc" name="UserGroupDesc" [(ngModel)]="model.UserGroupDesc" autocomplete="off">
             </div>            
             <div class="form-group mb-2" >
                 <label for="mappes_user" class="mb-0">Mapped SAP B1 User <span class="text-danger">*</span></label>
-                <kendo-dropdownlist class="w-100" id="mappes_user" name="mappes_user" class="form-control-sm form-control"></kendo-dropdownlist>
+                <kendo-dropdownlist class="w-100" id="mapped_user" [data]="DropDownListData" [(ngModel)]="model.mapped_user" name="mapped_user" class="form-control-sm form-control"
+                [textField]="'USER_CODE'"
+                [valueField]="'USER_CODE'">
+                </kendo-dropdownlist>
             </div>
             <div class="form-group mb-2">
                 <label for="mappes_user_password" class="mb-0">Mapped SAP B1 User Password<span class="text-danger">*</span></label>
-                <input type="password" id="mappes_user_password" name="mappes_user_password" class="form-control form-control-sm" autocomplete="off">
+                <input type="password" id="mapped_Password" name="mapped_Password" [(ngModel)]="model.mapped_Password" class="form-control form-control-sm" autocomplete="off">
             </div>
             <div class="row form-group mb-0">
                 <div class="col-12 d-flex align-items-center my-2">
                 <label class="custom-checkbox mb-0">
-                    <input type="checkbox" value="">
+                    <input type="checkbox"  id="IsAdminEnabled" name="IsAdminEnabled" [(ngModel)]="model.IsAdminEnabled">
                     <span class="checkbox"></span>
                     <span class="text-inverse">Manager/Admin</span>
                 </label>
@@ -144,7 +154,7 @@
                 <use xlink:href="#cancel"></use>
             </svg> Cancel
         </button>
-        <button class="btn btn-success btn-sm ml-2 d-flex align-items-center" type="button">
+        <button class="btn btn-success btn-sm ml-2 d-flex align-items-center" type="button" (click)="SaveData()" >
             <svg viewBox="0 0 512 512" class="icon mr-2">
                 <use xlink:href="#saveDisk"></use>
             </svg> Save
