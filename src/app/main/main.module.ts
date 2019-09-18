@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, LowerCasePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DialogsModule } from '@progress/kendo-angular-dialog';
 import { GridModule, ExcelModule } from '@progress/kendo-angular-grid';
@@ -29,6 +29,7 @@ import { TenantComponent } from './tenant/tenant.component';
     FlexLayoutModule,
     TreeViewModule  
   ],
+  providers: [LowerCasePipe],
   declarations: [MainComponent, UserGroupComponent, UserManagementComponent, UserAuthorizationComponent, UserRolesComponent, ConnectedUsersComponent, TenantComponent]
 })
 export class MainModule { }

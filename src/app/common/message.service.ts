@@ -13,7 +13,7 @@ export class MessageService {
       animation: { type: 'slide', duration: 400 },
       position: { horizontal: 'right', vertical: 'top' },
       type: { style: 'success', icon: true },
-      closable: true
+      closable: false
     });
   }
   public errormessage(message: string): void {
@@ -23,7 +23,7 @@ export class MessageService {
       animation: { type: 'slide', duration: 400 },
       position: { horizontal: 'right', vertical: 'top' },
       type: { style: 'error', icon: true },
-      closable: true
+      closable: false
     });
   }
   public Infomessage(message: string): void {
@@ -33,7 +33,7 @@ export class MessageService {
       animation: { type: 'slide', duration: 400 },
       position: { horizontal: 'right', vertical: 'top' },
       type: { style: 'info', icon: true },
-      closable: true
+      closable: false
     });
   }
 }

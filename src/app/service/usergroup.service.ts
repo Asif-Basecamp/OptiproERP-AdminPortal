@@ -17,7 +17,7 @@ export class UsergroupService {
   }
 GetUserGroupGridData(model : any)
 {
-  debugger
+  
   this.Url = 'http://localhost:57962/api/UserGroup/GetAllUserGroupRecords';  
   const headerSettings: {[name: string]: string | string[]; } = {};  
   this.header = new HttpHeaders(headerSettings);  
@@ -40,16 +40,55 @@ AddUser(model : any){
   this.Url = 'http://localhost:57962/api/UserGroup/AddUserGroup';  
  
   var jObject = { UserGroupValues: JSON.stringify([{ UserGroupId: model.UserGroupId, 
-    UserGroupDesc: model.UserGroupDesc, IsAdminEnabled: model.IsAdminEnabled, SAPUser: model.mapped_user.USER_CODE, SAPPass: model.mapped_Password }]) };
+    UserGroupDesc: model.UserGroupDesc, IsAdminEnabled: model.IsAdminEnabled, SAPUser: model.mapped_user, SAPPass: model.mapped_Password }]) };
  return this.http.post<any>(this.Url,jObject,{ headers: this.header});
 }
-CheckDuplicateUserGroup(UserGrpId:string) {
+UpdateUser(model : any){ 
   debugger;
+  const headerSettings: {[name: string]: string | string[]; } = {};  
+    this.header = new HttpHeaders(headerSettings);  
+  this.Url = 'http://localhost:57962/api/UserGroup/UpdateUserGroupRecord';  
+ 
+  var jObject = { UserGroupValues: JSON.stringify([{ UserGroupId: model.UserGroupId,isGrpIdEditable:model.isGrpIdEditable=true,
+    UserGroupDesc: model.UserGroupDesc, IsAdminEnabled: model.IsAdminEnabled, SAPUser: model.mapped_user,
+    PreviousGrpId:model.PreviousGrpId, SAPPassword: model.mapped_Password }]) };
+    return this.http.post<any>(this.Url,jObject,{ headers: this.header});
+}
+ChkUserGroupAssociativity(model : any)
+{
+  debugger;
+  const headerSettings: {[name: string]: string | string[]; } = {};  
+    this.header = new HttpHeaders(headerSettings);  
+  this.Url = 'http://localhost:57962/api/UserGroup/ChkUserGroupAssociativity';  
+ 
+  var jObject = { UserGroupValues: JSON.stringify([{ UserGroupId: model.UserGroupId }]) };
+    return this.http.post<any>(this.Url,jObject,{ headers: this.header});
+}
+DeleteUser(model : any){ 
+  debugger;
+  const headerSettings: {[name: string]: string | string[]; } = {};  
+    this.header = new HttpHeaders(headerSettings);  
+  this.Url = 'http://localhost:57962/api/UserGroup/DeleteUserGroupRecordById';  
+ 
+  var jObject = { UserGroupValues: JSON.stringify([{ UserGroupId: model.UserGroupId, 
+    UserGroupDesc: model.UserGroupDesc, IsAdminEnabled: model.IsAdminEnabled }]) };
+    return this.http.post<any>(this.Url,jObject,{ headers: this.header});
+}
+GetDataByUserId(UserGroupId:string)
+{
+    const headerSettings: {[name: string]: string | string[]; } = {};  
+    this.header = new HttpHeaders(headerSettings);  
+    this.Url = 'http://localhost:57962/api/UserGroup/SelectUserGroupRecordById';  
+    var jObject = { UserGroupValues: JSON.stringify([{ UserGroupId: UserGroupId }]) };
+    return this.http.post<any>(this.Url,jObject,{ headers: this.header});
+}
+CheckDuplicateUserGroup(UserGrpId:string) {
+  
   const headerSettings: {[name: string]: string | string[]; } = {};  
     this.header = new HttpHeaders(headerSettings);  
   this.Url = 'http://localhost:57962/api/UserGroup/CheckUserGroupIdDuplicity';   
   var jObject = { UserGroupValues: JSON.stringify([{ UserGroupId: UserGrpId.toUpperCase() }]) };
  return this.http.post<any>(this.Url,jObject,{ headers: this.header});
   
-}
+  }
 }
