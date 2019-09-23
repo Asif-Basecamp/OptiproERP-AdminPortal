@@ -1,9 +1,9 @@
-<div class="layout-mode" fxFlex="100%" fxLayout="column">
+<div class="layout-mode" fxFlex fxLayout="column">
     <div class="page-header">
-        <h4 *ngIf="!dialogOpened">User Group</h4>
+        <h4 *ngIf="!dialogOpened">{{'User_Group'|translate}}</h4> 
         <h4 *ngIf="dialogOpened">User Group - Add New</h4>
     </div>
-    <div class="card" *ngIf="!dialogOpened" fxFlex>
+    <div class="card" fxFlex>
         <div class="card-body" fxFlex fxLayout="column">
             <form>
                 <div class="row">
@@ -11,7 +11,7 @@
                         <div class="d-flex align-items-center">
                             <div class="input-group">
                                 <input type="text" class="form-control form-control-sm" id="search"
-                                    placeholder="Search" (input)="onInput($event.target.value)">
+                                    placeholder="{{'Search'|translate}}" (input)="onInput($event.target.value)">
                                 <div class="input-group-append">
                                     <button class="btn btn-primary btn-sm btn-icon" type="button">
                                         <svg viewBox="0 0 410.23 410.23" class="icon">
@@ -32,6 +32,7 @@
 
             <!-- Kendo Grid Start -->
             <div fxLayout="column" fxFlex="100%" class="kendo-grid-wrapper mt-3">
+
                 <kendo-grid #gridUser [kendoGridBinding]="gridData" [resizable]="true" [sortable]="true" class="full-height-grid kendo-responsive-grid" [filterable]=isColumnFilter
                     [groupable]=isColumnGroup [columnMenu]="false"
                     [selectable]="true" 
@@ -54,15 +55,15 @@
                             <label class="custom-checkbox mb-0 mr-2 filter-checkbox">
                                 <input type="checkbox" [(ngModel)]="isColumnFilter" [ngModelOptions]="{standalone: true}">
                                 <span class="checkbox"></span>
-                                <span>Enable filter</span>
+                                <span>{{'Enable_filter'|translate}}</span>
                             </label>
                             <label class="custom-checkbox mb-0 grouping-checkbox">
                                 <input type="checkbox" [(ngModel)]="isColumnGroup" [ngModelOptions]="{standalone: true}">
                                 <span class="checkbox"></span>
-                                <span>Enable grouping</span>
+                                <span>{{'Enable_grouping'|translate}}</span>
                             </label>
                             <!-- export -->
-                            <button type="button" kendoGridExcelCommand title="Export to excel file" class="ml-auto btn btn-link btn-sm btn-icon p-0">
+                            <button type="button" kendoGridExcelCommand title="{{'Export_to_excel_file'|translate}}" class="ml-auto btn btn-link btn-sm btn-icon p-0">
                                 <svg viewBox="0 0 512 512" class="icon">
                                     <use xlink:href="#download"></use>
                                 </svg>
@@ -76,18 +77,18 @@
                             
                             <div class="d-flex">
                                 <dl class="mb-0 w-50 pr-1">
-                                    <dt>Group Codeaaaaa</dt>
+                                    <dt>{{'Group_Code'|translate}}</dt>
                                     <dd>{{ dataItem.OPTM_GROUPCODE}}</dd>
                                     {{ dataItem.OPTM_GROUPCODE}}
                                     <!-- <dt>Admin</dt>
                                     <dd class="mb-0">{{ dataItem.Category.CategoryName }}</dd> -->
                                 </dl>                                
                                 <dl class="mb-0 w-50">
-                                    <dt>Group Description</dt>
+                                    <dt>{{'Group_Description'|translate}}</dt>
                                     <dd>{{ dataItem.OPTM_DESCRIPTION}}</dd>
                                 </dl>
                                 <dl class="mb-0 w-50">
-                                        <dt>Group Admin</dt>
+                                        <dt>{{'Group_Admin'|translate}}</dt>
                                         <dd>{{ dataItem.OPTM_ISADMIN }}</dd>
                                     </dl>
                             </div>
@@ -95,9 +96,9 @@
                     </kendo-grid-column>
                   
                     <!-- columns for mid-size devices -->
-                    <kendo-grid-column media="(min-width: 768px)" field="OPTM_GROUPCODE" title="Group Code"></kendo-grid-column>
-                    <kendo-grid-column media="(min-width: 768px)" field="OPTM_DESCRIPTION" title="Group Description"></kendo-grid-column>
-                    <kendo-grid-column media="(min-width: 768px)" field="OPTM_ISADMIN" title="Admin">
+                    <kendo-grid-column media="(min-width: 768px)" field="OPTM_GROUPCODE" title="{{'Group_Code'|translate}}"></kendo-grid-column>
+                    <kendo-grid-column media="(min-width: 768px)" field="OPTM_DESCRIPTION" title="{{'Group_Description'|translate}}"></kendo-grid-column>
+                    <kendo-grid-column media="(min-width: 768px)" field="OPTM_ISADMIN" title="{{'Admin'|translate}}">
                     </kendo-grid-column>
 
                     <!-- xlsx template start -->
@@ -108,119 +109,109 @@
             <!-- Kendo Grid End -->
         </div>
     </div>
-    <div class="card" *ngIf="dialogOpened" fxFlex>
-        <div class="card-body" fxFlex fxLayout="column">
-            <form #UserForm="ngForm" fxFlex fxLayout="column">
-                <div class="addNewScreen pb-3" fxFlex="100%" >
-                    <div class="row no-gutters">
-                        <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
-                            <div class="form-group mb-2 px-1">
-                                <label for="user_group" class="mb-0">User Group<span class="text-danger">*</span></label>
-                                <input type="text" #UserGrpId="ngModel" class="form-control form-control-sm" id="UserGroupId" name="UserGroupId" [(ngModel)]="model.UserGroupId"  (change)="onChange(UserGrpId.value)" [readonly]="!Ugroup"  autocomplete="off" required>
-                            </div>
-                            <div class="form-group mb-2 px-1">
-                                <label for="description" class="mb-0">Description<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control form-control-sm" id="UserGroupDesc" name="UserGroupDesc" #UserGroupDesc="ngModel" [(ngModel)]="model.UserGroupDesc" [readonly]="!UDesc" autocomplete="off" required>
-                            </div>            
-                            <div class="form-group mb-2 px-1" >
-                                <label for="mappes_user" class="mb-0">Mapped SAP B1 User <span class="text-danger">*</span></label>
-                                
-                                <kendo-dropdownlist class="w-100" id="sapUser" [data]="DropDownListData" 
-                                [(ngModel)]="model.mapped_user" #mappeduser="ngModel" [valuePrimitive]="true" [readonly]="!UUser"  name="sapUser" class="w-100 form-control-sm form-control" required autocomplete="off"
-                                textField="USER_CODE"
-                                valueField="USER_CODE">
-                                </kendo-dropdownlist> 
-                                
-                            </div>                            
-                            <div class="form-group mb-2 px-1">
-                                <label for="mappes_user_password" class="mb-0">Mapped SAP B1 User Password<span class="text-danger">*</span></label>
-                                <input type="password" id="mapped_Password" [readonly]="!UPwd" name="mapped_Password" #mappedPasasword="ngModel" [(ngModel)]="model.mapped_Password" class="form-control form-control-sm" autocomplete="off" required>
-                            </div>
-                            <div class="row form-group mb-0 px-1">
-                                <div class="col-12 d-flex align-items-center my-2">
-                                <label class="custom-checkbox mb-0">
-                                    <input type="checkbox"  id="IsAdminEnabled" name="IsAdminEnabled" [(ngModel)]="model.IsAdminEnabled" [disabled]="!AdminEnable">
-                                    <span class="checkbox"></span>
-                                    <span class="text-inverse">Manager/Admin</span>
-                                </label>
-                                </div>
-                            </div>        
-                        </div>
-                    </div>
-                </div>
-                <div class="sticky-bottom-toolbar d-flex align-items-center justify-content-start border-top pt-2">
-                    <button class="btn btn-primary btn-sm d-flex align-items-center mr-2" type="button" *ngIf="enableEdit" (click)="EnableFields()"> 
-                        <svg viewBox="0 0 55.25 55.25" class="icon mr-2">
-                            <use xlink:href="#edit"></use>
-                        </svg> Edit
-                    </button>           
-            
-                    <button class="btn btn-success btn-sm d-flex align-items-center mr-2" type="button" (click)="SaveData()" *ngIf="enableSubmit" [disabled]= "!UserForm.form.valid" >
-                        <svg viewBox="0 0 512 512" class="icon mr-2">
-                            <use xlink:href="#saveDisk"></use>
-                        </svg> Save
-                    </button>
-                    <button class="btn btn-success btn-sm ml-2 d-flex align-items-center mr-2" type="button"
-                    (click)="UpdateData()" *ngIf="enableUpdate">
-                        <svg viewBox="0 0 64 64" class="icon mr-2">
-                            <use xlink:href="#update"></use>
-                        </svg>Update
-                    </button>
-                    <button class="btn btn-danger ml-2 btn-sm d-flex align-items-center mr-2" *ngIf="enableDelete" type="button"
-                    
-                    (click)="confirmationToggle()"> 
-                    <svg viewBox="0 0 753.23 753.23" class="icon mr-2">
-                            <use xlink:href="#bin"></use>
-                        </svg> Delete
-                    </button>
-                    <button class="btn btn-danger btn-sm d-flex align-items-center mr-2" type="button" (click)="dialougeToggle()"> 
-                        <svg viewBox="0 0 489 489" class="icon mr-2">
-                            <use xlink:href="#cancel"></use>
-                        </svg> Cancel 
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
 </div>
 
 <!-- Kendo Dialouge -->
-<!-- 
+
 <kendo-dialog *ngIf="dialogOpened" (close)="dialougeToggle()" [minWidth]="250" [width]="450">
     <kendo-dialog-titlebar>
         <div> {{HeaderText}}</div>
     </kendo-dialog-titlebar>
     <form #UserForm="ngForm">
-    
+    <div class="">
+        
+            <div class="form-group mb-2">
+                <label for="user_group" class="mb-0">{{'Group_Admin'|translate}}<span class="text-danger">*</span></label>
+                <input type="text" #UserGrpId="ngModel" class="form-control form-control-sm" id="UserGroupId" name="UserGroupId" [(ngModel)]="model.UserGroupId"  (change)="onChange(UserGrpId.value)" [readonly]="!Ugroup"  autocomplete="off" required>
+            </div>
+            <div class="form-group mb-2">
+                <label for="description" class="mb-0">{{'Description'|translate}}<span class="text-danger">*</span></label>
+                <input type="text" class="form-control form-control-sm" id="UserGroupDesc" name="UserGroupDesc" #UserGroupDesc="ngModel" [(ngModel)]="model.UserGroupDesc" [readonly]="!UDesc" autocomplete="off" required>
+            </div>            
+            <div class="form-group mb-2" >
+                <label for="mappes_user" class="mb-0"> {{'Mapped_SAP_B1_User'|translate}} <span class="text-danger">*</span></label>
+               
+                <kendo-dropdownlist class="w-100" id="sapUser" [data]="DropDownListData" 
+                [(ngModel)]="model.mapped_user" #mappeduser="ngModel" [valuePrimitive]="true" [readonly]="!UUser"  name="sapUser" class="w-100 form-control-sm form-contro" required autocomplete="off"
+                textField="USER_CODE"
+                valueField="USER_CODE">
+                </kendo-dropdownlist> 
+                
+            </div>
+            
+            <div class="form-group mb-2">
+                <label for="mappes_user_password" class="mb-0">{{'Mapped_SAP_B1_User_Password'|translate}}<span class="text-danger">*</span></label>
+                <input type="password" id="mapped_Password" [readonly]="!UPwd" name="mapped_Password" #mappedPasasword="ngModel" [(ngModel)]="model.mapped_Password" class="form-control form-control-sm" autocomplete="off" required>
+            </div>
+            <div class="row form-group mb-0">
+                <div class="col-12 d-flex align-items-center my-2">
+                <label class="custom-checkbox mb-0">
+                    <input type="checkbox"  id="IsAdminEnabled" name="IsAdminEnabled" [(ngModel)]="model.IsAdminEnabled" [disabled]="!AdminEnable">
+                    <span class="checkbox"></span>
+                    <span class="text-inverse">  {{'Manager_Admin'|translate}}</span>
+                </label>
+                </div>
+            </div>
+        
+    </div>
     <kendo-dialog-actions class="p-2 align-items-start justify-content-start">
-       
+        <button class="btn btn-primary btn-sm d-flex align-items-center mr-2" type="button" *ngIf="enableEdit" (click)="EnableFields()"> 
+            <svg viewBox="0 0 55.25 55.25" class="icon mr-2">
+                <use xlink:href="#edit"></use>
+            </svg>   {{'Edit'|translate}}
+        </button>           
+
+        <button class="btn btn-success btn-sm ml-auto d-flex align-items-center" type="button" (click)="SaveData()" *ngIf="enableSubmit" [disabled]= "!UserForm.form.valid" >
+            <svg viewBox="0 0 512 512" class="icon mr-2">
+                <use xlink:href="#saveDisk"></use>
+            </svg>  {{'Save'|translate}}
+        </button>
+        <button class="btn btn-success btn-sm ml-2 d-flex align-items-center" type="button"
+        (click)="UpdateData()" *ngIf="enableUpdate">
+            <svg viewBox="0 0 64 64" class="icon mr-2">
+                <use xlink:href="#update"></use>
+            </svg> {{'Update'|translate}}
+        </button>
+        <button class="btn btn-danger ml-2 btn-sm d-flex align-items-center mr-2" *ngIf="enableDelete" type="button"
+         
+         (click)="confirmationToggle()"> 
+          <svg viewBox="0 0 753.23 753.23" class="icon mr-2">
+                <use xlink:href="#bin"></use>
+            </svg> {{'Delete'|translate}}
+        </button>
+        <button class="btn btn-danger btn-sm d-flex align-items-center" type="button" (click)="dialougeToggle()"> 
+            <svg viewBox="0 0 489 489" class="icon mr-2">
+                <use xlink:href="#cancel"></use>
+            </svg> {{'Cancel'|translate}}
+        </button>
         
     </kendo-dialog-actions>
 </form>
-</kendo-dialog> -->
+</kendo-dialog>
 
 <!-- Confirmation Dialouge -->
 
 <kendo-dialog *ngIf="confirmationOpened" (close)="confirmationToggle()" [minWidth]="250" [width]="450">
     <kendo-dialog-titlebar>
-        <div> Please Confirm</div>
+        <div> {{'Please_Confirm'|translate}}</div>
     </kendo-dialog-titlebar>
     <div class="">
-Do you want to delete record?
+        {{'Do_you_want_to_delete_record'|translate}}
+
     </div>
     <kendo-dialog-actions class="p-2 align-items-start justify-content-start">
         <button class="btn btn-success btn-sm d-flex align-items-center mr-2" type="button" 
         (click)="ChkUserGroupAssociativity()">  > 
             <svg viewBox="0 0 55.25 55.25" class="icon mr-2">
                 <use xlink:href="#edit"></use>
-            </svg> Yes
+            </svg> {{'Yes'|translate}}
         </button>           
 
         <button class="btn btn-danger btn-sm ml-auto d-flex align-items-center" type="button"
         (click)="confirmationToggle()" >
             <svg viewBox="0 0 512 512" class="icon mr-2">
                 <use xlink:href="#saveDisk"></use>
-            </svg> No
+            </svg> {{'No'|translate}}
         </button>
     </kendo-dialog-actions>
 </kendo-dialog>

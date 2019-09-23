@@ -8,37 +8,37 @@
             <div class="card-header">
               <div class="row m-b-20">
                 <div class="col-md-12">
-                  <h4 class="text-left m-0">Login</h4>
+                  <h4 class="text-left m-0">{{'Login' |translate}}</h4>
                 </div>
               </div>
             </div>
             <form #LoginForm="ngForm">
               <div class="card-body">
                 <div class="form-group mb-2">
-                  <label for="user" class="mb-0">Username<span class="text-danger">*</span></label>
-                  <input type="text" class="form-control" id="UserName" name="UserName" #UserName="ngModel" [(ngModel)]="model.UserName" aria-describedby="User" required placeholder="Username" autocomplete="off" required>
+                  <label for="user" class="mb-0">{{ 'Login_Username'|translate}}<span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" id="UserName" name="UserName" #UserName="ngModel" [(ngModel)]="model.UserName" aria-describedby="User" required placeholder="{{ 'Enter_Username'|translate}}" autocomplete="off" required>
                   
                 </div>
                 <div class="form-group mb-2">
-                  <label for="user" class="mb-0">Password<span class="text-danger">*</span></label>
-                  <input type="password" id="Password" name="Password" #Password="ngModel" [(ngModel)]="model.Password" class="form-control" placeholder="EnterPassword" autocomplete="off" required>
+                  <label for="user" class="mb-0">{{'Login_Password' |translate}}<span class="text-danger">*</span></label>
+                  <input type="password" id="Password" name="Password" #Password="ngModel" [(ngModel)]="model.Password" class="form-control" placeholder="{{'Enter_Password' | translate}}" autocomplete="off" required>
                 </div>
                 <div class="row my-4" >
                   <div class="col-md-12 text-center">
-                    <button type="button" [disabled]= "!LoginForm.form.valid" class="btn btn-primary btn-block btn-md" (click)="login()">Connect</button>
+                    <button type="button" [disabled]= "!LoginForm.form.valid" class="btn btn-primary btn-block btn-md" (click)="login()">{{'Connect' | translate}}</button>
                   </div>
                 </div>
                 <ng-container *ngIf="isConnected">
                   <div class="form-group mb-2">
-                    <label for="company" class="mb-0">Company <span class="text-danger">*</span></label>
+                    <label for="company" class="mb-0">{{'Company' | translate}} <span class="text-danger">*</span></label>
                     <kendo-dropdownlist class="w-100" id="companyId" name="companyId"></kendo-dropdownlist>
                   </div>
                   <div class="form-group mb-2">
-                    <label for="warehouse" class="mb-0">Warehouse <span class="text-danger">*</span></label>
+                    <label for="warehouse" class="mb-0">{{'Warehouse' | translate}} <span class="text-danger">*</span></label>
                     <kendo-dropdownlist class="w-100" id="whseId" name="whseId"></kendo-dropdownlist>
                   </div>
                   <div class="form-group mb-2">
-                    <label for="workCenter" class="mb-0">WareCenter <span class="text-danger">*</span></label>
+                    <label for="workCenter" class="mb-0">{{'WareCenter' | translate}} <span class="text-danger">*</span></label>
                     <kendo-dropdownlist class="w-100" id="workCenterId" name="workCenterId"></kendo-dropdownlist>
                   </div>
                   <div class="row form-group mb-0">
@@ -46,12 +46,12 @@
                       <label class="custom-checkbox mb-0">
                         <input type="checkbox" value="">
                         <span class="checkbox"></span>
-                        <span class="text-inverse">Require Machine</span>
+                        <span class="text-inverse">{{'Require_Machine'|translate}}</span>
                       </label>
                     </div>
                   </div>
                   <div class="form-group mb-2" >
-                    <label for="machine" class="mb-0">Machine <span class="text-danger">*</span></label>
+                    <label for="machine" class="mb-0">{{'Machine'|translate}} <span class="text-danger">*</span></label>
                     <kendo-dropdownlist class="w-100" id="machineId" name="machineId"></kendo-dropdownlist>
                   </div>
                   <div class="row form-group mb-0">
@@ -59,16 +59,16 @@
                       <label class="custom-checkbox mb-0">
                         <input type="checkbox" value="">
                         <span class="checkbox"></span>
-                        <span class="text-inverse">Remember Me</span>
+                        <span class="text-inverse">{{'Remember_Me'|translate}}</span>
                       </label>
                     </div>
                   </div>
                   <div class="card-footer border-0 p-0 rounded-bottom">
                     <div class="row mt-0">
                       <div class="col-md-12 text-center" fxLayout="row">
-                        <button type="button" class="btn btn-primary btn-lg rounded-0" fxFlex="100">Login</button>
+                        <button type="button" class="btn btn-primary btn-lg rounded-0" fxFlex="100">{{'Login'|translate}}</button>
                         <!-- <span class="px-1"></span> -->
-                        <button type="button" class="btn btn-secondary btn-lg rounded-0" fxFlex="100">Reset</button>
+                        <button type="button" class="btn btn-secondary btn-lg rounded-0" fxFlex="100">{{'Reset'|translate}}</button>
                       </div>
                     </div>
                   </div>

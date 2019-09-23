@@ -3,6 +3,8 @@ import { GridComponent } from '@progress/kendo-angular-grid';
 import { UsergroupService } from '../../service/usergroup.service'; 
 import { MessageService } from '../../common/message.service'; 
 import { filterBy, FilterDescriptor } from '@progress/kendo-data-query';
+import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 @Component({
   selector: 'app-user-group',
   templateUrl: './user-group.component.html',
@@ -13,7 +15,7 @@ export class UserGroupComponent implements OnInit {
   model : any={};  
   IsDuplicate: boolean=false;
   HeaderText:string="";
-  
+  selectedItem: string = ""; 
   // public paginationButtonCount = 5;
   // public paginationInfo = true;
   // public paginationType: 'input';
@@ -34,7 +36,13 @@ export class UserGroupComponent implements OnInit {
   public FilterData: any[];
   public DropDownListData: any[];
   public searchText : string;
-  constructor(private UserGroupService:UsergroupService, private MessageService:MessageService) {
+  constructor(private UserGroupService:UsergroupService, private MessageService:MessageService,
+    private translate: TranslateService, private httpClientSer: HttpClient) {
+      // let userLang = navigator.language.split('-')[0];
+      //   userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
+      translate.use(localStorage.getItem('applang'));
+        translate.onLangChange.subscribe((event: LangChangeEvent) => { 
+        }); 
     
    }    
 

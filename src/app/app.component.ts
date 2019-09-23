@@ -13,8 +13,9 @@ export class AppComponent implements OnInit {
   compactLayout = false;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute) {}
-
+ 
   ngOnInit() {
+    localStorage.setItem('applang','sp');
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.showHeader = this.activatedRoute.firstChild.snapshot.data.showHeader !== false;

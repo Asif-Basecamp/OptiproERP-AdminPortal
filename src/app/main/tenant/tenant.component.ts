@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { products } from 'src/app/dummyData/data';
 import { GridComponent, RowClassArgs } from '@progress/kendo-angular-grid';
-
+import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 @Component({
   selector: 'app-tenant',
   templateUrl: './tenant.component.html',
@@ -17,13 +18,17 @@ export class TenantComponent implements OnInit {
   // public paginationInfoPreviousNext = true;
 
   public gridData: any[];
-
+  selectedItem: string = ""; 
   public checkedKeys: any[] = [];
 
-  constructor() { 
+  constructor(private translate: TranslateService, private httpClientSer: HttpClient) { 
+      translate.use(localStorage.getItem('applang'));
+        translate.onLangChange.subscribe((event: LangChangeEvent) => {
+            this.selectedItem = translate.instant("Login_Username"); 
+        }); 
+    }    
     //this.setSelectableSettings();
-  }
-
+   
   ngOnInit() {
     this.gridData = products;
     // this.isMobile();

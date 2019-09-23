@@ -6,7 +6,12 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { AuthenticationRoutingModule } from './authentication-routing.module';
 import { LoginComponent } from './login/login.component';
 import { FormsModule } from '@angular/forms';
-
+import { TranslateModule, TranslateLoader} from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { HttpClient, HttpHeaders, HttpClientModule } from '@angular/common/http';
+export function createTranslateLoader(http: HttpClient) {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
 @NgModule({
   declarations: [LoginComponent],
   imports: [
@@ -14,7 +19,15 @@ import { FormsModule } from '@angular/forms';
     AuthenticationRoutingModule,
     DropDownsModule,
     FormsModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: createTranslateLoader,
+        deps: [HttpClient]
+      },
+      isolate: false
+    }),
   ]
 })
 export class AuthenticationModule { }

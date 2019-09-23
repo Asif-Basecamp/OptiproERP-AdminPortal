@@ -1,6 +1,6 @@
 <div class="layout-mode" fxFlex fxLayout="column">
     <div class="page-header">
-        <h4>Connected Users</h4>
+        <h4>{{'Connected_Users'|translate}}</h4>
     </div>
     <div class="card" fxFlex>
         <div class="card-body" fxFlex fxLayout="column">
@@ -8,11 +8,11 @@
                 <div class="form-group row mb-0">
                     <div class="col-sm-12 col-md-8 col-lg-6 col-xl-5">
                         <div class="row align-items-center">
-                            <label for="product" class="col-sm-2 col-md-2 col-lg-3 col-xl-3 col-form-label py-0">Product<span class="text-danger">*</span></label>
+                            <label for="product" class="col-sm-2 col-md-2 col-lg-3 col-xl-3 col-form-label py-0">{{'Product'|translate}}<span class="text-danger">*</span></label>
                             <div class="col-sm-10 col-md-10 col-lg-9 col-xl-9">
                                 <div class="d-flex align-items-center">
                                     <kendo-dropdownlist class="w-100 form-control-sm form-control" id="product" name="product"></kendo-dropdownlist>
-                                    <button class="btn btn-success btn-sm ml-2" type="button">Display</button>
+                                    <button class="btn btn-success btn-sm ml-2" type="button">{{'Display'|translate}}</button>
                                 </div>                        
                             </div>
                         </div>
@@ -43,12 +43,12 @@
                             <label class="custom-checkbox mb-0 mr-2 filter-checkbox">
                                 <input type="checkbox" [(ngModel)]="isColumnFilter" [ngModelOptions]="{standalone: true}">
                                 <span class="checkbox"></span>
-                                <span>Enable filter</span>
+                                <span>{{'Enable_filter'|translate}}</span>
                             </label>
                             <label class="custom-checkbox mb-0 grouping-checkbox">
                                 <input type="checkbox" [(ngModel)]="isColumnGroup" [ngModelOptions]="{standalone: true}">
                                 <span class="checkbox"></span>
-                                <span>Enable grouping</span>
+                                <span>{{'Enable_grouping'|translate}}</span>
                             </label>
                             <!-- export -->
                             <button type="button" kendoGridExcelCommand title="Export to excel file" class="ml-auto btn btn-link btn-sm btn-icon p-0">
@@ -64,16 +64,16 @@
                         <ng-template kendoGridCellTemplate let-dataItem>
                             <div class="d-flex">
                                 <dl class="mb-0 w-50 pr-1">
-                                    <dt>User Name</dt>
+                                    <dt>{{'User_Name'|translate}}</dt>
                                     <dd>{{ dataItem.ProductName }}</dd>
     
-                                    <dt>Last Transaction Date Time</dt>
+                                    <dt>{{'Last_Transaction_Date_Time'|translate}}</dt>
                                     <dd class="mb-0">{{ dataItem.Category.CategoryName }}</dd>
                                 </dl>                                
                                 <dl class="mb-0 w-50">
-                                    <dt>GUID</dt>
+                                    <dt>{{'GUID'|translate}}</dt>
                                     <dd>{{ dataItem.Category.Description }}</dd>
-                                    <dt>Logout</dt>
+                                    <dt>{{'Logout'|translate}}</dt>
                                     <dd class="mb-0">{{ dataItem.ProductName }}</dd>
                                 </dl>
                             </div>
@@ -81,10 +81,10 @@
                     </kendo-grid-column>
 
                     <!-- columns for mid-size devices -->
-                    <kendo-grid-column media="(min-width: 768px)" field="ProductName" title="User Name"></kendo-grid-column>
-                    <kendo-grid-column media="(min-width: 768px)" field="Category.Description" title="GUID"></kendo-grid-column>
-                    <kendo-grid-column media="(min-width: 768px)" field="Category.CategoryName" title="Last Transaction Date Time"></kendo-grid-column>
-                    <kendo-grid-column media="(min-width: 768px)" field="Category.Description" title="Logout"></kendo-grid-column>
+                    <kendo-grid-column media="(min-width: 768px)" field="ProductName" title="{{'User_Name'|translate}}"></kendo-grid-column>
+                    <kendo-grid-column media="(min-width: 768px)" field="Category.Description" title="{{'GUID'|translate}}"></kendo-grid-column>
+                    <kendo-grid-column media="(min-width: 768px)" field="Category.CategoryName" title="{{'Last_Transaction_Date_Time'|translate}}"></kendo-grid-column>
+                    <kendo-grid-column media="(min-width: 768px)" field="Category.Description" title="{{'Logout'|translate}}"></kendo-grid-column>
 
                     <!-- xlsx template start -->
                     <kendo-grid-excel fileName="Connected-Users.xlsx"></kendo-grid-excel>

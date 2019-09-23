@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { GridComponent, SelectableSettings, RowArgs } from '@progress/kendo-angular-grid';
 import { RoleService } from '../../service/role.service'; 
 import { MessageService } from '../../common/message.service';
+import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 @Component({
   selector: 'app-user-roles',
   templateUrl: './user-roles.component.html',
@@ -10,6 +12,7 @@ import { MessageService } from '../../common/message.service';
 
 export class UserRolesComponent implements OnInit {
   model : any={};
+  selectedItem: string = ""; 
   public gridData1: any[];
   public GridDataFormanupulation: any[];
   IsDuplicate :boolean=false;
@@ -32,7 +35,13 @@ export class UserRolesComponent implements OnInit {
   public IsProduct= true;
   public confirmationOpened = false;
  
-  constructor(private RoleService:RoleService,private MessageService:MessageService) { 
+  constructor(private RoleService:RoleService,private MessageService:MessageService,
+    private translate: TranslateService, private httpClientSer: HttpClient) { 
+      // let userLang = navigator.language.split('-')[0];
+      //     userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
+          translate.use(localStorage.getItem('applang'));
+          translate.onLangChange.subscribe((event: LangChangeEvent) => { 
+          }); 
     
   }
 
