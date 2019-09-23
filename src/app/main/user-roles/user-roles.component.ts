@@ -53,9 +53,10 @@ export class UserRolesComponent implements OnInit {
      
      this.RoleService.FillProductDropDownList().subscribe(    
       data => {    
-            
-        if(data.length>0)   
+        
+        if(data.Status == "Success")  
         {  
+          data=data.data; 
          this.DropDownListData = data; 
         }    
         else{    
@@ -68,6 +69,7 @@ export class UserRolesComponent implements OnInit {
   }
   CheckUncheckValueInsideFrid(data)
     {
+      data=data.data; 
       for(let i=0; i<data.length; i++)
       {
         data[i].AllSelected =false;
@@ -112,8 +114,9 @@ export class UserRolesComponent implements OnInit {
        this.RoleService.FillFridOnDropdownSelectedIndexChanged(this.model).subscribe(    
           data => { 
           
-            if(data.length>0)   
+            if(data.Status == "Success")  
             {  
+              data=data.data; 
               this.CheckUncheckValueInsideFrid(data)   
                this.GridDataFormanupulation=data;
             }    
@@ -151,8 +154,9 @@ export class UserRolesComponent implements OnInit {
       this.RoleService.FillGridData().subscribe(    
         data => {    
              
-          if(data.length>0)   
+          if(data.Status == "Success")  
           {  
+            data=data.data; 
            this.gridData = data; 
           }    
           else{    
@@ -356,8 +360,9 @@ export class UserRolesComponent implements OnInit {
       this.RoleService.CheckDuplicateUserGroup(RoleId).subscribe(    
         data => { 
             
-          if(data.length>0)   
+          if(data.Status == "Success") 
             {
+              data=data.data; 
               if(data[0].CountRoleCheck>0)
                 {
                   this.MessageService.errormessage("RoleId is already exist..");
@@ -430,6 +435,7 @@ export class UserRolesComponent implements OnInit {
           this.addRolesScreenToggle();
           this.RoleService.GetDataByRoleId(selection.selectedRows[0].dataItem.OPTM_ROLEID).subscribe(    
           data => {     
+            data=data.data; 
           this.HeaderText= "Edit -" +' '+  data[0].OPTM_ROLEID;         
               data.forEach((SavedData) => { // foreach statement 
               this.model.Product=SavedData.OPTM_PROD;
@@ -512,8 +518,9 @@ export class UserRolesComponent implements OnInit {
           this.RoleService.chkIfGroupIdisAssociate(RoleId).subscribe(    
             data => { 
               debugger
-              if(data.length>0)   
+              if(data.Status == "Success") 
                 {
+                  data=data.data; 
                   if(data[0].ROLEIDCOUNT==0)
                     {
                       this.IsRoleId=true;

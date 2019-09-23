@@ -13,23 +13,29 @@ export class UserManagementService {
 
 FillCompNGrpNSAPUsrNProd()
     {
-      this.Url = 'http://localhost:57962/api/UserManagement/GetCompNGrpNSAPUsrNProd';  
-      const headerSettings: {[name: string]: string | string[]; } = {};  
+      this.Url = 'http://localhost:21534/api/UserManagement/GetCompNGrpNSAPUsrNProd';  
+      const headerSettings: {[name: string]: string | string[]; } = {
+        'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
+      };  
       this.header = new HttpHeaders(headerSettings); 
       return this.http.get<any>(this.Url,{ headers: this.header});
     }
 FillDDlEmployee(selDataBase:string)
     {
-      this.Url = 'http://localhost:57962/api/UserManagement/GetEmployee';  
-      const headerSettings: {[name: string]: string | string[]; } = {};  
+      this.Url = 'http://localhost:21534/api/UserManagement/GetEmployee';  
+      const headerSettings: {[name: string]: string | string[]; } = {
+        'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
+      };  
       this.header = new HttpHeaders(headerSettings); 
       var jObject = { CompanyName: JSON.stringify([{ CompanyDBId: selDataBase }]) };
       return this.http.post<any>(this.Url,jObject,{ headers: this.header})
     }
 FillGridData()
     {
-      this.Url = 'http://localhost:57962/api/UserManagement/UserDetail';  
-      const headerSettings: {[name: string]: string | string[]; } = {};  
+      this.Url = 'http://localhost:21534/api/UserManagement/UserDetail';  
+      const headerSettings: {[name: string]: string | string[]; } = {
+        'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
+      };  
       this.header = new HttpHeaders(headerSettings); 
       return this.http.get<any>(this.Url,{ headers: this.header});
     }
@@ -37,8 +43,10 @@ FillGridData()
     FillFridOnDropdownSelectedIndexChanged(model : any)
     {
       
-      this.Url = 'http://localhost:57962/api/DefineRole/GetOperationalMenuList';  
-      const headerSettings: {[name: string]: string | string[]; } = {};  
+      this.Url = 'http://localhost:21534/api/DefineRole/GetOperationalMenuList';  
+      const headerSettings: {[name: string]: string | string[]; } = {
+        'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
+      };  
       this.header = new HttpHeaders(headerSettings); 
       var jObject = { RoleDetails: JSON.stringify([{ Product: model.Product}]) };
        
@@ -55,8 +63,10 @@ FillGridData()
                     });
                     var jObject = { RoleDetails: JSON.stringify({ SelectedRows: SelectedRowData, RoleIdDesc: oRoleIdDesc }) };
                     
-      this.Url = 'http://localhost:57962/api/DefineRole/OnAddPress';  
-      const headerSettings: {[name: string]: string | string[]; } = {};  
+      this.Url = 'http://localhost:21534/api/DefineRole/OnAddPress';  
+      const headerSettings: {[name: string]: string | string[]; } = {
+        'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
+      };  
       this.header = new HttpHeaders(headerSettings); 
       return this.http.post<any>(this.Url,jObject,{ headers: this.header});
     }
@@ -72,40 +82,50 @@ FillGridData()
                     });
                     var jObject = { RoleDetails: JSON.stringify({ SelectedRows: SelectedRowData, RoleIdDesc: oRoleIdDesc }) };
       //this.Url = '';                
-      this.Url = 'http://localhost:57962/api/DefineRole/OnUpdatePress';  
-      const headerSettings: {[name: string]: string | string[]; } = {};  
+      this.Url = 'http://localhost:21534/api/DefineRole/OnUpdatePress';  
+      const headerSettings: {[name: string]: string | string[]; } = {
+        'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
+      };  
       this.header = new HttpHeaders(headerSettings); 
       return this.http.post<any>(this.Url,jObject,{ headers: this.header});
     }
     DeleteUserRole(model : any)
     {
       var jObject = { RoleDetails: JSON.stringify([{ PreviousRoleId: model.RoleId }]) };        
-      this.Url = 'http://localhost:57962/api/DefineRole/OnDeletePress';  
-      const headerSettings: {[name: string]: string | string[]; } = {};  
+      this.Url = 'http://localhost:21534/api/DefineRole/OnDeletePress';  
+      const headerSettings: {[name: string]: string | string[]; } = {
+        'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
+      };  
       this.header = new HttpHeaders(headerSettings); 
       return this.http.post<any>(this.Url,jObject,{ headers: this.header});
     }
     CheckDuplicateUserGroup(RoleId :string)
     {
-      const headerSettings: {[name: string]: string | string[]; } = {};  
+      const headerSettings: {[name: string]: string | string[]; } = {
+        'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
+      };  
       this.header = new HttpHeaders(headerSettings);  
-        this.Url = 'http://localhost:57962/api/DefineRole/CheckDuplicateRecord';   
+        this.Url = 'http://localhost:21534/api/DefineRole/CheckDuplicateRecord';   
         var jObject = { RoleDetails: JSON.stringify([{ RoleId:RoleId.toUpperCase() }]) };
        return this.http.post<any>(this.Url,jObject,{ headers: this.header});
     }
     GetDataByRoleId(RoleId :string)
     {
-      const headerSettings: {[name: string]: string | string[]; } = {};  
+      const headerSettings: {[name: string]: string | string[]; } = {
+        'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
+      };  
       this.header = new HttpHeaders(headerSettings);  
-        this.Url = 'http://localhost:57962/api/DefineRole/GetDefineRolesByRoleId';   
+        this.Url = 'http://localhost:21534/api/DefineRole/GetDefineRolesByRoleId';   
         var jObject = { RoleDetails: JSON.stringify([{ RoleId: RoleId }]) };
        return this.http.post<any>(this.Url,jObject,{ headers: this.header});
     }
     chkIfGroupIdisAssociate(RoleId :string)
       {
-        const headerSettings: {[name: string]: string | string[]; } = {};  
+        const headerSettings: {[name: string]: string | string[]; } = {
+          'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
+        };  
         this.header = new HttpHeaders(headerSettings);  
-        this.Url = 'http://localhost:57962/api/DefineRole/ReferalCheck';   
+        this.Url = 'http://localhost:21534/api/DefineRole/ReferalCheck';   
         var jObject = { RoleDetails: JSON.stringify([{ RoleId: RoleId }]) };
        return this.http.post<any>(this.Url,jObject,{ headers: this.header});
       }

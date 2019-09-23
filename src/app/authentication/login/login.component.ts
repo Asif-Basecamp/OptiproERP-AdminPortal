@@ -12,7 +12,7 @@ import { MessageService } from '../../common/message.service';
 export class LoginComponent {    
     
   model : any={};    
-    
+  successmsg: any;  
   errorMessage:string;    
   constructor(private router:Router,private LoginService:LoginService,private MessageService:MessageService) { }    
     ngOnInit() {    
@@ -26,8 +26,12 @@ export class LoginComponent {
       data => {    
         debugger;    
         //if(data.Status=="Success") 
-        if(data.length>0)   
+        if(data != null)   
         {       
+          this.successmsg = 'token - ' + data.access_token;  
+          localStorage.setItem('access_token', data.access_token);       
+          localStorage.setItem('token_type', data.token_type); 
+          localStorage.setItem('expires_in', data.expires_in); 
           this.router.navigate(['/main']);    
           debugger;    
         }    
