@@ -8,6 +8,9 @@ html, body{
   width: 16px;
   height: auto;
   fill: #fff;
+  &.icon-dark{
+    fill:$gray-900;
+  }
 }
 //Layout
 .compact-layout {
@@ -340,20 +343,22 @@ kendo-grid-filter-wrapper-cell{
   & kendo-grid-filter-cell-operators{
     & kendo-dropdownlist{
       & .k-dropdown-wrap{
-        border-color: rgba(33, 37, 41, 0.15);
+        border-color: rgba(33, 37, 41, 0.15) !important;
         width: 28px;
-        height: 28px;
+        height: 28px !important;
         & >span{
-          padding:0;  
-          width: 100%;
-          height:100%;
+          padding:0 !important;  
+          width: 100% !important;
+          height:100% !important;
         }
       }
     }
     &  > .k-button.k-clear-button-visible{
       height:28px !important;
+      border-color: rgba(33, 37, 41, 0.15) !important;
       width:28px;
       margin-left: 0.375rem;
+      background: #fff;
     }
   }
 }
