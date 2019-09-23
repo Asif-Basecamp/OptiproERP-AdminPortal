@@ -161,6 +161,14 @@ button.btn.btn-icon {
 }
 
 //Form control
+.ng-invalid.ng-touched > .k-dropdown-wrap,
+.ng-invalid.ng-dirty > .k-dropdown-wrap{
+  border: none !important;
+}
+.ng-invalid.ng-touched.form-control-sm.form-control,
+.ng-invalid.ng-dirty.form-control-sm.form-control{
+  border-color: #dc3545;
+}
 .form-control-sm {
   height: 28px;
 }

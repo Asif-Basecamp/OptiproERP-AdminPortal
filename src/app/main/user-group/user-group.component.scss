@@ -31,3 +31,9 @@
 .k-dialog-buttongroup{
     align-items: center;
 }
+
+.addNewScreen {
+    max-height: calc(100vh - 130px) !important;
+    overflow-y: auto;
+    overflow-x: visible;
+}

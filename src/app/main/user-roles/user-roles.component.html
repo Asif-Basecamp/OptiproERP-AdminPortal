@@ -19,7 +19,8 @@
                                     </button>
                                 </div>
                             </div>
-                            <button class="btn btn-success btn-sm ml-2 btn-icon" type="button" (click)="addRolesScreenToggle()">
+                            <button class="btn btn-success btn-sm ml-2 btn-icon" type="button"
+                                (click)="addRolesScreenToggle()">
                                 <svg viewBox="0 0 512 512" class="icon">
                                     <use xlink:href="#add"></use>
                                 </svg>
@@ -32,9 +33,10 @@
             <!-- Kendo Grid Start -->
             <div fxLayout="column" fxFlex="100%" class="kendo-grid-wrapper mt-3">
 
-                <kendo-grid #gridUserRole [kendoGridBinding]="gridData" [resizable]="true" [sortable]="true" class="full-height-grid kendo-responsive-grid" [filterable]=isColumnFilter
-                    [groupable]=isColumnGroup [columnMenu]="false"
-                    (selectionChange)="gridUserRoleSelectionChange(gridUserRole, $event)"  [selectable]="true">
+                <kendo-grid #gridUserRole [kendoGridBinding]="gridData" [resizable]="true" [sortable]="true"
+                    class="full-height-grid kendo-responsive-grid" [filterable]=isColumnFilter [groupable]=isColumnGroup
+                    [columnMenu]="false" (selectionChange)="gridUserRoleSelectionChange(gridUserRole, $event)"
+                    [selectable]="true">
                     <!-- [pageSize]="10" 
                     [pageable]="{
                         buttonCount: paginationButtonCount,
@@ -44,24 +46,27 @@
                         previousNext: paginationInfoPreviousNext
                     }"> -->
                     <!-- grid template start -->
-                    <ng-template kendoGridToolbarTemplate >
+                    <ng-template kendoGridToolbarTemplate>
                         <div class="d-flex align-items-center">
                             <!-- show hide column start show hide -->
                             <!-- <kendo-grid-column-chooser class="float-left opti_hide-in-mobile"></kendo-grid-column-chooser> -->
 
                             <!-- checkbox -->
                             <label class="custom-checkbox mb-0 mr-2 filter-checkbox">
-                                <input type="checkbox" [(ngModel)]="isColumnFilter" [ngModelOptions]="{standalone: true}">
+                                <input type="checkbox" [(ngModel)]="isColumnFilter"
+                                    [ngModelOptions]="{standalone: true}">
                                 <span class="checkbox"></span>
                                 <span>Enable filter</span>
                             </label>
                             <label class="custom-checkbox mb-0 grouping-checkbox">
-                                <input type="checkbox" [(ngModel)]="isColumnGroup" [ngModelOptions]="{standalone: true}">
+                                <input type="checkbox" [(ngModel)]="isColumnGroup"
+                                    [ngModelOptions]="{standalone: true}">
                                 <span class="checkbox"></span>
                                 <span>Enable grouping</span>
                             </label>
                             <!-- export -->
-                            <button type="button" kendoGridExcelCommand title="Export to excel file" class="ml-auto btn btn-link btn-sm btn-icon p-0">
+                            <button type="button" kendoGridExcelCommand title="Export to excel file"
+                                class="ml-auto btn btn-link btn-sm btn-icon p-0">
                                 <svg viewBox="0 0 512 512" class="icon">
                                     <use xlink:href="#download"></use>
                                 </svg>
@@ -76,18 +81,20 @@
                                 <dl class="mb-0 w-50 pr-1">
                                     <dt>Role Id</dt>
                                     <dd class="mb-0">{{ dataItem.OPTM_ROLEID }}</dd>
-                                </dl>  
-                                <dl class="mb-0 w-50">    
+                                </dl>
+                                <dl class="mb-0 w-50">
                                     <dt>Role Description</dt>
                                     <dd class="mb-0">{{ dataItem.OPTM_ROLEDESC}}</dd>
-                                </dl> 
+                                </dl>
                             </div>
                         </ng-template>
                     </kendo-grid-column>
 
                     <!-- columns for mid-size devices -->
-                    <kendo-grid-column media="(min-width: 768px)" field="OPTM_ROLEID" title="Role Id"></kendo-grid-column>
-                    <kendo-grid-column media="(min-width: 768px)" field="OPTM_ROLEDESC" title="Role Description"></kendo-grid-column>
+                    <kendo-grid-column media="(min-width: 768px)" field="OPTM_ROLEID" title="Role Id">
+                    </kendo-grid-column>
+                    <kendo-grid-column media="(min-width: 768px)" field="OPTM_ROLEDESC" title="Role Description">
+                    </kendo-grid-column>
 
                     <!-- xlsx template start -->
                     <kendo-grid-excel fileName="User-roles.xlsx"></kendo-grid-excel>
@@ -99,7 +106,7 @@
     </div>
     <!-- add user screen -->
     <div class="card" fxFlex *ngIf="addRolesScreen">
-        <div class="card-body pb-2" fxFlex fxLayout="column">            
+        <div class="card-body pb-2" fxFlex fxLayout="column">
             <div class="addRolesScreen pb-3" fxFlex="100%">
                 <form #UserRoleForm="ngForm">
                     <div class="row">
@@ -107,119 +114,137 @@
                             <div class="row">
                                 <div class="form-group col-md-12 mb-2">
                                     <label class="mb-0" for="user_id">Role Id<span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control form-control-sm" #RoleId (change)="onChange(RoleId.value)" [readonly]="!IsRoleId" [(ngModel)]="model.RoleId" id="RoleId" name="RoleId" required>
-                                </div>                            
+                                    <input type="text" class="form-control form-control-sm" #RoleId
+                                        (change)="onChange(RoleId.value)" [readonly]="!IsRoleId"
+                                        [(ngModel)]="model.RoleId" id="RoleId" name="RoleId" required>
+                                </div>
                                 <div class="form-group col-md-12 mb-2">
                                     <label class="mb-0" for="user_name">Description</label>
-                                    <input type="text" class="form-control form-control-sm" id="RoleDesc" name="RoleDesc" [readonly]="!IsRoleDesc" [(ngModel)]="model.RoleDesc" #RoleDesc required>
+                                    <input type="text" class="form-control form-control-sm" id="RoleDesc"
+                                        name="RoleDesc" [readonly]="!IsRoleDesc" [(ngModel)]="model.RoleDesc" #RoleDesc
+                                        required>
                                 </div>
                                 <div class="form-group col-md-12 mb-2">
                                     <label class="mb-0" for="product">Product<span class="text-danger">*</span></label>
-                                    <kendo-dropdownlist class="w-100" id="Product" [data]="DropDownListData" 
-                                    [(ngModel)]="model.Product" #Product  [valuePrimitive]="true"   name="Product" [readonly]="!IsProduct" class="form-control-sm form-control w-100" required autocomplete="off"
-                                    textField="ProductId"
-                                    valueField="ProductId" (valueChange)="FillFridOnDropdownSelectedIndexChanged($event)">
-                                    </kendo-dropdownlist> 
+                                    <kendo-dropdownlist class="w-100" id="Product" [data]="DropDownListData"
+                                        [(ngModel)]="model.Product" #Product [valuePrimitive]="true" name="Product"
+                                        [readonly]="!IsProduct" class="form-control-sm form-control w-100" required
+                                        autocomplete="off" textField="ProductId" valueField="ProductId"
+                                        (valueChange)="FillFridOnDropdownSelectedIndexChanged($event)">
+                                    </kendo-dropdownlist>
                                     <!-- <kendo-dropdownlist id="product" name="product" class="form-control-sm form-control w-100"></kendo-dropdownlist> -->
                                 </div>
                             </div>
-                        </div>                           
+                        </div>
                     </div>
                 </form>
-                
+
                 <div class="mt-3">
-                        <kendo-grid 
-                        [data]="gridData1" #gridUser
-                        [height]="500"
-                        [selectable]="{ checkboxOnly: true, mode: 'multiple' }"
-                       
-                        >
-                       
-                        <kendo-grid-column field="ScreenName" title="DefineRole Screen" [width]="300"></kendo-grid-column>
-                        <kendo-grid-column  field="SelectAll" title="DefineRole All" width="60" class="text-center" headerClass="text-center">
-                                <ng-template kendoGridCellTemplate  let-dataItem let-rowIndex="rowIndex">
-                                        
-                                    <label class="custom-checkbox mb-0">
-                                    
-                                        <input type="checkbox" id="SelectAll"  [checked]="dataItem.AllSelected" (change)="GetData($event,dataItem,rowIndex)" name="SelectAll">
-                                        <span class="checkbox"></span>
-                                    </label>
-                                </ng-template>
-                            </kendo-grid-column>
-                            <!-- {{dataItem.AddEnabled}} -->
-                            <kendo-grid-column  field="AddEnabled" title="DefineRole Add" width="60" class="text-center" headerClass="text-center">
-                                <ng-template kendoGridCellTemplate  let-dataItem let-rowIndex="rowIndex">
-                               
-                                    <label class="custom-checkbox mb-0">
-                                       
-                                        <input type="checkbox"  id="AddEnabled" (change)="GetData($event,dataItem,rowIndex)" [checked]="dataItem.AddSelected"   name="AddEnabled"  [disabled]="!dataItem.AddEnabled"
-                                        >
-                                        <span class="checkbox"></span>
-                                    </label>
-                                </ng-template>
-                            </kendo-grid-column>
-    <!-- {{dataItem.UpdateEnabled}} -->
-                            <kendo-grid-column  field="UpdateEnabled" title="DefineRole Update" width="60" class="text-center" headerClass="text-center">
-                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-                                    <label class="custom-checkbox mb-0">
-                                        <input type="checkbox"  id="UpdateEnabled" (change)="GetData($event,dataItem,rowIndex)" name="UpdateEnabled" [checked]="dataItem.UpdateSelected"  [disabled]="!dataItem.UpdateEnabled">
-                                        <span class="checkbox"></span>
-                                    </label>
-                                </ng-template>
-                            </kendo-grid-column>
-                            <!-- {{dataItem.DeleteEnabled}} -->
-                            <kendo-grid-column  field="DeleteEnabled" title="DefineRole Delete" width="60" class="text-center" headerClass="text-center">
-                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-                                    <label class="custom-checkbox mb-0">
-                                        <input type="checkbox"  id="DeleteEnabled" (change)="GetData($event,dataItem,rowIndex)" name="DeleteEnabled" [checked]="dataItem.DeleteSelected"  [disabled]="!dataItem.DeleteEnabled">
-                                        <span class="checkbox"></span>
-                                    </label>
-                                </ng-template>
-                            </kendo-grid-column>
-                            <!-- {{dataItem.ReadEnabled}} -->
-                            <kendo-grid-column  field="ReadEnabled" title="DefineRole Read" width="60" class="text-center" headerClass="text-center">
-                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-                                    
-                                    <label class="custom-checkbox mb-0">
-                                        <input type="checkbox"  id="ReadEnabled" (change)="GetData($event,dataItem,rowIndex)" [checked]="dataItem.ReadSelected"  name="ReadEnabled"  [disabled]="!dataItem.ReadEnabled">
-                                        <span class="checkbox"></span>
-                                    </label>
-                                </ng-template>
-                            </kendo-grid-column>
-                    </kendo-grid>
-  
+                    <div class="row">
+                        <div class="col-sm-12 col-md-10 col-lg-8 col-xl-8">
+                            <kendo-grid [data]="gridData1" #gridUser [height]="500" [selectable]="{ checkboxOnly: true, mode: 'multiple' }">
+                                <kendo-grid-column field="ScreenName" title="DefineRole Screen">
+                                </kendo-grid-column>
+                                <kendo-grid-column field="SelectAll" title="DefineRole All" width="120" class="text-center"
+                                    headerClass="text-center">
+                                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+
+                                        <label class="custom-checkbox mb-0">
+
+                                            <input type="checkbox" id="SelectAll" [checked]="dataItem.AllSelected"
+                                                (change)="GetData($event,dataItem,rowIndex)" name="SelectAll">
+                                            <span class="checkbox"></span>
+                                        </label>
+                                    </ng-template>
+                                </kendo-grid-column>
+                                <!-- {{dataItem.AddEnabled}} -->
+                                <kendo-grid-column field="AddEnabled" title="DefineRole Add" width="120" class="text-center"
+                                    headerClass="text-center">
+                                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+
+                                        <label class="custom-checkbox mb-0">
+
+                                            <input type="checkbox" id="AddEnabled" (change)="GetData($event,dataItem,rowIndex)"
+                                                [checked]="dataItem.AddSelected" name="AddEnabled"
+                                                [disabled]="!dataItem.AddEnabled">
+                                            <span class="checkbox"></span>
+                                        </label>
+                                    </ng-template>
+                                </kendo-grid-column>
+                                <!-- {{dataItem.UpdateEnabled}} -->
+                                <kendo-grid-column field="UpdateEnabled" title="DefineRole Update" width="120"
+                                    class="text-center" headerClass="text-center">
+                                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                        <label class="custom-checkbox mb-0">
+                                            <input type="checkbox" id="UpdateEnabled"
+                                                (change)="GetData($event,dataItem,rowIndex)" name="UpdateEnabled"
+                                                [checked]="dataItem.UpdateSelected" [disabled]="!dataItem.UpdateEnabled">
+                                            <span class="checkbox"></span>
+                                        </label>
+                                    </ng-template>
+                                </kendo-grid-column>
+                                <!-- {{dataItem.DeleteEnabled}} -->
+                                <kendo-grid-column field="DeleteEnabled" title="DefineRole Delete" width="120"
+                                    class="text-center" headerClass="text-center">
+                                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                        <label class="custom-checkbox mb-0">
+                                            <input type="checkbox" id="DeleteEnabled"
+                                                (change)="GetData($event,dataItem,rowIndex)" name="DeleteEnabled"
+                                                [checked]="dataItem.DeleteSelected" [disabled]="!dataItem.DeleteEnabled">
+                                            <span class="checkbox"></span>
+                                        </label>
+                                    </ng-template>
+                                </kendo-grid-column>
+                                <!-- {{dataItem.ReadEnabled}} -->
+                                <kendo-grid-column field="ReadEnabled" title="DefineRole Read" width="120" class="text-center"
+                                    headerClass="text-center">
+                                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+
+                                        <label class="custom-checkbox mb-0">
+                                            <input type="checkbox" id="ReadEnabled" (change)="GetData($event,dataItem,rowIndex)"
+                                                [checked]="dataItem.ReadSelected" name="ReadEnabled"
+                                                [disabled]="!dataItem.ReadEnabled">
+                                            <span class="checkbox"></span>
+                                        </label>
+                                    </ng-template>
+                                </kendo-grid-column>
+                            </kendo-grid>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <!-- user detail save/cancel option -->
-            <div class="sticky-bottom-toolbar d-flex align-items-center justify-content-start border-top pt-2">     
-                <button *ngIf="enableEdit" (click)="EditData()" class="btn btn-primary btn-sm d-flex align-items-center mr-2" type="button"> 
+            <div class="sticky-bottom-toolbar d-flex align-items-center justify-content-start border-top pt-2">
+                <button *ngIf="enableEdit" (click)="EditData()"
+                    class="btn btn-primary btn-sm d-flex align-items-center mr-2" type="button">
                     <svg viewBox="0 0 55.25 55.25" class="icon mr-2">
                         <use xlink:href="#edit"></use>
                     </svg> Edit
-                </button>           
+                </button>
 
-                <button *ngIf="enableSubmit" class="btn btn-success btn-sm mr-2 d-flex align-items-center mr-2" 
-                 type="button" (click)="SaveData(gridUser, $event)"
-                 [disabled]= "!UserRoleForm.form.valid">
+                <button *ngIf="enableSubmit" class="btn btn-success btn-sm mr-2 d-flex align-items-center mr-2"
+                    type="button" (click)="SaveData(gridUser, $event)" [disabled]="!UserRoleForm.form.valid">
                     <svg viewBox="0 0 512 512" class="icon mr-2">
                         <use xlink:href="#saveDisk"></use>
                     </svg> Save
                 </button>
 
                 <button class="btn btn-success btn-sm ml-2 d-flex align-items-center" type="button"
-                (click)="UpdateData(gridUser)" *ngIf="enableUpdate">
+                    (click)="UpdateData(gridUser)" *ngIf="enableUpdate">
                     <svg viewBox="0 0 64 64" class="icon mr-2">
                         <use xlink:href="#update"></use>
                     </svg>Update
                 </button>
 
-                <button *ngIf="enableDelete" class="btn btn-danger btn-sm d-flex align-items-center mr-2" type="button" (click)="confirmationToggle()"> 
+                <button *ngIf="enableDelete" class="btn btn-danger btn-sm d-flex align-items-center mr-2" type="button"
+                    (click)="confirmationToggle()">
                     <svg viewBox="0 0 753.23 753.23" class="icon mr-2">
                         <use xlink:href="#bin"></use>
                     </svg> Delete
                 </button>
-                <button class="btn btn-danger btn-sm d-flex align-items-center" type="button" (click)="addRolesScreenToggle()"> 
+                <button class="btn btn-danger btn-sm d-flex align-items-center" type="button"
+                    (click)="addRolesScreenToggle()">
                     <svg viewBox="0 0 489 489" class="icon mr-2">
                         <use xlink:href="#cancel"></use>
                     </svg> Cancel
@@ -230,26 +255,24 @@
 </div>
 
 <kendo-dialog *ngIf="confirmationOpened" (close)="confirmationToggle()" [minWidth]="250" [width]="450">
-        <kendo-dialog-titlebar>
-            <div> Please Confirm</div>
-        </kendo-dialog-titlebar>
-        <div class="">
-    Do you want to delete record?
-        </div>
-        <kendo-dialog-actions class="p-2 align-items-start justify-content-start">
-            <button class="btn btn-success btn-sm d-flex align-items-center mr-2" type="button" 
-            (click)="DeleteData()">  > 
-                <svg viewBox="0 0 55.25 55.25" class="icon mr-2">
-                    <use xlink:href="#edit"></use>
-                </svg> Yes
-            </button>           
-    
-            <button class="btn btn-danger btn-sm ml-auto d-flex align-items-center" type="button"
-            (click)="confirmationToggle()" >
-                <svg viewBox="0 0 512 512" class="icon mr-2">
-                    <use xlink:href="#saveDisk"></use>
-                </svg> No
-            </button>
-        </kendo-dialog-actions>
-    </kendo-dialog>
-    
+    <kendo-dialog-titlebar>
+        <div> Please Confirm</div>
+    </kendo-dialog-titlebar>
+    <div class="">
+        Do you want to delete record?
+    </div>
+    <kendo-dialog-actions class="p-2 align-items-start justify-content-start">
+        <button class="btn btn-success btn-sm d-flex align-items-center mr-2" type="button" (click)="DeleteData()"> >
+            <svg viewBox="0 0 55.25 55.25" class="icon mr-2">
+                <use xlink:href="#edit"></use>
+            </svg> Yes
+        </button>
+
+        <button class="btn btn-danger btn-sm ml-auto d-flex align-items-center" type="button"
+            (click)="confirmationToggle()">
+            <svg viewBox="0 0 512 512" class="icon mr-2">
+                <use xlink:href="#saveDisk"></use>
+            </svg> No
+        </button>
+    </kendo-dialog-actions>
+</kendo-dialog>
