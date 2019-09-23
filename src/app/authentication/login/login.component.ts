@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { NotificationService } from '@progress/kendo-angular-notification';
+//import { NotificationService } from '@progress/kendo-angular-notification';
 import { Router } from '@angular/router';    
 import { LoginService } from '../../service/login.service';    
- import { FormsModule } from '@angular/forms'; 
-
+import { MessageService } from '../../common/message.service';
+ 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -14,7 +14,7 @@ export class LoginComponent {
   model : any={};    
     
   errorMessage:string;    
-  constructor(private router:Router,private LoginService:LoginService,private notificationService: NotificationService ) { }    
+  constructor(private router:Router,private LoginService:LoginService,private MessageService:MessageService) { }    
     ngOnInit() {    
     sessionStorage.removeItem('UserName');    
     sessionStorage.clear();    
@@ -28,25 +28,18 @@ export class LoginComponent {
         //if(data.Status=="Success") 
         if(data.length>0)   
         {       
-          this.router.navigate(['/dashboard']);    
+          this.router.navigate(['/main']);    
           debugger;    
         }    
-        else{    
-          this.errorMessage = data.Message;    
+        else{ 
+          this.MessageService.errormessage("UserName or Password is invalid");
+          //this.errorMessage = data.Message;    
         }    
       },    
-      error => {    
-        this.errorMessage = error.message;    
+      error => { 
+        this.MessageService.errormessage(error.message);   
+          
       });    
   };    
-  public show(message: string): void {
-    this.notificationService.show({
-      content: message,
-      cssClass: 'button-notification',
-      animation: { type: 'slide', duration: 400 },
-      position: { horizontal: 'right', vertical: 'top' },
-      type: { style: 'success', icon: true },
-      closable: true
-    });
-  }
+  
 }

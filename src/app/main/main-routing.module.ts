@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { UserGroupComponent } from './user-group/user-group.component';
 import { MainComponent } from './main.component';
+import { UserGroupComponent } from './user-group/user-group.component';
 import { UserManagementComponent } from './user-management/user-management.component';
 import { UserRolesComponent } from './user-roles/user-roles.component';
 import { UserAuthorizationComponent } from './user-authorization/user-authorization.component';

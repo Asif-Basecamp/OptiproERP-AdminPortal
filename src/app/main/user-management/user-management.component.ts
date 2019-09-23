@@ -3,6 +3,8 @@ import { products } from 'src/app/dummyData/data';
 import { GridComponent } from '@progress/kendo-angular-grid';
 import { CheckableSettings } from '@progress/kendo-angular-treeview';
 import { of, Observable } from 'rxjs';
+import { UserManagementService } from 'src/app/service/user-management.service';
+import { MessageService } from '../../common/message.service';
 
 @Component({
   selector: 'app-user-management',
@@ -21,19 +23,86 @@ export class UserManagementComponent implements OnInit {
   public gridData: any[];
   public checkboxOnly = false;
   public mode = 'multiple';
+  public ddlUserGroup: any[];
+  public ddlSAPUser: any[];
+  public GridCompany: any[];
+  public GridUserMgmtProduct: any[];
+  public ddlUserType: any[];
   // public selectableSettings: SelectableSettings;
 
   public checkedKeys: any[] = [];
 
-  constructor() { 
+  constructor(private UserManagementService:UserManagementService,private MessageService:MessageService ) { 
     //this.setSelectableSettings();
   }
 
   ngOnInit() {
-    this.gridData = products;
+    this.FillGridData();
+    debugger
+    this.ddlUserType=[];
+    this.ddlUserType.push(
+      { text: "Customer", value: "C" }, 
+      { text: "Employee", value: "E" }, 
+      { text: "Vendor", value: "V" }  
+         
+    );
+    console.log(this.ddlUserType);
     // this.isMobile();
   }
+  FillGridData()
+    {
+    this.UserManagementService.FillGridData().subscribe(    
+      data => { 
+      if(data.length>0)   
+          {  
+            this.gridData = data; 
+          }    
+      else{    
+            this.MessageService.errormessage("Something went wrong..");    
+          }    
+        },    
+      error => {  
+          this.MessageService.errormessage(error.message);   
+        });
+    }
 
+  FillDropdownList()
+    {
+      debugger
+      this.UserManagementService.FillCompNGrpNSAPUsrNProd().subscribe(    
+       data => {  
+        if(data.SAPUser.length>0)   this.ddlSAPUser=data.SAPUser;
+        if(data.UserGroup.length>0)   this.ddlUserGroup=data.UserGroup;
+        if(data.ProductList.length>0)   this.GridUserMgmtProduct=data.ProductList;
+        if(data.CompanyList.length>0)   this.GridCompany=data.CompanyList;
+         //if(data.UserGroup.length>0)   
+        //  {  
+           //this.ddlUserGroup=data.UserGroup;
+          //  if(data.SAPUser.length>0)   this.ddlSAPUser=data.SAPUser;
+          //  if(data.ProductList.length>0) this.ddlUserMgmtProduct=data.ProductList;
+          // if(data.CompanyList.length>0)
+          //this.DropDownListData = data; 
+        // }    
+        //  else{    
+        //    this.MessageService.errormessage("Something went wrong..");    
+        //  }    
+       },    
+       error => {  
+         this.MessageService.errormessage(error.message);   
+       });
+    }
+
+  GrdUserMgmtSelectionChange(grid,event)
+    {
+      debugger
+      this.UserManagementService.FillDDlEmployee(event.selectedRows[0].dataItem.dbName).subscribe(    
+        data => {  
+          debugger
+        },    
+        error => {  
+          this.MessageService.errormessage(error.message);   
+        });
+    }
   onFilterChange(checkBox:any,grid:GridComponent){
     if(checkBox.checked==false){
       this.clearFilter(grid);
@@ -62,6 +131,7 @@ export class UserManagementComponent implements OnInit {
 
   public addUserScreenToggle() {
     this.addUserScreen = !this.addUserScreen;
+    this.FillDropdownList();
   }
 
   

@@ -34,14 +34,7 @@
 
                 <kendo-grid [kendoGridBinding]="gridData" [resizable]="true" [sortable]="true" class="full-height-grid kendo-responsive-grid" [filterable]=isColumnFilter
                     [groupable]=isColumnGroup [columnMenu]="false">
-                    <!-- [pageSize]="10" 
-                    [pageable]="{
-                        buttonCount: paginationButtonCount,
-                        info: paginationInfo,
-                        type: paginationType,
-                        pageSizes: paginationPageSizes,
-                        previousNext: paginationInfoPreviousNext
-                    }"> -->
+                    
                     <!-- grid template start -->
                     <ng-template kendoGridToolbarTemplate >
                         <div class="d-flex align-items-center">
@@ -74,27 +67,27 @@
                             <div class="d-flex">
                                 <dl class="mb-0 w-50 pr-1">
                                     <dt>User Code</dt>
-                                    <dd>{{ dataItem.ProductName }}</dd>
+                                    <dd>{{ dataItem.OPTM_USERCODE }}</dd>
     
                                     <dt>User Group</dt>
-                                    <dd class="mb-0">{{ dataItem.Category.CategoryName }}</dd>
+                                    <dd class="mb-0">{{ dataItem.OPTM_GROUPCODE }}</dd>
                                 </dl>                                
                                 <dl class="mb-0 w-50">
                                     <dt>User Name</dt>
-                                    <dd>{{ dataItem.Category.Description }}</dd>
+                                    <dd>{{ dataItem.OPTM_USERNAME }}</dd>
 
                                     <dt>Active</dt>
-                                    <dd class="mb-0">{{ dataItem.Category.Description }}</dd>
+                                    <dd class="mb-0">{{ dataItem.OPTM_ACTIVE}}</dd>
                                 </dl>
                             </div>
                         </ng-template>
                     </kendo-grid-column>
 
                     <!-- columns for mid-size devices -->
-                    <kendo-grid-column media="(min-width: 768px)" field="ProductName" title="User Code"></kendo-grid-column>
-                    <kendo-grid-column media="(min-width: 768px)" field="Category.Description" title="User Name"></kendo-grid-column>
-                    <kendo-grid-column media="(min-width: 768px)" field="Category.CategoryName" title="User Group"></kendo-grid-column>
-                    <kendo-grid-column media="(min-width: 768px)" field="Category.Description" title="Active"></kendo-grid-column>
+                    <kendo-grid-column media="(min-width: 768px)" field="OPTM_USERCODE" title="User Code"></kendo-grid-column>
+                    <kendo-grid-column media="(min-width: 768px)" field="OPTM_USERNAME" title="User Name"></kendo-grid-column>
+                    <kendo-grid-column media="(min-width: 768px)" field="OPTM_GROUPCODE" title="User Group"></kendo-grid-column>
+                    <kendo-grid-column media="(min-width: 768px)" field="OPTM_ACTIVE" title="Active"></kendo-grid-column>
 
                     <!-- xlsx template start -->
                     <kendo-grid-excel fileName="User-management.xlsx"></kendo-grid-excel>
@@ -138,11 +131,24 @@
                                 <div class="row">
                                     <div class="form-group col-md-12 mb-2">
                                         <label class="mb-0" for="user_group">User Group<span class="text-danger">*</span></label>
-                                        <kendo-dropdownlist id="user_group" name="user_group" class="form-control-sm form-control w-100"></kendo-dropdownlist>
+                                        <!-- <kendo-dropdownlist id="user_group" name="user_group" class="form-control-sm form-control w-100">
+
+                                        </kendo-dropdownlist> -->
+                                        <kendo-dropdownlist class="w-100" id="user_group" [data]="ddlUserGroup" 
+                                        name="user_group"  class="form-control-sm form-control w-100" required autocomplete="off"
+                                       textField="groupCode"
+                                       valueField="groupCode">
+                                       </kendo-dropdownlist> 
+                                        
                                     </div>
                                     <div class="form-group col-md-12 mb-2">
                                         <label class="mb-0" for="mapped_user_id">Mapped SAP B1 User<span class="text-danger">*</span></label>
-                                        <kendo-dropdownlist id="mapped_user_id"  name="mapped_user_id" class="form-control-sm form-control w-100"></kendo-dropdownlist>
+                                        <!-- <kendo-dropdownlist id="mapped_user_id"  name="mapped_user_id" class="form-control-sm form-control w-100"></kendo-dropdownlist> -->
+                                        <kendo-dropdownlist class="w-100" id="mapped_user_id" [data]="ddlSAPUser" 
+                                         name="mapped_user_id"  class="form-control-sm form-control w-100" required autocomplete="off"
+                                        textField="USER_CODE"
+                                        valueField="USER_CODE">
+                                        </kendo-dropdownlist> 
                                     </div>
                                     <div class="form-group col-md-12 mb-2">
                                         <label class="mb-0" for="mapped_user_password" >Mapped SAP B1 User Pwd<span class="text-danger">*</span></label>
@@ -175,16 +181,10 @@
                             <div class="section-heading mb-2">
                                 <h5 class="m-0">Company</h5>
                             </div>
-                            <kendo-grid [kendoGridBinding]="gridData" [resizable]="true" [sortable]="true" class="custom-height-grid" [filterable]=isColumnFilter
-                                [groupable]=isColumnGroup [columnMenu]="false" [selectable]="{ checkboxOnly: true, mode: 'multiple' }">
-                                <!-- [pageSize]="10" 
-                                [pageable]="{
-                                    buttonCount: paginationButtonCount,
-                                    info: paginationInfo,
-                                    type: paginationType,
-                                    pageSizes: paginationPageSizes,
-                                    previousNext: paginationInfoPreviousNext
-                                }"> -->
+                            <kendo-grid [kendoGridBinding]="GridCompany" #GrdUserMgmt [resizable]="true" [sortable]="true" class="custom-height-grid" [filterable]=isColumnFilter
+                                [groupable]=isColumnGroup [columnMenu]="false" 
+                                [selectable]="true" aria-multiline="false" (selectionChange)="GrdUserMgmtSelectionChange(GrdUserMgmt, $event)">
+                                
                                 <!-- grid template start -->
                                 <ng-template kendoGridToolbarTemplate >
                                     <div class="d-flex align-items-center">
@@ -212,9 +212,11 @@
                                 </ng-template>
 
                                 <!-- columns for mid-size devices -->
-                                <kendo-grid-checkbox-column  [width]="38" class="text-center" headerClass="text-center"></kendo-grid-checkbox-column>
-                                <kendo-grid-column field="ProductName" title="Database"></kendo-grid-column>
-                                <kendo-grid-column field="Category.Description" title="Company"></kendo-grid-column>
+                                <kendo-grid-checkbox-column  [width]="38" class="text-center" headerClass="text-center">
+
+                                </kendo-grid-checkbox-column>
+                                <kendo-grid-column field="dbName" title="Database"></kendo-grid-column>
+                                <kendo-grid-column field="cmpName" title="Company"></kendo-grid-column>
                                 <!-- xlsx template start -->
                                 <kendo-grid-excel fileName="User-management.xlsx"></kendo-grid-excel>
                                 <!-- xlsx template end -->
@@ -227,28 +229,25 @@
                             <form>
                                 <div class="form-group mb-2">
                                     <label class="mb-0" for="user_type">User Type<span class="text-danger">*</span></label>
-                                    <kendo-dropdownlist id="user_type" name="user_type" class="form-control-sm form-control w-100"></kendo-dropdownlist>
+                                    <kendo-dropdownlist [data]="ddlUserType" id="UserType" [value]='ddlUserType[1]' name="UserType" class="form-control-sm form-control w-100"
+                                        textField="text"
+                                        valueField="value">
+                                    </kendo-dropdownlist>
+                                   
                                 </div>
                                 <div class="form-group mb-2">
                                     <label class="mb-0" for="products">Products<span class="text-danger">*</span></label>
                                     <div class="form-grid-wrapper">
-                                        <kendo-grid [kendoGridBinding]="gridData" [resizable]="true" [sortable]="true" class="custom-height-grid" [filterable]=false
+                                        <kendo-grid [kendoGridBinding]="GridUserMgmtProduct" [resizable]="true" [sortable]="true" class="custom-height-grid" [filterable]=false
                                             [groupable]=false [columnMenu]="false" [selectable]="{ checkboxOnly: true, mode: 'multiple' }">
-                                            <!-- [pageSize]="10" 
-                                            [pageable]="{
-                                                buttonCount: paginationButtonCount,
-                                                info: paginationInfo,
-                                                type: paginationType,
-                                                pageSizes: paginationPageSizes,
-                                                previousNext: paginationInfoPreviousNext
-                                            }"> -->
+                                            
                                             <!-- grid template start -->
                                             
             
                                             <!-- columns for mid-size devices -->
                                             <kendo-grid-checkbox-column  [width]="38" class="text-center" headerClass="text-center"></kendo-grid-checkbox-column>
-                                            <kendo-grid-column field="ProductName" title="Product Name"></kendo-grid-column>
-                                            <kendo-grid-column field="Category.Description" title="Description"></kendo-grid-column>
+                                            <kendo-grid-column field="ProductId" title="Product Id"></kendo-grid-column>
+                                            <kendo-grid-column field="OPTM_PRODDESC" title="Description"></kendo-grid-column>
                                         </kendo-grid>
                                     </div>
                                 </div>
