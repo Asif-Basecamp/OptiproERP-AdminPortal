@@ -122,31 +122,31 @@
         
             <div class="form-group mb-2">
                 <label for="user_group" class="mb-0">{{'Group_Admin'|translate}}<span class="text-danger">*</span></label>
-                <input type="text" #UserGrpId="ngModel" class="form-control form-control-sm" id="UserGroupId" name="UserGroupId" [(ngModel)]="model.UserGroupId"  (change)="onChange(UserGrpId.value)" [readonly]="!Ugroup"  autocomplete="off" required>
-            </div>
+                <input type="text" #UserGrpId="ngModel" class="form-control form-control-sm" id="UserGroupId" name="UserGroupId" [(ngModel)]="model.UserGroupId"  (change)="onChange(UserGrpId.value)"   autocomplete="off" required> <!-- [readonly]="!Ugroup" -->
+            </div>            
             <div class="form-group mb-2">
                 <label for="description" class="mb-0">{{'Description'|translate}}<span class="text-danger">*</span></label>
-                <input type="text" class="form-control form-control-sm" id="UserGroupDesc" name="UserGroupDesc" #UserGroupDesc="ngModel" [(ngModel)]="model.UserGroupDesc" [readonly]="!UDesc" autocomplete="off" required>
+                <input type="text" class="form-control form-control-sm" id="UserGroupDesc" name="UserGroupDesc" #UserGroupDesc="ngModel" [(ngModel)]="model.UserGroupDesc"  autocomplete="off" required> <!--[readonly]="!UDesc"-->
             </div>            
             <div class="form-group mb-2" >
                 <label for="mappes_user" class="mb-0"> {{'Mapped_SAP_B1_User'|translate}} <span class="text-danger">*</span></label>
                
                 <kendo-dropdownlist class="w-100" id="sapUser" [data]="DropDownListData" 
-                [(ngModel)]="model.mapped_user" #mappeduser="ngModel" [valuePrimitive]="true" [readonly]="!UUser"  name="sapUser" class="w-100 form-control-sm form-contro" required autocomplete="off"
+                [(ngModel)]="model.mapped_user" #mappeduser="ngModel" [valuePrimitive]="true"  name="sapUser" class="w-100 form-control-sm form-contro" required autocomplete="off"
                 textField="USER_CODE"
                 valueField="USER_CODE">
                 </kendo-dropdownlist> 
-                
+                <!--[readonly]="!UUser" -->
             </div>
             
             <div class="form-group mb-2">
                 <label for="mappes_user_password" class="mb-0">{{'Mapped_SAP_B1_User_Password'|translate}}<span class="text-danger">*</span></label>
-                <input type="password" id="mapped_Password" [readonly]="!UPwd" name="mapped_Password" #mappedPasasword="ngModel" [(ngModel)]="model.mapped_Password" class="form-control form-control-sm" autocomplete="off" required>
+                <input type="password" id="mapped_Password"  name="mapped_Password" #mappedPasasword="ngModel" [(ngModel)]="model.mapped_Password" class="form-control form-control-sm" autocomplete="off" required> <!--[readonly]="!UPwd"-->
             </div>
             <div class="row form-group mb-0">
                 <div class="col-12 d-flex align-items-center my-2">
                 <label class="custom-checkbox mb-0">
-                    <input type="checkbox"  id="IsAdminEnabled" name="IsAdminEnabled" [(ngModel)]="model.IsAdminEnabled" [disabled]="!AdminEnable">
+                    <input type="checkbox"  id="IsAdminEnabled" name="IsAdminEnabled" [(ngModel)]="model.IsAdminEnabled"><!-- [disabled]="!AdminEnable"-->
                     <span class="checkbox"></span>
                     <span class="text-inverse">  {{'Manager_Admin'|translate}}</span>
                 </label>
@@ -155,11 +155,11 @@
         
     </div>
     <kendo-dialog-actions class="p-2 align-items-start justify-content-start">
-        <button class="btn btn-primary btn-sm d-flex align-items-center mr-2" type="button" *ngIf="enableEdit" (click)="EnableFields()"> 
+        <!-- <button class="btn btn-primary btn-sm d-flex align-items-center mr-2" type="button" *ngIf="enableEdit" (click)="EnableFields()"> 
             <svg viewBox="0 0 55.25 55.25" class="icon mr-2">
                 <use xlink:href="#edit"></use>
             </svg>   {{'Edit'|translate}}
-        </button>           
+        </button>            -->
 
         <button class="btn btn-success btn-sm ml-auto d-flex align-items-center" type="button" (click)="SaveData()" *ngIf="enableSubmit" [disabled]= "!UserForm.form.valid" >
             <svg viewBox="0 0 512 512" class="icon mr-2">

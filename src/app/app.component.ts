@@ -15,7 +15,7 @@ export class AppComponent implements OnInit {
   constructor(private router: Router, private activatedRoute: ActivatedRoute) {}
  
   ngOnInit() {
-    localStorage.setItem('applang','sp');
+    localStorage.setItem('applang','en');
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.showHeader = this.activatedRoute.firstChild.snapshot.data.showHeader !== false;

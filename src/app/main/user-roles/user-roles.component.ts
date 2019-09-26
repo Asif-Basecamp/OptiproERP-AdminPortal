@@ -476,6 +476,7 @@ export class UserRolesComponent implements OnInit {
 
                 this.RoleService.FillFridOnDropdownSelectedIndexChanged(this.model).subscribe(    
                   data => { 
+                    data = data.data;
                     if(data.length>0)   
                     { 
                       this.SelectedRowData.forEach((SavedData) => { // foreach statement 

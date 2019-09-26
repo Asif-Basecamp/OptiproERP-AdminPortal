@@ -24,13 +24,13 @@ export class UserGroupComponent implements OnInit {
   public dialogOpened = false;
   public confirmationOpened = false;
   public enableSubmit= false;
-  public enableEdit = false;
+  // public enableEdit = false;
   public enableUpdate= false;
   public enableDelete = false;
-  public Ugroup= true;
-  public UDesc = true;
-  public UUser= true;
-  public UPwd = true;
+  // public Ugroup= true;
+  // public UDesc = true;
+  // public UUser= true;
+  // public UPwd = true;
   public AdminEnable=true;
   public gridData: any[];
   public FilterData: any[];
@@ -258,14 +258,14 @@ FillDropdownList()
           mapped_user: data[0].OPTM_SAPUSER,
           PreviousGrpId:selection.selectedRows[0].dataItem.OPTM_GROUPCODE
         };
-        this.enableEdit=true;  
+        // this.enableEdit=true;  
         this.enableDelete=true; 
-        this.enableUpdate=false; 
+        this.enableUpdate=true; 
         this.enableSubmit=false;
-        this.Ugroup=false;  
-        this.UDesc=false;  
-        this.UUser=false;  
-        this.UPwd=false;
+        // this.Ugroup=false;  
+        // this.UDesc=false;  
+        // this.UUser=false;  
+        // this.UPwd=false;
         this.AdminEnable=false;
         }  
          
@@ -316,12 +316,12 @@ FillDropdownList()
     this.model.IsAdminEnabled = false;
     this.dialogOpened = !this.dialogOpened;
     this.enableSubmit=true;
-    this.Ugroup=true;  
-    this.UDesc=true;  
-    this.UUser=true;  
-    this.UPwd=true;
+    // this.Ugroup=true;  
+    // this.UDesc=true;  
+    // this.UUser=true;  
+    // this.UPwd=true;
     this.AdminEnable=true;
-    this.enableEdit=false;  
+    // this.enableEdit=false;  
     this.enableDelete=false; 
     this.enableUpdate=false; 
     this.enableSubmit=true; 
@@ -335,12 +335,12 @@ FillDropdownList()
   EnableFields()
   {
     debugger
-    this.Ugroup=true;  
-    this.UDesc=true;  
-    this.UUser=true;  
-    this.UPwd=true;
+    // this.Ugroup=true;  
+    // this.UDesc=true;  
+    // this.UUser=true;  
+    // this.UPwd=true;
     this.AdminEnable=true;
-    this.enableEdit=false;  
+    // this.enableEdit=false;  
     this.enableDelete=false; 
     this.enableUpdate=true; 
    
