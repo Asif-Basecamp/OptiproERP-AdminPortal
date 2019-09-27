@@ -41,6 +41,27 @@ export class LoginComponent {
           localStorage.setItem('access_token', data.access_token);       
           localStorage.setItem('token_type', data.token_type); 
           localStorage.setItem('expires_in', data.expires_in); 
+          // this.router.navigate(['/main']); 
+          this.AdminLoginLog();   
+          debugger;    
+        }    
+        else{ 
+          this.MessageService.errormessage("UserName or Password is invalid");
+          //this.errorMessage = data.Message;    
+        }    
+      },    
+      error => { 
+        this.MessageService.errormessage(error.message); 
+      });    
+  };    
+  AdminLoginLog(){ 
+    debugger;
+    this.LoginService.AdminLoginLog(this.model).subscribe(    
+      data => {    
+        debugger;    
+        //if(data.Status=="Success") 
+        if(data.data == "True")   
+        {     
           this.router.navigate(['/main']);    
           debugger;    
         }    
@@ -50,9 +71,7 @@ export class LoginComponent {
         }    
       },    
       error => { 
-        this.MessageService.errormessage(error.message);   
-          
-      });    
-  };    
-  
+        this.MessageService.errormessage(error.message); 
+      });   
+  }
 }

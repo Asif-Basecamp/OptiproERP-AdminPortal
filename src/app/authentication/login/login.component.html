@@ -25,7 +25,7 @@
                 </div>
                 <div class="row my-4" >
                   <div class="col-md-12 text-center">
-                    <button type="button" [disabled]= "!LoginForm.form.valid" class="btn btn-primary btn-block btn-md" (click)="login()">{{'Connect' | translate}}</button>
+                    <button type="submit" [disabled]= "!LoginForm.form.valid" class="btn btn-primary btn-block btn-md" (click)="login()">{{'Connect' | translate}}</button>
                   </div>
                 </div>
                 <ng-container *ngIf="isConnected">
