@@ -28,12 +28,10 @@ export class LoginComponent {
     sessionStorage.clear();    
   }   
 
-  login(){    
-    debugger;    
+  login(){     
     this.selectedItem = this.translate.instant("Login_Username");
     this.LoginService.Login(this.model).subscribe(    
       data => {    
-        debugger;    
         //if(data.Status=="Success") 
         if(data != null)   
         {       
@@ -42,8 +40,7 @@ export class LoginComponent {
           localStorage.setItem('token_type', data.token_type); 
           localStorage.setItem('expires_in', data.expires_in); 
           // this.router.navigate(['/main']); 
-          this.AdminLoginLog();   
-          debugger;    
+          this.AdminLoginLog();     
         }    
         else{ 
           this.MessageService.errormessage("UserName or Password is invalid");
@@ -55,15 +52,12 @@ export class LoginComponent {
       });    
   };    
   AdminLoginLog(){ 
-    debugger;
     this.LoginService.AdminLoginLog(this.model).subscribe(    
-      data => {    
-        debugger;    
+      data => {     
         //if(data.Status=="Success") 
         if(data.data == "True")   
         {     
-          this.router.navigate(['/main']);    
-          debugger;    
+          this.router.navigate(['/main']);       
         }    
         else{ 
           this.MessageService.errormessage("UserName or Password is invalid");

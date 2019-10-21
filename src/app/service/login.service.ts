@@ -18,7 +18,7 @@ export class LoginService {
    }
 
    Login(model : any){ 
-    debugger;  
+      
      var jObject = { LoginDetail: JSON.stringify([{ LoginId: model.UserName, LoginPassword: model.Password }]) } //bug no 14986 Tamanna Feb 
       
      var a =this.Url+'UserLogin';  
@@ -27,7 +27,7 @@ export class LoginService {
 }
 AdminLoginLog(model : any)
 {
-  debugger;   
+     
   var today = new Date();
   var date = today.toLocaleString();
    

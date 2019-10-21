@@ -173,8 +173,7 @@ export class UserGroupComponent implements OnInit {
   DeleteData()
   {
     this.UserGroupService.DeleteUser(this.model).subscribe(    
-      data => {    
-        debugger;  
+      data => {     
         // if(data==1)   
         // {     
          this.FillGrid()
@@ -240,13 +239,11 @@ FillDropdownList()
   }
   
   gridUserSelectionChange(gridUser, selection) {
-    debugger
     this.dialougeToggle();
     const GroupCodeData= selection.selectedRows[0].dataItem.OPTM_GROUPCODE
     this.UserGroupService.GetDataByUserId(GroupCodeData).subscribe(    
       data => { 
        this.HeaderText= "Edit -" +' '+  data.data[0].OPTM_GROUPCODE;
-        debugger;  
         if(data.Status == "Success") 
         { 
           data =data.data;
@@ -334,7 +331,6 @@ FillDropdownList()
   }
   EnableFields()
   {
-    debugger
     // this.Ugroup=true;  
     // this.UDesc=true;  
     // this.UUser=true;  

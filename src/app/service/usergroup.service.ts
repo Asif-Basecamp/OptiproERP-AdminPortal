@@ -40,7 +40,6 @@ return this.http.get<any>(this.Url,{ headers: headerSettings});
 }
 
 AddUser(model : any){ 
-  debugger;
   const headerSettings: {[name: string]: string | string[]; } = {
     'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
   };  
@@ -52,7 +51,6 @@ AddUser(model : any){
  return this.http.post<any>(this.Url,jObject,{ headers: this.header});
 }
 UpdateUser(model : any){ 
-  debugger;
   const headerSettings: {[name: string]: string | string[]; } = {
     'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
   };  
@@ -66,7 +64,7 @@ UpdateUser(model : any){
 }
 ChkUserGroupAssociativity(model : any)
 {
-  debugger;
+  
   const headerSettings: {[name: string]: string | string[]; } = {
     'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
   };  
@@ -77,7 +75,7 @@ ChkUserGroupAssociativity(model : any)
     return this.http.post<any>(this.Url,jObject,{ headers: this.header});
 }
 DeleteUser(model : any){ 
-  debugger;
+  
   const headerSettings: {[name: string]: string | string[]; } = {
     'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
   };  

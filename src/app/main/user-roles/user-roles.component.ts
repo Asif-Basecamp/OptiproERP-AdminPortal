@@ -114,7 +114,6 @@ export class UserRolesComponent implements OnInit {
          data[i].ReadSelected =true;
          else  data[i].ReadSelected =false;
       }  
-      debugger    
       this.gridData1=data;
       console.log(data[0])
     }
@@ -259,7 +258,7 @@ export class UserRolesComponent implements OnInit {
       
     }
      CheckboxSelectAll(event,dataItem,rowIndex)
-     {debugger
+     {
       
       switch (event.currentTarget.name)   
       {   
@@ -527,7 +526,7 @@ export class UserRolesComponent implements OnInit {
           
           this.RoleService.chkIfGroupIdisAssociate(RoleId).subscribe(    
             data => { 
-              debugger
+              
               if(data.Status == "Success") 
                 {
                   data=data.data; 
@@ -557,7 +556,7 @@ export class UserRolesComponent implements OnInit {
 
       UpdateData(gridUser)
         {
-          debugger
+          
            const RoleId=this.model.RoleId;
            this.onChange(RoleId);
 
@@ -578,7 +577,7 @@ export class UserRolesComponent implements OnInit {
             
             this.RoleService.UpdateUserRole(this.model,SelectedRowData).subscribe(    
                 data => {    
-                    debugger
+                    
                   if(data=="True")  
                     {     
                      this.FillGridData();
@@ -597,10 +596,10 @@ export class UserRolesComponent implements OnInit {
         }
         DeleteData()
           {
-            debugger
+            
             this.RoleService.DeleteUserRole(this.model).subscribe(    
               data => {    
-                  debugger
+                  
                 if(data=="True")
                   {
                   this.confirmationOpened=false;     
