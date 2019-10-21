@@ -163,7 +163,17 @@
    "UserManagement_15":"GetBusinessPartner Successfully",
    "UserManagement_16":"GetBusinessPartner UnSuccessfully",
    "UserManagement_17":"GetBusinessPartner Successfully",
-   "UserManagement_18":"GetBusinessPartner UnSuccessfully"
-   
+   "UserManagement_18":"GetBusinessPartner UnSuccessfully",
+
+   "UPInvaild":"UserName or Password is invalid*",
+   "Somethingwrong":"Something went wrong..",
+   "UGalreadyExist":"User Group is already exist..",
+   "UGallocated":"User Group is allocated to User",
+   "RoleIdalready":"RoleId is already exist..",
+   "NoRows":"No rows is selected..",
+   "RecordCreated":"Record Created..",
+   "RecordUpdate":"Record Updated..",
+   "RecordDelete":"Record Deleted..",
+   "Unauthorized":"Unauthorized"
   } 
   

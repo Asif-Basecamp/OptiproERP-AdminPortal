@@ -70,10 +70,10 @@ export class UserGroupComponent implements OnInit {
         //if(data.Status=="Success") 
         if(data.Status == "Success") 
         {     
-          this.gridData = data.data;
-          this.FilterData=data.data;
+          this.gridData = data;
+          this.FilterData=data;
         }    
-        else{ this.MessageService.errormessage("Something went wrong..");    
+        else{ this.MessageService.errormessage(this.translate.instant('Somethingwrong'));    
         }    
       },    
       error => {
@@ -86,13 +86,12 @@ export class UserGroupComponent implements OnInit {
   {
     this.UserGroupService.AddUser(this.model).subscribe(    
       data => {    
-        data =data.data;
         if(data==1)   
         {     
          this.FillGrid()
          this.dialogOpened=false;
         }    
-        else{ this.MessageService.errormessage("Something went wrong..");    
+        else{ this.MessageService.errormessage(this.translate.instant('Somethingwrong'));    
         }    
       },    
       error => {
@@ -105,13 +104,12 @@ export class UserGroupComponent implements OnInit {
     
     this.UserGroupService.UpdateUser(this.model).subscribe(    
       data => {    
-        data =data.data;
         if(data==1)   
         {     
          this.FillGrid()
         this.dialogOpened=false;
         }    
-        else{ this.MessageService.errormessage("Something went wrong..");    
+        else{ this.MessageService.errormessage(this.translate.instant('Somethingwrong'));    
         }    
       },    
       error => {
@@ -127,7 +125,7 @@ export class UserGroupComponent implements OnInit {
           this.Update()
         }
         else{
-          this.MessageService.errormessage("User Group is already exist..");
+          this.MessageService.errormessage(this.translate.instant('UGalreadyExist'));
         }
       }
       else
@@ -143,7 +141,6 @@ export class UserGroupComponent implements OnInit {
       
         if(data.Status == "Success") 
         {
-          data =data.data;
           if(data[0].UserGroupCount==0)
           {
             this.DeleteData()     
@@ -154,14 +151,14 @@ export class UserGroupComponent implements OnInit {
           else{ 
             this.confirmationOpened=false;
             this.dialogOpened=false;
-            this.MessageService.errormessage("User Group is allocated to User");  
+            this.MessageService.errormessage(this.translate.instant('UGallocated'));  
           }
         
         }    
         else
         { 
          
-          this.MessageService.errormessage("Something went wrong..");    
+          this.MessageService.errormessage(this.translate.instant('Somethingwrong'));    
         }    
       },    
       error => {
@@ -198,10 +195,9 @@ export class UserGroupComponent implements OnInit {
           
         if(data.Status == "Success") 
         {
-          data =data.data;
           if(data[0].GroupCodeCount==1)
           {
-            this.MessageService.errormessage("User Group is already exist..");
+            this.MessageService.errormessage(this.translate.instant('UGalreadyExist'));
             //DuplicateUserGroupId
             this.IsDuplicate=true;
           }
@@ -211,7 +207,7 @@ export class UserGroupComponent implements OnInit {
           }  
         }    
         else{    
-         this.MessageService.errormessage("Something went wrong..");
+         this.MessageService.errormessage(this.translate.instant('Somethingwrong'));
         }    
       },    
       error => {    
@@ -226,11 +222,10 @@ FillDropdownList()
             
         if(data.Status == "Success") 
         {  
-          data =data.data;
          this.DropDownListData = data; 
         }    
         else{    
-          this.MessageService.errormessage("Something went wrong..");    
+          this.MessageService.errormessage(this.translate.instant('Somethingwrong'));    
         }    
       },    
       error => {  
@@ -246,7 +241,6 @@ FillDropdownList()
        this.HeaderText= "Edit -" +' '+  data.data[0].OPTM_GROUPCODE;
         if(data.Status == "Success") 
         { 
-          data =data.data;
          this.model = {
           UserGroupId: data[0].OPTM_GROUPCODE,
           UserGroupDesc: data[0].OPTM_DESCRIPTION,
@@ -265,8 +259,11 @@ FillDropdownList()
         // this.UPwd=false;
         this.AdminEnable=false;
         }  
-         
-        else{ this.MessageService.errormessage("Something went wrong..");    
+         else if(data.Status =="Unauthorized")
+         {
+          this.MessageService.errormessage(this.translate.instant('Unauthorized'));
+         }
+        else{ this.MessageService.errormessage(this.translate.instant('Somethingwrong'));    
         }    
       },    
       error => {
