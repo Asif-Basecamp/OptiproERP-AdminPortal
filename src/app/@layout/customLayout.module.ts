@@ -13,7 +13,7 @@ import { MenuModule } from '@progress/kendo-angular-menu';
     CommonModule,
     FlexLayoutModule,
     RouterModule,
-    MenuModule
+    MenuModule, 
   ],
   exports: [
     // FooterComponent,

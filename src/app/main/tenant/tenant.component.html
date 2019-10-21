@@ -1,6 +1,6 @@
 <div class="layout-mode" fxFlex fxLayout="column">
         <div class="page-header">
-            <h4>Tenant</h4>
+            <h4>{{'Tenant'|translate}}</h4>
         </div>
         <div class="card" fxFlex>
             <div class="card-body pb-2" fxFlex fxLayout="column">            
@@ -42,12 +42,12 @@
                                     <label class="custom-checkbox mb-0 mr-2 filter-checkbox">
                                         <input type="checkbox" [(ngModel)]="isColumnFilter" [ngModelOptions]="{standalone: true}">
                                         <span class="checkbox"></span>
-                                        <span>Enable filter</span>
+                                        <span>{{'Enable_filter'|translate}}</span>
                                     </label>
                                     <label class="custom-checkbox mb-0 grouping-checkbox">
                                         <input type="checkbox" [(ngModel)]="isColumnGroup" [ngModelOptions]="{standalone: true}">
                                         <span class="checkbox"></span>
-                                        <span>Enable grouping</span>
+                                        <span>{{'Enable_grouping'|translate}}</span>
                                     </label>
                                     <!-- export -->
                                     <button type="button" kendoGridExcelCommand title="Export to excel file" class="ml-auto btn btn-link btn-sm btn-icon p-0">
@@ -66,20 +66,20 @@
                                 <ng-template kendoGridCellTemplate let-dataItem>
                                     <div class="d-flex">
                                         <dl class="mb-0 w-50 pr-1">
-                                            <dt>Product Code</dt>
+                                            <dt>{{'Product_Code'|translate}}</dt>
                                             <dd>{{ dataItem.ProductName }}</dd>
             
-                                            <dt>Total License Assigned</dt>
+                                            <dt>{{'Total_License_Assigned' |translate}}</dt>
                                             <dd>{{ dataItem.Category.CategoryName }}</dd>
                                             
-                                            <dt>Remaining</dt>
+                                            <dt>{{'Remaining'|translate}}</dt>
                                             <dd class="mb-0">{{ dataItem.ProductName }}</dd>
                                         </dl>                                
                                         <dl class="mb-0 w-50">
-                                            <dt>Product Description</dt>
+                                            <dt>{{'Product_Description'|translate}}</dt>
                                             <dd>{{ dataItem.Category.Description }}</dd>
     
-                                            <dt>Tenant License Count</dt>
+                                            <dt>{{'Tenant_License_Count'|translate}}</dt>
                                             <dd class="mb-0">{{ ProductName }}</dd>
                                         </dl>
                                     </div>
@@ -87,15 +87,15 @@
                             </kendo-grid-column>
     
                             <!-- columns for mid-size devices -->
-                            <kendo-grid-column media="(min-width: 768px)" field="ProductName" title="Product Code"></kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="Category.Description" title="Product Description"></kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="Category.Description" title="Total License Assigned"></kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="ProductName" title="Tenant License Count">
+                            <kendo-grid-column media="(min-width: 768px)" field="ProductName" title="{{'Product_Code'|translate}}"></kendo-grid-column>
+                            <kendo-grid-column media="(min-width: 768px)" field="Category.Description" title="{{'Product_Description'|translate}}"></kendo-grid-column>
+                            <kendo-grid-column media="(min-width: 768px)" field="Category.Description" title="{{'Total_License_Assigned' |translate}}"></kendo-grid-column>
+                            <kendo-grid-column media="(min-width: 768px)" field="ProductName" title="{{'Tenant_License_Count'|translate}}">
                                 <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                                     <input type="text" class="form-control form-control-sm" placeholder="" [ngStyle]="{'height.px': '20'}">
                                 </ng-template>
                             </kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="Category.Description" title="Remaining"></kendo-grid-column>
+                            <kendo-grid-column media="(min-width: 768px)" field="Category.Description" title="{{'Remaining'|translate}}"></kendo-grid-column>
                             <!-- xlsx template start -->
                             <kendo-grid-excel fileName="Tenant.xlsx"></kendo-grid-excel>
                             <!-- xlsx template end -->
@@ -121,7 +121,7 @@
                                     <label class="custom-checkbox mb-0 mr-2 filter-checkbox">
                                         <input type="checkbox" [(ngModel)]="isColumnFilter2" [ngModelOptions]="{standalone: true}">
                                         <span class="checkbox"></span>
-                                        <span>Enable filter</span>
+                                        <span>{{'Enable_filter'|translate}}</span>
                                     </label>
                                     <!-- <label class="custom-checkbox mb-0 grouping-checkbox">
                                         <input type="checkbox" [(ngModel)]="isColumnGroup" [ngModelOptions]="{standalone: true}">
@@ -153,22 +153,22 @@
                     <button class="btn btn-primary btn-sm d-flex align-items-center mr-2" type="button"> 
                         <svg viewBox="0 0 55.25 55.25" class="icon mr-2">
                             <use xlink:href="#edit"></use>
-                        </svg> Edit
+                        </svg> {{'Edit'|translate}}
                     </button>
                     <button class="btn btn-success btn-sm mr-2 d-flex align-items-center" type="button">
                         <svg viewBox="0 0 64 64" class="icon mr-2">
                             <use xlink:href="#update"></use>
-                        </svg> Update
+                        </svg> {{'Update'|translate}}
                     </button>
                     <button class="btn btn-danger btn-sm d-flex align-items-center mr-2" type="button"> 
                         <svg viewBox="0 0 753.23 753.23" class="icon mr-2">
                             <use xlink:href="#bin"></use>
-                        </svg> Delete
+                        </svg> {{'Delete'|translate}}
                     </button>
                     <button class="btn btn-danger btn-sm d-flex align-items-center" type="button"> 
                         <svg viewBox="0 0 489 489" class="icon mr-2">
                             <use xlink:href="#cancel"></use>
-                        </svg> Cancel
+                        </svg> {{'Cancel'|translate}}
                     </button>
                 </div>
             </div>

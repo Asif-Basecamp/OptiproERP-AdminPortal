@@ -1,6 +1,6 @@
 <div class="layout-mode" fxFlex fxLayout="column">
     <div class="page-header">
-        <h4>Roles</h4>
+        <h4>{{'Roles'|translate}}</h4>
     </div>
     <div class="card" fxFlex *ngIf="!addRolesScreen">
         <div class="card-body" fxFlex fxLayout="column">
@@ -53,12 +53,12 @@
                             <label class="custom-checkbox mb-0 mr-2 filter-checkbox">
                                 <input type="checkbox" [(ngModel)]="isColumnFilter" [ngModelOptions]="{standalone: true}">
                                 <span class="checkbox"></span>
-                                <span>Enable filter</span>
+                                <span>{{'Enable_filter'|translate}}</span>
                             </label>
                             <label class="custom-checkbox mb-0 grouping-checkbox">
                                 <input type="checkbox" [(ngModel)]="isColumnGroup" [ngModelOptions]="{standalone: true}">
                                 <span class="checkbox"></span>
-                                <span>Enable grouping</span>
+                                <span>{{'Enable_grouping'|translate}}</span>
                             </label>
                             <!-- export -->
                             <button type="button" kendoGridExcelCommand title="Export to excel file" class="ml-auto btn btn-link btn-sm btn-icon p-0">
@@ -74,11 +74,11 @@
                         <ng-template kendoGridCellTemplate let-dataItem>
                             <div class="d-flex">
                                 <dl class="mb-0 w-50 pr-1">
-                                    <dt>Role Id</dt>
+                                    <dt>{{'Role_Id'|translate}}</dt>
                                     <dd class="mb-0">{{ dataItem.OPTM_ROLEID }}</dd>
                                 </dl>  
                                 <dl class="mb-0 w-50">    
-                                    <dt>Role Description</dt>
+                                    <dt>{{'Role_Description'|translate}}</dt>
                                     <dd class="mb-0">{{ dataItem.OPTM_ROLEDESC}}</dd>
                                 </dl> 
                             </div>
@@ -86,8 +86,8 @@
                     </kendo-grid-column>
 
                     <!-- columns for mid-size devices -->
-                    <kendo-grid-column media="(min-width: 768px)" field="OPTM_ROLEID" title="Role Id"></kendo-grid-column>
-                    <kendo-grid-column media="(min-width: 768px)" field="OPTM_ROLEDESC" title="Role Description"></kendo-grid-column>
+                    <kendo-grid-column media="(min-width: 768px)" field="OPTM_ROLEID" title="{{'Role_Id'|translate}}"></kendo-grid-column>
+                    <kendo-grid-column media="(min-width: 768px)" field="OPTM_ROLEDESC" title="{{'Role_Description'|translate}}"></kendo-grid-column>
 
                     <!-- xlsx template start -->
                     <kendo-grid-excel fileName="User-roles.xlsx"></kendo-grid-excel>
@@ -106,15 +106,15 @@
                         <div class="col-sm-5 col-md-4 col-lg-4 col-xl-3">
                             <div class="row">
                                 <div class="form-group col-md-12 mb-2">
-                                    <label class="mb-0" for="user_id">Role Id<span class="text-danger">*</span></label>
+                                    <label class="mb-0" for="user_id">{{'Role_Id'|translate}}<span class="text-danger">*</span></label>
                                     <input type="text" class="form-control form-control-sm" #RoleId (change)="onChange(RoleId.value)" [readonly]="!IsRoleId" [(ngModel)]="model.RoleId" id="RoleId" name="RoleId" required>
                                 </div>                            
                                 <div class="form-group col-md-12 mb-2">
-                                    <label class="mb-0" for="user_name">Description</label>
+                                    <label class="mb-0" for="user_name">{{'Description'|translate}}</label>
                                     <input type="text" class="form-control form-control-sm" id="RoleDesc" name="RoleDesc" [readonly]="!IsRoleDesc" [(ngModel)]="model.RoleDesc" #RoleDesc required>
                                 </div>
                                 <div class="form-group col-md-12 mb-2">
-                                    <label class="mb-0" for="product">Product<span class="text-danger">*</span></label>
+                                    <label class="mb-0" for="product">{{'Product'|translate}}<span class="text-danger">*</span></label>
                                     <kendo-dropdownlist class="w-100" id="Product" [data]="DropDownListData" 
                                     [(ngModel)]="model.Product" #Product  [valuePrimitive]="true"   name="Product" [readonly]="!IsProduct" class="form-control-sm form-control w-100" required autocomplete="off"
                                     textField="ProductId"
@@ -196,7 +196,7 @@
                 <button *ngIf="enableEdit" (click)="EditData()" class="btn btn-primary btn-sm d-flex align-items-center mr-2" type="button"> 
                     <svg viewBox="0 0 55.25 55.25" class="icon mr-2">
                         <use xlink:href="#edit"></use>
-                    </svg> Edit
+                    </svg> {{'Edit'|translate}}
                 </button>           
 
                 <button *ngIf="enableSubmit" class="btn btn-success btn-sm mr-2 d-flex align-items-center mr-2" 
@@ -204,25 +204,25 @@
                  [disabled]= "!UserRoleForm.form.valid">
                     <svg viewBox="0 0 512 512" class="icon mr-2">
                         <use xlink:href="#saveDisk"></use>
-                    </svg> Save
+                    </svg> {{'Save'|translate}}
                 </button>
 
                 <button class="btn btn-success btn-sm ml-2 d-flex align-items-center" type="button"
                 (click)="UpdateData(gridUser)" *ngIf="enableUpdate">
                     <svg viewBox="0 0 64 64" class="icon mr-2">
                         <use xlink:href="#update"></use>
-                    </svg>Update
+                    </svg>{{'Update'|translate}} 
                 </button>
 
                 <button *ngIf="enableDelete" class="btn btn-danger btn-sm d-flex align-items-center mr-2" type="button" (click)="confirmationToggle()"> 
                     <svg viewBox="0 0 753.23 753.23" class="icon mr-2">
                         <use xlink:href="#bin"></use>
-                    </svg> Delete
+                    </svg>{{'Delete'|translate}}  
                 </button>
                 <button class="btn btn-danger btn-sm d-flex align-items-center" type="button" (click)="addRolesScreenToggle()"> 
                     <svg viewBox="0 0 489 489" class="icon mr-2">
                         <use xlink:href="#cancel"></use>
-                    </svg> Cancel
+                    </svg> {{'Cancel'|translate}}
                 </button>
             </div>
         </div>
@@ -231,24 +231,24 @@
 
 <kendo-dialog *ngIf="confirmationOpened" (close)="confirmationToggle()" [minWidth]="250" [width]="450">
         <kendo-dialog-titlebar>
-            <div> Please Confirm</div>
+            <div> {{'Please_Confirm'|translate}}</div>
         </kendo-dialog-titlebar>
         <div class="">
-    Do you want to delete record?
+     {{'Do_you_want_to_delete_record'|translate}}
         </div>
         <kendo-dialog-actions class="p-2 align-items-start justify-content-start">
             <button class="btn btn-success btn-sm d-flex align-items-center mr-2" type="button" 
             (click)="DeleteData()">  > 
                 <svg viewBox="0 0 55.25 55.25" class="icon mr-2">
                     <use xlink:href="#edit"></use>
-                </svg> Yes
+                </svg> {{'Yes'|translate}}
             </button>           
     
             <button class="btn btn-danger btn-sm ml-auto d-flex align-items-center" type="button"
             (click)="confirmationToggle()" >
                 <svg viewBox="0 0 512 512" class="icon mr-2">
                     <use xlink:href="#saveDisk"></use>
-                </svg> No
+                </svg> {{'No'|translate}}
             </button>
         </kendo-dialog-actions>
     </kendo-dialog>

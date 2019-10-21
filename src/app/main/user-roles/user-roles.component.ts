@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { GridComponent, SelectableSettings, RowArgs } from '@progress/kendo-angular-grid';
 import { RoleService } from '../../service/role.service'; 
 import { MessageService } from '../../common/message.service';
+import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 @Component({
   selector: 'app-user-roles',
   templateUrl: './user-roles.component.html',
@@ -10,6 +12,7 @@ import { MessageService } from '../../common/message.service';
 
 export class UserRolesComponent implements OnInit {
   model : any={};
+  selectedItem: string = ""; 
   public gridData1: any[];
   public GridDataFormanupulation: any[];
   IsDuplicate :boolean=false;
@@ -32,7 +35,13 @@ export class UserRolesComponent implements OnInit {
   public IsProduct= true;
   public confirmationOpened = false;
  
-  constructor(private RoleService:RoleService,private MessageService:MessageService) { 
+  constructor(private RoleService:RoleService,private MessageService:MessageService,
+    private translate: TranslateService, private httpClientSer: HttpClient) { 
+      // let userLang = navigator.language.split('-')[0];
+      //     userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
+          translate.use(localStorage.getItem('applang'));
+          translate.onLangChange.subscribe((event: LangChangeEvent) => { 
+          }); 
     
   }
 
@@ -53,9 +62,10 @@ export class UserRolesComponent implements OnInit {
      
      this.RoleService.FillProductDropDownList().subscribe(    
       data => {    
-            
-        if(data.length>0)   
+        
+        if(data.Status == "Success")  
         {  
+          data=data.data; 
          this.DropDownListData = data; 
         }    
         else{    
@@ -68,6 +78,7 @@ export class UserRolesComponent implements OnInit {
   }
   CheckUncheckValueInsideFrid(data)
     {
+      data=data.data; 
       for(let i=0; i<data.length; i++)
       {
         data[i].AllSelected =false;
@@ -112,8 +123,9 @@ export class UserRolesComponent implements OnInit {
        this.RoleService.FillFridOnDropdownSelectedIndexChanged(this.model).subscribe(    
           data => { 
           
-            if(data.length>0)   
+            if(data.Status == "Success")  
             {  
+              data=data.data; 
               this.CheckUncheckValueInsideFrid(data)   
                this.GridDataFormanupulation=data;
             }    
@@ -151,8 +163,9 @@ export class UserRolesComponent implements OnInit {
       this.RoleService.FillGridData().subscribe(    
         data => {    
              
-          if(data.length>0)   
+          if(data.Status == "Success")  
           {  
+            data=data.data; 
            this.gridData = data; 
           }    
           else{    
@@ -356,8 +369,9 @@ export class UserRolesComponent implements OnInit {
       this.RoleService.CheckDuplicateUserGroup(RoleId).subscribe(    
         data => { 
             
-          if(data.length>0)   
+          if(data.Status == "Success") 
             {
+              data=data.data; 
               if(data[0].CountRoleCheck>0)
                 {
                   this.MessageService.errormessage("RoleId is already exist..");
@@ -430,6 +444,7 @@ export class UserRolesComponent implements OnInit {
           this.addRolesScreenToggle();
           this.RoleService.GetDataByRoleId(selection.selectedRows[0].dataItem.OPTM_ROLEID).subscribe(    
           data => {     
+            data=data.data; 
           this.HeaderText= "Edit -" +' '+  data[0].OPTM_ROLEID;         
               data.forEach((SavedData) => { // foreach statement 
               this.model.Product=SavedData.OPTM_PROD;
@@ -461,6 +476,7 @@ export class UserRolesComponent implements OnInit {
 
                 this.RoleService.FillFridOnDropdownSelectedIndexChanged(this.model).subscribe(    
                   data => { 
+                    data = data.data;
                     if(data.length>0)   
                     { 
                       this.SelectedRowData.forEach((SavedData) => { // foreach statement 
@@ -512,8 +528,9 @@ export class UserRolesComponent implements OnInit {
           this.RoleService.chkIfGroupIdisAssociate(RoleId).subscribe(    
             data => { 
               debugger
-              if(data.length>0)   
+              if(data.Status == "Success") 
                 {
+                  data=data.data; 
                   if(data[0].ROLEIDCOUNT==0)
                     {
                       this.IsRoleId=true;

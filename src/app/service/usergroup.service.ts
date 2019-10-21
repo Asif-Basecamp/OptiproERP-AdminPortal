@@ -18,26 +18,34 @@ export class UsergroupService {
 GetUserGroupGridData(model : any)
 {
   
-  this.Url = 'http://localhost:57962/api/UserGroup/GetAllUserGroupRecords';  
-  const headerSettings: {[name: string]: string | string[]; } = {};  
-  this.header = new HttpHeaders(headerSettings);  
-  var a =this.Url;  
- //return this.http.post<any>(this.Url+'UserLogin',model,{ headers: this.header});
- return this.http.get<any>(this.Url,{ headers: this.header});
+  this.Url = 'http://localhost:21534/api/UserGroup/GetAllUserGroupRecords';  
+  const headerSettings: {[name: string]: string | string[]; } = { 
+    'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
+};  
+this.header = new HttpHeaders(headerSettings);  
+var a =this.Url;  
+//return this.http.post<any>(this.Url+'UserLogin',model,{ headers: this.header});
+return this.http.get<any>(this.Url,{ headers: headerSettings});
 }
 FillDropDownList()
 {
-  this.Url = 'http://localhost:57962/api/UserGroup/GetSAPUser';  
-  const headerSettings: {[name: string]: string | string[]; } = {};  
-  this.header = new HttpHeaders(headerSettings); 
- return this.http.get<any>(this.Url,{ headers: this.header});
+  this.Url = 'http://localhost:21534/api/UserGroup/GetSAPUser';  
+  const headerSettings: {[name: string]: string | string[]; } = { 
+    'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
+};  
+this.header = new HttpHeaders(headerSettings);  
+var a =this.Url;  
+//return this.http.post<any>(this.Url+'UserLogin',model,{ headers: this.header});
+return this.http.get<any>(this.Url,{ headers: headerSettings});
 }
 
 AddUser(model : any){ 
   debugger;
-  const headerSettings: {[name: string]: string | string[]; } = {};  
+  const headerSettings: {[name: string]: string | string[]; } = {
+    'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
+  };  
     this.header = new HttpHeaders(headerSettings);  
-  this.Url = 'http://localhost:57962/api/UserGroup/AddUserGroup';  
+  this.Url = 'http://localhost:21534/api/UserGroup/AddUserGroup';  
  
   var jObject = { UserGroupValues: JSON.stringify([{ UserGroupId: model.UserGroupId, 
     UserGroupDesc: model.UserGroupDesc, IsAdminEnabled: model.IsAdminEnabled, SAPUser: model.mapped_user, SAPPass: model.mapped_Password }]) };
@@ -45,9 +53,11 @@ AddUser(model : any){
 }
 UpdateUser(model : any){ 
   debugger;
-  const headerSettings: {[name: string]: string | string[]; } = {};  
+  const headerSettings: {[name: string]: string | string[]; } = {
+    'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
+  };  
     this.header = new HttpHeaders(headerSettings);  
-  this.Url = 'http://localhost:57962/api/UserGroup/UpdateUserGroupRecord';  
+  this.Url = 'http://localhost:21534/api/UserGroup/UpdateUserGroupRecord';  
  
   var jObject = { UserGroupValues: JSON.stringify([{ UserGroupId: model.UserGroupId,isGrpIdEditable:model.isGrpIdEditable=true,
     UserGroupDesc: model.UserGroupDesc, IsAdminEnabled: model.IsAdminEnabled, SAPUser: model.mapped_user,
@@ -57,18 +67,22 @@ UpdateUser(model : any){
 ChkUserGroupAssociativity(model : any)
 {
   debugger;
-  const headerSettings: {[name: string]: string | string[]; } = {};  
+  const headerSettings: {[name: string]: string | string[]; } = {
+    'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
+  };  
     this.header = new HttpHeaders(headerSettings);  
-  this.Url = 'http://localhost:57962/api/UserGroup/ChkUserGroupAssociativity';  
+  this.Url = 'http://localhost:21534/api/UserGroup/ChkUserGroupAssociativity';  
  
   var jObject = { UserGroupValues: JSON.stringify([{ UserGroupId: model.UserGroupId }]) };
     return this.http.post<any>(this.Url,jObject,{ headers: this.header});
 }
 DeleteUser(model : any){ 
   debugger;
-  const headerSettings: {[name: string]: string | string[]; } = {};  
+  const headerSettings: {[name: string]: string | string[]; } = {
+    'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
+  };  
     this.header = new HttpHeaders(headerSettings);  
-  this.Url = 'http://localhost:57962/api/UserGroup/DeleteUserGroupRecordById';  
+  this.Url = 'http://localhost:21534/api/UserGroup/DeleteUserGroupRecordById';  
  
   var jObject = { UserGroupValues: JSON.stringify([{ UserGroupId: model.UserGroupId, 
     UserGroupDesc: model.UserGroupDesc, IsAdminEnabled: model.IsAdminEnabled }]) };
@@ -76,17 +90,21 @@ DeleteUser(model : any){
 }
 GetDataByUserId(UserGroupId:string)
 {
-    const headerSettings: {[name: string]: string | string[]; } = {};  
+    const headerSettings: {[name: string]: string | string[]; } = {
+      'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
+    };  
     this.header = new HttpHeaders(headerSettings);  
-    this.Url = 'http://localhost:57962/api/UserGroup/SelectUserGroupRecordById';  
+    this.Url = 'http://localhost:21534/api/UserGroup/SelectUserGroupRecordById';  
     var jObject = { UserGroupValues: JSON.stringify([{ UserGroupId: UserGroupId }]) };
     return this.http.post<any>(this.Url,jObject,{ headers: this.header});
 }
 CheckDuplicateUserGroup(UserGrpId:string) {
   
-  const headerSettings: {[name: string]: string | string[]; } = {};  
+  const headerSettings: {[name: string]: string | string[]; } = {
+    'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
+  };  
     this.header = new HttpHeaders(headerSettings);  
-  this.Url = 'http://localhost:57962/api/UserGroup/CheckUserGroupIdDuplicity';   
+  this.Url = 'http://localhost:21534/api/UserGroup/CheckUserGroupIdDuplicity';   
   var jObject = { UserGroupValues: JSON.stringify([{ UserGroupId: UserGrpId.toUpperCase() }]) };
  return this.http.post<any>(this.Url,jObject,{ headers: this.header});
   

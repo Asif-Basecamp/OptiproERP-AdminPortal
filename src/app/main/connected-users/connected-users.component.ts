@@ -3,6 +3,8 @@ import { GridComponent } from '@progress/kendo-angular-grid';
 import { ConnectedusersService } from 'src/app/service/Connectedusers.service';
 import { MessageService } from '../../common/message.service';
 
+import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 @Component({
   selector: 'app-connected-users',
   templateUrl: './connected-users.component.html',
@@ -19,8 +21,14 @@ export class ConnectedUsersComponent implements OnInit {
   public ddlProductList: any[];
   public PlaceHolder = { ProductId: 'Select Product..'};
   public ProductName: string = 'Select Product..';
-
-  constructor(private ConnectedUserServ: ConnectedusersService, private MessageService:MessageService) { }
+  selectedItem: string = "";  
+ 
+  constructor(private translate: TranslateService, private httpClientSer: HttpClient,private ConnectedUserServ: ConnectedusersService, private MessageService:MessageService) { 
+    translate.use(localStorage.getItem('applang'));
+      translate.onLangChange.subscribe((event: LangChangeEvent) => {
+          this.selectedItem = translate.instant("Login_Username"); 
+      }); 
+  }  
 
   ngOnInit() {
         

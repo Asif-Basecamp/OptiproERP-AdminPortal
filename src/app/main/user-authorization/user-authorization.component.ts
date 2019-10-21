@@ -4,13 +4,15 @@ import { GridComponent, RowClassArgs } from '@progress/kendo-angular-grid';
 import { AuthorizationService } from 'src/app/service/authorization.service';
 import { MessageService } from '../../common/message.service';
 
+import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 @Component({
   selector: 'app-user-authorization',
   templateUrl: './user-authorization.component.html',
   styleUrls: ['./user-authorization.component.scss']
 })
 export class UserAuthorizationComponent implements OnInit {
-
+  selectedItem: string = ""; 
   // public paginationButtonCount = 5;
   // public paginationInfo = true;
   // public paginationType: 'input';
@@ -38,9 +40,13 @@ export class UserAuthorizationComponent implements OnInit {
   public selectAllCheckBox: boolean = false;
   public loggedInUser : string = '';
 
-  constructor(private AuthServ: AuthorizationService, private MessageService:MessageService) { 
-    //this.setSelectableSettings();
-  }
+  constructor(private AuthServ: AuthorizationService, private MessageService:MessageService, private translate: TranslateService, private httpClientSer: HttpClient) {
+    // let userLang = navigator.language.split('-')[0];
+    //   userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
+    translate.use(localStorage.getItem('applang'));
+      translate.onLangChange.subscribe((event: LangChangeEvent) => { 
+      }); 
+ }
 
   ngOnInit() {
    

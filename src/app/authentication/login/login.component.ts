@@ -3,7 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';    
 import { LoginService } from '../../service/login.service';    
 import { MessageService } from '../../common/message.service';
- 
+import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -12,22 +13,55 @@ import { MessageService } from '../../common/message.service';
 export class LoginComponent {    
     
   model : any={};    
-    
+  successmsg: any;  
+  selectedItem: string = ""; 
   errorMessage:string;    
-  constructor(private router:Router,private LoginService:LoginService,private MessageService:MessageService) { }    
-    ngOnInit() {    
+  constructor(private router:Router,private LoginService:LoginService,private MessageService:MessageService,
+    private translate: TranslateService, private httpClientSer: HttpClient) { 
+      translate.use(localStorage.getItem('applang'));
+        translate.onLangChange.subscribe((event: LangChangeEvent) => {
+            this.selectedItem = translate.instant("Login_Username"); 
+        }); 
+    }    
+    ngOnInit() {     
     sessionStorage.removeItem('UserName');    
     sessionStorage.clear();    
   }   
 
   login(){    
     debugger;    
+    this.selectedItem = this.translate.instant("Login_Username");
     this.LoginService.Login(this.model).subscribe(    
       data => {    
         debugger;    
         //if(data.Status=="Success") 
-        if(data.length>0)   
+        if(data != null)   
         {       
+          this.successmsg = 'token - ' + data.access_token;  
+          localStorage.setItem('access_token', data.access_token);       
+          localStorage.setItem('token_type', data.token_type); 
+          localStorage.setItem('expires_in', data.expires_in); 
+          // this.router.navigate(['/main']); 
+          this.AdminLoginLog();   
+          debugger;    
+        }    
+        else{ 
+          this.MessageService.errormessage("UserName or Password is invalid");
+          //this.errorMessage = data.Message;    
+        }    
+      },    
+      error => { 
+        this.MessageService.errormessage(error.message); 
+      });    
+  };    
+  AdminLoginLog(){ 
+    debugger;
+    this.LoginService.AdminLoginLog(this.model).subscribe(    
+      data => {    
+        debugger;    
+        //if(data.Status=="Success") 
+        if(data.data == "True")   
+        {     
           this.router.navigate(['/main']);    
           debugger;    
         }    
@@ -37,9 +71,7 @@ export class LoginComponent {
         }    
       },    
       error => { 
-        this.MessageService.errormessage(error.message);   
-          
-      });    
-  };    
-  
+        this.MessageService.errormessage(error.message); 
+      });   
+  }
 }

@@ -53,9 +53,9 @@ export class UserManagementComponent implements OnInit {
     {
     this.UserManagementService.FillGridData().subscribe(    
       data => { 
-      if(data.length>0)   
+        if(data.Status == "Success") 
           {  
-            this.gridData = data; 
+            this.gridData = data.data; 
           }    
       else{    
             this.MessageService.errormessage("Something went wrong..");    
@@ -70,7 +70,8 @@ export class UserManagementComponent implements OnInit {
     {
       debugger
       this.UserManagementService.FillCompNGrpNSAPUsrNProd().subscribe(    
-       data => {  
+       data => { 
+        data=data.data; 
         if(data.SAPUser.length>0)   this.ddlSAPUser=data.SAPUser;
         if(data.UserGroup.length>0)   this.ddlUserGroup=data.UserGroup;
         if(data.ProductList.length>0)   this.GridUserMgmtProduct=data.ProductList;
