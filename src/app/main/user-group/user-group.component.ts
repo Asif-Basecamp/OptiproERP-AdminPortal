@@ -234,13 +234,11 @@ FillDropdownList()
   }
   
   gridUserSelectionChange(gridUser, selection) {
-     
     this.dialougeToggle();
     const GroupCodeData= selection.selectedRows[0].dataItem.OPTM_GROUPCODE
     this.UserGroupService.GetDataByUserId(GroupCodeData).subscribe(    
       data => { 
        this.HeaderText= "Edit -" +' '+  data.data[0].OPTM_GROUPCODE;
-         
         if(data.Status == "Success") 
         { 
          this.model = {
@@ -329,7 +327,7 @@ FillDropdownList()
     
   }
   EnableFields()
-  { 
+  {
     // this.Ugroup=true;  
     // this.UDesc=true;  
     // this.UUser=true;  

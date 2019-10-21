@@ -11,8 +11,10 @@
                             <label for="product" class="col-sm-2 col-md-2 col-lg-3 col-xl-3 col-form-label py-0">{{'Product'|translate}}<span class="text-danger">*</span></label>
                             <div class="col-sm-10 col-md-10 col-lg-9 col-xl-9">
                                 <div class="d-flex align-items-center">
-                                    <kendo-dropdownlist class="w-100 form-control-sm form-control" id="product" name="product"></kendo-dropdownlist>
-                                    <button class="btn btn-success btn-sm ml-2" type="button">{{'Display'|translate}}</button>
+                                    <kendo-dropdownlist class="w-100 form-control-sm form-control" id="product" name="product" [data]="ddlProductList" 
+                                    textField="ProductId" valueField="ProductId" [defaultItem]="PlaceHolder" (selectionChange)="productChange($event)">
+                                    </kendo-dropdownlist>
+                                    <button class="btn btn-success btn-sm ml-2" type="button" (click)="onClickDisplay()" [disabled]="ProductName == 'Select Product..'" >{{'Display'|translate}}</button>
                                 </div>                        
                             </div>
                         </div>
@@ -60,7 +62,7 @@
                     </ng-template>
 
                     <!-- Mobile view column -->
-                    <kendo-grid-column media="(max-width: 767px)" title="Items">
+                    <!-- <kendo-grid-column media="(max-width: 767px)" title="Items">
                         <ng-template kendoGridCellTemplate let-dataItem>
                             <div class="d-flex">
                                 <dl class="mb-0 w-50 pr-1">
@@ -78,13 +80,25 @@
                                 </dl>
                             </div>
                         </ng-template>
-                    </kendo-grid-column>
+                    </kendo-grid-column> -->
+
+                    <kendo-grid-column media="(min-width: 767px)" field="UserName" title="User Name"></kendo-grid-column>
+                    <kendo-grid-column media="(min-width: 767px)" field="GUID" title="GUID"></kendo-grid-column>
+                    <kendo-grid-column media="(min-width: 767px)" field="LastTransactionTime" title="Last Transaction Date Time"></kendo-grid-column>
+                    <kendo-grid-column media="(min-width: 767px)" field="" title="Logout"></kendo-grid-column>
 
                     <!-- columns for mid-size devices -->
+<<<<<<< HEAD
+                    <!-- <kendo-grid-column media="(min-width: 768px)" field="UserName" title="User Name"></kendo-grid-column>
+                    <kendo-grid-column media="(min-width: 768px)" field="GUID" title="GUID"></kendo-grid-column>
+                    <kendo-grid-column media="(min-width: 768px)" field="LastTransactionTime" title="Last Transaction Date Time"></kendo-grid-column>
+                    <kendo-grid-column media="(min-width: 768px)" field="Category.Description" title="Logout"></kendo-grid-column> -->
+=======
                     <kendo-grid-column media="(min-width: 768px)" field="ProductName" title="{{'User_Name'|translate}}"></kendo-grid-column>
                     <kendo-grid-column media="(min-width: 768px)" field="Category.Description" title="{{'GUID'|translate}}"></kendo-grid-column>
                     <kendo-grid-column media="(min-width: 768px)" field="Category.CategoryName" title="{{'Last_Transaction_Date_Time'|translate}}"></kendo-grid-column>
                     <kendo-grid-column media="(min-width: 768px)" field="Category.Description" title="{{'Logout'|translate}}"></kendo-grid-column>
+>>>>>>> cab695f2fd2fcc975dcae989af80347c67ef956f
 
                     <!-- xlsx template start -->
                     <kendo-grid-excel fileName="Connected-Users.xlsx"></kendo-grid-excel>

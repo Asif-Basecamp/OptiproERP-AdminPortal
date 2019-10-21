@@ -37,7 +37,7 @@ var a =this.Url;
 return this.http.get<any>(this.Url+'/api/UserGroup/GetSAPUser',{ headers: headerSettings});
 }
 
-AddUser(model : any){  
+AddUser(model : any){ 
   const headerSettings: {[name: string]: string | string[]; } = {
     'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
   };  
@@ -47,7 +47,7 @@ AddUser(model : any){
     UserGroupDesc: model.UserGroupDesc, IsAdminEnabled: model.IsAdminEnabled, SAPUser: model.mapped_user, SAPPass: model.mapped_Password }]) };
  return this.http.post<any>(this.Url+'/api/UserGroup/AddUserGroup',jObject,{ headers: this.header});
 }
-UpdateUser(model : any){  
+UpdateUser(model : any){ 
   const headerSettings: {[name: string]: string | string[]; } = {
     'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
   };  
@@ -59,7 +59,8 @@ UpdateUser(model : any){
     return this.http.post<any>(this.Url+'/api/UserGroup/UpdateUserGroupRecord',jObject,{ headers: this.header});
 }
 ChkUserGroupAssociativity(model : any)
-{ 
+{
+  
   const headerSettings: {[name: string]: string | string[]; } = {
     'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
   };  
@@ -68,7 +69,8 @@ ChkUserGroupAssociativity(model : any)
   var jObject = { UserGroupValues: JSON.stringify([{ UserGroupId: model.UserGroupId }]) };
     return this.http.post<any>(this.Url+'/api/UserGroup/ChkUserGroupAssociativity',jObject,{ headers: this.header});
 }
-DeleteUser(model : any){  
+DeleteUser(model : any){ 
+  
   const headerSettings: {[name: string]: string | string[]; } = {
     'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
   };  

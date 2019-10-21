@@ -30,6 +30,7 @@ export class LoginService {
 }
 AdminLoginLog(model : any)
 {
+     
   var today = new Date();
   var date = today.toLocaleString();
       const headerSettings: {[name: string]: string | string[]; } = {};  

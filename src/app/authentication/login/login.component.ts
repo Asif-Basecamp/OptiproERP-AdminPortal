@@ -40,12 +40,10 @@ export class LoginComponent {
     sessionStorage.clear();    
   }   
 
-  login(){    
-     
+  login(){     
     this.selectedItem = this.translate.instant("Login_Username");
     this.LoginService.Login(this.model).subscribe(    
       data => {    
-          
         //if(data.Status=="Success") 
         if(data != null)   
         {       
@@ -55,8 +53,7 @@ export class LoginComponent {
           localStorage.setItem('expires_in', data[0].expires_in); 
           this.auth.sendToken(data[0].access_token)
           // this.router.navigate(['/main']); 
-          this.AdminLoginLog();   
-            
+          this.AdminLoginLog();     
         }    
         else{ 
           this.MessageService.errormessage(this.translate.instant('UPInvaild'));
@@ -68,15 +65,12 @@ export class LoginComponent {
       });    
   };    
   AdminLoginLog(){ 
-   
     this.LoginService.AdminLoginLog(this.model).subscribe(    
-      data => {    
-           
+      data => {     
         //if(data.Status=="Success") 
         if(data == "True")   
         {     
-          this.router.navigate(['/main']);    
-            
+          this.router.navigate(['/main']);       
         }    
         else{ 
           this.router.navigate(['/main']);   

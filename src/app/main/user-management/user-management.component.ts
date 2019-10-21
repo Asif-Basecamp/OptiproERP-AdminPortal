@@ -43,7 +43,6 @@ export class UserManagementComponent implements OnInit {
 
   ngOnInit() {
     this.FillGridData();
-     
     this.ddlUserType=[];
     this.ddlUserType.push(
       { text: "Customer", value: "C" }, 
@@ -73,7 +72,6 @@ export class UserManagementComponent implements OnInit {
 
   FillDropdownList()
     {
-       
       this.UserManagementService.FillCompNGrpNSAPUsrNProd().subscribe(    
        data => { 
         data=data.data; 
@@ -100,10 +98,8 @@ export class UserManagementComponent implements OnInit {
 
   GrdUserMgmtSelectionChange(grid,event)
     {
-       
       this.UserManagementService.FillDDlEmployee(event.selectedRows[0].dataItem.dbName).subscribe(    
         data => {  
-           
         },    
         error => {  
           this.MessageService.errormessage(error.message);   
