@@ -35,7 +35,7 @@ AdminLoginLog(model : any)
   this.Url = 'http://localhost:21534/api/login/AdminLoginLog/';  
       const headerSettings: {[name: string]: string | string[]; } = {};  
       this.header = new HttpHeaders(headerSettings); 
-      var jObject = { LoginDetail: JSON.stringify([{"adminUser":model.UserName,"adminLogDateTime": date }])} //bug no 14986 Tamanna Feb 
+      var jObject = { LoginDetail: JSON.stringify([{"adminUser":model.UserName,"adminLogDateTime": date }])} 
      
     return this.http.post<any>(this.Url,jObject,{ headers: this.header});
 }
