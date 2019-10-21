@@ -16,6 +16,11 @@ export class LoginService {
    }
 
    Login(model : any){ 
+    const headerSettings: {[name: string]: string | string[]; } = {
+        'Content-Type':'application/json',  
+    };  
+     
+    this.header = new HttpHeaders(headerSettings);
      var jObject = { LoginDetail: JSON.stringify([{ LoginId: model.UserName, LoginPassword: model.Password }]) } //bug no 14986 Tamanna Feb 
       
     
@@ -25,7 +30,6 @@ export class LoginService {
 }
 AdminLoginLog(model : any)
 {
-     
   var today = new Date();
   var date = today.toLocaleString();
       const headerSettings: {[name: string]: string | string[]; } = {};  
