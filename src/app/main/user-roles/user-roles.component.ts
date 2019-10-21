@@ -65,11 +65,10 @@ export class UserRolesComponent implements OnInit {
         
         if(data.Status == "Success")  
         {  
-          data=data.data; 
          this.DropDownListData = data; 
         }    
         else{    
-          this.MessageService.errormessage("Something went wrong..");    
+          this.MessageService.errormessage(this.translate.instant('Somethingwrong'));    
         }    
       },    
       error => {  
@@ -78,7 +77,6 @@ export class UserRolesComponent implements OnInit {
   }
   CheckUncheckValueInsideFrid(data)
     {
-      data=data.data; 
       for(let i=0; i<data.length; i++)
       {
         data[i].AllSelected =false;
@@ -113,8 +111,7 @@ export class UserRolesComponent implements OnInit {
          if(data[i].ReadSelected ==true)
          data[i].ReadSelected =true;
          else  data[i].ReadSelected =false;
-      }  
-      debugger    
+      }     
       this.gridData1=data;
       console.log(data[0])
     }
@@ -125,12 +122,11 @@ export class UserRolesComponent implements OnInit {
           
             if(data.Status == "Success")  
             {  
-              data=data.data; 
               this.CheckUncheckValueInsideFrid(data)   
                this.GridDataFormanupulation=data;
             }    
             else{    
-             this.MessageService.errormessage("Something went wrong..");
+             this.MessageService.errormessage(this.translate.instant('Somethingwrong'));
             }    
           },    
           error => {    
@@ -164,12 +160,11 @@ export class UserRolesComponent implements OnInit {
         data => {    
              
           if(data.Status == "Success")  
-          {  
-            data=data.data; 
+          {   
            this.gridData = data; 
           }    
           else{    
-            this.MessageService.errormessage("Something went wrong..");    
+            this.MessageService.errormessage(this.translate.instant('Somethingwrong'));    
           }    
         },    
         error => {  
@@ -259,7 +254,7 @@ export class UserRolesComponent implements OnInit {
       
     }
      CheckboxSelectAll(event,dataItem,rowIndex)
-     {debugger
+     { 
       
       switch (event.currentTarget.name)   
       {   
@@ -371,10 +366,9 @@ export class UserRolesComponent implements OnInit {
             
           if(data.Status == "Success") 
             {
-              data=data.data; 
               if(data[0].CountRoleCheck>0)
                 {
-                  this.MessageService.errormessage("RoleId is already exist..");
+                  this.MessageService.errormessage(this.translate.instant('RoleIdalready'));
                   //DuplicateUserGroupId
                   this.IsDuplicate=true;
                 }
@@ -384,7 +378,7 @@ export class UserRolesComponent implements OnInit {
                 }  
               }    
           else{    
-            this.MessageService.errormessage("Something went wrong..");
+            this.MessageService.errormessage(this.translate.instant('Somethingwrong'));
               }    
                   },    
             error => {    
@@ -415,7 +409,7 @@ export class UserRolesComponent implements OnInit {
       }
        if(SelectedRowData.length==0)  
         {
-          this.MessageService.errormessage('No rows is selected..'); 
+          this.MessageService.errormessage(this.translate.instant('NoRows')); 
           return
         }
       this.RoleService.AddUserRole(this.model,SelectedRowData).subscribe(    
@@ -426,10 +420,10 @@ export class UserRolesComponent implements OnInit {
               this.FillGridData();
               this.addRolesScreenToggle();
              this.gridData1.length=0;
-              this.MessageService.successmessage("Record Created..");
+              this.MessageService.successmessage(this.translate.instant('RecordCreated'));
               
             }    
-              else{ this.MessageService.errormessage("Something went wrong..");    
+              else{ this.MessageService.errormessage(this.translate.instant('Somethingwrong'));    
               }    
             },    
             error => {
@@ -444,7 +438,6 @@ export class UserRolesComponent implements OnInit {
           this.addRolesScreenToggle();
           this.RoleService.GetDataByRoleId(selection.selectedRows[0].dataItem.OPTM_ROLEID).subscribe(    
           data => {     
-            data=data.data; 
           this.HeaderText= "Edit -" +' '+  data[0].OPTM_ROLEID;         
               data.forEach((SavedData) => { // foreach statement 
               this.model.Product=SavedData.OPTM_PROD;
@@ -476,7 +469,6 @@ export class UserRolesComponent implements OnInit {
 
                 this.RoleService.FillFridOnDropdownSelectedIndexChanged(this.model).subscribe(    
                   data => { 
-                    data = data.data;
                     if(data.length>0)   
                     { 
                       this.SelectedRowData.forEach((SavedData) => { // foreach statement 
@@ -508,7 +500,7 @@ export class UserRolesComponent implements OnInit {
                     } 
                     
                     else{    
-                     this.MessageService.errormessage("Something went wrong..");
+                     this.MessageService.errormessage(this.translate.instant('Somethingwrong'));
                     } 
                   },    
                   error => {
@@ -527,10 +519,9 @@ export class UserRolesComponent implements OnInit {
           
           this.RoleService.chkIfGroupIdisAssociate(RoleId).subscribe(    
             data => { 
-              debugger
+               
               if(data.Status == "Success") 
                 {
-                  data=data.data; 
                   if(data[0].ROLEIDCOUNT==0)
                     {
                       this.IsRoleId=true;
@@ -541,7 +532,7 @@ export class UserRolesComponent implements OnInit {
                     }  
                   }    
               else{    
-                    this.MessageService.errormessage("Something went wrong..");
+                    this.MessageService.errormessage(this.translate.instant('Somethingwrong'));
                   }    
                       },    
                 error => {    
@@ -557,7 +548,7 @@ export class UserRolesComponent implements OnInit {
 
       UpdateData(gridUser)
         {
-          debugger
+           
            const RoleId=this.model.RoleId;
            this.onChange(RoleId);
 
@@ -577,8 +568,7 @@ export class UserRolesComponent implements OnInit {
             }
             
             this.RoleService.UpdateUserRole(this.model,SelectedRowData).subscribe(    
-                data => {    
-                    debugger
+                data => {     
                   if(data=="True")  
                     {     
                      this.FillGridData();
@@ -586,7 +576,7 @@ export class UserRolesComponent implements OnInit {
 
                     
                      this.gridData1.length=0;
-                     this.MessageService.successmessage("Record Updated..");
+                     this.MessageService.successmessage(this.translate.instant('RecordUpdate'));
                     }    
                     else{ this.MessageService.errormessage(data);    
                     }    
@@ -597,17 +587,17 @@ export class UserRolesComponent implements OnInit {
         }
         DeleteData()
           {
-            debugger
+             
             this.RoleService.DeleteUserRole(this.model).subscribe(    
               data => {    
-                  debugger
+                   
                 if(data=="True")
                   {
                   this.confirmationOpened=false;     
                    this.FillGridData();
                    this.addRolesScreenToggle();
                    this.gridData1.length=0;
-                   this.MessageService.successmessage("Record Deleted..");
+                   this.MessageService.successmessage(this.translate.instant('RecordDelete'));
                   }    
                   else{ this.MessageService.errormessage(data);    
                   }    
