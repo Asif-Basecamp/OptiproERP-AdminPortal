@@ -175,9 +175,8 @@
                             <div class="section-heading mb-2">
                                 <h5 class="m-0">{{'Company'|translate}}</h5>
                             </div>
-                            <kendo-grid [kendoGridBinding]="data" [resizable]="true" [sortable]="true" class="custom-height-grid" [filterable]=isColumnFilter
+                            <kendo-grid [kendoGridBinding]="gridData" [resizable]="true" [sortable]="true" class="custom-height-grid" [filterable]=isColumnFilter
                                 [groupable]=isColumnGroup [columnMenu]="false" [selectable]="{ checkboxOnly: true, mode: 'multiple' }">
-
                                 <!-- [pageSize]="10" 
                                 [pageable]="{
                                     buttonCount: paginationButtonCount,
@@ -186,7 +185,6 @@
                                     pageSizes: paginationPageSizes,
                                     previousNext: paginationInfoPreviousNext
                                 }"> -->
-
                                 <!-- grid template start -->
                                 <ng-template kendoGridToolbarTemplate >
                                     <div class="d-flex align-items-center">
@@ -214,39 +212,9 @@
                                 </ng-template>
 
                                 <!-- columns for mid-size devices -->
-                                <kendo-grid-checkbox-column headerClass="text-center" class="text-center" [width]="40">
-                                    <ng-template kendoGridCellTemplate let-idx="rowIndex">
-                                        <label class="custom-checkbox m-0">
-                                            <input type="checkbox" [kendoGridSelectionCheckbox]="idx">
-                                            <span class="checkbox"></span>
-                                        </label>
-                                    </ng-template>
-                                </kendo-grid-checkbox-column>
-                                <kendo-grid-column field="ProductName" title="Database" [width]="150"></kendo-grid-column>
-                                <kendo-grid-column field="ProductID" title="Company" [width]="150"></kendo-grid-column>
-                                <kendo-grid-column field="" title="User Type" [width]="100">
-                                        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-                                            <kendo-dropdownlist [data]="listItems" class="form-control-sm form-control w-100"></kendo-dropdownlist>
-                                        </ng-template>
-                                </kendo-grid-column>
-                                <kendo-grid-column field="ProductName" title="Emp ID"></kendo-grid-column>
-                                <kendo-grid-column field="ProductName" title="BP ID"></kendo-grid-column>
-                                <ng-template kendoGridDetailTemplate let-dataItem>
-                                    <kendo-grid [kendoGridBinding]="data" [resizable]="true" [sortable]="true" class="" [filterable]=false
-                                        [groupable]=false [columnMenu]="false" [selectable]="{ checkboxOnly: true, mode: 'multiple' }">
-                                        <!-- columns for mid-size devices -->
-                                        <kendo-grid-checkbox-column headerClass="text-center" class="text-center" [width]="40">
-                                            <ng-template kendoGridCellTemplate let-ids="rowIndex">
-                                                <label class="custom-checkbox m-0">
-                                                    <input type="checkbox" [kendoGridSelectionCheckbox]="ids">
-                                                    <span class="checkbox"></span>
-                                                </label>
-                                            </ng-template>
-                                        </kendo-grid-checkbox-column>
-                                        <kendo-grid-column field="ProductName" title="Product Name"></kendo-grid-column>
-                                        <kendo-grid-column field="ProductName" title="Description"></kendo-grid-column> 
-                                    </kendo-grid>
-                                </ng-template>
+                                <kendo-grid-checkbox-column  [width]="38" class="text-center" headerClass="text-center"></kendo-grid-checkbox-column>
+                                <kendo-grid-column field="ProductName" title="Database"></kendo-grid-column>
+                                <kendo-grid-column field="Category.Description" title="Company"></kendo-grid-column>
                                 <!-- xlsx template start -->
                                 <kendo-grid-excel fileName="User-management.xlsx"></kendo-grid-excel>
                                 <!-- xlsx template end -->
@@ -254,67 +222,57 @@
                         </div>
                         <div class="company-details col-sm-6 mt-3 mt-sm-0">
                             <div class="section-heading mb-2">
-                                <h5 class="m-0">DB: Chai, Company: 1</h5>
+                                <h5 class="m-0">{{'Company_Details'|translate}}</h5>
                             </div>
-                            <kendo-grid [kendoGridBinding]="data" [resizable]="true" [sortable]="true" class="custom-height-grid" [filterable]=isColumnFilter33
-                                [groupable]=isColumnGroup33 [columnMenu]="false" [selectable]="{ checkboxOnly: true, mode: 'multiple' }">
-
-                                <!-- grid template start -->
-                                <ng-template kendoGridToolbarTemplate >
-                                    <div class="d-flex align-items-center">
-                                        <!-- show hide column start show hide -->
-                                        <!-- <kendo-grid-column-chooser class="float-left opti_hide-in-mobile"></kendo-grid-column-chooser> -->
-
-                                        <!-- checkbox -->
-                                        <label class="custom-checkbox mb-0 mr-2 filter-checkbox">
-                                            <input type="checkbox" [(ngModel)]="isColumnFilter33" [ngModelOptions]="{standalone: true}">
-                                            <span class="checkbox"></span>
-                                            <span>{{'Enable_filter'|translate}}</span>
-                                        </label>
-                                        <label class="custom-checkbox mb-0 grouping-checkbox">
-                                            <input type="checkbox" [(ngModel)]="isColumnGroup33" [ngModelOptions]="{standalone: true}">
-                                            <span class="checkbox"></span>
-                                            <span>{{'Enable_grouping'|translate}}</span>
-                                        </label>
-                                        <!-- export -->
-                                        <button type="button" kendoGridExcelCommand title="{{'Export_to_excel_file'|translate}}" class="ml-auto btn btn-link btn-sm btn-icon p-0">
-                                            <svg viewBox="0 0 512 512" class="icon">
-                                                <use xlink:href="#download"></use>
-                                            </svg>
-                                        </button>
+                            <form>
+                                <div class="form-group mb-2">
+                                    <label class="mb-0" for="user_type">{{'User_Type'|translate}}<span class="text-danger">*</span></label>
+                                    <kendo-dropdownlist id="user_type" name="user_type" class="form-control-sm form-control w-100"></kendo-dropdownlist>
+                                </div>
+                                <div class="form-group mb-2">
+                                    <label class="mb-0" for="products">{{'Products'|translate}}<span class="text-danger">*</span></label>
+                                    <div class="form-grid-wrapper">
+                                        <kendo-grid [kendoGridBinding]="gridData" [resizable]="true" [sortable]="true" class="custom-height-grid" [filterable]=false
+                                            [groupable]=false [columnMenu]="false" [selectable]="{ checkboxOnly: true, mode: 'multiple' }">
+                                            <!-- [pageSize]="10" 
+                                            [pageable]="{
+                                                buttonCount: paginationButtonCount,
+                                                info: paginationInfo,
+                                                type: paginationType,
+                                                pageSizes: paginationPageSizes,
+                                                previousNext: paginationInfoPreviousNext
+                                            }"> -->
+                                            <!-- grid template start -->
+                                            
+            
+                                            <!-- columns for mid-size devices -->
+                                            <kendo-grid-checkbox-column  [width]="38" class="text-center" headerClass="text-center"></kendo-grid-checkbox-column>
+                                            <kendo-grid-column field="ProductName" title="Product Name"></kendo-grid-column>
+                                            <kendo-grid-column field="Category.Description" title="Description"></kendo-grid-column>
+                                        </kendo-grid>
                                     </div>
-                                </ng-template>
-
-                                <!-- columns for mid-size devices -->
-                                <kendo-grid-checkbox-column headerClass="text-center" class="text-center" [width]="40">
-                                    <ng-template kendoGridCellTemplate let-idx="rowIndex">
-                                        <label class="custom-checkbox m-0">
-                                            <input type="checkbox" [kendoGridSelectionCheckbox]="idx">
-                                            <span class="checkbox"></span>
-                                        </label>
-                                    </ng-template>
-                                </kendo-grid-checkbox-column>
-                                <kendo-grid-column field="ProductName" title="Warehouse"></kendo-grid-column>
-                                <ng-template kendoGridDetailTemplate let-dataItem>
-                                    <kendo-grid [kendoGridBinding]="data" [resizable]="true" [sortable]="true" class="" [filterable]=false
-                                        [groupable]=false [columnMenu]="false" [selectable]="{ checkboxOnly: true, mode: 'multiple' }">
-                                        <!-- columns for mid-size devices -->
-                                        <kendo-grid-checkbox-column headerClass="text-center" class="text-center" [width]="40">
-                                            <ng-template kendoGridCellTemplate let-ids="rowIndex">
-                                                <label class="custom-checkbox m-0">
-                                                    <input type="checkbox" [kendoGridSelectionCheckbox]="ids">
-                                                    <span class="checkbox"></span>
-                                                </label>
-                                            </ng-template>
-                                        </kendo-grid-checkbox-column>
-                                        <kendo-grid-column field="ProductName" title="Work Center"></kendo-grid-column>
-                                    </kendo-grid>
-                                </ng-template>
-
-                                <!-- xlsx template start -->
-                                <kendo-grid-excel fileName="Warehouse-info.xlsx"></kendo-grid-excel>
-                                <!-- xlsx template end -->
-                            </kendo-grid>
+                                </div>
+                                <div class="form-group mb-2">
+                                    <label class="mb-0" for="bussiness_partner_code" >{{'Bussiness_Partner_Code'|translate}}<span class="text-danger">*</span></label>
+                                    <kendo-dropdownlist name="bussiness_partner_code" class="form-control form-control-sm" id="bussiness_partner_code"></kendo-dropdownlist>
+                                </div>
+                                <div class="form-group mb-0">
+                                    <label class="mb-0" for="tenant">{{'Warehouse'|translate}} &amp; {{'Work_Center'|translate}}<span class="text-danger">*</span></label>
+                                    <div class="treeview-wrapper">
+                                        <kendo-treeview
+                                            [nodes]="treeData"
+                                            [children]="children"
+                                            [hasChildren]="hasChildren"
+                                            textField="text"
+                                            [isExpanded]="isExpanded"
+                                            (collapse)="handleCollapse($event)"
+                                            (expand)="handleExpand($event)"        
+                                            [kendoTreeViewCheckable]="checkableSettings"
+                                            [(checkedKeys)]="checkedKeys"
+                                        ></kendo-treeview>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
