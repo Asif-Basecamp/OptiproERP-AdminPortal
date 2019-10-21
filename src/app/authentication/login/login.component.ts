@@ -39,6 +39,7 @@ export class LoginComponent {
           localStorage.setItem('access_token', data.access_token);       
           localStorage.setItem('token_type', data.token_type); 
           localStorage.setItem('expires_in', data.expires_in); 
+          //this.auth.sendToken(data.access_token)
           // this.router.navigate(['/main']); 
           this.AdminLoginLog();     
         }    
