@@ -5,14 +5,15 @@ import { CheckableSettings } from '@progress/kendo-angular-treeview';
 import { of, Observable } from 'rxjs';
 import { UserManagementService } from 'src/app/service/user-management.service';
 import { MessageService } from '../../common/message.service';
-
+import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 @Component({
   selector: 'app-user-management',
   templateUrl: './user-management.component.html',
   styleUrls: ['./user-management.component.scss']
 })
 export class UserManagementComponent implements OnInit {
-
+  selectedItem: string = "";
   // public paginationButtonCount = 5;
   // public paginationInfo = true;
   // public paginationType: 'input';
@@ -32,13 +33,17 @@ export class UserManagementComponent implements OnInit {
 
   public checkedKeys: any[] = [];
 
-  constructor(private UserManagementService:UserManagementService,private MessageService:MessageService ) { 
+  constructor(private UserManagementService:UserManagementService,private MessageService:MessageService,
+    private translate: TranslateService, private httpClientSer: HttpClient) { 
     //this.setSelectableSettings();
+    translate.use(localStorage.getItem('applang'));
+    translate.onLangChange.subscribe((event: LangChangeEvent) => { 
+    }); 
   }
 
   ngOnInit() {
     this.FillGridData();
-    debugger
+     
     this.ddlUserType=[];
     this.ddlUserType.push(
       { text: "Customer", value: "C" }, 
@@ -58,7 +63,7 @@ export class UserManagementComponent implements OnInit {
             this.gridData = data.data; 
           }    
       else{    
-            this.MessageService.errormessage("Something went wrong..");    
+            this.MessageService.errormessage(this.translate.instant('Somethingwrong'));    
           }    
         },    
       error => {  
@@ -68,7 +73,7 @@ export class UserManagementComponent implements OnInit {
 
   FillDropdownList()
     {
-      debugger
+       
       this.UserManagementService.FillCompNGrpNSAPUsrNProd().subscribe(    
        data => { 
         data=data.data; 
@@ -95,10 +100,10 @@ export class UserManagementComponent implements OnInit {
 
   GrdUserMgmtSelectionChange(grid,event)
     {
-      debugger
+       
       this.UserManagementService.FillDDlEmployee(event.selectedRows[0].dataItem.dbName).subscribe(    
         data => {  
-          debugger
+           
         },    
         error => {  
           this.MessageService.errormessage(error.message);   
