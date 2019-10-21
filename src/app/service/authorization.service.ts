@@ -68,7 +68,7 @@ export class AuthorizationService {
   }
 
   GetDataForUserGroup(UserGroup:string){
-    this.Url = 'http://localhost:57965/api/Permission/GetDataForUserGroup';
+    this.Url = 'http://172.16.6.166:1297/OptiProERPAdminService/api/Permission/GetDataForUserGroup';
     const headerSettings: {[name: string]: string | string[]; } = {};  
     this.header = new HttpHeaders(headerSettings); 
     var jObject = { UserGroup: JSON.stringify([{ UserGroup: UserGroup}]) };   

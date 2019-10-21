@@ -28,7 +28,7 @@ export class LoginComponent {
     sessionStorage.clear();    
   }   
 
-  login(){     
+  login(){  
     this.selectedItem = this.translate.instant("Login_Username");
     this.LoginService.Login(this.model).subscribe(    
       data => {    

@@ -18,7 +18,6 @@ export class LoginService {
    }
 
    Login(model : any){ 
-      
      var jObject = { LoginDetail: JSON.stringify([{ LoginId: model.UserName, LoginPassword: model.Password }]) } //bug no 14986 Tamanna Feb 
       
      var a =this.Url+'UserLogin';  
