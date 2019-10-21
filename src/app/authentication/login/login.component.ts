@@ -62,7 +62,8 @@ export class LoginComponent {
         }    
         else{ 
           this.MessageService.errormessage("UserName or Password is invalid");
-          //this.errorMessage = data.Message;      
+          //this.errorMessage = data.Message;    
+          //comments here  
         }     
       },    
       error => { 
