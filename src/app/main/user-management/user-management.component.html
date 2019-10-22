@@ -229,8 +229,16 @@
                                             <kendo-dropdownlist [data]="listItems" class="form-control-sm form-control w-100"></kendo-dropdownlist>
                                         </ng-template>
                                 </kendo-grid-column>
-                                <kendo-grid-column field="ProductName" title="Emp ID"></kendo-grid-column>
-                                <kendo-grid-column field="ProductName" title="BP ID"></kendo-grid-column>
+                                <kendo-grid-column field="" title="Emp ID" [width]="100">
+                                        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                            <kendo-dropdownlist [data]="listItems" class="form-control-sm form-control w-100"></kendo-dropdownlist>
+                                        </ng-template>
+                                </kendo-grid-column>
+                                <kendo-grid-column field="" title="BP ID" [width]="100">
+                                        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                            <kendo-dropdownlist [data]="listItems" class="form-control-sm form-control w-100"></kendo-dropdownlist>
+                                        </ng-template>
+                                </kendo-grid-column>
                                 <ng-template kendoGridDetailTemplate let-dataItem>
                                     <kendo-grid [kendoGridBinding]="data" [resizable]="true" [sortable]="true" class="" [filterable]=false
                                         [groupable]=false [columnMenu]="false" [selectable]="{ checkboxOnly: true, mode: 'multiple' }">
