@@ -45,16 +45,16 @@ export class LoginComponent {
         //if(data.Status=="Success") 
         if(data != null)   
         {       
-          this.successmsg = 'token - ' + data.access_token;  
-          localStorage.setItem('access_token', data.access_token);       
-          localStorage.setItem('token_type', data.token_type); 
-          localStorage.setItem('expires_in', data.expires_in); 
+          this.successmsg = 'token - ' + data[0].access_token;  
+          localStorage.setItem('access_token', data[0].access_token);       
+          localStorage.setItem('token_type', data[0].token_type); 
+          localStorage.setItem('expires_in', data[0].expires_in); 
           //this.auth.sendToken(data.access_token)
           // this.router.navigate(['/main']); 
           this.AdminLoginLog();     
-        }    
+        }     
         else{ 
-          this.MessageService.errormessage("UserName or Password is invalid");
+          this.MessageService.errormessage(this.translate.instant('UPInvaild'));
           //this.errorMessage = data.Message;    
         }    
       },    
@@ -66,12 +66,12 @@ export class LoginComponent {
     this.LoginService.AdminLoginLog(this.model).subscribe(    
       data => {     
         //if(data.Status=="Success") 
-        if(data.data == "True")   
+        if(data == "True")   
         {     
           this.router.navigate(['/main']);       
         }    
         else{ 
-          this.MessageService.errormessage("UserName or Password is invalid");
+          this.MessageService.errormessage(this.translate.instant('UPInvaild'));
           //this.errorMessage = data.Message;    
           //comments here  
         }     

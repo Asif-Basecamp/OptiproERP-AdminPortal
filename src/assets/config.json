@@ -1,5 +1,5 @@
 {
-    "service_url": "http://172.16.6.213/PublishAdminProtal",
+    "service_url": "http://localhost/AdminService",
     "deployedFor": "handheld",
     "clientName": "EllyzaLondon"
 }
