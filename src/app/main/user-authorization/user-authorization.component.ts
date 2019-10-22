@@ -64,7 +64,6 @@ export class UserAuthorizationComponent implements OnInit {
   }
 
   public addAuthScreenToggle(mode) {
-    
     this.addAuthScreen = !this.addAuthScreen;
     this.inputRole = [];
 
@@ -88,20 +87,18 @@ export class UserAuthorizationComponent implements OnInit {
   }
 
   public dialougeToggle() {
-
-    if(this.inputRole.length <= 0){
-      this.MessageService.errormessage('Please select role');
+     if(this.UserGroup === 'Select User Group..'){
+      this.MessageService.errormessage('Please Select User Group');
       return false;
-    }
-
-    this.dialogOpened = !this.dialogOpened;   
+     }else{
+      this.dialogOpened = !this.dialogOpened;
+     }
   }
 
   getPermissionView(){
     this.AuthServ.getPermissionView().subscribe(
       data => {
-        this.gridData = data; 
-        console.log(this.gridData);
+        this.gridData = data.data; 
       },    
       error => {  
         this.MessageService.errormessage(error.message);
@@ -109,15 +106,13 @@ export class UserAuthorizationComponent implements OnInit {
   }
 
   getUserForLookup(){
-  
     this.AuthServ.getUsers(this.UserGroup).subscribe(
       data => {  
-        this.userGridLookup = data.USERDETAILS;  
+        this.userGridLookup = data.data.USERDETAILS; 
       },    
       error => {  
         this.MessageService.errormessage(error.message);
     });
-
   }
 
   userGroupChange($event){
@@ -128,7 +123,7 @@ export class UserAuthorizationComponent implements OnInit {
   getAllUserGroup(){
     this.AuthServ.getUserGroup().subscribe(
       data => {
-        this.allUsersDDL = data;         
+        this.allUsersDDL = data.data;         
       },    
       error => {  
         this.MessageService.errormessage(error.message);
@@ -139,15 +134,15 @@ export class UserAuthorizationComponent implements OnInit {
     this.AuthServ.getUserGroup().subscribe(
       data => {
       this.ddlUserGroup = [];   
-      for(let i=0; i < data.length; i++){
+      for(let i=0; i < data.data.length; i++){
         for(let j=0; j < this.gridData.length; j++){
-          if(data[i].OPTM_GROUPCODE == this.gridData[j].OPTM_USERGROUP){
-            data.splice(i,1)
+          if(data.data[i].OPTM_GROUPCODE == this.gridData[j].OPTM_USERGROUP){
+            data.data.splice(i,1)
           }
         }
       }      
-       this.ddlUserGroup = data;  
-       this.defaultItem = this.ddlUserGroup[0];       
+       this.ddlUserGroup = data.data; 
+      // this.defaultItem = this.ddlUserGroup[0];       
       },    
       error => {  
         this.MessageService.errormessage(error.message);
@@ -157,7 +152,7 @@ export class UserAuthorizationComponent implements OnInit {
   getRoles(mode){
     this.AuthServ.getRoles().subscribe(
       data => {       
-      this.gridDataRoles = data;  
+      this.gridDataRoles = data.data; 
       if(mode == 'edit'){
         for(let i=0; i<this.DataForUserGroup.OPTM_ADMIN_AUTHR.length; i++){
           for(let j=0; j<this.gridDataRoles.length; j++){
@@ -229,7 +224,7 @@ export class UserAuthorizationComponent implements OnInit {
   if(state == 'show'){
     this.AuthServ.getMenuList(this.inputRole).subscribe(
       data => {      
-       this.screenGrid = data.Table;
+       this.screenGrid = data.data.Table;
        for(let i=0; i<this.screenGrid.length; i++){
 
         if(this.screenGrid[i].AddSelected == '')
@@ -324,29 +319,12 @@ export class UserAuthorizationComponent implements OnInit {
    
   this.AuthServ.GetDataForUserGroup(userGrp).subscribe(
     data => {    
-        
-        this.DataForUserGroup = data;
+        this.DataForUserGroup = data.data;
         this.ddlUserGroup = this.allUsersDDL.filter(val => val.OPTM_GROUPCODE == userGrp);
         this.defaultItem = this.ddlUserGroup[0];
         this.inputVal = userGrp;
         this.showDisplayBtn = true;  
         this.getRoles('edit');      
-      
-        // for(let i=0; i<data.OPTM_ADMIN_AUTHR.length; i++){
-        //   for(let j=0; j<this.gridDataRoles.length; j++){
-
-        //     if(data.OPTM_ADMIN_AUTHR[i].OPTM_ROLEID == this.gridDataRoles[j].OPTM_ROLEID ){
-        //       this.gridDataRoles[j].checked = true;
-        //       this.inputRole.push({
-        //         OPTM_ROLEID: this.gridDataRoles[j].OPTM_ROLEID
-        //       });
-        //     }
-        //   }
-        // }
-
-        // this.getMenuList('show');
-        // this.CheckUserPermissionForProduct('edit');   
-
     },    
     error => {  
       this.MessageService.errormessage(error.message);
@@ -394,7 +372,6 @@ selectCheckboxRole(checkvalue,rowdata,idx){
   }
 
   onSelectAllChange($event){
-  
     this.oModalData.SelectedRole = [];       
     if($event == "checked"){ 
      this.selectAllCheckBox = true;
