@@ -34,19 +34,10 @@
 
                 <kendo-grid [kendoGridBinding]="gridData" [resizable]="true" [sortable]="true" class="full-height-grid kendo-responsive-grid" [filterable]=isColumnFilter
                     [groupable]=isColumnGroup [columnMenu]="false" [selectable] = "true" (selectionChange)="editUser($event)">
-                    <!-- [pageSize]="10" 
-                    [pageable]="{
-                        buttonCount: paginationButtonCount,
-                        info: paginationInfo,
-                        type: paginationType,
-                        pageSizes: paginationPageSizes,
-                        previousNext: paginationInfoPreviousNext
-                    }"> -->
+
                     <!-- grid template start -->
                     <ng-template kendoGridToolbarTemplate >
                         <div class="d-flex align-items-center">
-                            <!-- show hide column start show hide -->
-                            <!-- <kendo-grid-column-chooser class="float-left opti_hide-in-mobile"></kendo-grid-column-chooser> -->
 
                             <!-- checkbox -->
                             <label class="custom-checkbox mb-0 mr-2 filter-checkbox">
@@ -507,25 +498,13 @@
             </div>
         </div>
 
-        <!-- Lookup Grid--> <!--[selectable]="{ checkboxOnly: true, mode: 'multiple' }"-->
+        <!-- Lookup Grid--> 
         <kendo-grid [kendoGridBinding]="userGridLookup" [resizable]="true" [sortable]="true" [filterable]=isColumnFilter3
             [groupable]=isColumnGroup3 [columnMenu]="false" [height]="250" [selectable]="true" 
             (selectionChange)="gridUserSelection($event)">
-            <!-- [pageSize]="10" 
-            [pageable]="{
-                buttonCount: paginationButtonCount,
-                info: paginationInfo,
-                type: paginationType,
-                pageSizes: paginationPageSizes,
-                previousNext: paginationInfoPreviousNext
-            }"> -->
             <!-- grid template start -->
             <ng-template kendoGridToolbarTemplate >
                 <div class="d-flex align-items-center">
-                    <!-- show hide column start show hide -->
-                    <!-- <kendo-grid-column-chooser class="float-left opti_hide-in-mobile"></kendo-grid-column-chooser> -->
-
-                    <!-- checkbox -->
                     <label class="custom-checkbox mb-0 mr-2 filter-checkbox">
                         <input type="checkbox" [(ngModel)]="isColumnFilter3" [ngModelOptions]="{standalone: true}">
                         <span class="checkbox"></span>
