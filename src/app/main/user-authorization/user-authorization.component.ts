@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { products } from 'src/app/dummyData/data';
+import { products } from '../../dummyData/data';
 import { GridComponent, RowClassArgs } from '@progress/kendo-angular-grid';
-import { AuthorizationService } from 'src/app/service/authorization.service';
+import { AuthorizationService } from '../../service/authorization.service';
 import { MessageService } from '../../common/message.service';
 
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
@@ -13,13 +13,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 })
 export class UserAuthorizationComponent implements OnInit {
   selectedItem: string = ""; 
-  // public paginationButtonCount = 5;
-  // public paginationInfo = true;
-  // public paginationType: 'input';
-  // public paginationPageSizes = true;
-  // public paginationInfoPreviousNext = true;
   public addAuthScreen = false;
-
   public gridData: any[];
   public gridDataRoles: any[];
   public checkedKeys: any[] = [];
@@ -41,20 +35,15 @@ export class UserAuthorizationComponent implements OnInit {
   public loggedInUser : string = '';
 
   constructor(private AuthServ: AuthorizationService, private MessageService:MessageService, private translate: TranslateService, private httpClientSer: HttpClient) {
-    // let userLang = navigator.language.split('-')[0];
-    //   userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
     translate.use(localStorage.getItem('applang'));
       translate.onLangChange.subscribe((event: LangChangeEvent) => { 
       }); 
- }
+  }
 
   ngOnInit() {
-   
     this.getPermissionView();
     this.oModalData.User = [];
     this.oModalData.SelectedRole = []; 
-    //this.loggedInUser = window.localStorage.getItem('LoggedInUser');
-    // this.isMobile();
   }
 
   onFilterChange(checkBox:any,grid:GridComponent){
@@ -64,7 +53,7 @@ export class UserAuthorizationComponent implements OnInit {
   }
 
   clearFilter(grid:GridComponent){      
-    //grid.filter.filters=[];
+
   }
 
   public rowCallback(context: RowClassArgs) {
@@ -73,22 +62,6 @@ export class UserAuthorizationComponent implements OnInit {
         exceptional: isEven,
       };
   }
-
-  // public isMobile(): void {
-  //   if(window.innerWidth <= 991){
-  //     // this.paginationInfo = false;
-  //     this.paginationPageSizes = false; 
-  //     this.paginationInfoPreviousNext = false;  
-  //     this.paginationButtonCount = 3;                 
-  //   }
-  // }
-
-//   public setSelectableSettings(): void {
-//     this.selectableSettings = {
-//         checkboxOnly: this.checkboxOnly,
-//         mode: this.mode
-//     };
-// }
 
   public addAuthScreenToggle(mode) {
     
@@ -128,6 +101,7 @@ export class UserAuthorizationComponent implements OnInit {
     this.AuthServ.getPermissionView().subscribe(
       data => {
         this.gridData = data; 
+        console.log(this.gridData);
       },    
       error => {  
         this.MessageService.errormessage(error.message);
@@ -148,33 +122,7 @@ export class UserAuthorizationComponent implements OnInit {
 
   userGroupChange($event){
     this.UserGroup = $event.OPTM_GROUPCODE;
-
     this.getUserForLookup();
-
-  //   this.checkInvalidGroup();
-
-  //   this.AuthServ.checkUserCodeExists(this.UserGroup).subscribe(
-  //   data => {       
-  //     if(data == "Record Exists"){
-  //     let isOverwrite = false;
-  //     isOverwrite = confirm("Record already exists. Do you want to overwrite it?");
-  
-  //     if(isOverwrite){
-  //       this.MessageService.successmessage("Yes");
-  //     }
-  //     else{
-  //       this.MessageService.errormessage("No");
-  //     }
-      
-  //     }  
-  //     else{
-  //      this.MessageService.errormessage("Record does not exists");
-  //     }      
-  //   },    
-  //   error => {  
-  //     this.MessageService.errormessage(error.message);
-  //  });
-    
   }
 
   getAllUserGroup(){
@@ -240,84 +188,33 @@ export class UserAuthorizationComponent implements OnInit {
     });
   }
 
-  // checkUserCodeExists(){
-  //   this.AuthServ.checkUserCodeExists(this.UserGroup).subscribe(
-  //     data => {       
-  //       if(data == "Record Exists"){
-  //         return true;
-  //       }  
-  //       else{
-  //         return false;
-  //       }      
-  //     },    
-  //     error => {  
-  //       this.MessageService.errormessage(error.message);
-  //       //return false;
-  //   });
-  //   return false;
-  // }
-
   gridUserSelection($event){
     this.inputVal = $event.selectedRows[0].dataItem.OPTM_USERCODE;
     this.CheckUserPermissionForProduct('grid'); 
-    //this.dialougeToggle();  
   }
 
   CheckUserPermissionForProduct(area){
-
     this.oModalData.User = [];
     this.oModalData.User.push({
       User: this.inputVal
     })
-
-    // var jObject = { UserGroup: JSON.stringify(this.oModalData) };
-    // console.log(jObject);
-
     this.AuthServ.checkUserPermissionForProduct(this.oModalData).subscribe(
     data => {       
-      
-       if(data != 'exist'){
+      if(data != 'exist'){
         this.MessageService.errormessage(data);
         this.screenGrid = [];
-       // this.inputVal = '';
-       //this.oModalData.User = [];
-       }
-      
-        if(this.inputRole.length > 0 && this.inputVal != '')
+      }
+      if(this.inputRole.length > 0 && this.inputVal != '')
         this.showDisplayBtn = true;
-      
         if(area == 'grid')
         this.dialougeToggle();
-    },    
+      },    
     error => {  
       this.MessageService.errormessage(error.message);
-  });
-
+    });
   }
 
-  // selectUserRole($event){
-
-  //  if($event.selectedRows.length > 1 || $event.deselectedRows.length > 1){
-  //   return false;
-  //  } 
-
-  //   this.oModalData.SelectedRole = [];       
-  //   if($event.selectedRows.length > 0){         
-  //       this.inputRole.push({
-  //         OPTM_ROLEID: $event.selectedRows[0].dataItem.OPTM_ROLEID
-  //       });           
-  //   }
-  //   else{
-  //     let deselectVal = $event.deselectedRows[0].dataItem.OPTM_ROLEID;
-  //     const index = this.inputRole.findIndex(val => val.OPTM_ROLEID === deselectVal);
-  //     this.inputRole.splice(index,1);
-  //   } 
-
-  //   this.getMenuList('hide');
-  // }
-
   getMenuList(state){
-
     for(let i=0; i < this.inputRole.length; i++){
       for(let j=0; j < this.gridDataRoles.length; j++){
         if(this.inputRole[i].OPTM_ROLEID == this.gridDataRoles[j].OPTM_ROLEID){
@@ -364,15 +261,10 @@ export class UserAuthorizationComponent implements OnInit {
   }
  }
 
- saveRecord(){
-
-  console.log(this.screenGrid);
-  console.log(this.gridDataRoles);
-  
+ saveRecord(){  
   var oSaveModel:any = {};
   oSaveModel.OPTM_ADMIN_AUTHR = [];
   oSaveModel.OPTM_ADMIN_AUTHRUSER = [];
-
   for(let idx=0; idx<this.gridDataRoles.length; ){
   if(this.gridDataRoles[idx].checked == true){   
   oSaveModel.OPTM_ADMIN_AUTHR.push({
