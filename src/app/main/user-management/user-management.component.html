@@ -257,7 +257,7 @@
                                 <h5 class="m-0">DB: Chai, Company: 1</h5>
                             </div>
                             <kendo-grid [kendoGridBinding]="data" [resizable]="true" [sortable]="true" class="custom-height-grid" [filterable]=isColumnFilter33
-                                [groupable]=isColumnGroup33 [columnMenu]="false" [selectable]="{ checkboxOnly: true, mode: 'multiple' }">
+                                [groupable]=false [columnMenu]="false" [selectable]="{ checkboxOnly: true, mode: 'multiple' }">
 
                                 <!-- grid template start -->
                                 <ng-template kendoGridToolbarTemplate >
@@ -270,11 +270,6 @@
                                             <input type="checkbox" [(ngModel)]="isColumnFilter33" [ngModelOptions]="{standalone: true}">
                                             <span class="checkbox"></span>
                                             <span>{{'Enable_filter'|translate}}</span>
-                                        </label>
-                                        <label class="custom-checkbox mb-0 grouping-checkbox">
-                                            <input type="checkbox" [(ngModel)]="isColumnGroup33" [ngModelOptions]="{standalone: true}">
-                                            <span class="checkbox"></span>
-                                            <span>{{'Enable_grouping'|translate}}</span>
                                         </label>
                                         <!-- export -->
                                         <button type="button" kendoGridExcelCommand title="{{'Export_to_excel_file'|translate}}" class="ml-auto btn btn-link btn-sm btn-icon p-0">

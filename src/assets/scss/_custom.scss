@@ -301,6 +301,9 @@ body .k-widget.form-control-sm .k-input {
 .k-i-arrow-60-down::before, .k-i-expand-s::before, .k-i-collapse::before, .k-i-sarrow-s::before, .k-i-arrow-s::before{
   transform:rotateZ(90deg);
 }
+.k-list .k-item, .k-list-optionlabel{
+  padding: 3px 12px;
+}
 //kendo checkbox
 .k-checkbox:checked + .k-checkbox-label::after {
   border-radius: 2px;
