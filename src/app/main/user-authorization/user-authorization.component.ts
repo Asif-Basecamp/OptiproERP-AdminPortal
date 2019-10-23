@@ -33,6 +33,7 @@ export class UserAuthorizationComponent implements OnInit {
   public DataForUserGroup: any;
   public selectAllCheckBox: boolean = false;
   public loggedInUser : string = '';
+  public confirmationOpened = false;
 
   constructor(private AuthServ: AuthorizationService, private MessageService:MessageService, private translate: TranslateService, private httpClientSer: HttpClient) {
     translate.use(localStorage.getItem('applang'));
@@ -48,12 +49,8 @@ export class UserAuthorizationComponent implements OnInit {
 
   onFilterChange(checkBox:any,grid:GridComponent){
     if(checkBox.checked==false){
-      this.clearFilter(grid);
+     // this.clearFilter(grid);
     }
-  }
-
-  clearFilter(grid:GridComponent){      
-
   }
 
   public rowCallback(context: RowClassArgs) {
@@ -63,38 +60,7 @@ export class UserAuthorizationComponent implements OnInit {
       };
   }
 
-  public addAuthScreenToggle(mode) {
-    this.addAuthScreen = !this.addAuthScreen;
-    this.inputRole = [];
-
-    if(this.addAuthScreen){
-
-      if(mode == 'edit'){
-        this.getAllUserGroup();       
-      } 
-      else{
-        this.getRoles(mode);
-      }          
-      this.getUserGroup();
-     
-    }
-    
-    if(mode == 'add'){
-     this.isEdit = false;
-     this.inputVal = '';     
-     this.userGridLookup = []; this.screenGrid = [];
-    }
-  }
-
-  public dialougeToggle() {
-     if(this.UserGroup === 'Select User Group..'){
-      this.MessageService.errormessage('Please Select User Group');
-      return false;
-     }else{
-      this.dialogOpened = !this.dialogOpened;
-     }
-  }
-
+  /*-- get list of users on home screen --*/
   getPermissionView(){
     this.AuthServ.getPermissionView().subscribe(
       data => {
@@ -105,6 +71,7 @@ export class UserAuthorizationComponent implements OnInit {
     }); 
   }
 
+  /*-- get list of users on click search icon --*/
   getUserForLookup(){
     this.AuthServ.getUsers(this.UserGroup).subscribe(
       data => {  
@@ -115,11 +82,7 @@ export class UserAuthorizationComponent implements OnInit {
     });
   }
 
-  userGroupChange($event){
-    this.UserGroup = $event.OPTM_GROUPCODE;
-    this.getUserForLookup();
-  }
-
+  /*-- get list of user group --*/
   getAllUserGroup(){
     this.AuthServ.getUserGroup().subscribe(
       data => {
@@ -130,17 +93,58 @@ export class UserAuthorizationComponent implements OnInit {
     });
   }
 
+  /*-- condition of add or edit screen --*/
+  public addAuthScreenToggle(mode) {
+    this.addAuthScreen = !this.addAuthScreen;
+    this.inputRole = [];
+    if(this.addAuthScreen){
+      if(mode == 'edit'){
+        this.getAllUserGroup();       
+      } 
+      else{
+        this.UserGroup = 'Select User Group..';
+        this.defaultItem = '';
+        this.getRoles(mode);
+      }          
+      this.getUserGroup();
+    }
+    if(mode == 'add'){
+      this.isEdit = false;
+      this.inputVal = '';     
+      this.userGridLookup = []; 
+      this.screenGrid = [];
+    }
+  }
+
+  /*-- select user screen on click search icon --*/
+  public dialougeToggle() {
+    if(this.UserGroup === 'Select User Group..'){
+      this.MessageService.errormessage('Please Select User Group');
+      return false;
+    }else{
+      this.dialogOpened = !this.dialogOpened;
+    }
+  }
+
+  /*-- on click user group --*/
+  userGroupChange($event){
+    this.UserGroup = $event.OPTM_GROUPCODE;
+    this.getUserForLookup();
+  }
+
   getUserGroup(){
     this.AuthServ.getUserGroup().subscribe(
       data => {
-      this.ddlUserGroup = [];   
-      for(let i=0; i < data.data.length; i++){
-        for(let j=0; j < this.gridData.length; j++){
-          if(data.data[i].OPTM_GROUPCODE == this.gridData[j].OPTM_USERGROUP){
-            data.data.splice(i,1)
+      this.ddlUserGroup = []; 
+      if(data.data){
+        for(let i=0; i < data.data.length; i++){
+          for(let j=0; j < this.gridData.length; j++){
+            if(data.data[i].OPTM_GROUPCODE == this.gridData[j].OPTM_USERGROUP){
+              data.data.splice(i,1)
+            }
           }
-        }
-      }      
+        }    
+      }    
        this.ddlUserGroup = data.data; 
       // this.defaultItem = this.ddlUserGroup[0];       
       },    
@@ -194,9 +198,9 @@ export class UserAuthorizationComponent implements OnInit {
       User: this.inputVal
     })
     this.AuthServ.checkUserPermissionForProduct(this.oModalData).subscribe(
-    data => {       
-      if(data != 'exist'){
-        this.MessageService.errormessage(data);
+    data => { 
+      if(data.data != 'exist'){
+        this.MessageService.errormessage(data.data);
         this.screenGrid = [];
       }
       if(this.inputRole.length > 0 && this.inputVal != '')
@@ -256,64 +260,16 @@ export class UserAuthorizationComponent implements OnInit {
   }
  }
 
- saveRecord(){  
-  var oSaveModel:any = {};
-  oSaveModel.OPTM_ADMIN_AUTHR = [];
-  oSaveModel.OPTM_ADMIN_AUTHRUSER = [];
-  for(let idx=0; idx<this.gridDataRoles.length; ){
-  if(this.gridDataRoles[idx].checked == true){   
-  oSaveModel.OPTM_ADMIN_AUTHR.push({
-    OPTM_AUTHCODE:this.gridDataRoles[idx].OPTM_USERGROUP, //add auth code
-    OPTM_USERGROUP:this.gridDataRoles[idx].OPTM_USERGROUP,
-    OPTM_ROLEID: this.gridDataRoles[idx].OPTM_ROLEID,
-    OPTM_CREATEDATE: '000-00-00',
-    OPTM_USERID: 'admin'
- });
-}
-}
-
- for(let i=0; i<this.screenGrid.length; i++){  
-  
-  const index = this.DataForUserGroup.OPTM_ADMIN_AUTHRUSER.findIndex(r=>r.OPTM_MENUID == this.screenGrid[i].OPTM_MENUID);
-    
-  oSaveModel.OPTM_ADMIN_AUTHRUSER.push({
-    OPTM_USERGROUP: this.DataForUserGroup.OPTM_ADMIN_AUTHR[0].OPTM_USERGROUP,
-    OPTM_ROLEID: this.screenGrid[i].OPTM_ROLEID,
-    OPTM_MENUID: this.screenGrid[i].OPTM_MENUID,
-    OPTM_PERMISSION: "",
-    OPTM_CREATEDATE: '000-00-00',
-    OPTM_USERCODE: this.DataForUserGroup.OPTM_ADMIN_AUTHR[0].OPTM_USERGROUP,
-    AddSelected: this.screenGrid[i].AddSelected,
-    UpdateSelected: this.screenGrid[i].UpdateSelected,
-    DeleteSelected: this.screenGrid[i].DeleteSelected,
-    ReadSelected: this.screenGrid[i].ReadSelected,
-    OPTM_USERID: 'admin',
-    OPTM_AUTHCODE: this.DataForUserGroup.OPTM_ADMIN_AUTHRUSER[index].OPTM_AUTHCODE
-  });
-}
-
-  this.AuthServ.AddPermission(oSaveModel).subscribe(
-    data => { 
-      if(data == "True"){
-        this.MessageService.successmessage("Operation Completed Successfully");
-        this.addAuthScreenToggle('add');
-      }
-      else{
-        this.MessageService.errormessage(data);
-      }
-    },    
-    error => {  
-      this.MessageService.errormessage(error.message);
-  }); 
-}
-
  editUser($event){
   let userGrp ;
-  if($event.selectedRows.length > 0)
+  if($event.selectedRows.length > 0){
      userGrp = $event.selectedRows[0].dataItem.OPTM_USERGROUP;
-  else
+     this.UserGroup = $event.selectedRows[0].dataItem.OPTM_USERGROUP;
+     this.getUserForLookup();
+  }   
+  else{
      userGrp = $event.selectedRows[0].dataItem.OPTM_USERGROUP;    
-     
+  }   
   this.isEdit = true;
   this.addAuthScreenToggle('edit'); 
    
@@ -327,6 +283,126 @@ export class UserAuthorizationComponent implements OnInit {
         this.getRoles('edit');      
     },    
     error => {  
+      this.MessageService.errormessage(error.message);
+  });
+}
+
+
+ saveRecord(){  
+  var oSaveModel:any = {};
+  oSaveModel.OPTM_ADMIN_AUTHR = [];
+  oSaveModel.OPTM_ADMIN_AUTHRUSER = [];
+  
+   if(this.isEdit === true){
+    let userGroup = this.UserGroup;
+    let inputVal = this.inputVal;
+    let DataForUserGroup = this.DataForUserGroup;  
+    let saveRoleData = this.gridDataRoles.map(function(obj) {
+      if(obj.checked == true){
+        oSaveModel.OPTM_ADMIN_AUTHR.push({
+          OPTM_USERGROUP : userGroup,
+          OPTM_ROLEID : obj.OPTM_ROLEID,
+          OPTM_CREATEDATE : '000-00-00',
+          OPTM_USERID : 'admin'
+      });
+      }
+      return obj; 
+    });
+
+    let saveUserGridData = this.screenGrid.map(function(obj) {
+      const index = DataForUserGroup.OPTM_ADMIN_AUTHRUSER.findIndex(r=>r.OPTM_MENUID == obj.OPTM_MENUID);
+    
+      oSaveModel.OPTM_ADMIN_AUTHRUSER.push({
+        OPTM_USERGROUP: DataForUserGroup.OPTM_ADMIN_AUTHR[0].OPTM_USERGROUP,
+        OPTM_ROLEID: obj.OPTM_ROLEID,
+        OPTM_MENUID: obj.OPTM_MENUID,
+        OPTM_PERMISSION: obj.OPTM_PERMISSION,
+        OPTM_CREATEDATE: '000-00-00',
+        OPTM_USERCODE: DataForUserGroup.OPTM_ADMIN_AUTHR[0].OPTM_USERGROUP,
+        AddSelected: obj.AddSelected,
+        UpdateSelected: obj.UpdateSelected,
+        DeleteSelected: obj.DeleteSelected,
+        ReadSelected: obj.ReadSelected,
+        OPTM_USERID: 'admin',
+      });
+      return obj; 
+    });
+
+    this.AuthServ.AddPermission(oSaveModel).subscribe(
+      data => { 
+        if(data.data == "True"){
+          this.MessageService.successmessage("Operation Updated Successfully");
+          this.addAuthScreenToggle('edit');
+        }
+        else{
+          this.MessageService.errormessage(data.data);
+        }
+      },    
+      error => {  
+        this.MessageService.errormessage(error.message);
+    });
+   }else{
+    let userGroup = this.UserGroup;
+    let inputVal = this.inputVal;  
+    let saveRoleData = this.gridDataRoles.map(function(obj) {
+      if(obj.checked == true){
+        oSaveModel.OPTM_ADMIN_AUTHR.push({
+          OPTM_USERGROUP : userGroup,
+          OPTM_ROLEID : obj.OPTM_ROLEID,
+          OPTM_CREATEDATE : '000-00-00',
+          OPTM_USERID : 'admin'
+      });
+      }
+      return obj; 
+    });
+
+    let saveUserGridData = this.screenGrid.map(function(obj) {
+      oSaveModel.OPTM_ADMIN_AUTHRUSER.push({
+        OPTM_USERGROUP : userGroup,
+        OPTM_ROLEID : obj.OPTM_ROLEID,
+        OPTM_MENUID : obj.OPTM_MENUID,
+        OPTM_PERMISSION : obj.OPTM_PERMISSION,
+        OPTM_CREATEDATE : "000-00-00",
+        OPTM_USERCODE : inputVal,
+        AddSelected: obj.AddSelected,
+        UpdateSelected: obj.UpdateSelected,
+        DeleteSelected: obj.DeleteSelected,
+        ReadSelected: obj.ReadSelected,
+        OPTM_USERID: "admin"
+      });
+      return obj; 
+    });
+
+    this.AuthServ.AddPermission(oSaveModel).subscribe(
+      data => { 
+        if(data.data == "True"){
+          this.MessageService.successmessage("Operation Completed Successfully");
+          this.addAuthScreenToggle('add');
+        }
+        else{
+          this.MessageService.errormessage(data.data);
+        }
+      },    
+      error => {  
+        this.MessageService.errormessage(error.message);
+    });
+   }
+}
+
+public confirmationToggle() {
+   this.confirmationOpened = !this.confirmationOpened;
+}
+
+deleteRecord(){
+  this.AuthServ.DeletePermission(this.UserGroup).subscribe(
+    data => { 
+      this.confirmationOpened=false;
+      this.dialogOpened=false;   
+      this.MessageService.successmessage('Record deleted successfully');   
+    },    
+    error => { 
+      this.confirmationOpened=false;
+      this.dialogOpened=false; 
       this.MessageService.errormessage(error.message);
   });
 }
