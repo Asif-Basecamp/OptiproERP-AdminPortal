@@ -34,14 +34,19 @@ export class UserAuthorizationComponent implements OnInit {
   public selectAllCheckBox: boolean = false;
   public loggedInUser : string = '';
   public confirmationOpened = false;
+  public Loading: boolean = false;
+  public user_select : any;
 
   constructor(private AuthServ: AuthorizationService, private MessageService:MessageService, private translate: TranslateService, private httpClientSer: HttpClient) {
     translate.use(localStorage.getItem('applang'));
       translate.onLangChange.subscribe((event: LangChangeEvent) => { 
-      }); 
+    }); 
   }
 
   ngOnInit() {
+    this.translate.get('Select_User_Group').subscribe((res: string) => {
+      this.user_select = res;
+    }); 
     this.getPermissionView();
     this.oModalData.User = [];
     this.oModalData.SelectedRole = []; 
@@ -102,7 +107,7 @@ export class UserAuthorizationComponent implements OnInit {
         this.getAllUserGroup();       
       } 
       else{
-        this.UserGroup = 'Select User Group..';
+        this.UserGroup = this.user_select;
         this.defaultItem = '';
         this.getRoles(mode);
       }          
@@ -119,7 +124,9 @@ export class UserAuthorizationComponent implements OnInit {
   /*-- select user screen on click search icon --*/
   public dialougeToggle() {
     if(this.UserGroup === 'Select User Group..'){
-      this.MessageService.errormessage('Please Select User Group');
+      this.translate.get('Select_User_MSG').subscribe((res: string) => {
+        this.MessageService.errormessage(res);
+      }); 
       return false;
     }else{
       this.dialogOpened = !this.dialogOpened;
@@ -331,7 +338,9 @@ export class UserAuthorizationComponent implements OnInit {
     this.AuthServ.AddPermission(oSaveModel).subscribe(
       data => { 
         if(data.data == "True"){
-          this.MessageService.successmessage("Operation Updated Successfully");
+         this.translate.get('Operation_Update_MSG').subscribe((res: string) => {
+            this.MessageService.successmessage(res);
+          }); 
           this.addAuthScreenToggle('edit');
         }
         else{
@@ -376,7 +385,9 @@ export class UserAuthorizationComponent implements OnInit {
     this.AuthServ.AddPermission(oSaveModel).subscribe(
       data => { 
         if(data.data == "True"){
-          this.MessageService.successmessage("Operation Completed Successfully");
+          this.translate.get('Operation_Complete_MSG').subscribe((res: string) => {
+            this.MessageService.successmessage(res);
+          }); 
           this.addAuthScreenToggle('add');
         }
         else{
@@ -394,15 +405,20 @@ public confirmationToggle() {
 }
 
 deleteRecord(){
+  this.Loading = true;
   this.AuthServ.DeletePermission(this.UserGroup).subscribe(
     data => { 
       this.confirmationOpened=false;
-      this.dialogOpened=false;   
-      this.MessageService.successmessage('Record deleted successfully');   
+      this.dialogOpened=false;
+      this.Loading = false;
+      this.translate.get('Record_deleted').subscribe((res: string) => {
+        this.MessageService.successmessage(res);
+      });   
     },    
     error => { 
       this.confirmationOpened=false;
       this.dialogOpened=false; 
+      this.Loading = false;
       this.MessageService.errormessage(error.message);
   });
 }

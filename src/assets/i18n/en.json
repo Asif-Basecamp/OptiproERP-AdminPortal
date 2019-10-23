@@ -33,6 +33,7 @@
   "Cancel":"Cancel",
   "Please_Confirm":"Please Confirm",
   "Do_you_want_to_delete_record":"Do you want to delete record?",
+  "Do_you_want_to_logout":"Do you want to Logout?",
   "Yes":"Yes",
   "No":"No",
 
@@ -69,7 +70,10 @@
   "Read":"Read",
   "Select_User":"Select User",
   "Record_deleted": "Record deleted successfully",
-
+  "Operation_Complete_MSG": "Operation Completed Successfully",
+  "Operation_Update_MSG": "Operation Updated Successfully",
+  "Select_User_Group": "Select User Group..",
+  "Select_User_MSG": "Please Select User Group",
   "Product_Code":"Product Code",
   "Total_License_Assigned":"Total License Assigned",
   "Remaining":"Remaining",

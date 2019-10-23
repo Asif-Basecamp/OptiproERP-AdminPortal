@@ -14,11 +14,11 @@
               <ng-template kendoMenuItemTemplate>
                 <a class="nav-link dropdown-toggle">
                   <span class="user-avtar">
-                    <svg viewBox="0 0 128 128" class="icon icon-user" title="Rkmanager">
+                    <svg viewBox="0 0 128 128" class="icon icon-user" title="">
                         <use xlink:href="#user-avatar"></use>
                     </svg>
                   </span> 
-                  <span class="user-name">Rkmanager</span> 
+                  <span class="user-name"></span> 
                   <svg viewBox="0 0 451.847 451.847" class="icon icon-caret">
                       <use xlink:href="#caret"></use>
                   </svg>
@@ -26,9 +26,34 @@
               </ng-template>
               <ng-template kendoMenuItemContentTemplate class="demoPopup" >
                   <button type="button" class="dropdown-item" (click)="functionM()">About</button>
-                  <button type="button" class="dropdown-item">Logout</button>
+                  <button type="button" class="dropdown-item" (click)="confirmationToggle()">Logout</button>
               </ng-template>
           </kendo-menu-item>
       </kendo-menu>
   </div>      
 </nav>
+
+<kendo-dialog *ngIf="confirmationOpened" (close)="confirmationToggle()" [minWidth]="250" [width]="450">
+    <kendo-dialog-titlebar>
+        <div> {{'Please_Confirm'|translate}}</div>
+    </kendo-dialog-titlebar>
+    <div class="">
+        {{'Do_you_want_to_logout'|translate}}
+
+    </div>
+    <kendo-dialog-actions class="p-2 align-items-start justify-content-start">
+        <button class="btn btn-success btn-sm d-flex align-items-center mr-2" type="button" 
+        (click)="Logout()">  
+            <svg viewBox="0 0 55.25 55.25" class="icon mr-2">
+                <use xlink:href="#edit"></use>
+            </svg> {{'Yes'|translate}}
+        </button>           
+
+        <button class="btn btn-danger btn-sm ml-auto d-flex align-items-center" type="button"
+        (click)="confirmationToggle()" >
+            <svg viewBox="0 0 512 512" class="icon mr-2">
+                <use xlink:href="#saveDisk"></use>
+            </svg> {{'No'|translate}}
+        </button>
+    </kendo-dialog-actions>
+</kendo-dialog>

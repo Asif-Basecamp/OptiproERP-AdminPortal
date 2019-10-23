@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';    
 
 @Component({
     selector: 'app-header',
@@ -6,9 +9,13 @@ import { Component, OnInit } from '@angular/core';
     styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
-    constructor() {
+
+    public confirmationOpened = false;
+
+    constructor(private router:Router, private translate: TranslateService, private httpClientSer: HttpClient) {
     }
     ngOnInit() {
+        alert(localStorage.getItem('expires_in'));
     }
 
     public sidebarToggle(): void {
@@ -17,5 +24,14 @@ export class HeaderComponent implements OnInit {
         }else{
             document.getElementById("sidebar-wrapper").classList.remove("toggle");
         }
+    }
+
+    public confirmationToggle() {
+        this.confirmationOpened = !this.confirmationOpened;
+     }
+
+    Logout(){
+        localStorage.clear();
+        this.router.navigate(['/login']); 
     }
 }

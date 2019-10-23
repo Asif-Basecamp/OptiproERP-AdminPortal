@@ -101,7 +101,7 @@ export class AuthorizationService {
       'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
     };  
     this.header = new HttpHeaders(headerSettings);  
-    var jObject = { DeletePermissionDetails: JSON.stringify(UserGroup) };   
+    var jObject = { DeletePermissionDetails: JSON.stringify([{ UserGroup: UserGroup}]) };   
     return this.http.post<any>(this.Url+'/api/Permission/DeleteAllPermission',jObject,{ headers: headerSettings});
   }
 }
