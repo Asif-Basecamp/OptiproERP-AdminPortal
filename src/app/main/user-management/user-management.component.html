@@ -33,7 +33,7 @@
             <div fxLayout="column" fxFlex="100%" class="kendo-grid-wrapper mt-3">
 
                 <kendo-grid [kendoGridBinding]="gridData" [resizable]="true" [sortable]="true" class="full-height-grid kendo-responsive-grid" [filterable]=isColumnFilter
-                    [groupable]=isColumnGroup [columnMenu]="false">
+                    [groupable]=isColumnGroup [columnMenu]="false" [kendoGridSelectBy]="mySelectionKey">
                     <!-- [pageSize]="10" 
                     [pageable]="{
                         buttonCount: paginationButtonCount,
@@ -138,11 +138,16 @@
                                 <div class="row">
                                     <div class="form-group col-md-12 mb-2">
                                         <label class="mb-0" for="user_group">{{'User_Group'|translate}}<span class="text-danger">*</span></label>
-                                        <kendo-dropdownlist id="user_group" name="user_group" class="form-control-sm form-control w-100"></kendo-dropdownlist>
+                                        <kendo-dropdownlist [data]="ddlUserGroup" id="user_group" name="user_group" class="form-control-sm form-control w-100"
+                                        textField="groupCode"
+                                        valueField="groupCode"> 
+                                        </kendo-dropdownlist>
                                     </div>
                                     <div class="form-group col-md-12 mb-2">
                                         <label class="mb-0" for="mapped_user_id">{{'Mapped_SAP_B1_User'|translate}}<span class="text-danger">*</span></label>
-                                        <kendo-dropdownlist id="mapped_user_id"  name="mapped_user_id" class="form-control-sm form-control w-100"></kendo-dropdownlist>
+                                        <kendo-dropdownlist [data]="ddlSAPUser" id="mapped_user_id"  name="mapped_user_id" class="form-control-sm form-control w-100"
+                                        textField="USER_CODE"
+                                        valueField="USER_CODE"></kendo-dropdownlist>
                                     </div>
                                     <div class="form-group col-md-12 mb-2">
                                         <label class="mb-0" for="mapped_user_password" >{{'Mapped_SAP_B1_User_Password'|translate}}<span class="text-danger">*</span></label>
@@ -150,7 +155,8 @@
                                     </div>
                                     <div class="form-group col-md-12 mb-2">
                                         <label class="mb-0" for="tenant">{{'Tenant'|translate}}</label>
-                                        <kendo-dropdownlist id="tenant"  name="tenant" class="form-control-sm form-control w-100"></kendo-dropdownlist>
+                                        <kendo-dropdownlist  id="tenant"  name="tenant" class="form-control-sm form-control w-100"
+                                       ></kendo-dropdownlist>
                                     </div>
                                     <div class="form-group col-md-12 mb-2">
                                         <!-- <label class="custom-checkbox mb-0">
@@ -214,24 +220,29 @@
                                 </ng-template>
 
                                 <!-- columns for mid-size devices -->
-                                <kendo-grid-checkbox-column headerClass="text-center" class="text-center" [width]="40">
+                                <kendo-grid-checkbox-column [kendoGridBinding]="ddlCompanyList" headerClass="text-center" class="text-center" [width]="40"
+                                 (selectionChange)="checkboxSelectionChange(ddlCompanyList, $event)"> 
                                     <ng-template kendoGridCellTemplate let-idx="rowIndex">
                                         <label class="custom-checkbox m-0">
-                                            <input type="checkbox" [kendoGridSelectionCheckbox]="idx">
+                                            <input type="checkbox" [kendoGridSelectionCheckbox]="idx"
+                                            >
                                             <span class="checkbox"></span>
                                         </label>
                                     </ng-template>
-                                </kendo-grid-checkbox-column>
-                                <kendo-grid-column field="ProductName" title="Database" [width]="150"></kendo-grid-column>
-                                <kendo-grid-column field="ProductID" title="Company" [width]="150"></kendo-grid-column>
+                                </kendo-grid-checkbox-column>  
+                                <kendo-grid-column field="dbName" title="Database" [width]="150"></kendo-grid-column>
+                                <kendo-grid-column field="cmpName" title="Company" [width]="150"></kendo-grid-column>
                                 <kendo-grid-column field="" title="User Type" [width]="100">
                                         <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-                                            <kendo-dropdownlist [data]="listItems" class="form-control-sm form-control w-100"></kendo-dropdownlist>
+                                            <kendo-dropdownlist [data]="ddlUserType" class="form-control-sm form-control w-100"
+                                            textField="text"
+                                    valueField="text"></kendo-dropdownlist>
                                         </ng-template>
                                 </kendo-grid-column>
                                 <kendo-grid-column field="" title="Emp ID" [width]="100">
                                         <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-                                            <kendo-dropdownlist [data]="listItems" class="form-control-sm form-control w-100"></kendo-dropdownlist>
+                                            <kendo-dropdownlist [data]="listItems" class="form-control-sm form-control w-100" 
+                                            ></kendo-dropdownlist>
                                         </ng-template>
                                 </kendo-grid-column>
                                 <kendo-grid-column field="" title="BP ID" [width]="100">
@@ -240,7 +251,7 @@
                                         </ng-template>
                                 </kendo-grid-column>
                                 <ng-template kendoGridDetailTemplate let-dataItem>
-                                    <kendo-grid [kendoGridBinding]="data" [resizable]="true" [sortable]="true" class="" [filterable]=false
+                                    <kendo-grid [kendoGridBinding]="ddlProductList" [resizable]="true" [sortable]="true" class="" [filterable]=false
                                         [groupable]=false [columnMenu]="false" [selectable]="{ checkboxOnly: true, mode: 'multiple' }">
                                         <!-- columns for mid-size devices -->
                                         <kendo-grid-checkbox-column headerClass="text-center" class="text-center" [width]="40">
@@ -251,8 +262,8 @@
                                                 </label>
                                             </ng-template>
                                         </kendo-grid-checkbox-column>
-                                        <kendo-grid-column field="ProductName" title="Product Name"></kendo-grid-column>
-                                        <kendo-grid-column field="ProductName" title="Description"></kendo-grid-column> 
+                                        <kendo-grid-column field="ProductId" title="Product Name"></kendo-grid-column>
+                                        <kendo-grid-column field="OPTM_PRODDESC" title="Description"></kendo-grid-column> 
                                     </kendo-grid>
                                 </ng-template>
                                 <!-- xlsx template start -->

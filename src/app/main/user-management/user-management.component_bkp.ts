@@ -59,7 +59,7 @@ export class UserManagementComponent implements OnInit {
       data => { 
         if(data.Status == "Success") 
           {  
-            this.gridData = data.data; 
+            this.gridData = data; 
           }    
       else{    
             this.MessageService.errormessage(this.translate.instant('Somethingwrong'));    
@@ -73,8 +73,7 @@ export class UserManagementComponent implements OnInit {
   FillDropdownList()
     {
       this.UserManagementService.FillCompNGrpNSAPUsrNProd().subscribe(    
-       data => { 
-        data=data.data; 
+       data => {  
         if(data.SAPUser.length>0)   this.ddlSAPUser=data.SAPUser;
         if(data.UserGroup.length>0)   this.ddlUserGroup=data.UserGroup;
         if(data.ProductList.length>0)   this.GridUserMgmtProduct=data.ProductList;
@@ -88,7 +87,7 @@ export class UserManagementComponent implements OnInit {
           //this.DropDownListData = data; 
         // }    
         //  else{    
-        //    this.MessageService.errormessage("Something went wrong..");    
+        //    this.Messag eService.errormessage("Something went wrong..");    
         //  }    
        },    
        error => {  
