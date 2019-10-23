@@ -68,6 +68,7 @@
   "Add":"Add",
   "Read":"Read",
   "Select_User":"Select User",
+  "Record_deleted": "Record deleted successfully",
 
   "Product_Code":"Product Code",
   "Total_License_Assigned":"Total License Assigned",
