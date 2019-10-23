@@ -35,6 +35,7 @@ export class UserGroupComponent implements OnInit {
   public gridData: any[];
   public FilterData: any[];
   public DropDownListData: any[];
+  public ddlUserType: any[];
   public searchText : string;
   constructor(private UserGroupService:UsergroupService, private MessageService:MessageService,
     private translate: TranslateService, private httpClientSer: HttpClient) {
@@ -49,6 +50,14 @@ export class UserGroupComponent implements OnInit {
   ngOnInit() {
     
     this.FillGrid();
+    this.ddlUserType=[];
+    this.ddlUserType.push(
+      { text: "Customer", value: "C" }, 
+      { text: "Employee", value: "E" }, 
+      { text: "Vendor", value: "V" }  
+         
+    );
+    console.log(this.ddlUserType);
   }
   clearForm(model: any) {
     this.model = {
