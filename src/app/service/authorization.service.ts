@@ -11,78 +11,98 @@ export class AuthorizationService {
   //token : string;  
   header : any;
 
-  constructor(private http : HttpClient) { }
+  constructor(private http : HttpClient) { 
+    this.Url= localStorage.getItem('arrConfigData');
+  }
 
   getPermissionView(){
-    this.Url = 'http://localhost:57965/api/Permission/GetPermissionView';  
-    const headerSettings: {[name: string]: string | string[]; } = {};  
-    this.header = new HttpHeaders(headerSettings); 
-    return this.http.get<any>(this.Url,{ headers: this.header});
+    const headerSettings: {[name: string]: string | string[]; } = { 
+      'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
+    };  
+    this.header = new HttpHeaders(headerSettings);  
+    var a =this.Url;  
+    return this.http.get<any>(this.Url+'/api/Permission/GetPermissionView',{ headers: headerSettings});
   }
 
   getUserGroup(){
-    this.Url = 'http://localhost:57965/api/Permission/GetUserGroup';  
-    const headerSettings: {[name: string]: string | string[]; } = {};  
-    this.header = new HttpHeaders(headerSettings); 
-    return this.http.get<any>(this.Url,{ headers: this.header});
+    const headerSettings: {[name: string]: string | string[]; } = { 
+      'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
+    };  
+    this.header = new HttpHeaders(headerSettings);  
+    var a =this.Url;  
+    return this.http.get<any>(this.Url+'/api/Permission/GetUserGroup',{ headers: headerSettings});
   }
 
   getRoles(){
-    this.Url = 'http://localhost:57965/api/Permission/GetRoles';
-    const headerSettings: {[name: string]: string | string[]; } = {};  
-    this.header = new HttpHeaders(headerSettings); 
-    return this.http.get<any>(this.Url,{ headers: this.header});
+    const headerSettings: {[name: string]: string | string[]; } = { 
+      'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
+    };  
+    this.header = new HttpHeaders(headerSettings);  
+    var a =this.Url;  
+    return this.http.get<any>(this.Url+'/api/Permission/GetRoles',{ headers: headerSettings});
   }
 
   checkUserCodeExists(UserGroup:string){
-    this.Url = 'http://localhost:57965/api/Permission/CheckUserCodeExists';
-    const headerSettings: {[name: string]: string | string[]; } = {};  
-    this.header = new HttpHeaders(headerSettings); 
+    const headerSettings: {[name: string]: string | string[]; } = { 
+      'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
+    };  
+    this.header = new HttpHeaders(headerSettings);  
     var jObject = { UserGroup: JSON.stringify([{ UserGroup: UserGroup}]) };   
-    return this.http.post<any>(this.Url,jObject,{ headers: this.header});
+    return this.http.post<any>(this.Url+'/api/Permission/CheckUserCodeExists',jObject,{ headers: headerSettings});
   }
 
   getUsers(UserGroup:string){
-    this.Url = 'http://localhost:57965/api/Permission/GetUsers';
-    const headerSettings: {[name: string]: string | string[]; } = {};  
-    this.header = new HttpHeaders(headerSettings); 
-    var jObject = { Users: JSON.stringify([{ UserGroup: UserGroup}]) };   
-    return this.http.post<any>(this.Url,jObject,{ headers: this.header});
+    const headerSettings: {[name: string]: string | string[]; } = { 
+      'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
+    };  
+    this.header = new HttpHeaders(headerSettings);  
+    var jObject = { Users: JSON.stringify([{ UserGroup: UserGroup}]) };     
+    return this.http.post<any>(this.Url+'/api/Permission/GetUsers',jObject,{ headers: headerSettings});
   }
 
   checkUserPermissionForProduct(oModalData:any){
-   // this.Url = 'http://172.16.6.140/OptiProAdmin/api/Permission/CheckUserPermissionForProduct';
-    this.Url = 'http://localhost:57965/api/Permission/CheckUserPermissionForProduct';
-    const headerSettings: {[name: string]: string | string[]; } = {};  
-    this.header = new HttpHeaders(headerSettings); 
+    const headerSettings: {[name: string]: string | string[]; } = { 
+      'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
+    };  
+    this.header = new HttpHeaders(headerSettings);  
     var jObject = { UserGroup: JSON.stringify(oModalData) };   
-    return this.http.post<any>(this.Url,jObject,{ headers: this.header});
+    return this.http.post<any>(this.Url+'/api/Permission/CheckUserPermissionForProduct',jObject,{ headers: headerSettings});
   }
 
   getMenuList(Roles:any[]){
-    this.Url = 'http://localhost:57965/api/Permission/GetMenuList';
-    const headerSettings: {[name: string]: string | string[]; } = {};  
-    this.header = new HttpHeaders(headerSettings); 
+    const headerSettings: {[name: string]: string | string[]; } = { 
+      'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
+    };  
+    this.header = new HttpHeaders(headerSettings);  
     var jObject = { Roles: JSON.stringify({ OPTM_ADMIN_AUTHR: Roles}) };   
-    return this.http.post<any>(this.Url,jObject,{ headers: this.header});
+    return this.http.post<any>(this.Url+'/api/Permission/GetMenuList',jObject,{ headers: headerSettings});
   }
 
   GetDataForUserGroup(UserGroup:string){
-    this.Url = 'http://172.16.6.166:1297/OptiProERPAdminService/api/Permission/GetDataForUserGroup';
-    const headerSettings: {[name: string]: string | string[]; } = {};  
-    this.header = new HttpHeaders(headerSettings); 
+    const headerSettings: {[name: string]: string | string[]; } = { 
+      'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
+    };  
+    this.header = new HttpHeaders(headerSettings);  
     var jObject = { UserGroup: JSON.stringify([{ UserGroup: UserGroup}]) };   
-    return this.http.post<any>(this.Url,jObject,{ headers: this.header});
+    return this.http.post<any>(this.Url+'/api/Permission/GetDataForUserGroup',jObject,{ headers: headerSettings});
   }
 
   AddPermission(oSaveModal:any){ 
-    this.Url = 'http://localhost:57965/api/Permission/AddPermission';
-    const headerSettings: {[name: string]: string | string[]; } = {};  
-    this.header = new HttpHeaders(headerSettings); 
+    const headerSettings: {[name: string]: string | string[]; } = { 
+      'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
+    };  
+    this.header = new HttpHeaders(headerSettings);  
     var jObject = { AddPermissionDetails: JSON.stringify(oSaveModal) };   
-    return this.http.post<any>(this.Url,jObject,{ headers: this.header});
+    return this.http.post<any>(this.Url+'/api/Permission/AddPermission',jObject,{ headers: headerSettings});
   }
 
-
+  DeletePermission(UserGroup:any){ 
+    const headerSettings: {[name: string]: string | string[]; } = { 
+      'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
+    };  
+    this.header = new HttpHeaders(headerSettings);  
+    var jObject = { DeletePermissionDetails: JSON.stringify(UserGroup) };   
+    return this.http.post<any>(this.Url+'/api/Permission/DeleteAllPermission',jObject,{ headers: headerSettings});
+  }
 }
 

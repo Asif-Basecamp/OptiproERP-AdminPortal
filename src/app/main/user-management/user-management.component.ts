@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { products } from 'src/app/dummyData/data';
+import { products } from '../../dummyData/data';
 import { GridComponent } from '@progress/kendo-angular-grid';
 import { CheckableSettings } from '@progress/kendo-angular-treeview';
 import { of, Observable } from 'rxjs';
-import { UserManagementService } from 'src/app/service/user-management.service';
+import { UserManagementService } from '../../service/user-management.service';
 import { MessageService } from '../../common/message.service';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+
 @Component({
   selector: 'app-user-management',
   templateUrl: './user-management.component.html',

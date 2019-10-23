@@ -68,7 +68,7 @@ export class UserGroupComponent implements OnInit {
       data => {    
             
         //if(data.Status=="Success") 
-        if(data.Status == "Success") 
+        if(data.length>0) 
         {     
           this.gridData = data;
           this.FilterData=data;
@@ -139,7 +139,7 @@ export class UserGroupComponent implements OnInit {
     this.UserGroupService.ChkUserGroupAssociativity(this.model).subscribe(    
       data => {    
       
-        if(data.Status == "Success") 
+        if(data.length > 0) 
         {
           if(data[0].UserGroupCount==0)
           {
@@ -193,7 +193,7 @@ export class UserGroupComponent implements OnInit {
     this.UserGroupService.CheckDuplicateUserGroup(UserGrpId).subscribe(    
       data => { 
           
-        if(data.Status == "Success") 
+        if(data.length > 0) 
         {
           if(data[0].GroupCodeCount==1)
           {
@@ -220,7 +220,7 @@ FillDropdownList()
      this.UserGroupService.FillDropDownList().subscribe(    
       data => {    
             
-        if(data.Status == "Success") 
+        if(data.length > 0) 
         {  
          this.DropDownListData = data; 
         }    
@@ -238,8 +238,8 @@ FillDropdownList()
     const GroupCodeData= selection.selectedRows[0].dataItem.OPTM_GROUPCODE
     this.UserGroupService.GetDataByUserId(GroupCodeData).subscribe(    
       data => { 
-       this.HeaderText= "Edit -" +' '+  data.data[0].OPTM_GROUPCODE;
-        if(data.Status == "Success") 
+       this.HeaderText= "Edit -" +' '+  data[0].OPTM_GROUPCODE;
+        if(data.length > 0) 
         { 
          this.model = {
           UserGroupId: data[0].OPTM_GROUPCODE,

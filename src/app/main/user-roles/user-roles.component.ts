@@ -63,7 +63,7 @@ export class UserRolesComponent implements OnInit {
      this.RoleService.FillProductDropDownList().subscribe(    
       data => {    
         
-        if(data.Status == "Success")  
+        if(data.length > 0)  
         {  
          this.DropDownListData = data; 
         }    
@@ -120,7 +120,7 @@ export class UserRolesComponent implements OnInit {
        this.RoleService.FillFridOnDropdownSelectedIndexChanged(this.model).subscribe(    
           data => { 
           
-            if(data.Status == "Success")  
+            if(data.length > 0)  
             {  
               this.CheckUncheckValueInsideFrid(data)   
                this.GridDataFormanupulation=data;
@@ -159,7 +159,7 @@ export class UserRolesComponent implements OnInit {
       this.RoleService.FillGridData().subscribe(    
         data => {    
              
-          if(data.Status == "Success")  
+          if(data.length > 0)  
           {   
            this.gridData = data; 
           }    
@@ -364,7 +364,7 @@ export class UserRolesComponent implements OnInit {
       this.RoleService.CheckDuplicateUserGroup(RoleId).subscribe(    
         data => { 
             
-          if(data.Status == "Success") 
+          if(data.length > 0) 
             {
               if(data[0].CountRoleCheck>0)
                 {
@@ -520,7 +520,7 @@ export class UserRolesComponent implements OnInit {
           this.RoleService.chkIfGroupIdisAssociate(RoleId).subscribe(    
             data => { 
               
-              if(data.Status == "Success") 
+              if(data.length > 0) 
                 {
                   if(data[0].ROLEIDCOUNT==0)
                     {

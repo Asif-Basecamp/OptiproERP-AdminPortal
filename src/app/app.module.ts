@@ -22,7 +22,7 @@ import { TranslateModule, TranslateLoader} from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { FormsModule } from '@angular/forms';
 import { TreeViewModule } from '@progress/kendo-angular-treeview';
-import { TrnaslateLazyModule } from '../../translate-lazy.module';
+import { TrnaslateLazyModule } from 'translate-lazy.module';
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }

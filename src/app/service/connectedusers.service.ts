@@ -5,18 +5,22 @@ import {HttpHeaders} from '@angular/common/http';
 @Injectable({
   providedIn: 'root'
 })
-export class ConnectedusersService {
+export class ConnectedUsersService {
   Url :string;  
   //token : string;  
   header : any;
 
-  constructor(private http : HttpClient) { }
+  constructor(private http : HttpClient) { 
+    this.Url= localStorage.getItem('arrConfigData');
+  }
 
   getProductList(){
-      this.Url = 'http://172.16.6.140/OptiAdmin/api/DefineRole/GetProductList';  
-      const headerSettings: {[name: string]: string | string[]; } = {};  
-      this.header = new HttpHeaders(headerSettings); 
-      return this.http.get<any>(this.Url,{ headers: this.header});
+      const headerSettings: {[name: string]: string | string[]; } = { 
+        'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
+      };  
+      this.header = new HttpHeaders(headerSettings);  
+      var a =this.Url;  
+      return this.http.get<any>(this.Url+'/api/DefineRole/GetProductList',{ headers: headerSettings});
   }
 
   getConnectedUserData(ProductName,ControllerName){

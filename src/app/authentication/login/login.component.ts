@@ -16,6 +16,7 @@ export class LoginComponent {
   successmsg: any;  
   selectedItem: string = ""; 
   errorMessage:string;    
+  arrConfigData:any=[];
   constructor(private router:Router,private LoginService:LoginService,private MessageService:MessageService,
     private translate: TranslateService, private httpClientSer: HttpClient) { 
       translate.use(localStorage.getItem('applang'));
@@ -26,7 +27,16 @@ export class LoginComponent {
     ngOnInit() {     
     sessionStorage.removeItem('UserName');    
     sessionStorage.clear();    
-  }   
+    this.httpClientSer.get('./assets/config.json').subscribe(
+      data => {
+        this.arrConfigData = data as string[];
+        localStorage.setItem('arrConfigData', this.arrConfigData.service_url); 
+      },
+      (err: HttpErrorResponse) => {
+        console.log(err.message);
+      }
+    );
+  }  
 
   login(){     
     this.selectedItem = this.translate.instant("Login_Username");
@@ -42,9 +52,9 @@ export class LoginComponent {
           //this.auth.sendToken(data.access_token)
           // this.router.navigate(['/main']); 
           this.AdminLoginLog();     
-        }    
+        }     
         else{ 
-          this.MessageService.errormessage("UserName or Password is invalid");
+          this.MessageService.errormessage(this.translate.instant('UPInvaild'));
           //this.errorMessage = data.Message;    
         }    
       },    
@@ -55,13 +65,13 @@ export class LoginComponent {
   AdminLoginLog(){ 
     this.LoginService.AdminLoginLog(this.model).subscribe(    
       data => {     
-        //if(data.Status=="Success") 
-        if(data.data == "True")   
+        if(data.Status=="Success") 
+       // if(data == "True")   
         {     
           this.router.navigate(['/main']);       
         }    
         else{ 
-          this.MessageService.errormessage("UserName or Password is invalid");
+          this.MessageService.errormessage(this.translate.instant('UPInvaild'));
           //this.errorMessage = data.Message;    
           //comments here  
         }     

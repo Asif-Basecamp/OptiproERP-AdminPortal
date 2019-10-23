@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { products } from 'src/app/dummyData/data';
+import { products } from '../../dummyData/data';
 import { GridComponent, RowClassArgs } from '@progress/kendo-angular-grid';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
