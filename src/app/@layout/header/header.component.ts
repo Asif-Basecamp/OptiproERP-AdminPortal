@@ -11,11 +11,13 @@ import { Router } from '@angular/router';
 export class HeaderComponent implements OnInit {
 
     public confirmationOpened = false;
+    public userName: any;
 
     constructor(private router:Router, private translate: TranslateService, private httpClientSer: HttpClient) {
     }
     ngOnInit() {
-        alert(localStorage.getItem('expires_in'));
+        this.userName = localStorage.getItem('admin_user'); 
+        //alert(localStorage.getItem('expires_in'));
     }
 
     public sidebarToggle(): void {

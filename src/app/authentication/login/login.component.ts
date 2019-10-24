@@ -45,7 +45,8 @@ export class LoginComponent {
         //if(data.Status=="Success") 
         if(data != null)   
         {       
-          this.successmsg = 'token - ' + data[0].access_token;  
+          this.successmsg = 'token - ' + data[0].access_token; 
+          localStorage.setItem('admin_user', data[0].adminUser);  
           localStorage.setItem('access_token', data[0].access_token);       
           localStorage.setItem('token_type', data[0].token_type); 
           localStorage.setItem('expires_in', data[0].expires_in); 
