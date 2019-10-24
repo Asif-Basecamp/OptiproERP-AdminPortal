@@ -32,8 +32,9 @@
             <!-- Kendo Grid Start -->
             <div fxLayout="column" fxFlex="100%" class="kendo-grid-wrapper mt-3">
 
-                <kendo-grid [kendoGridBinding]="gridData" [resizable]="true" [sortable]="true" class="full-height-grid kendo-responsive-grid" [filterable]=isColumnFilter
-                    [groupable]=isColumnGroup [columnMenu]="false" [kendoGridSelectBy]="mySelectionKey">
+                <kendo-grid 
+                 [kendoGridBinding]="gridData" [resizable]="true" [sortable]="true" class="full-height-grid kendo-responsive-grid" [filterable]=isColumnFilter
+                    [groupable]=isColumnGroup [columnMenu]="false"  >
                     <!-- [pageSize]="10" 
                     [pageable]="{
                         buttonCount: paginationButtonCount,
@@ -182,7 +183,7 @@
                                 <h5 class="m-0">{{'Company'|translate}}</h5>
                             </div>
                             <kendo-grid [kendoGridBinding]="data" [resizable]="true" [sortable]="true" class="custom-height-grid" [filterable]=isColumnFilter
-                                [groupable]=isColumnGroup [columnMenu]="false" [selectable]="{ checkboxOnly: true, mode: 'multiple' }">
+                              (cellClick)="cellClickHandler($event)"     [groupable]=isColumnGroup [columnMenu]="false">
 
                                 <!-- [pageSize]="10" 
                                 [pageable]="{

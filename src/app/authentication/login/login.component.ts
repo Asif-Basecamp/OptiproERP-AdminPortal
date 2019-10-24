@@ -45,11 +45,11 @@ export class LoginComponent {
         //if(data.Status=="Success") 
         if(data != null)   
         {       
-          this.successmsg = 'token - ' + data.access_token;  
-          localStorage.setItem('admin_user', data.adminUser); 
-          localStorage.setItem('access_token', data.access_token);       
-          localStorage.setItem('token_type', data.token_type); 
-          localStorage.setItem('expires_in', data.expires_in); 
+          this.successmsg = 'token - ' + data[0].access_token; 
+          localStorage.setItem('admin_user', data[0].adminUser);  
+          localStorage.setItem('access_token', data[0].access_token);       
+          localStorage.setItem('token_type', data[0].token_type); 
+          localStorage.setItem('expires_in', data[0].expires_in); 
           //this.auth.sendToken(data.access_token)
           // this.router.navigate(['/main']); 
           this.AdminLoginLog();     
@@ -66,8 +66,8 @@ export class LoginComponent {
   AdminLoginLog(){ 
     this.LoginService.AdminLoginLog(this.model).subscribe(    
       data => {     
-        if(data.Status=="Success") 
-       // if(data == "True")   
+        //if(data.Status=="Success") 
+        if(data == "True")   
         {     
           this.router.navigate(['/main']);       
         }    
