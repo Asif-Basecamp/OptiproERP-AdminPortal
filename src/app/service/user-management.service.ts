@@ -8,7 +8,7 @@ import {HttpHeaders} from '@angular/common/http';
 export class UserManagementService {
   Url :string;  
   token : string;  
-  header : any;
+  header : any; 
   constructor(private http : HttpClient) { this.Url= localStorage.getItem('arrConfigData');}
 
 FillCompNGrpNSAPUsrNProd()
