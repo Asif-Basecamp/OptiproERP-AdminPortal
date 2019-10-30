@@ -59,6 +59,7 @@ export class UserManagementComponent implements OnInit {
   public addscreenmode: any;
   public confirmationOpened = false;
   public Loading: boolean = false;
+  public employeeData: any;
   
   constructor(private UserManagementService:UserManagementService,private MessageService:MessageService,
     private translate: TranslateService, private httpClientSer: HttpClient) { 
@@ -170,6 +171,7 @@ export class UserManagementComponent implements OnInit {
             this.UserManagementService.FillDDlEmployee(data.CompanyList[i].dbName).subscribe(
               employeedata => {
                 this.Loading = false;
+                this.employeeData = employeedata;
                 data.CompanyList[i]["UserType"] = this.ddlUserType;
                 data.CompanyList[i]["Employee"] = employeedata;
                 data.CompanyList[i]["product"] = this.ddlProductList;
@@ -427,13 +429,14 @@ export class UserManagementComponent implements OnInit {
             }else if(data[0].OPTM_USERTYPE == 'V'){
               this.company_data[index]["selectedUserType"] = { text: "Vendor", value: data[0].OPTM_USERTYPE };
             }
-           /* console.log(data[0].OPTM_EMPID);
-            let EmployeeID = element.Employee.filter(id => id.empID === data[0].OPTM_EMPID);
-            console.log(EmployeeID);*/
-           //this.company_data[index]["product"] = productByStoreID;
+            this.employeeData.forEach((value, index) => {
+              if(value[index].empID === data[0].OPTM_EMPID){
+                this.company_data[index]["selectedEmployeeID"] = value[index];
+              }
+            });  
           }
         });
-       // console.log(this.company_data);
+        console.log(this.company_data);
         this.user_id = data[0].OPTM_USERCODE; 
         this.user_name = data[0].OPTM_USERNAME;
         this.password = data[0].OPTM_PASSWORD;
