@@ -69,7 +69,7 @@ export class UserAuthorizationComponent implements OnInit {
   getPermissionView(){
     this.AuthServ.getPermissionView().subscribe(
       data => {
-        this.gridData = data.data; 
+        this.gridData = data; 
       },    
       error => {  
         this.MessageService.errormessage(error.message);
@@ -80,7 +80,7 @@ export class UserAuthorizationComponent implements OnInit {
   getUserForLookup(){
     this.AuthServ.getUsers(this.UserGroup).subscribe(
       data => {  
-        this.userGridLookup = data.data.USERDETAILS; 
+        this.userGridLookup = data.USERDETAILS; 
       },    
       error => {  
         this.MessageService.errormessage(error.message);
@@ -91,7 +91,7 @@ export class UserAuthorizationComponent implements OnInit {
   getAllUserGroup(){
     this.AuthServ.getUserGroup().subscribe(
       data => {
-        this.allUsersDDL = data.data;         
+        this.allUsersDDL = data;         
       },    
       error => {  
         this.MessageService.errormessage(error.message);
@@ -143,16 +143,16 @@ export class UserAuthorizationComponent implements OnInit {
     this.AuthServ.getUserGroup().subscribe(
       data => {
       this.ddlUserGroup = []; 
-      if(data.data){
-        for(let i=0; i < data.data.length; i++){
+      if(data){
+        for(let i=0; i < data.length; i++){
           for(let j=0; j < this.gridData.length; j++){
-            if(data.data[i].OPTM_GROUPCODE == this.gridData[j].OPTM_USERGROUP){
-              data.data.splice(i,1)
+            if(data[i].OPTM_GROUPCODE == this.gridData[j].OPTM_USERGROUP){
+              data.splice(i,1)
             }
           }
         }    
       }    
-       this.ddlUserGroup = data.data; 
+       this.ddlUserGroup = data; 
       // this.defaultItem = this.ddlUserGroup[0];       
       },    
       error => {  
@@ -163,7 +163,7 @@ export class UserAuthorizationComponent implements OnInit {
   getRoles(mode){
     this.AuthServ.getRoles().subscribe(
       data => {       
-      this.gridDataRoles = data.data; 
+      this.gridDataRoles = data; 
       if(mode == 'edit'){
         for(let i=0; i<this.DataForUserGroup.OPTM_ADMIN_AUTHR.length; i++){
           for(let j=0; j<this.gridDataRoles.length; j++){
@@ -206,8 +206,8 @@ export class UserAuthorizationComponent implements OnInit {
     })
     this.AuthServ.checkUserPermissionForProduct(this.oModalData).subscribe(
     data => { 
-      if(data.data != 'exist'){
-        this.MessageService.errormessage(data.data);
+      if(data != 'exist'){
+        this.MessageService.errormessage(data);
         this.screenGrid = [];
       }
       if(this.inputRole.length > 0 && this.inputVal != '')
@@ -235,7 +235,7 @@ export class UserAuthorizationComponent implements OnInit {
   if(state == 'show'){
     this.AuthServ.getMenuList(this.inputRole).subscribe(
       data => {      
-       this.screenGrid = data.data.Table;
+       this.screenGrid = data.Table;
        for(let i=0; i<this.screenGrid.length; i++){
 
         if(this.screenGrid[i].AddSelected == '')
@@ -282,7 +282,7 @@ export class UserAuthorizationComponent implements OnInit {
    
   this.AuthServ.GetDataForUserGroup(userGrp).subscribe(
     data => {    
-        this.DataForUserGroup = data.data;
+        this.DataForUserGroup = data;
         this.ddlUserGroup = this.allUsersDDL.filter(val => val.OPTM_GROUPCODE == userGrp);
         this.defaultItem = this.ddlUserGroup[0];
         this.inputVal = userGrp;
@@ -337,14 +337,14 @@ export class UserAuthorizationComponent implements OnInit {
 
     this.AuthServ.AddPermission(oSaveModel).subscribe(
       data => { 
-        if(data.data == "True"){
+        if(data == "True"){
          this.translate.get('Operation_Update_MSG').subscribe((res: string) => {
             this.MessageService.successmessage(res);
           }); 
           this.addAuthScreenToggle('edit');
         }
         else{
-          this.MessageService.errormessage(data.data);
+          this.MessageService.errormessage(data);
         }
       },    
       error => {  
@@ -384,14 +384,14 @@ export class UserAuthorizationComponent implements OnInit {
 
     this.AuthServ.AddPermission(oSaveModel).subscribe(
       data => { 
-        if(data.data == "True"){
+        if(data == "True"){
           this.translate.get('Operation_Complete_MSG').subscribe((res: string) => {
             this.MessageService.successmessage(res);
           }); 
           this.addAuthScreenToggle('add');
         }
         else{
-          this.MessageService.errormessage(data.data);
+          this.MessageService.errormessage(data);
         }
       },    
       error => {  
