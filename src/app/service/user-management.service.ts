@@ -83,24 +83,16 @@ FillGridData()
       this.header = new HttpHeaders(headerSettings); 
       return this.http.post<any>(this.Url+'/api/DefineRole/OnUpdatePress',jObject,{ headers: this.header});
     }
-    DeleteUserRole(model : any)
-    {
-      var jObject = { RoleDetails: JSON.stringify([{ PreviousRoleId: model.RoleId }]) };        
-      
-      const headerSettings: {[name: string]: string | string[]; } = {
-        'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
-      };  
-      this.header = new HttpHeaders(headerSettings); 
-      return this.http.post<any>(this.Url+'/api/DefineRole/OnDeletePress',jObject,{ headers: this.header});
-    }
-    CheckDuplicateUserGroup(RoleId :string)
+    
+    CheckDuplicateUserGroup(UserId :string)
     {
       const headerSettings: {[name: string]: string | string[]; } = {
         'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
       };  
+     
       this.header = new HttpHeaders(headerSettings);   
-        var jObject = { RoleDetails: JSON.stringify([{ RoleId:RoleId.toUpperCase() }]) };
-       return this.http.post<any>(this.Url+'/api/DefineRole/CheckDuplicateRecord',jObject,{ headers: this.header});
+        var jObject = { UserDetails: JSON.stringify([{ UserId:UserId}]) };
+       return this.http.post<any>(this.Url+'/api/UserManagement/CheckDuplicity',jObject,{ headers: this.header});
     }
     GetDataByRoleId(RoleId :string)
     {
@@ -111,15 +103,77 @@ FillGridData()
         var jObject = { RoleDetails: JSON.stringify([{ RoleId: RoleId }]) };
        return this.http.post<any>(this.Url+'/api/DefineRole/GetDefineRolesByRoleId',jObject,{ headers: this.header});
     }
-    chkIfGroupIdisAssociate(RoleId :string)
-      {
+
+    chkIfGroupIdisAssociate(RoleId :string){
         const headerSettings: {[name: string]: string | string[]; } = {
           'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
         };  
         this.header = new HttpHeaders(headerSettings);   
         var jObject = { RoleDetails: JSON.stringify([{ RoleId: RoleId }]) };
        return this.http.post<any>(this.Url+'/api/DefineRole/ReferalCheck',jObject,{ headers: this.header});
-      }
+    }
 
-    
+    FillDDlWarehouse(dbname:string, EmpId:string){ 
+      const headerSettings: {[name: string]: string | string[]; } = {
+        'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
+      };  
+      this.header = new HttpHeaders(headerSettings); 
+      var jObject = { CompanyName: JSON.stringify([{ CompanyDBId: dbname,EmpId: EmpId }]) };
+      return this.http.post<any>(this.Url+'/api/UserManagement/GetWHS',jObject,{ headers: this.header})
+    } 
+
+    FillDDlWorkCenter(dbname:string, warehouse:string){ 
+      const headerSettings: {[name: string]: string | string[]; } = {
+        'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
+      };  
+      this.header = new HttpHeaders(headerSettings); 
+      var jObject = { CompanyName: JSON.stringify([{ Company: dbname, Warehouse: "'"+warehouse+"'" }]) };
+      return this.http.post<any>(this.Url+'/api/UserManagement/GetWorkCenterByWarehouse',jObject,{ headers: this.header})
+    } 
+
+    AddUserManagement(SubmitSave:any){ 
+      const headerSettings: {[name: string]: string | string[]; } = { 
+        'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
+      };  
+      this.header = new HttpHeaders(headerSettings);  
+      var jObject = { SubmitSave: JSON.stringify(SubmitSave) };   
+      return this.http.post<any>(this.Url+'/api/UserManagement/OnSavePress',jObject,{ headers: headerSettings});
+    }
+
+    userRefrenceCheck(userId : any){
+      const headerSettings: {[name: string]: string | string[]; } = {
+        'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
+      };  
+      this.header = new HttpHeaders(headerSettings); 
+      var jObject = { UserDetails: JSON.stringify([{ UserId: userId }]) };        
+      return this.http.post<any>(this.Url+'/api/UserManagement/UserReferalCheck',jObject,{ headers: this.header});
+    }
+
+    DeleteUserManagement(userId : any){
+      const headerSettings: {[name: string]: string | string[]; } = {
+        'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
+      };  
+      this.header = new HttpHeaders(headerSettings); 
+      var jObject = { UserDetails: JSON.stringify([{ PreviousUserId: userId }]) };        
+      return this.http.post<any>(this.Url+'/api/UserManagement/DeleteUserRecord',jObject,{ headers: this.header});
+    }
+
+    getEditDetail(userId : any){
+      const headerSettings: {[name: string]: string | string[]; } = {
+        'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
+      };  
+      this.header = new HttpHeaders(headerSettings); 
+      var jObject = { SubmitSave: JSON.stringify([{ UserId: userId }]) };        
+      return this.http.post<any>(this.Url+'/api/UserManagement/PopulateRecord',jObject,{ headers: this.header});
+    }
+
+    EditUserManagement(SubmitSave:any){ 
+      const headerSettings: {[name: string]: string | string[]; } = { 
+        'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
+      };  
+      this.header = new HttpHeaders(headerSettings);  
+      var jObject = { SubmitSave: JSON.stringify(SubmitSave) };   
+      return this.http.post<any>(this.Url+'/api/UserManagement/SubmitUpdate',jObject,{ headers: headerSettings});
+    }
+
 }
