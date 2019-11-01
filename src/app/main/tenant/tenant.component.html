@@ -2,7 +2,86 @@
         <div class="page-header">
             <h4>{{'Tenant'|translate}}</h4>
         </div>
-        <div class="card" fxFlex>
+
+        <div class="card" fxFlex *ngIf="!addTenantScreen">
+            <div class="card-body" fxFlex fxLayout="column">
+                <form>
+                    <div class="row">
+                        <div class="col-sm-6 col-md-4 mb-sm-0 mb-1">
+                            <div class="d-flex align-items-center">
+                                <div class="input-group">
+                                    <input type="text" class="form-control form-control-sm" id="search" placeholder="{{'Search'|translate}}" (input)="onInput($event.target.value)">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary btn-sm btn-icon" type="button">
+                                            <svg viewBox="0 0 410.23 410.23" class="icon">
+                                                <use xlink:href="#search"></use>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                                <button class="btn btn-success btn-sm ml-2 btn-icon" type="button" (click)="addTenantScreenToggle('add')">
+                                    <svg viewBox="0 0 512 512" class="icon">
+                                        <use xlink:href="#add"></use>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="row" fxFlex="0 1 100%">
+                    <div class="col-md-12 col-lg-8 col-xl-6">
+                        <div fxLayout="column" fxFlex="100%" class="kendo-grid-wrapper mt-3">
+                            <kendo-grid [kendoGridBinding]="TenantList" [resizable]="true" [sortable]="true" class="full-height-grid kendo-responsive-grid" [filterable]=isColumnFilter [groupable]=isColumnGroup [columnMenu]="false" [selectable]="true" (selectionChange)="editTenant($event)">
+                                <ng-template kendoGridToolbarTemplate>
+                                    <div class="d-flex align-items-center">
+            
+                                        <!-- <label class="custom-checkbox mb-0 mr-2 filter-checkbox">
+                                            <input type="checkbox" [(ngModel)]="isColumnFilter" [ngModelOptions]="{standalone: true}">
+                                            <span class="checkbox"></span>
+                                            <span>{{'Enable_filter'|translate}}</span>
+                                        </label> -->
+                                        <!-- <label class="custom-checkbox mb-0 grouping-checkbox">
+                                            <input type="checkbox" [(ngModel)]="isColumnGroup" [ngModelOptions]="{standalone: true}">
+                                            <span class="checkbox"></span>
+                                            <span>{{'Enable_grouping'|translate}}</span>
+                                        </label> -->
+                                        <!-- export -->
+                                        <button type="button" kendoGridExcelCommand title="{{'Export_to_excel_file'|translate}}" class="ml-auto btn btn-link btn-sm btn-icon p-0">
+                                            <svg viewBox="0 0 512 512" class="icon">
+                                                <use xlink:href="#download"></use>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </ng-template>
+            
+                                <!-- Mobile view column -->
+                                <kendo-grid-column media="(max-width: 767px)" title="Tenant">
+                                    <ng-template kendoGridCellTemplate let-dataItem>
+                                        <div class="d-flex">
+                                            <dl class="mb-0 w-50 pr-1">
+                                                <dt>{{'Tenant Name'|translate}}</dt>
+                                                <dd>{{ dataItem.TENANTKEY }}</dd>
+                                            </dl>
+                                            
+                                        </div>
+                                    </ng-template>
+                                </kendo-grid-column>
+            
+                                <!-- Desktop view column -->
+                                <kendo-grid-column media="(min-width: 767px)" field="TENANTKEY" title="{{'Tenant Name'|translate}}">
+                                </kendo-grid-column>
+                                
+                                <kendo-grid-excel fileName="TenantList.xlsx"></kendo-grid-excel>
+                            </kendo-grid>
+                        </div>
+                    </div>
+                </div>
+                <!-- Kendo Grid End -->
+            </div>
+        </div>
+
+        <div class="card" fxFlex *ngIf="addTenantScreen">
+           <form #TenantForm="ngForm">
             <div class="card-body pb-2" fxFlex fxLayout="column">            
                 <div class="tenantScreen pb-3" fxFlex="100%" fxLayout="column">
                     <form>
@@ -12,7 +91,8 @@
                                     <label for="tenant_name" class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-form-label py-0">Tenant Name</label>
                                     <div class="col-sm-9 col-md-9 col-lg-9 col-xl-9">
                                         <div class="d-flex align-items-center">
-                                            <kendo-dropdownlist class="w-100 form-control-sm form-control" id="tenant_name" name="tenant_name"></kendo-dropdownlist>
+                                            <!-- <kendo-dropdownlist class="w-100 form-control-sm form-control" id="tenant_name" name="tenant_name" [data]="ddlTenantName" textField="TENANTKEY" valueField="TENANTKEY" [defaultItem]="defaultTenant" (selectionChange)="getTenantListByName($event.TENANTKEY)"></kendo-dropdownlist> -->
+                                            <input type="text" name="id" class="form-control" required #name=ngModel [(ngModel)]="TenantId" placeholder="Enter Tenant Id" autocomplete="off">
                                         </div>                        
                                     </div>
                                 </div>
@@ -22,33 +102,27 @@
         
                     <!-- Kendo Grid Start -->
                     <div fxLayout="column" fxFlex="100%" class="kendo-grid-wrapper mt-3">    
-                        <kendo-grid [kendoGridBinding]="gridData" [resizable]="true" [sortable]="true" class="custom-height-grid kendo-responsive-grid" [filterable]=isColumnFilter
+                        <kendo-grid [kendoGridBinding]="ProductData" [resizable]="true" [pageable]="showViewGridPage" [pageSize]="10" [sortable]="true" class="custom-height-grid kendo-responsive-grid" [filterable]=isColumnFilterView
                             [groupable]=isColumnGroup [columnMenu]="false" [selectable]="{ checkboxOnly: true, mode: 'multiple' }">
-                            <!-- [pageSize]="10" 
-                            [pageable]="{
-                                buttonCount: paginationButtonCount,
-                                info: paginationInfo,
-                                type: paginationType,
-                                pageSizes: paginationPageSizes,
-                                previousNext: paginationInfoPreviousNext
-                            }"> -->
+                            
                             <!-- grid template start -->
                             <ng-template kendoGridToolbarTemplate >
                                 <div class="d-flex align-items-center">
                                     <!-- show hide column start show hide -->
-                                    <!-- <kendo-grid-column-chooser class="float-left opti_hide-in-mobile"></kendo-grid-column-chooser> -->
-    
+                                       
                                     <!-- checkbox -->
                                     <label class="custom-checkbox mb-0 mr-2 filter-checkbox">
-                                        <input type="checkbox" [(ngModel)]="isColumnFilter" [ngModelOptions]="{standalone: true}">
+                                        <!-- <input type="checkbox" [(ngModel)]="isColumnFilter" [ngModelOptions]="{standalone: true}">
                                         <span class="checkbox"></span>
-                                        <span>{{'Enable_filter'|translate}}</span>
+                                        <span>{{'Enable_filter'|translate}}</span> -->
+                                        <input #chkFilterView type="checkbox" (change)="onFilterChange(chkFilterView,ProductData)" id="FilterColumnView" [(ngModel)]="isColumnFilterView" class="k-checkbox" [disabled]="TenantId == ''" name="FilterColumnView" />
+                                        <label class="k-checkbox-label" for="FilterColumnView">Enable Filter</label>
                                     </label>
-                                    <label class="custom-checkbox mb-0 grouping-checkbox">
+                                    <!-- <label class="custom-checkbox mb-0 grouping-checkbox">
                                         <input type="checkbox" [(ngModel)]="isColumnGroup" [ngModelOptions]="{standalone: true}">
                                         <span class="checkbox"></span>
                                         <span>{{'Enable_grouping'|translate}}</span>
-                                    </label>
+                                    </label> -->
                                     <!-- export -->
                                     <button type="button" kendoGridExcelCommand title="Export to excel file" class="ml-auto btn btn-link btn-sm btn-icon p-0">
                                         <svg viewBox="0 0 512 512" class="icon">
@@ -57,52 +131,82 @@
                                     </button>
                                 </div>
                             </ng-template>
+
+                            <!-- <kendo-grid-column field="SNO" title="#" class="text-center" headerClass="text-center" width="52">
+                            </kendo-grid-column> -->
     
                             
-                            <kendo-grid-checkbox-column [width]="38" showSelectAll="true" class="text-center" headerClass="text-center"></kendo-grid-checkbox-column>
+                            <!-- <kendo-grid-checkbox-column [width]="38" showSelectAll="true" class="text-center" headerClass="text-center"></kendo-grid-checkbox-column> -->
+
+                            <kendo-grid-checkbox-column field="checkbox" title="Select" [width]="33" class="text-center" headerClass="text-center">
+                                <ng-template kendoGridHeaderTemplate let-column let-rowIndex="rowIndex">
+                                    <div class="k-form-field d-flex center-checkbox">
+                                        <input type="checkbox" name="view_parent_checkbox" class="cursor-pointer" #Selectallcheckedvalue (change)="on_Selectall_checkbox_checked(Selectallcheckedvalue.checked)"
+                                        id="view_parent_checkbox{{rowIndex}}" [checked]=selectallprod class="k-checkbox">
+                                    <label class="k-checkbox-label" for="view_parent_checkbox{{rowIndex}}"></label>
+                                    </div>
+                                </ng-template>
+                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                    <div class="k-form-field d-flex center-checkbox">                                    
+                                    <input type="checkbox" name="view_child_checkbox" #checkedvalueview [checked]=dataItem.rowcheck id="view_child_checkbox{{rowIndex}}"
+                                        class="k-checkbox checkboxFN cursor-pointer" [disabled]="TenantId == ''" (change)="selectProduct(checkedvalueview.checked,dataItem,rowIndex)" />
+                                    <label class="k-checkbox-label" for="view_child_checkbox{{rowIndex}}"></label>
+                                    </div>
+                                </ng-template>
+                            </kendo-grid-checkbox-column>
     
                             <!-- Mobile view column -->
                             <kendo-grid-column media="(max-width: 767px)" title="Items">
                                 <ng-template kendoGridCellTemplate let-dataItem>
                                     <div class="d-flex">
                                         <dl class="mb-0 w-50 pr-1">
-                                            <dt>{{'Product_Code'|translate}}</dt>
-                                            <dd>{{ dataItem.ProductName }}</dd>
+                                            <dt>{{'Product Code'|translate}}</dt>
+                                            <dd>{{ dataItem.OPTM_PRODCODE }}</dd>
             
-                                            <dt>{{'Total_License_Assigned' |translate}}</dt>
-                                            <dd>{{ dataItem.Category.CategoryName }}</dd>
+                                            <dt>{{'Product Description' |translate}}</dt>
+                                            <dd>{{ dataItem.OPTM_PRODDESC }}</dd>
                                             
-                                            <dt>{{'Remaining'|translate}}</dt>
-                                            <dd class="mb-0">{{ dataItem.ProductName }}</dd>
+                                            <dt>{{'Total License Assigned'|translate}}</dt>
+                                            <dd class="mb-0">{{ dataItem.TOTALASSIGNEDLIC }}</dd>
                                         </dl>                                
                                         <dl class="mb-0 w-50">
-                                            <dt>{{'Product_Description'|translate}}</dt>
-                                            <dd>{{ dataItem.Category.Description }}</dd>
+                                            <dt>{{'Tenant License Count'|translate}}</dt>
+                                            <dd>{{ dataItem.EXTNCODE }}</dd>
     
-                                            <dt>{{'Tenant_License_Count'|translate}}</dt>
-                                            <dd class="mb-0">{{ ProductName }}</dd>
+                                            <dt>{{'Remaining'|translate}}</dt>
+                                            <dd class="mb-0">{{ dataItem.REMAINING }}</dd>
                                         </dl>
                                     </div>
                                 </ng-template>
                             </kendo-grid-column>
     
                             <!-- columns for mid-size devices -->
-                            <kendo-grid-column media="(min-width: 768px)" field="ProductName" title="{{'Product_Code'|translate}}"></kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="Category.Description" title="{{'Product_Description'|translate}}"></kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="Category.Description" title="{{'Total_License_Assigned' |translate}}"></kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="ProductName" title="{{'Tenant_License_Count'|translate}}">
-                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                            <kendo-grid-column media="(min-width: 768px)" field="OPTM_PRODCODE" title="{{'Product Code'|translate}}"></kendo-grid-column>
+                            <kendo-grid-column media="(min-width: 768px)" field="OPTM_PRODDESC" title="{{'Product Description'|translate}}"></kendo-grid-column>
+                            <kendo-grid-column media="(min-width: 768px)" field="TOTALASSIGNEDLIC" title="{{'Total License Assigned' |translate}}" class="text-right"></kendo-grid-column>
+                            <kendo-grid-column media="(min-width: 768px)" field="EXTNCODE" title="{{'Tenant License Count'|translate}}">
+                                <!-- <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                                     <input type="text" class="form-control form-control-sm" placeholder="" [ngStyle]="{'height.px': '20'}">
+                                </ng-template> -->
+                                <ng-template kendoGridCellTemplate let-dataItem let-idx='rowIndex'>
+                                  <input type="text" fieldSize="small" name="dataItem.EXTNCODE" class="form-control form-control-sm text-right" id="licenseCount" [disabled]="TenantId == ''" 
+                                    (keypress)="numberOnly($event)" (change)="onLicenseCountChange(licenseCount.value,idx)"
+                                    value={{dataItem.EXTNCODE}} #licenseCount title="License Count" />
+                                    <div id="extcode{{idx}}">
+                                    <small id="errorcode{{idx}}" class="form-text float-right text-danger" *ngIf="dataItem.showErrorMsg">
+                                      Insufficient License Count 
+                                    </small> 
+                                  </div>
                                 </ng-template>
                             </kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="Category.Description" title="{{'Remaining'|translate}}"></kendo-grid-column>
+                            <kendo-grid-column media="(min-width: 768px)" field="REMAINING" title="{{'Remaining'|translate}}" class="text-right"></kendo-grid-column>
                             <!-- xlsx template start -->
                             <kendo-grid-excel fileName="Tenant.xlsx"></kendo-grid-excel>
                             <!-- xlsx template end -->
                         </kendo-grid>
     
-                        <kendo-grid [kendoGridBinding]="gridData" [resizable]="true" [sortable]="true" class="custom-height-grid mt-3" [filterable]=isColumnFilter2
-                            [groupable]=false [columnMenu]="false" [selectable]="{ checkboxOnly: true, mode: 'multiple' }">
+                        <kendo-grid [kendoGridBinding]="UserData" [resizable]="true" [sortable]="true" class="custom-height-grid mt-3" [filterable]=isColumnFilterUser
+                            [groupable]=false [columnMenu]="false" [pageable]="showUserGridPage" [pageSize]="10" [selectable]="{ checkboxOnly: true, mode: 'multiple' }">
                             <!-- [pageSize]="10" 
                             [pageable]="{
                                 buttonCount: paginationButtonCount,
@@ -119,9 +223,11 @@
     
                                     <!-- checkbox -->
                                     <label class="custom-checkbox mb-0 mr-2 filter-checkbox">
-                                        <input type="checkbox" [(ngModel)]="isColumnFilter2" [ngModelOptions]="{standalone: true}">
+                                        <!-- <input type="checkbox" [(ngModel)]="isColumnFilter2" [ngModelOptions]="{standalone: true}"> 
                                         <span class="checkbox"></span>
-                                        <span>{{'Enable_filter'|translate}}</span>
+                                        <span>{{'Enable_filter'|translate}}</span> -->
+                                        <input #chkFilterUser type="checkbox" (change)="onFilterChange(chkFilterUser,UserData)" id="FilterColumnUser" [(ngModel)]="isColumnFilterUser" class="k-checkbox" [disabled]="TenantId == ''" name="FilterColumnUser" />
+                                        <label class="k-checkbox-label" for="FilterColumnUser">Enable Filter</label>
                                     </label>
                                     <!-- <label class="custom-checkbox mb-0 grouping-checkbox">
                                         <input type="checkbox" [(ngModel)]="isColumnGroup" [ngModelOptions]="{standalone: true}">
@@ -136,10 +242,30 @@
                                     </button>
                                 </div>
                             </ng-template>
-    
+
                             <!-- columns for mid-size devices -->
-                            <kendo-grid-checkbox-column [width]="38" showSelectAll="true" class="text-center" headerClass="text-center"></kendo-grid-checkbox-column>
-                            <kendo-grid-column field="ProductName" title="Users"></kendo-grid-column>
+                            <!-- <kendo-grid-checkbox-column [width]="38" showSelectAll="true" class="text-center" headerClass="text-center"></kendo-grid-checkbox-column> -->
+                            <kendo-grid-checkbox-column field="checkbox" title="Select" width="33" class="text-center" headerClass="text-center">
+
+                                <ng-template kendoGridHeaderTemplate let-column let-rowIndex="rowIndex">
+                                    <div class="k-form-field d-flex center-checkbox">
+                                    <input type="checkbox" name="user_parent_checkbox" class="cursor-pointer" #Selectuserallcheckedvalue (change)="user_Selectall_checkbox_checked(Selectuserallcheckedvalue.checked)"
+                                        id="user_parent_checkbox{{rowIndex}}" [checked]=selectalluser class="k-checkbox">
+                                    <label class="k-checkbox-label" for="user_parent_checkbox{{rowIndex}}"></label>
+                                    </div>
+                                </ng-template>
+
+                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                    <div class="k-form-field d-flex center-checkbox">
+                                    <input type="checkbox" name="child_checkbox" #checkedvalue [checked]=dataItem.rowcheck id="child_checkbox_{{rowIndex}}"
+                                        class="k-checkbox checkboxUN cursor-pointer" [disabled]="TenantId == ''" (change)="selectUser(checkedvalue.checked,dataItem,rowIndex)" />
+                                    <label class="k-checkbox-label" for="child_checkbox_{{rowIndex}}"></label>
+                                    </div>
+                                </ng-template>
+                            </kendo-grid-checkbox-column>
+                            <kendo-grid-column field="OPTM_USERCODE" title="User Code"></kendo-grid-column>
+                            <kendo-grid-column field="OPTM_USERNAME" title="User Name"></kendo-grid-column>
+                            <kendo-grid-column field="OPTM_GROUPCODE" title="User Group"></kendo-grid-column>
                             <!-- xlsx template start -->
                             <kendo-grid-excel fileName="Tenant-users.xlsx"></kendo-grid-excel>
                             <!-- xlsx template end -->
@@ -150,28 +276,30 @@
     
                 <!-- user detail save/cancel option -->
                 <div class="sticky-bottom-toolbar d-flex align-items-center justify-content-start border-top pt-2">                
-                    <button class="btn btn-primary btn-sm d-flex align-items-center mr-2" type="button"> 
+                    <button class="btn btn-primary btn-sm d-flex align-items-center mr-2" type="button" *ngIf="!isEdit" [disabled]="!TenantForm.form.valid" (click)="SaveRecord('New')"> 
                         <svg viewBox="0 0 55.25 55.25" class="icon mr-2">
                             <use xlink:href="#edit"></use>
-                        </svg> {{'Edit'|translate}}
+                        </svg> {{'Save'|translate}}
                     </button>
-                    <button class="btn btn-success btn-sm mr-2 d-flex align-items-center" type="button">
+                    <button class="btn btn-success btn-sm mr-2 d-flex align-items-center" type="button" *ngIf="isEdit" [disabled]="!TenantForm.form.valid" (click)="SaveRecord('Update')">
                         <svg viewBox="0 0 64 64" class="icon mr-2">
                             <use xlink:href="#update"></use>
                         </svg> {{'Update'|translate}}
                     </button>
-                    <button class="btn btn-danger btn-sm d-flex align-items-center mr-2" type="button"> 
+                    <!-- <button class="btn btn-danger btn-sm d-flex align-items-center mr-2" type="button" (click)="DeleteRecord()"> 
                         <svg viewBox="0 0 753.23 753.23" class="icon mr-2">
                             <use xlink:href="#bin"></use>
                         </svg> {{'Delete'|translate}}
-                    </button>
-                    <button class="btn btn-danger btn-sm d-flex align-items-center" type="button"> 
+                    </button> -->
+                    <button class="btn btn-danger btn-sm d-flex align-items-center" type="button" (click)="CancelRecord()"> 
                         <svg viewBox="0 0 489 489" class="icon mr-2">
                             <use xlink:href="#cancel"></use>
                         </svg> {{'Cancel'|translate}}
                     </button>
                 </div>
-            </div>
-        </div>
+            </div>            
+        
+        </form></div>
+        <div *ngIf="loading" class="k-i-loading"></div>
     </div>
         

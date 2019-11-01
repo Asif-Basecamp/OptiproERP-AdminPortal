@@ -1,5 +1,5 @@
 {
-    "service_url": "http://localhost:41692",
+    "service_url": "http://172.16.6.213/OptiProERPAdminService",
     "deployedFor": "handheld",
     "clientName": "EllyzaLondon"
 }
