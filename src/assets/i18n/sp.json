@@ -75,10 +75,14 @@
     "Product_Description":"Product Description",
     "Tenant_License_Count":"Tenant License Count",
     "Display":"Display",
+    "License_Count":"License Count",
+    "Insufficient_License_Count":"Insufficient License Count",
 
     "Last_Transaction_Date_Time":"Last Transaction Date Time",
     "GUID":"GUID",
     "Logout":"Logout",
+    "EnterTenantId":"Enter Tenant Id",
+    "TenantName":"Tenant Name",
 
    "Role_01":"Get All Define Roles Successfully",
    "Role_02":"Get All Define Roles UnSuccessfully",
