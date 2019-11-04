@@ -85,17 +85,21 @@
                     <kendo-grid-column media="(min-width: 767px)" field="UserName" title="User Name"></kendo-grid-column>
                     <kendo-grid-column media="(min-width: 767px)" field="GUID" title="GUID"></kendo-grid-column>
                     <kendo-grid-column media="(min-width: 767px)" field="LastTransactionTime" title="Last Transaction Date Time"></kendo-grid-column>
-                    <kendo-grid-column media="(min-width: 767px)" field="" title="Logout"></kendo-grid-column>
+                    <kendo-grid-column media="(min-width: 767px)" field="" title="Logout">
+                        <ng-template kendoGridCellTemplate let-dataItem let-idx='rowIndex'>
+                            <button class="btn btn-primary btn-sm d-flex align-items-center mr-2 text-danger" type="button" (click)="logoutUser(dataItem,rowIndex)"> 
+                                <svg viewBox="0 0 55.25 55.25" class="icon mr-2">
+                                    <use xlink:href="#Logout"></use>
+                                </svg> {{'Logout'|translate}}
+                            </button>
+                        </ng-template>
+                    </kendo-grid-column>
 
-                    <!-- columns for mid-size devices -->
-                    <!-- <kendo-grid-column media="(min-width: 768px)" field="UserName" title="User Name"></kendo-grid-column>
-                    <kendo-grid-column media="(min-width: 768px)" field="GUID" title="GUID"></kendo-grid-column>
-                    <kendo-grid-column media="(min-width: 768px)" field="LastTransactionTime" title="Last Transaction Date Time"></kendo-grid-column>
-                    <kendo-grid-column media="(min-width: 768px)" field="Category.Description" title="Logout"></kendo-grid-column> -->
-                    <kendo-grid-column media="(min-width: 768px)" field="ProductName" title="{{'User_Name'|translate}}"></kendo-grid-column>
-                    <kendo-grid-column media="(min-width: 768px)" field="Category.Description" title="{{'GUID'|translate}}"></kendo-grid-column>
-                    <kendo-grid-column media="(min-width: 768px)" field="Category.CategoryName" title="{{'Last_Transaction_Date_Time'|translate}}"></kendo-grid-column>
-                    <kendo-grid-column media="(min-width: 768px)" field="Category.Description" title="{{'Logout'|translate}}"></kendo-grid-column>
+                    <!-- columns for mid-size devices -->                    
+                    <!-- <kendo-grid-column media="(min-width: 768px)" field="UserName" title="{{'User_Name'|translate}}"></kendo-grid-column>
+                    <kendo-grid-column media="(min-width: 768px)" field="GUID" title="{{'GUID'|translate}}"></kendo-grid-column>
+                    <kendo-grid-column media="(min-width: 768px)" field="LastTransactionTime" title="{{'Last_Transaction_Date_Time'|translate}}"></kendo-grid-column>
+                    <kendo-grid-column media="(min-width: 768px)" field="" title="{{'Logout'|translate}}"></kendo-grid-column> -->
 
                     <!-- xlsx template start -->
                     <kendo-grid-excel fileName="Connected-Users.xlsx"></kendo-grid-excel>

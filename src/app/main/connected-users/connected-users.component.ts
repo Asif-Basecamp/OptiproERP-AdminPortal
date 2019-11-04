@@ -23,6 +23,8 @@ export class ConnectedUsersComponent implements OnInit {
   public PlaceHolder = { ProductId: 'Select Product..'};
   public ProductName: string = 'Select Product..';
   selectedItem: string = "";  
+  public Product: string ='';
+  public Controller: string ='';
  
   constructor(private translate: TranslateService, private httpClientSer: HttpClient,private ConnectedUserServ: ConnectedUsersService, private MessageService:MessageService) { 
     translate.use(localStorage.getItem('applang'));
@@ -74,42 +76,65 @@ export class ConnectedUsersComponent implements OnInit {
 
   onClickDisplay(){    
 
-    let Product = '';
-    let Controller = ''
+    this.Product = '';
+    this.Controller = ''
+    this.gridData = [];
 
     switch (this.ProductName)   
     { 
       case 'ATD': 
-             Product = 'OptiWMS'; 
+             this.Product = 'OptiProERPATD';  this.Controller = 'Login';
              break;
 
       case 'CNF': 
-            Product = 'optiproconfigurator'; Controller = 'Base';
+            this.Product = 'OptiProERPCNFService'; this.Controller = 'Base';
             break;
 
       case 'CVP': 
-            Product = 'OptiWMS';
+            this.Product = 'OptiProPortalService'; this.Controller = 'user'; 
+            break;
+
+      case 'MMO': 
+            this.Product = 'OptiProERPMMOService'; this.Controller = 'MoveOrder';
+            break;
+
+      case 'SFES': 
+            this.Product = 'OptiProERPSFESService'; this.Controller = 'SFDCLogin';
             break;
 
       case 'WMS': 
-             Product = 'OptiPROWMS'; Controller = 'Login';
-             break;
-             
+            this.Product = 'OptiProERPWMSService'; this.Controller = 'WMSlogin';
+             break;             
 
       default:
-            Product = 'OptiAdmin';
+           // this.Product = 'OptiProERPAdminService';
             break;
 
     }
-
-    this.ConnectedUserServ.getConnectedUserData(Product,Controller).subscribe(
-      data => {
-        console.log(data);
+    
+    this.ConnectedUserServ.getConnectedUserData(this.Product,this.Controller).subscribe(
+      data => {      
         if(data != undefined && data != null){
           this.gridData = data.LoggedUserData;
         }     
         else{
           this.MessageService.errormessage("No record found");
+       }
+      },    
+      error => {  
+        this.MessageService.errormessage(error.message);
+    });
+  }
+
+  logoutUser(dataItem,rowIndex){    
+    this.ConnectedUserServ.RemoveLoggedInUser(this.Product,this.Controller,dataItem.GUID,dataItem.UserName).subscribe(
+      data => {      
+        if(data == true){
+          this.MessageService.successmessage("User session has been terminated successfully");
+          this.gridData.splice(rowIndex,1);      
+        }     
+        else{
+          this.MessageService.errormessage("Cannot Logout user!");
        }
       },    
       error => {  

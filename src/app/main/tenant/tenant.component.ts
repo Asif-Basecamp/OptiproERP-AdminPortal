@@ -93,8 +93,8 @@ export class TenantComponent implements OnInit {
     this.getUsersList('');
   } 
   
-  editRecord(){
-    console.log(this.TenantId);
+  editRecord(){    
+    this.loading = true;
     this.getTenantListByName(this.TenantId);
   }
 
@@ -126,7 +126,7 @@ export class TenantComponent implements OnInit {
   }
 
   getProductsList(action){   
-    
+    this.loading = true;    
     this.tenantService.GetProductsList().subscribe(
       data => {        
         this.ProductData = data;
@@ -143,9 +143,10 @@ export class TenantComponent implements OnInit {
         if(action == 'New')
         this.ProductListNew();
         else        
-        this.ProductListUpdate();       
+        this.ProductListUpdate(); 
+        this.loading = false;       
       });
-      this.loading = false; 
+      
   }
 
   getUsersList(paramTenant){
@@ -192,6 +193,11 @@ export class TenantComponent implements OnInit {
         } 
       }
     }
+
+    if(!this.isEdit)
+    this.getUserByProductList('',this.ProdCodeArr);
+    else
+    this.getUserByProductList(this.TenantId,this.ProdCodeArr);
   }
 
   selectUser(checkvalue,rowdata,index){  
@@ -244,7 +250,11 @@ export class TenantComponent implements OnInit {
            this.TenantList = data; 
            this.FilterData = data;      
           }
-        }  
+        } 
+        else{
+          this.MessageService.errormessage("No tenant found!");
+        } 
+        this.loading = false;
       },    
       error => {  
         this.loading = false;  
@@ -253,16 +263,17 @@ export class TenantComponent implements OnInit {
   }
 
   getTenantListByName(tenantName){
-    this.loading = true;
+    
     this.tenantService.GetTenantListByName(tenantName).subscribe(
       data => {
         if(data != null && data != undefined){  
-          this.TenantDataArr = data;        
-          this.getProductsList('Update');
-          console.log(data);
+          this.TenantDataArr = data; 
+          this.loading = false;       
+          this.getProductsList('Update');          
         }
         else {          
           console.log("Error in GetTenantListByName");
+          this.loading = false;
         }   
             
     });
