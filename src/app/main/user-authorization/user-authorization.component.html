@@ -93,10 +93,10 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-12">
+                    <div class="col-sm-12 col-md-7 col-lg-7 col-xl-8">
                         <div class="form-group mb-2">
                             <label class="mb-0">{{'Roles'|translate}}</label>
-                            <kendo-grid [kendoGridBinding]="gridDataRoles" [resizable]="true" [sortable]="true" class="custom-height-grid kendo-responsive-grid" [filterable]=isColumnFilter [groupable]=isColumnGroup [columnMenu]="false" [selectable]="{ checkboxOnly: true, mode: 'multiple' }">
+                            <kendo-grid [kendoGridBinding]="gridDataRoles" [resizable]="true" [height]="190" [sortable]="true" class="kendo-responsive-grid" [filterable]=isColumnFilter [groupable]=isColumnGroup [columnMenu]="false" [selectable]="{ checkboxOnly: true, mode: 'multiple' }" [ngStyle]="{'max-height':'190px'}">
                                 <ng-template kendoGridToolbarTemplate>
                                     <div class="d-flex align-items-center">
                                         <label class="custom-checkbox mb-0 mr-2 filter-checkbox">
@@ -124,7 +124,7 @@
                                     </ng-template>
 
                                     <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-                                        <div class="k-form-field d-flex center-checkbox">
+                                        <div class="k-form-field center-checkbox">
                                             <input type="checkbox" name="select_role_checkbox" #checkedvalueview [checked]=dataItem.checked id="select_role_checkbox{{rowIndex}}" class="k-checkbox cursor-pointer" (change)="selectCheckboxRole(checkedvalueview.checked,dataItem,rowIndex)" />
                                             <label class="k-checkbox-label" for="select_role_checkbox{{rowIndex}}"></label>
                                         </div>
@@ -151,7 +151,6 @@
                                 </kendo-grid-column>
 
                                 <!-- Desktop view column -->
-
                                 <kendo-grid-column media="(min-width: 768px)" field="OPTM_ROLEID" title="{{'Role_Id'|translate}}"></kendo-grid-column>
                                 <kendo-grid-column media="(min-width: 768px)" field="OPTM_ROLEDESC" title="{{'Description'|translate}}"></kendo-grid-column>
                                 <kendo-grid-column media="(min-width: 768px)" field="OPTM_PROD" title="{{'Product'|translate}}"></kendo-grid-column>
@@ -196,7 +195,7 @@
 
                     <div class="row mt-2">
                         <div class="col-sm-12 col-md-7 col-lg-7 col-xl-8">
-                            <kendo-grid [kendoGridBinding]="screenGrid" [resizable]="true" [sortable]="true" class="custom-height-grid kendo-responsive-grid" [filterable]=screenGridFilter [groupable]=screenGridGroup [columnMenu]="false" [selectable]="{ checkboxOnly: true, mode: 'multiple' }">
+                            <kendo-grid [kendoGridBinding]="screenGrid" [resizable]="true" [sortable]="true" [height]="190" class="kendo-responsive-grid" [filterable]=screenGridFilter [groupable]=screenGridGroup [columnMenu]="false" [selectable]="{ checkboxOnly: true, mode: 'multiple' }" [ngStyle]="{'max-height':'190px'}">
                                 <ng-template kendoGridToolbarTemplate>
                                     <div class="d-flex align-items-center">
                                         <label class="custom-checkbox mb-0 mr-2 filter-checkbox">
