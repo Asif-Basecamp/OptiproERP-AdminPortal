@@ -489,13 +489,16 @@ export class UserRolesComponent implements OnInit {
                       
                         this.CheckUncheckValueInsideFrid(data);
                         this.GridDataFormanupulation=data;
-                        this.IsRoleId=false;
-                        this.IsRoleDesc=false ;
-                        this.IsProduct=false;
+                        // this.IsRoleId=false;
+                        // this.IsRoleDesc=false ;
+                        // this.IsProduct=false;
+                        this.IsRoleId=true;
+                        this.IsRoleDesc=true ;
+                        this.IsProduct=true;
                         this.enableEdit=true;
                         this.enableDelete=true;
                        this.enableSubmit=false;
-                       this.enableUpdate=false;
+                       this.enableUpdate=true;
                        
                     } 
                     

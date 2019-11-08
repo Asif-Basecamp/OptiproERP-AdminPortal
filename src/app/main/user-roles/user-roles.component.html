@@ -192,13 +192,18 @@
             </div>
 
             <!-- user detail save/cancel option -->
-            <div class="sticky-bottom-toolbar d-flex align-items-center justify-content-start border-top pt-2">     
-                <button *ngIf="enableEdit" (click)="EditData()" class="btn btn-primary btn-sm d-flex align-items-center mr-2" type="button"> 
+            <div  class="sticky-bottom-toolbar d-flex align-items-center justify-content-start border-top pt-2">     
+                <!-- <button *ngIf="enableEdit" (click)="EditData()" class="btn btn-primary btn-sm d-flex align-items-center mr-2" type="button"> 
                     <svg viewBox="0 0 55.25 55.25" class="icon mr-2">
                         <use xlink:href="#edit"></use>
                     </svg> {{'Edit'|translate}}
-                </button>           
-
+                </button>            -->
+                <button *ngIf="false" (click)="EditData()" class="btn btn-primary btn-sm d-flex align-items-center mr-2" type="button"> 
+                        <svg viewBox="0 0 55.25 55.25" class="icon mr-2">
+                            <use xlink:href="#edit"></use>
+                        </svg> {{'Edit'|translate}}
+                    </button>  
+                
                 <button *ngIf="enableSubmit" class="btn btn-success btn-sm mr-2 d-flex align-items-center mr-2" 
                  type="button" (click)="SaveData(gridUser, $event)"
                  [disabled]= "!UserRoleForm.form.valid">
