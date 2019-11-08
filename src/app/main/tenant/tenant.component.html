@@ -22,7 +22,7 @@
         
                     <!-- Kendo Grid Start -->
                     <div fxLayout="column" fxFlex="100%" class="kendo-grid-wrapper mt-3">    
-                        <kendo-grid [kendoGridBinding]="gridData" [resizable]="true" [sortable]="true" class="custom-height-grid kendo-responsive-grid" [filterable]=isColumnFilter
+                        <kendo-grid [kendoGridBinding]="gridData" [resizable]="true" [sortable]="true" class="kendo-responsive-grid" [height]="240" [ngStyle]="{'max-height':'240px'}" [filterable]=isColumnFilter
                             [groupable]=isColumnGroup [columnMenu]="false" [selectable]="{ checkboxOnly: true, mode: 'multiple' }">
                             <!-- [pageSize]="10" 
                             [pageable]="{
@@ -101,7 +101,7 @@
                             <!-- xlsx template end -->
                         </kendo-grid>
     
-                        <kendo-grid [kendoGridBinding]="gridData" [resizable]="true" [sortable]="true" class="custom-height-grid mt-3" [filterable]=isColumnFilter2
+                        <kendo-grid [kendoGridBinding]="gridData" [resizable]="true" [sortable]="true" class=" mt-3" [height]="240" [ngStyle]="{'max-height':'240px'}" [filterable]=isColumnFilter2
                             [groupable]=false [columnMenu]="false" [selectable]="{ checkboxOnly: true, mode: 'multiple' }">
                             <!-- [pageSize]="10" 
                             [pageable]="{
