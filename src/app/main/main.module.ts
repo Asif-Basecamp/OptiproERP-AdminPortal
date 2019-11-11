@@ -17,6 +17,7 @@ import { ConnectedUsersComponent } from './connected-users/connected-users.compo
 import { TenantComponent } from './tenant/tenant.component';
 import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
@@ -42,6 +43,7 @@ export function createTranslateLoader(http: HttpClient) {
     }),  
   ],
   providers: [LowerCasePipe],
-  declarations: [MainComponent, UserGroupComponent, UserManagementComponent, UserAuthorizationComponent, UserRolesComponent, ConnectedUsersComponent, TenantComponent]
+  declarations: [MainComponent, UserGroupComponent, UserManagementComponent, 
+    UserAuthorizationComponent, UserRolesComponent, ConnectedUsersComponent, TenantComponent]
 })
 export class MainModule { }
