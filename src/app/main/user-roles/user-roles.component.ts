@@ -25,6 +25,7 @@ export class UserRolesComponent implements OnInit {
   public UpdateSelected :boolean=false;
   public DeleteSelected :boolean=false;
   public ReadSelected :boolean=false;
+  public EditMode :boolean=false;
   public SelectedRowData:any[];
   public enableSubmit= false;
   public enableEdit = false;
@@ -34,7 +35,10 @@ export class UserRolesComponent implements OnInit {
   public IsRoleDesc = true;
   public IsProduct= true;
   public confirmationOpened = false;
- 
+  public ValProduct='';
+  public GridTemplate: any[];
+  public count=0;
+  public GridGetDataOnSelectionChanhe: any[] = [];
   constructor(private RoleService:RoleService,private MessageService:MessageService,
     private translate: TranslateService, private httpClientSer: HttpClient) { 
       // let userLang = navigator.language.split('-')[0];
@@ -61,8 +65,7 @@ export class UserRolesComponent implements OnInit {
    {
      
      this.RoleService.FillProductDropDownList().subscribe(    
-      data => {    
-        
+      data => { 
         if(data.length > 0)  
         {  
          this.DropDownListData = data; 
@@ -75,8 +78,9 @@ export class UserRolesComponent implements OnInit {
         this.MessageService.errormessage(error.message);   
       });
   }
-  CheckUncheckValueInsideFrid(data)
+  CheckUncheckValueInsideFrid(data,EditMode)
     {
+      debugger
       for(let i=0; i<data.length; i++)
       {
         data[i].AllSelected =false;
@@ -113,20 +117,56 @@ export class UserRolesComponent implements OnInit {
          else  data[i].ReadSelected =false;
       }  
       this.gridData1=data;
+      
       console.log(data[0])
     }
   FillFridOnDropdownSelectedIndexChanged()
     {
+      debugger
+     
+      if(this.count >0)
+      { //var SelectedRowData:any=[];
+
+        var iTblCount = 0;
+        // row count of SelectedRowData
+       // this.gridData1[iTblCount]=this.gridData1;
+        let iSelectedTbl = this.GridGetDataOnSelectionChanhe.length;
+        // For each loop of all screens of a Product
+        for (iTblCount = 0; iTblCount < this.gridData1.length; iTblCount++) {
+  
+            if (this.gridData1[iTblCount].AddSelected == true || this.gridData1[iTblCount].UpdateSelected == true || this.gridData1[iTblCount].DeleteSelected == true || this.gridData1[iTblCount].ReadSelected == true) {
+                // Select row of TableDataBinding if any checkbox is checked
+                this.GridGetDataOnSelectionChanhe[iSelectedTbl] =this.gridData1[iTblCount];
+                // increase index value of SelectedRowData
+                iSelectedTbl = iSelectedTbl + 1;
+            }
+        }
+        
+        console.log(this.GridGetDataOnSelectionChanhe);
+      }
+
+          
+     
        this.RoleService.FillFridOnDropdownSelectedIndexChanged(this.model).subscribe(    
           data => { 
           
             if(data.length > 0)  
             {  
-              this.CheckUncheckValueInsideFrid(data)   
-               this.GridDataFormanupulation=data;
+            //  if(this.EditMode===true && this.model.Product==this.ValProduct)
+              // {
+              //  this.gridData1=this.GridTemplate;
+              // }
+               //else{ 
+                 this.CheckUncheckValueInsideFrid(data,false)   
+                this.GridDataFormanupulation=data;
+                this.count++;
+             
+             // }
+             
             }    
             else{    
              this.MessageService.errormessage(this.translate.instant('Somethingwrong'));
+             this.gridData1=[];
             }    
           },    
           error => {    
@@ -407,11 +447,22 @@ export class UserRolesComponent implements OnInit {
               iSelectedTbl = iSelectedTbl + 1;
           }
       }
+        if(this.GridGetDataOnSelectionChanhe.length>0)
+        {
+          for(let i=0; i<this.SelectedRowData.length; i++)
+          {
+         //   this.GridGetDataOnSelectionChanhe.push({SelectedRowData[00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000i]})
+           // SelectedRowData.push({this.GridGetDataOnSelectionChanhe[i]});
+          }
+          SelectedRowData.push;
+        }
+        debugger
        if(SelectedRowData.length==0)  
         {
           this.MessageService.errormessage(this.translate.instant('NoRows')); 
           return
         }
+        debugger
       this.RoleService.AddUserRole(this.model,SelectedRowData).subscribe(    
           data => {    
               
@@ -441,6 +492,7 @@ export class UserRolesComponent implements OnInit {
           this.HeaderText= "Edit -" +' '+  data[0].OPTM_ROLEID;         
               data.forEach((SavedData) => { // foreach statement 
               this.model.Product=SavedData.OPTM_PROD;
+              this.ValProduct=SavedData.OPTM_PROD;
               var Permission = SavedData.OPTM_PERMISSION.split(",");
               this.AddSelected = false;
               this.UpdateSelected = false;
@@ -486,8 +538,12 @@ export class UserRolesComponent implements OnInit {
                       this.model.PriviousRoleId=selection.selectedRows[0].dataItem.OPTM_ROLEID;
                       this.model.RoleId=selection.selectedRows[0].dataItem.OPTM_ROLEID;
                       this.model.RoleDesc=selection.selectedRows[0].dataItem.OPTM_ROLEDESC;
-                      
-                        this.CheckUncheckValueInsideFrid(data);
+                      this.EditMode=true;
+                        this.CheckUncheckValueInsideFrid(data,true);
+                       
+                       this.GridTemplate=this.gridData1;
+
+                        
                         this.GridDataFormanupulation=data;
                         // this.IsRoleId=false;
                         // this.IsRoleDesc=false ;

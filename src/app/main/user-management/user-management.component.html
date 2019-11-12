@@ -273,7 +273,7 @@
                                                 <ng-template kendoGridCellTemplate let-dataItem let-workCenterIndex="rowIndex">
                                                     <label class="custom-checkbox m-0">
                                                         <input type="checkbox" (change)="workCenterSelect($event,dataItem.workcenter,workCenterIndex)" 
-                                                        [id]="cmpIndex+workCentersIndex" [checked]="dataItem.workcenter.checked">
+                                                        [id]="cmpIndex+workCentersIndex" >
                                                         <span class="checkbox"></span>
                                                     </label>
                                                 </ng-template>
