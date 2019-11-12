@@ -2,6 +2,8 @@
         <div class="page-header">
             <h4>{{'User_Management'|translate}}</h4>
         </div>
+
+        <!-- display user list -->
         <div class="card" fxFlex *ngIf="!addUserScreen">
             <div class="card-body" fxFlex fxLayout="column">
                 <form>
@@ -27,11 +29,9 @@
                         </div>
                     </div>
                 </form>
+                    <div fxLayout="column" fxFlex="100%" class="kendo-grid-wrapper mt-3">
     
-                <!-- Kendo Grid Start -->
-                <div fxLayout="column" fxFlex="100%" class="kendo-grid-wrapper mt-3">
-    
-                    <kendo-grid [kendoGridBinding]="gridData" [resizable]="true" [sortable]="true" class="full-height-grid kendo-responsive-grid" [filterable]=isColumnFilter [groupable]=isColumnGroup [columnMenu]="false" (cellClick)="userClickHandler($event)">
+                    <kendo-grid [kendoGridBinding]="userData" [resizable]="true" [sortable]="true" class="full-height-grid kendo-responsive-grid" [filterable]=isColumnFilter [groupable]=isColumnGroup [columnMenu]="false" (cellClick)="userClickHandler($event)">
     
                         <ng-template kendoGridToolbarTemplate>
                             <div class="d-flex align-items-center">
@@ -46,7 +46,6 @@
                                     <span class="checkbox"></span>
                                     <span>{{'Enable_grouping'|translate}}</span>
                                 </label>
-                                <!-- export -->
                                 <button type="button" kendoGridExcelCommand title="Export to excel file" class="ml-auto btn btn-link btn-sm btn-icon p-0">
                                     <svg viewBox="0 0 512 512" class="icon">
                                         <use xlink:href="#download"></use>
@@ -82,43 +81,56 @@
                         <kendo-grid-column media="(min-width: 768px)" field="OPTM_USERNAME" title="{{'User_Name'|translate}}"></kendo-grid-column>
                         <kendo-grid-column media="(min-width: 768px)" field="OPTM_GROUPCODE" title="{{'User_Group'|translate}}"></kendo-grid-column>
                         <kendo-grid-column media="(min-width: 768px)" field="OPTM_ACTIVE" title="{{'Active'|translate}}"></kendo-grid-column>
-    
-                        <!-- xlsx template start -->
                         <kendo-grid-excel fileName="User-management.xlsx"></kendo-grid-excel>
-                        <!-- xlsx template end -->
                     </kendo-grid>
                 </div>
-                <!-- Kendo Grid End -->
             </div>
         </div>
-        <!-- add user screen -->
+        <!-- end user list display div -->
+
+
+        <!-- add user screen div -->
         <div class="card" fxFlex *ngIf="addUserScreen">
+            <form #addUserForm="ngForm">
             <div class="card-body pb-2" fxFlex fxLayout="column">
                 <div class="addUserScreen" fxFlex="100%">
                     <div class="user-detail">
                         <div class="section-heading mb-2">
                             <h5 class="m-0">{{'User_Details'|translate}}</h5>
                         </div>
-                        <form>
                             <div class="row">
                                 <div class="col-sm-5 col-md-4 col-lg-4 col-xl-3">
                                     <div class="row">
                                         <div class="form-group col-md-12 mb-2">
                                             <label class="mb-0" for="user_id">{{'User_Id'|translate}}<span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control form-control-sm" id="user_id" name="user_id" [(ngModel)]="user_id" (change)="onBlurUserID()">
+                                            <input type="text" class="form-control form-control-sm" id="user_id" name="user_id" [(ngModel)]="user_id" #UserID=ngModel (change)="onBlurUserID()"
+                                            required autocomplete="off">
+                                            <span class="error" *ngIf="UserID.errors?.required && UserID.touched">
+                                                User Id is required
+                                            </span>
                                         </div>
                                         <div class="form-group col-md-12 mb-2">
                                             <label class="mb-0" for="user_name">{{'User_Name'|translate}}</label>
-                                            <input type="text" class="form-control form-control-sm" id="user_name" name="user_name" [(ngModel)]="user_name">
+                                            <input type="text" class="form-control form-control-sm" id="user_name" name="user_name" [(ngModel)]="user_name" #UserName=ngModel required autocomplete="off">
+                                            <span class="error" *ngIf="UserName.errors?.required && UserName.touched">
+                                                User Name is required
+                                            </span>
                                         </div>
                                         <div class="form-group col-md-12 mb-2">
                                             <label class="mb-0" for="password">{{'Password'|translate}}<span class="text-danger">*</span></label>
-                                            <input type="password" class="form-control form-control-sm" id="password" name="password" [(ngModel)]="password">
+                                            <input type="password" class="form-control form-control-sm" id="password" name="password" [(ngModel)]="password" #Password=ngModel required autocomplete="off">
+                                            <span class="error" *ngIf="Password.errors?.required && Password.touched">
+                                                Password is required
+                                            </span>
                                         </div>
                                         <div class="form-group col-md-12 mb-2">
                                             <label class="mb-0" for="re_password">{{'Re-Enter_Password'|translate}}<span class="text-danger">*</span></label>
-                                            <input type="password" class="form-control form-control-sm" id="re_password" name="re_password" [(ngModel)]="re_password">
+                                            <input type="password" class="form-control form-control-sm" id="re_password" name="re_password" [(ngModel)]="re_password" #RePassword=ngModel required  autocomplete="off">
+                                            <span class="error" *ngIf="RePassword.errors?.required && RePassword.touched">
+                                                Confirm Password is required
+                                            </span>
                                         </div>
+
                                     </div>
                                 </div>
                                 <div class="col-sm-5 offset-sm-1 col-md-4 offset-md-1 col-lg-4 offset-lg-1 col-xl-3 offset-xl-1">
@@ -134,11 +146,14 @@
                                         </div>
                                         <div class="form-group col-md-12 mb-2">
                                             <label class="mb-0" for="mapped_user_password">{{'Mapped_SAP_B1_User_Password'|translate}}<span class="text-danger">*</span></label>
-                                            <input type="password" name="mapped_user_password" class="form-control form-control-sm" id="mapped_user_password" [(ngModel)]="mappedPass">
+                                            <input type="password" name="mapped_user_password" class="form-control form-control-sm" id="mapped_user_password" [(ngModel)]="mappedPass" #MapPassword=ngModel required autocomplete="off">
+                                            <span class="error" *ngIf="MapPassword.errors?.required && MapPassword.touched">
+                                                User Password is required
+                                            </span>
                                         </div>
                                         <div class="form-group col-md-12 mb-2">
                                             <label class="mb-0" for="tenant">{{'Tenant'|translate}}</label>
-                                            <input type="text" id="tenant" name="tenant" [(ngModel)]="tenant" class="form-control-sm form-control w-100">
+                                            <input type="text" id="tenant" name="tenant" [(ngModel)]="tenant" class="form-control-sm form-control w-100" autocomplete="off">
                                         </div>
                                         <div class="form-group col-md-12 mb-2">
                                             <div class="custom-control custom-switch mt-1">
@@ -149,7 +164,6 @@
                                     </div>
                                 </div>
                             </div>
-                        </form>
                     </div>
                     <div class="company-company-details border-top py-3 mt-2">
                         <div class="row">
@@ -161,8 +175,7 @@
                                     <h5 class="m-0">{{'Company'|translate}}</h5>
                                 </div>
                                 <kendo-grid [kendoGridBinding]="company_data" [resizable]="true" [sortable]="true" class="custom-height-grid" 
-                                [filterable]=isColumnFilter14 (cellClick)="companyClickHandler($event)" [groupable]=isColumnGroup14 
-                                [kendoGridSelectBy]="'dbName'" [selectedKeys]="companySelection" [columnMenu]="false" 
+                                [filterable]=isColumnFilter14 (cellClick)="companyClickHandler($event)" (detailExpand)="onExpandCompany($event)" [groupable]=isColumnGroup14 [kendoGridSelectBy]="'dbName'" [selectedKeys]="companySelection" [columnMenu]="false" 
                                 [selectable]="{ checkboxOnly: true, mode: 'multiple' }">
                                     <ng-template kendoGridToolbarTemplate>
                                         <div class="d-flex align-items-center">
@@ -186,7 +199,8 @@
                                     <kendo-grid-checkbox-column headerClass="text-center" class="text-center" [width]="40">
                                         <ng-template kendoGridCellTemplate let-dataItem let-companyRowIndex="rowIndex">
                                             <label class="custom-checkbox m-0">
-                                                <input type="checkbox" (change)="companySelect($event, dataItem, companyRowIndex)" [kendoGridSelectionCheckbox]="companyRowIndex">
+                                                <input type="checkbox" (change)="companySelect($event, dataItem, companyRowIndex)" [kendoGridSelectionCheckbox]="companyRowIndex" 
+                                                [disabled]="dataItem.selectedEmployeeType && dataItem.selectedEmployeeType.firstName == 'Emp ID'">
                                                 <span class="checkbox"></span>
                                             </label>
                                         </ng-template>
@@ -195,30 +209,26 @@
                                     <kendo-grid-column field="cmpName" title="Company" [width]="150"></kendo-grid-column>
                                     <kendo-grid-column title="User Type" [width]="100">
                                         <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-                                            <kendo-dropdownlist [data]="dataItem.UserType" (valueChange)="onChangeUserType($event, rowIndex, company_data)" class="form-control-sm form-control w-100" textField="text" valueField="text" [(ngModel)]="dataItem.selectedUserType"></kendo-dropdownlist>
+                                            <kendo-dropdownlist [data]="dataItem.UserType" [(ngModel)]="dataItem.selectedUserType" (valueChange)="onChangeUserType($event, rowIndex, company_data)" [ngModelOptions]="{standalone: true}"  class="form-control-sm form-control w-100" textField="text" valueField="text"></kendo-dropdownlist>
                                         </ng-template>
                                     </kendo-grid-column>
-                                    <kendo-grid-column title="Emp ID" [width]="100">
-                                        <ng-template kendoGridCellTemplate let-dataItem let-emprowIndex="rowIndex">
-                                            <kendo-dropdownlist [data]="dataItem.Employee" textField="firstName" valueField="empID" [(ngModel)]="dataItem.selectedEmployeeType" (valueChange)="onChangeEmployeeId($event, dataItem.dbName, emprowIndex)" class="form-control-sm form-control w-100"></kendo-dropdownlist>
-                                        </ng-template>
-                                    </kendo-grid-column>
-                                    <kendo-grid-column title="BP ID" [width]="100">
+                                    <kendo-grid-column title="" [width]="100">
                                         <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-                                            <kendo-dropdownlist [data]="listItems" class="form-control-sm form-control w-100"></kendo-dropdownlist>
+
+                                            <kendo-dropdownlist *ngIf="!dataItem.BPCode" [data]="dataItem.Employee" textField="firstName" valueField="empID" [(ngModel)]="dataItem.selectedEmployeeType" (valueChange)="onChangeEmployeeId($event, dataItem.dbName, rowIndex)" [ngModelOptions]="{standalone: true}" class="form-control-sm form-control w-100" [disabled]="dataItem.selectedCompany != 'blank'"></kendo-dropdownlist>
+
+                                            <kendo-dropdownlist *ngIf="dataItem.BPCode" [data]="listItems" class="form-control-sm form-control w-100" [defaultItem]="'BP ID'"></kendo-dropdownlist>
                                         </ng-template>
                                     </kendo-grid-column>
-    
                                     <ng-template kendoGridDetailTemplate let-dataItem let-productRowIndex="rowIndex">
-                                        <kendo-grid [kendoGridBinding]="dataItem.product" [resizable]="true" [sortable]="true" class="" [filterable]=false [groupable]=false 
+                                        <kendo-grid *ngIf="dataItem.selectedCompany != 'blank'" [kendoGridBinding]="dataItem.product" [resizable]="true" [sortable]="true" class="" [filterable]=false [groupable]=false 
                                         [kendoGridSelectBy]="'UniqueId'" [selectedKeys]="productSelection" [columnMenu]="false" 
                                         [selectable]="{ checkboxOnly: true, mode: 'multiple' }">
                                             <kendo-grid-checkbox-column headerClass="text-center" class="text-center" [width]="40">
                                                 <ng-template kendoGridCellTemplate let-pidx="rowIndex" let-dataItem>
                                                     <label class="custom-checkbox m-0">
-                                                        <!-- <input type="checkbox" (change)="productSelect($event, dataItem.ProductId)"
-                                                                [checked]="dataItem.ProductId === productID"> -->
-                                                        <input type="checkbox" [kendoGridSelectionCheckbox]="pidx" (change)="productSelect($event, dataItem.ProductId, pidx)">
+                                                        <input type="checkbox" [kendoGridSelectionCheckbox]="pidx" (change)="productSelect($event, dataItem.ProductId, pidx, 
+                                                        productRowIndex)">
                                                         <span class="checkbox"></span>
                                                     </label>
                                                 </ng-template>
@@ -236,8 +246,10 @@
                                 <div class="section-heading mb-2" *ngIf="databName">
                                     <h5 class="m-0">Database : {{databName}}({{companyName}})</h5>
                                 </div>
-                                <kendo-grid [kendoGridBinding]="WH_WC_Data" [resizable]="true" [sortable]="true" class="custom-height-grid" 
-                                [filterable]=isColumnFilter33 [groupable]=false [columnMenu]="false" [kendoGridSelectBy]="'OPTM_WHSE'" 
+                                <kendo-grid [kendoGridBinding]="WH_WC_Data" [resizable]="true" 
+                                [sortable]="true" class="custom-height-grid" 
+                                [filterable]=isColumnFilter33 [groupable]=false [columnMenu]="false" 
+                                [kendoGridSelectBy]="'uniqueId'" (detailExpand)="onExpandWarehouse($event)"
                                 [selectedKeys]="warehouseSelection" [selectable]="{ checkboxOnly: true, mode: 'multiple' }">
                                     <ng-template kendoGridToolbarTemplate>
                                         <div class="d-flex align-items-center">
@@ -254,30 +266,29 @@
                                             </button>
                                         </div>
                                     </ng-template>
-                                    <kendo-grid-column headerClass="text-center" class="text-center" [width]="40">
+                                    <kendo-grid-checkbox-column headerClass="text-center" class="text-center" [width]="40">
                                         <ng-template kendoGridCellTemplate let-dataItem let-warehouseIndex="rowIndex">
                                             <label class="custom-checkbox m-0">
-                                                <input type="checkbox" (change)="warehouseSelect($event, dataItem, warehouseIndex)"
-                                                 id="warehouseIndex" [checked]="dataItem.checked">
+                                                <input type="checkbox" (change)="warehouseSelect($event, dataItem, warehouseIndex)" [kendoGridSelectionCheckbox]="warehouseIndex">
                                                 <span class="checkbox"></span>
                                             </label>
                                         </ng-template>
-                                    </kendo-grid-column>
+                                    </kendo-grid-checkbox-column>
                                     <kendo-grid-column field="OPTM_WHSE" title="Warehouse"></kendo-grid-column>
                                     <ng-template kendoGridDetailTemplate let-dataItem let-workCentersIndex="rowIndex">
-                                        <kendo-grid [kendoGridBinding]="dataItem.workcenter" [resizable]="true" [sortable]="true" 
+                                        <kendo-grid *ngIf="dataItem.selectedWarehouse != 'blank'" [kendoGridBinding]="dataItem.workcenter" [resizable]="true" [sortable]="true" 
                                         class="" [filterable]=false [groupable]=false [columnMenu]="false" 
-                                        [kendoGridSelectBy]="'WorkCenterCode'" [selectedKeys]="workcenterSelection" 
+                                        [kendoGridSelectBy]="'uniqueId'" [selectedKeys]="workcenterSelection" 
                                         [selectable]="{ checkboxOnly: true, mode: 'multiple' }">
-                                            <kendo-grid-column headerClass="text-center" class="text-center" [width]="40">
+                                            <kendo-grid-checkbox-column headerClass="text-center" class="text-center" [width]="40">
                                                 <ng-template kendoGridCellTemplate let-dataItem let-workCenterIndex="rowIndex">
                                                     <label class="custom-checkbox m-0">
-                                                        <input type="checkbox" (change)="workCenterSelect($event,dataItem.workcenter,workCenterIndex)" 
-                                                        [id]="cmpIndex+workCentersIndex" >
+                                                        <input type="checkbox" (change)="workCenterSelect($event, dataItem, workCentersIndex)" 
+                                                        [kendoGridSelectionCheckbox]="workCenterIndex">
                                                         <span class="checkbox"></span>
                                                     </label>
                                                 </ng-template>
-                                            </kendo-grid-column>
+                                            </kendo-grid-checkbox-column>
                                             <kendo-grid-column field="WorkCenterCode" title="Work Center"></kendo-grid-column>
                                         </kendo-grid>
                                     </ng-template>
@@ -294,10 +305,10 @@
                     <button class="btn btn-primary btn-sm d-flex align-items-center mr-2" type="button" *ngIf="addscreenmode == 'edit'" (click)="userRefrenceCheck('edit')">
                         <svg viewBox="0 0 55.25 55.25" class="icon mr-2">
                             <use xlink:href="#edit"></use>
-                        </svg> {{'Edit'|translate}}
+                        </svg> Update
                     </button>
     
-                    <button class="btn btn-success btn-sm mr-2 d-flex align-items-center" type="button" *ngIf="addscreenmode == 'add'" (click)="saveRecord('add')">
+                    <button class="btn btn-success btn-sm mr-2 d-flex align-items-center" type="button" *ngIf="addscreenmode == 'add'" (click)="saveRecord('add')" [disabled]="addUserForm.invalid">
                         <svg viewBox="0 0 512 512" class="icon mr-2">
                             <use xlink:href="#saveDisk"></use>
                         </svg> {{'Save'|translate}}
@@ -314,6 +325,7 @@
                     </button>
                 </div>
             </div>
+        </form>           
         </div>
     </div>
     
