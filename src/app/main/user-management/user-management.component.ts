@@ -214,35 +214,30 @@ export class UserManagementComponent implements OnInit {
             WorkCenterdata => {
               this.Loading = false;
                warehousedata.Table[i]["workcenter"] = WorkCenterdata;
-               warehousedata.Table[i]["selectedWarehouse"] = 'blank';
+              // warehousedata.Table[i]["selectedWarehouse"] = 'blank';
                for (let j = 0; j < warehousedata.Table[i].workcenter.length; j++) {      
                 warehousedata.Table[i].workcenter[j]["uniqueId"] = dbName+''+i+''+j;       
-              }
+               }
             });
           }
-          this.WH_WC_Data = warehousedata.Table;
-           /*-- company and product selection --*/
-          if(this.editUserData){
-              this.company_data.forEach((element, index) => {
-              this.editUserData.forEach((element2, index2) => {
-                if(element.dbName === element2.OPTM_COMPID){
-                  //let WHUniqueID = this.WH_WC_Data[index].filter(i => i.OPTM_WHSE == element2.OPTM_WHSE);
-                  console.log(this.WH_WC_Data);
-                  console.log(element2);
-
-                  /*for(let j=0; j<productSplitArray.length; j++){
-                    let productUniqueID = this.company_data[index].product.filter(i => i.ProductId == productSplitArray[j]);
-                    if(productUniqueID){
-                      this.productSelection.push(productUniqueID[0].UniqueId);
-                    }
-                  }*/
-                }
-              });  
-            });
-          }
-          this.gridRefresh = true;
+        this.WH_WC_Data = warehousedata.Table;
+        this.WHWCGetdata(this.WH_WC_Data);  
       });  
   } 
+
+  WHWCGetdata(WHData){
+    this.company_data.forEach((element, index) => {
+      this.editUserData.forEach((element2, index2) => {
+        if(element.dbName === element2.OPTM_COMPID){
+          for(let j=0;j<WHData.length; j++){
+            if(WHData[j].OPTM_WHSE == element2.OPTM_WHSE){
+              this.warehouseSelection.push(WHData[j].uniqueId);
+            }
+          }
+        }
+      });  
+    });
+  }
 
   companyClickHandler(e){
     if(e.dataItem.selectedEmployeeType.empID != ''){
@@ -267,9 +262,9 @@ export class UserManagementComponent implements OnInit {
   }
 
   onExpandWarehouse(event){
-    if(event.dataItem.selectedWarehouse == 'blank'){
+    /*if(event.dataItem.selectedWarehouse == 'blank'){
       this.MessageService.errormessage("please choose Warehouse"); 
-    }
+    }*/
   }
  
   companySelect(event: any, companyData, companyIndex){
@@ -467,6 +462,16 @@ export class UserManagementComponent implements OnInit {
     this.addUserScreen = !this.addUserScreen; 
   }
 
+  getUniqueCompany(array){
+    var uniqueArray = [];
+      for(let i=0; i < array.length; i++){
+        if(uniqueArray.indexOf(array[i]) === -1) {
+            uniqueArray.push(array[i]);
+        }
+      }
+    return uniqueArray;
+  }
+
   getEditDetailById(userId){
     this.UserManagementService.getEditDetail(userId).subscribe(    
       data => { 
@@ -492,6 +497,12 @@ export class UserManagementComponent implements OnInit {
         this.company_data.forEach((element, index) => {
           this.editUserData.forEach((element2, index2) => {
             if(element.dbName === element2.OPTM_COMPID){
+
+              this.SubmitSave.Company.push({Company: this.company_data[index].dbName, cIndex: index}); 
+              console.log(this.SubmitSave.Company);
+             /* var uniqueNames = this.getUniqueCompany(this.SubmitSave.Company.Company);
+              console.log(uniqueNames);*/
+
               this.companySelection.push(element2.OPTM_COMPID);
               if(element2.OPTM_USERTYPE == 'C'){
                 this.company_data[index]["selectedUserType"] = { text: "Customer", value: element2.OPTM_USERTYPE };
@@ -513,7 +524,7 @@ export class UserManagementComponent implements OnInit {
             }
           });  
         });
-        
+      
        // this.WH_WC_Data.forEach((element, index) => {
          /* this.editUserData.forEach((element2, index2) => {
             if(element.OPTM_WHSE === element2.OPTM_WHSE){
