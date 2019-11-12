@@ -462,14 +462,12 @@ export class UserManagementComponent implements OnInit {
     this.addUserScreen = !this.addUserScreen; 
   }
 
-  getUniqueCompany(array){
-    var uniqueArray = [];
-      for(let i=0; i < array.length; i++){
-        if(uniqueArray.indexOf(array[i]) === -1) {
-            uniqueArray.push(array[i]);
-        }
-      }
-    return uniqueArray;
+  removeDuplicates(array, key) {
+    return array.filter((obj, index, self) =>
+        index === self.findIndex((el) => (
+            el[key] === obj[key]
+        ))
+    )
   }
 
   getEditDetailById(userId){
@@ -497,11 +495,10 @@ export class UserManagementComponent implements OnInit {
         this.company_data.forEach((element, index) => {
           this.editUserData.forEach((element2, index2) => {
             if(element.dbName === element2.OPTM_COMPID){
-
-              this.SubmitSave.Company.push({Company: this.company_data[index].dbName, cIndex: index}); 
-              console.log(this.SubmitSave.Company);
-             /* var uniqueNames = this.getUniqueCompany(this.SubmitSave.Company.Company);
-              console.log(uniqueNames);*/
+              this.SubmitSave.Company.push({Company: this.company_data[index].dbName, cIndex: index});
+              let arrCmpUnique; 
+              arrCmpUnique = this.removeDuplicates(this.SubmitSave.Company, 'Company');
+              console.log(arrCmpUnique);
 
               this.companySelection.push(element2.OPTM_COMPID);
               if(element2.OPTM_USERTYPE == 'C'){

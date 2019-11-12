@@ -29,13 +29,13 @@ export class RoleService {
     return this.http.get<any>(this.Url+'/api/DefineRole/GetAllDefineRoles',{ headers: this.header});
     }
    
-    FillFridOnDropdownSelectedIndexChanged(model : any)
+    FillFridOnDropdownSelectedIndexChanged(ProductName : string)
     { 
       const headerSettings: {[name: string]: string | string[]; } = {
         'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
       };  
       this.header = new HttpHeaders(headerSettings); 
-      var jObject = { RoleDetails: JSON.stringify([{ Product: model.Product}]) };
+      var jObject = { RoleDetails: JSON.stringify([{ Product: ProductName}]) };
        
     return this.http.post<any>(this.Url+'/api/DefineRole/GetOperationalMenuList',jObject,{ headers: this.header});
     }
