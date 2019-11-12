@@ -210,33 +210,55 @@ export class UserManagementComponent implements OnInit {
       warehousedata => {
         for(let i=0;i<warehousedata.Table.length; i++){
           warehousedata.Table[i]["uniqueId"] = index+''+i;
+          this.WHGetSelectiondata(warehousedata.Table[i]); 
           this.UserManagementService.FillDDlWorkCenter(dbName, warehousedata.Table[i].OPTM_WHSE).subscribe(
             WorkCenterdata => {
               this.Loading = false;
                warehousedata.Table[i]["workcenter"] = WorkCenterdata;
-              // warehousedata.Table[i]["selectedWarehouse"] = 'blank';
                for (let j = 0; j < warehousedata.Table[i].workcenter.length; j++) {      
-                warehousedata.Table[i].workcenter[j]["uniqueId"] = dbName+''+i+''+j;       
+                warehousedata.Table[i].workcenter[j]["uniqueId"] = dbName+''+i+''+j;  
+                this.WCGetSelectiondata(warehousedata.Table[i].workcenter[j]);      
                }
             });
           }
         this.WH_WC_Data = warehousedata.Table;
-        this.WHWCGetdata(this.WH_WC_Data);  
       });  
   } 
 
-  WHWCGetdata(WHData){
+  WHGetSelectiondata(WHData){
+    if(this.editUserData){
+      this.company_data.forEach((element, index) => {
+        this.editUserData.forEach((element2, index2) => {
+          if(element.dbName === element2.OPTM_COMPID){
+            if(WHData.OPTM_WHSE === element2.OPTM_WHSE){
+              this.SubmitSave.Warehouse.push({Company: element2.OPTM_COMPID, Id: element2.OPTM_WHSE, 
+                EmployeeId: element2.OPTM_EMPID, 
+                WHIndex: index, bussPart: ""});
+              this.SubmitSave.Warehouse = this.removeDuplicatesWarehouse(this.SubmitSave.Warehouse, 'Id');  
+              this.warehouseSelection.push(WHData.uniqueId);
+            }
+          }
+        });  
+      });
+    }
+  }
+
+  WCGetSelectiondata(WCData){
+  if(this.editUserData){
     this.company_data.forEach((element, index) => {
       this.editUserData.forEach((element2, index2) => {
         if(element.dbName === element2.OPTM_COMPID){
-          for(let j=0;j<WHData.length; j++){
-            if(WHData[j].OPTM_WHSE == element2.OPTM_WHSE){
-              this.warehouseSelection.push(WHData[j].uniqueId);
-            }
+          if(WCData.WorkCenterCode === element2.OPTM_WORKCENTER){
+              this.SubmitSave.WorkCenter.push({Company:  element2.OPTM_COMPID, EmployeeId: element2.OPTM_EMPID, 
+                productCode: this.dbClickProductName, WorkCenterCode: element2.OPTM_WORKCENTER, WCIndex: index, 
+                bussPart: ""});
+              this.SubmitSave.WorkCenter = this.removeDuplicatesWorkcenter(this.SubmitSave.WorkCenter, 'WorkCenterCode');  
+            this.workcenterSelection.push(WCData.uniqueId);
           }
         }
       });  
     });
+  }
   }
 
   companyClickHandler(e){
@@ -333,7 +355,8 @@ export class UserManagementComponent implements OnInit {
       });
     });
 
-    
+    console.log(this.SubmitSave.Product);
+
     let array = [];
       this.SubmitSave.Product.forEach((value, index) => {
         if(value.pIndex === rowIndex){
@@ -369,7 +392,8 @@ export class UserManagementComponent implements OnInit {
     if(event.target.checked === true){
       this.WCCode = workCenterData.WorkCenterCode;
       this.SubmitSave.WorkCenter.push({Company: this.dbName, EmployeeId: this.EmpID, 
-      productCode: this.dbClickProductName, WorkCenterCode: this.WCCode, WCIndex: workCenterIndex, bussPart: ""});
+      productCode: this.dbClickProductName, WorkCenterCode: this.WCCode, WCIndex: workCenterIndex, 
+      bussPart: ""});
     }else{
       let whatIndex4 = null;
       this.SubmitSave.WorkCenter.forEach((value, index) => {
@@ -462,7 +486,39 @@ export class UserManagementComponent implements OnInit {
     this.addUserScreen = !this.addUserScreen; 
   }
 
-  removeDuplicates(array, key) {
+  removeDuplicatesCompany(array, key) {
+    return array.filter((obj, index, self) =>
+        index === self.findIndex((el) => (
+            el[key] === obj[key]
+        ))
+    )
+  }
+
+  removeDuplicatesEmployee(array, key) {
+    return array.filter((obj, index, self) =>
+        index === self.findIndex((el) => (
+            el[key] === obj[key]
+        ))
+    )
+  }
+
+  removeDuplicatesProduct(array, key) {
+    return array.filter((obj, index, self) =>
+        index === self.findIndex((el) => (
+            el[key] === obj[key]
+        ))
+    )
+  }
+
+  removeDuplicatesWarehouse(array, key) {
+    return array.filter((obj, index, self) =>
+        index === self.findIndex((el) => (
+            el[key] === obj[key]
+        ))
+    )
+  }
+
+  removeDuplicatesWorkcenter(array, key) {
     return array.filter((obj, index, self) =>
         index === self.findIndex((el) => (
             el[key] === obj[key]
@@ -474,8 +530,9 @@ export class UserManagementComponent implements OnInit {
     this.UserManagementService.getEditDetail(userId).subscribe(    
       data => { 
         this.editUserData = data;
+
+        this.Loading = false;
         if(data[0]){
-          this.Loading = false;
           this.user_id = data[0].OPTM_USERCODE; 
           this.user_name = data[0].OPTM_USERNAME;
           this.password = data[0].OPTM_PASSWORD;
@@ -495,54 +552,73 @@ export class UserManagementComponent implements OnInit {
         this.company_data.forEach((element, index) => {
           this.editUserData.forEach((element2, index2) => {
             if(element.dbName === element2.OPTM_COMPID){
-              this.SubmitSave.Company.push({Company: this.company_data[index].dbName, cIndex: index});
-              let arrCmpUnique; 
-              arrCmpUnique = this.removeDuplicates(this.SubmitSave.Company, 'Company');
-              console.log(arrCmpUnique);
 
+              this.SubmitSave.Company.push({Company: this.company_data[index].dbName, cIndex: index}); 
+              this.SubmitSave.Company = this.removeDuplicatesCompany(this.SubmitSave.Company, 'Company');
               this.companySelection.push(element2.OPTM_COMPID);
+
+              const element = this.company_data[index];
+              let products = JSON.parse(JSON.stringify(this.ddlProductList));
+              for (let j = 0; j < products.length; j++) {      
+                products[j]["UniqueId"] = index+''+j;       
+              }
+              element["product"] = products;
+
               if(element2.OPTM_USERTYPE == 'C'){
                 this.company_data[index]["selectedUserType"] = { text: "Customer", value: element2.OPTM_USERTYPE };
+
+                let productByStoreID = element.product.filter(product => product.ProductId === 'CVP');
+                this.company_data[index]["product"] = productByStoreID;
+                this.company_data[index]["BPCode"] = true;
+
               }else if(element2.OPTM_USERTYPE == 'E'){
                 this.company_data[index]["selectedUserType"] = { text: "Employee", value: element2.OPTM_USERTYPE };
+
+                let productByStoreID = element.product.filter(product => product.ProductId === 'ATD' 
+                ||  product.ProductId === 'SFES' || product.ProductId === 'WMS' || product.ProductId === 'CNF'
+                ||  product.ProductId === 'MMO' || product.ProductId === 'DSB');
+                this.company_data[index]["product"] = productByStoreID;
+                this.company_data[index]["BPCode"] = false;
+
               }else if(element2.OPTM_USERTYPE == 'V'){
                 this.company_data[index]["selectedUserType"] = { text: "Vendor", value: element2.OPTM_USERTYPE };
-              } 
+
+                let productByStoreID = element.product.filter(product => product.ProductId === 'CVP' 
+                ||  product.ProductId === 'MMO');
+                this.company_data[index]["product"] = productByStoreID;
+                this.company_data[index]["BPCode"] = true;
+              }
+              this.userType = element2.OPTM_USERTYPE;
+
               let empID = this.company_data[index].Employee.filter(i => i.empID == element2.OPTM_EMPID);
               this.company_data[index]["selectedEmployeeType"] = empID[0];
+
+              this.SubmitSave.EmployeeId.push({Company: this.company_data[index].dbName, 
+                empID: this.company_data[index].selectedEmployeeType.empID,
+                bussPart: "", eIndex: index});
+
+              this.SubmitSave.EmployeeId = this.removeDuplicatesEmployee(this.SubmitSave.EmployeeId, 'Company');
+                            
+
               this.company_data[index]["selectedCompany"] = element2.OPTM_COMPID;
+
               let productSplitArray = element2.OPTM_OPTIADDON.split(',');
               for(let j=0; j<productSplitArray.length; j++){
                 let productUniqueID = this.company_data[index].product.filter(i => i.ProductId == productSplitArray[j]);
                 if(productUniqueID){
                   this.productSelection.push(productUniqueID[0].UniqueId);
+
+                  this.SubmitSave.Product.push({productCode: productUniqueID[0].productID, pIndex: index, 
+                    bussPart: "",
+                    Company: this.company_data[index].dbName, EmployeeId: element2.OPTM_EMPID});
+
+                  this.SubmitSave.Product = this.removeDuplicatesProduct(this.SubmitSave.Product, 'productCode');
                 }
               }
+              this.dbClickProductName = element2.OPTM_COMPID;  
             }
           });  
         });
-      
-       // this.WH_WC_Data.forEach((element, index) => {
-         /* this.editUserData.forEach((element2, index2) => {
-            if(element.OPTM_WHSE === element2.OPTM_WHSE){
-              console.log(this.WH_WC_Data[index]);
-            } 
-          }); */ 
-       // });  
-      /*  this.WCCode = data[0].OPTM_WORKCENTER;
-          this.WHCode = data[0].OPTM_WHSE;
-          this.userType = data[0].OPTM_USERTYPE;
-          this.user_id = data[0].OPTM_USERCODE; 
-          this.user_name = data[0].OPTM_USERNAME;
-          this.password = data[0].OPTM_PASSWORD;
-          this.re_password = data[0].OPTM_PASSWORD;
-          this.userGroup = {groupCode: data[0].OPTM_GROUPCODE};
-          this.mapped_user = {USER_CODE: data[0].OPTM_SAPUSER};
-          this.mappedPass = data[0].OPTM_SAPPASSWORD;
-          this.productSelection = [data[0].OPTM_OPTIADDON];
-          this.productID = data[0].OPTM_OPTIADDON;
-          this.warehouseSelection = [data[0].OPTM_WHSE];
-          this.workcenterSelection = [data[0].OPTM_WORKCENTER];*/
     }, error => {
       this.Loading = false;    
       this.MessageService.errormessage(error.message);   
@@ -550,7 +626,7 @@ export class UserManagementComponent implements OnInit {
   }
 
   onBlurUserID() {
-    /*  this.UserManagementService.CheckDuplicateUserGroup(this.user_id).subscribe(    
+      this.UserManagementService.CheckDuplicateUserGroup(this.user_id).subscribe(    
         data => { 
           if(data.length > 0){
             if(data[0].UserCodeCount>0){
@@ -564,7 +640,7 @@ export class UserManagementComponent implements OnInit {
         },    
         error => {    
           this.MessageService.errormessage(error.message);
-        });*/
+        });
   };
 
   public confirmationToggle() {

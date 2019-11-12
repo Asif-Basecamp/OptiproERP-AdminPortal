@@ -27,7 +27,8 @@ export class UserRolesComponent implements OnInit {
   public ReadSelected :boolean=false;
   public SelectedRowData:any[]=[];
   public NewSelectedRowData: any[] = [];
-
+  public EditMode :boolean=false;
+  //public SelectedRowData:any[];
   public enableSubmit= false;
   public enableEdit = false;
   public enableUpdate= false;
@@ -100,7 +101,7 @@ export class UserRolesComponent implements OnInit {
       
         if(data.length > 0)  
         {  
-          this.CheckUncheckValueInsideFrid(data)   
+         // this.CheckUncheckValueInsideFrid(data);   
            this.GridDataFormanupulation=data;
            // Set Checked Value 
            this.gridData1=data;
@@ -139,8 +140,7 @@ export class UserRolesComponent implements OnInit {
    {
      //if(this.SelectedRowData.length>0)
      this.RoleService.FillProductDropDownList().subscribe(    
-      data => {    
-        
+      data => { 
         if(data.length > 0)  
         {  
          this.DropDownListData = data; 
@@ -153,8 +153,9 @@ export class UserRolesComponent implements OnInit {
         this.MessageService.errormessage(error.message);   
       });
   }
-  CheckUncheckValueInsideFrid(data)
+  CheckUncheckValueInsideFrid(data,EditMode)
     {
+      debugger
       for(let i=0; i<data.length; i++)
       {
         data[i].AllSelected =false;

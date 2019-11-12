@@ -283,7 +283,8 @@
                                             <kendo-grid-checkbox-column headerClass="text-center" class="text-center" [width]="40">
                                                 <ng-template kendoGridCellTemplate let-dataItem let-workCenterIndex="rowIndex">
                                                     <label class="custom-checkbox m-0">
-                                                        <input type="checkbox" (change)="workCenterSelect($event, dataItem, workCentersIndex)" [kendoGridSelectionCheckbox]="workCenterIndex">
+                                                        <input type="checkbox" (change)="workCenterSelect($event, dataItem, workCentersIndex)" 
+                                                        [kendoGridSelectionCheckbox]="workCenterIndex">
                                                         <span class="checkbox"></span>
                                                     </label>
                                                 </ng-template>
