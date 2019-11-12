@@ -276,7 +276,7 @@
                                     </kendo-grid-checkbox-column>
                                     <kendo-grid-column field="OPTM_WHSE" title="Warehouse"></kendo-grid-column>
                                     <ng-template kendoGridDetailTemplate let-dataItem let-workCentersIndex="rowIndex">
-                                        <kendo-grid *ngIf="dataItem.selectedWarehouse != 'blank'" [kendoGridBinding]="dataItem.workcenter" [resizable]="true" [sortable]="true" 
+                                        <kendo-grid [kendoGridBinding]="dataItem.workcenter" [resizable]="true" [sortable]="true" 
                                         class="" [filterable]=false [groupable]=false [columnMenu]="false" 
                                         [kendoGridSelectBy]="'uniqueId'" [selectedKeys]="workcenterSelection" 
                                         [selectable]="{ checkboxOnly: true, mode: 'multiple' }">
