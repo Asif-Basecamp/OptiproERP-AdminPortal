@@ -645,8 +645,28 @@ export class UserManagementComponent implements OnInit {
         this.MessageService.errormessage(error.message); 
       });
   }
+
+  onChange(e){
+    
+    var UserGrpId=[{"UserGroupId": e.groupCode}];
+    this.UserManagementService.GetSAPUserByGrpId(UserGrpId).subscribe(    
+      data => { 
+        if(data.length>0)
+        {
+          this.mappedPass=data[0].OPTM_SAPPASSWORD;
+          this.mapped_user=data[0].OPTM_SAPUSER;
+        }
+      },    
+      error => {
+        debugger
+        this.MessageService.errormessage(error.message); 
+      });
+  
+  }
   
   cancel(){
     this.addUserScreen = !this.addUserScreen; 
   }
+
+  
 }

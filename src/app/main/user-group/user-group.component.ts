@@ -28,6 +28,7 @@ export class UserGroupComponent implements OnInit {
   // public enableEdit = false;
   public enableUpdate= false;
   public enableDelete = false;
+  public IsGroupCode= true;
   // public Ugroup= true;
   // public UDesc = true;
   // public UUser= true;
@@ -70,6 +71,8 @@ export class UserGroupComponent implements OnInit {
       IsAdminEnabled: "",
       USER_CODE: "",
       mapped_user:""
+     
+
     };
      
     }   
@@ -250,9 +253,10 @@ FillDropdownList()
   }
   CancelData()
     {
+      debugger
       if(this.EditMode)
       {
-        debugger
+        
         this.confirmationEditToggle();
         //this.dialougeToggle();
       }
@@ -280,6 +284,8 @@ FillDropdownList()
         this.enableDelete=true; 
         this.enableUpdate=true; 
         this.enableSubmit=false;
+        this.IsGroupCode=false;
+       // this.EditMode=true
         // this.Ugroup=false;  
         // this.UDesc=false;  
         // this.UUser=false;  
@@ -307,7 +313,7 @@ FillDropdownList()
     
     this.gridData = filterBy(this.FilterData, {
      
-      field:'OPTM_GROUPCODE',
+      field:'OPTM_ROLEID',
       operator: 'contains',
      value: filter,
     //   filters: [
@@ -345,6 +351,7 @@ FillDropdownList()
     this.enableDelete=false; 
     this.enableUpdate=false; 
     this.enableSubmit=true; 
+    this.IsGroupCode=true;
     
   }
   public confirmationToggle() {
@@ -353,7 +360,7 @@ FillDropdownList()
     
   }
   public confirmationEditToggle() {
-   debugger
+   
     this.confirmationOpenedEdit = !this.confirmationOpenedEdit;
     
   }

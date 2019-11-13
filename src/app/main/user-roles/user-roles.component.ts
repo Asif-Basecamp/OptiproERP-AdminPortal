@@ -4,6 +4,7 @@ import { RoleService } from '../../service/role.service';
 import { MessageService } from '../../common/message.service';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { filterBy } from '../../../../node_modules/@progress/kendo-data-query';
 @Component({
   selector: 'app-user-roles',
   templateUrl: './user-roles.component.html',
@@ -37,6 +38,8 @@ export class UserRolesComponent implements OnInit {
   public IsRoleDesc = true;
   public IsProduct= true;
   public confirmationOpened = false;
+  public confirmationOpenedEdit = false;
+  public FilterData: any[];
   //public TableDataBinding: any[]=[];
   constructor(private RoleService:RoleService,private MessageService:MessageService,
     private translate: TranslateService, private httpClientSer: HttpClient) { 
@@ -54,7 +57,24 @@ export class UserRolesComponent implements OnInit {
    // this.gridData = products;
     // this.isMobile();
   }
-
+  public confirmationEditToggle() {
+   
+    this.confirmationOpenedEdit = !this.confirmationOpenedEdit;
+    
+  }
+  onInput(filter) {
+    
+    this.gridData = filterBy(this.FilterData, {
+     
+      field:'OPTM_ROLEID',
+      operator: 'contains',
+     value: filter,
+    //   filters: [
+    //     { field: "OPTM_GROUPCODE", operator: "contains", value: filter },
+    //     { field: "OPTM_DESCRIPTION", operator: "contains", value:filter },
+    // ]
+    }); 
+  }
   onFilterChange(checkBox:any,grid:GridComponent){
     if(checkBox.checked==false){
       this.clearFilter(grid);
@@ -202,9 +222,9 @@ export class UserRolesComponent implements OnInit {
     //grid.filter.filters=[];
   }
 
-  public addRolesScreenToggle() {
+  public addRolesScreenToggle(Type) {
     this.addRolesScreen = !this.addRolesScreen;
-    
+    this.EditMode=false;
     this.enableSubmit=true;
     this.enableUpdate=false;
     this.enableDelete=false;
@@ -218,7 +238,10 @@ export class UserRolesComponent implements OnInit {
     this.FillDropdownList()
     this.NewSelectedRowData=[];
     this.gridData1=[];
-
+    if(Type==='Cancel') 
+    {
+     this.confirmationEditToggle();
+    }
   }
   FillGridData()
     {
@@ -227,7 +250,8 @@ export class UserRolesComponent implements OnInit {
              
           if(data.length > 0)  
           {   
-           this.gridData = data; 
+           this.gridData = data;
+           this.FilterData=data;
           }    
           else{    
             this.MessageService.errormessage(this.translate.instant('Somethingwrong'));    
@@ -507,7 +531,7 @@ export class UserRolesComponent implements OnInit {
             {     
               this.NewSelectedRowData=[];
               this.FillGridData();
-              this.addRolesScreenToggle();
+              this.addRolesScreenToggle('');
              this.gridData1.length=0;
               this.MessageService.successmessage(this.translate.instant('RecordCreated'));
               
@@ -521,7 +545,7 @@ export class UserRolesComponent implements OnInit {
      }
      
      gridUserRoleSelectionChange(UserRole,selection) {
-     debugger
+     
      var NewSelectedRowData = [];
       this.RoleService.GetDataByRoleId(selection.selectedRows[0].dataItem.OPTM_ROLEID).subscribe(    
         data => {
@@ -551,13 +575,11 @@ export class UserRolesComponent implements OnInit {
                     });
           
           console.log()
-          this.addRolesScreenToggle();
+          this.addRolesScreenToggle('');
            this.model.PriviousRoleId=selection.selectedRows[0].dataItem.OPTM_ROLEID;
           this.model.RoleId=selection.selectedRows[0].dataItem.OPTM_ROLEID;
           this.model.RoleDesc=selection.selectedRows[0].dataItem.OPTM_ROLEDESC;
-          this.HeaderText= "Edit -" +' '+  data[0].OPTM_ROLEID;         
-          //           data.forEach((SavedData) => { // foreach statement 
-          //           this.model.Product=SavedData.OPTM_PROD;
+          this.HeaderText= "Edit -" +' '+  data[0].OPTM_ROLEID; 
           data.forEach(function (SavedData) {
             var Permission = SavedData.OPTM_PERMISSION.split(",");
            
@@ -597,46 +619,47 @@ export class UserRolesComponent implements OnInit {
         this.enableDelete=false;
         this.enableUpdate=true;
         this.enableDelete=true;
+        this.EditMode=true
         });  
        
   }
    
 
-    EditData()
-        {
-          let RoleId=this.model.RoleId;
+    // EditData()
+    //     {
+    //       let RoleId=this.model.RoleId;
           
-          this.RoleService.chkIfGroupIdisAssociate(RoleId).subscribe(    
-            data => { 
+    //       this.RoleService.chkIfGroupIdisAssociate(RoleId).subscribe(    
+    //         data => { 
               
-              if(data.length > 0) 
-                {
-                  if(data[0].ROLEIDCOUNT==0)
-                    {
-                      this.IsRoleId=true;
-                    }
-                  else
-                    {
-                      this.IsRoleId=false;
-                    }  
-                  }    
-              else{    
-                    this.MessageService.errormessage(this.translate.instant('Somethingwrong'));
-                  }    
-                      },    
-                error => {    
-                  this.MessageService.errormessage(error.message);
-                    });
-                  this.IsRoleDesc=true ;
-                  this.IsProduct=true;
-                  this.enableSubmit=false;
-                  this.enableEdit=false;
-                  this.enableDelete=false;
-                  this.enableUpdate=true;
-        }
+    //           if(data.length > 0) 
+    //             {
+    //               if(data[0].ROLEIDCOUNT==0)
+    //                 {
+    //                   this.IsRoleId=true;
+    //                 }
+    //               else
+    //                 {
+    //                   this.IsRoleId=false;
+    //                 }  
+    //               }    
+    //           else{    
+    //                 this.MessageService.errormessage(this.translate.instant('Somethingwrong'));
+    //               }    
+    //                   },    
+    //             error => {    
+    //               this.MessageService.errormessage(error.message);
+    //                 });
+    //               this.IsRoleDesc=true ;
+    //               this.IsProduct=true;
+    //               this.enableSubmit=false;
+    //               this.enableEdit=false;
+    //               this.enableDelete=false;
+    //               this.enableUpdate=true;
+    //     }
 
 
-        UpdateData () {
+        UpdateData (Type) {
         //  var oModel = oCurrentController.getView().getModel();
 
           //Check if the Source is empty or not
@@ -686,8 +709,7 @@ export class UserRolesComponent implements OnInit {
                           }
                       }
                   }
-                  debugger
-      console.log(this.NewSelectedRowData);
+                 
             this.RoleService.UpdateUserRole(this.model,this.NewSelectedRowData).subscribe(    
                 data => {    
                     
@@ -695,8 +717,9 @@ export class UserRolesComponent implements OnInit {
                     {   
                     this.NewSelectedRowData=[];  
                      this.FillGridData();
-                     this.addRolesScreenToggle();
-
+                     this.addRolesScreenToggle('');
+                     if(Type==='Cancel')
+                     this.confirmationEditToggle();
                     
                      this.gridData1.length=0;
                      this.MessageService.successmessage(this.translate.instant('RecordUpdate'));
@@ -707,85 +730,8 @@ export class UserRolesComponent implements OnInit {
                   error => {
                     this.MessageService.errormessage(error.message);   
                   });
-                  // Push Value of Role Id and Description in another array
-                  // var oRoleIdDesc = []
-                  // oRoleIdDesc.push({
-                  //     PreviousRoleId: oModel.oData.PreviousRoleId,
-                  //     RoleId: oModel.oData.RoleId,
-                  //     RoleDesc: oModel.oData.RoleDesc
-                  // });
-
-                  //sap.ui.core.BusyIndicator.show();
-                  // //Created an object to pass to respective controller of API
-                  // var jObject = { RoleDetails: JSON.stringify({ SelectedRows: oModel.oData.SelectedRowData, RoleIdDesc: oRoleIdDesc }) };
-                  // //Creating JSON Model
-                  // var oModelDefineRoles = new JSONModel();
-                  // //Get the URL from BaseController
-                  // var psURL = oCurrentController.WMSBaseURL();
-                  // //Load the data to a URL with POST Method
-                  // oModelDefineRoles.loadData(psURL + '/api/DefineRole/OnUpdatePress', jObject, true, 'POST');
-                  //Result will come in this section after request completion
-                  // oModelDefineRoles.attachRequestCompleted(function (oEvent) {
-
-                  //     //Get the Data Source od the response
-                  //     var oModelData = oEvent.getSource();
-                  //     //Check if the Source is empty or not
-                  //     if (oModelData != null) {
-                  //         if (oModelData.oData == "True") {
-                  //             MessageToast.show(oCurrentController.GetResourceString("AdminPortalAppCommon.RecordUpdatedSuccessfully"));
-                  //             oCurrentController.showColor(oCurrentController.GetResourceString("AdminPortalAppCommon.Success"));
-                  //             var oEmptyModel = new JSONModel();
-                  //             oCurrentController.getView().setModel(oEmptyModel);
-                  //             oEmptyModel.refresh();
-                  //             sAddUpdate = "Add"
-                  //             oCurrentController.onViewPress();
-                  //         } else {
-                  //             MessageToast.show(oModelData.oData);
-                  //         }
-                  //     }
-                  // });
-             
       }  
-      // UpdateData(gridUser)
-      //   {
-          
-      //      const RoleId=this.model.RoleId;
-      //      this.onChange(RoleId);
-
-      //     //  var SelectedRowData:any=[];
-      //     //   var iTblCount = 0;
-      //     //   // row count of SelectedRowData
-      //     //   let iSelectedTbl = SelectedRowData.length;
-      //     //   // For each loop of all screens of a Product
-      //     //   for (iTblCount = 0; iTblCount < gridUser.data.length; iTblCount++) {
-
-      //     //       if (gridUser.data[iTblCount].AddSelected == true || gridUser.data[iTblCount].UpdateSelected == true || gridUser.data[iTblCount].DeleteSelected == true || gridUser.data[iTblCount].ReadSelected == true) {
-      //     //           // Select row of TableDataBinding if any checkbox is checked
-      //     //           SelectedRowData[iSelectedTbl] =gridUser.data[iTblCount];
-      //     //           // increase index value of SelectedRowData
-      //     //           iSelectedTbl = iSelectedTbl + 1;
-      //     //       }
-      //     //   }
-            
-      //     //   this.RoleService.UpdateUserRole(this.model,SelectedRowData).subscribe(    
-      //     //       data => {    
-                    
-      //     //         if(data=="True")  
-      //     //           {     
-      //     //            this.FillGridData();
-      //     //            this.addRolesScreenToggle();
-
-                    
-      //     //            this.gridData1.length=0;
-      //     //            this.MessageService.successmessage(this.translate.instant('RecordUpdate'));
-      //     //           }    
-      //     //           else{ this.MessageService.errormessage(data);    
-      //     //           }    
-      //     //         },    
-      //     //         error => {
-      //     //           this.MessageService.errormessage(error.message);   
-      //     //         });
-      //   }
+     
         DeleteData()
           {
             
@@ -796,7 +742,7 @@ export class UserRolesComponent implements OnInit {
                   {
                   this.confirmationOpened=false;     
                    this.FillGridData();
-                   this.addRolesScreenToggle();
+                   this.addRolesScreenToggle('');
                    this.gridData1.length=0;
                    this.MessageService.successmessage(this.translate.instant('RecordDelete'));
                   }    
@@ -811,5 +757,16 @@ export class UserRolesComponent implements OnInit {
    
             this.confirmationOpened = !this.confirmationOpened;
             
+          }
+          CancelData()
+          {
+            debugger
+            if(this.EditMode)
+            {
+              
+              this.confirmationEditToggle();
+              //this.dialougeToggle();
+            }
+            else this.addRolesScreenToggle('');
           }
 }
