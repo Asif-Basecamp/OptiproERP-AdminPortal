@@ -9,8 +9,8 @@
                     <div class="col-sm-6 col-md-4 mb-sm-0 mb-1">
                         <div class="d-flex align-items-center">
                             <div class="input-group">
-                                <input type="text" class="form-control form-control-sm" id="search"
-                                    placeholder="Search">
+                                    <input type="text" class="form-control form-control-sm" id="search"
+                                    placeholder="{{'Search'|translate}}" (input)="onInput($event.target.value)">
                                 <div class="input-group-append">
                                     <button class="btn btn-primary btn-sm btn-icon" type="button">
                                         <svg viewBox="0 0 410.23 410.23" class="icon">
@@ -227,7 +227,7 @@
                         <use xlink:href="#bin"></use>
                     </svg>{{'Delete'|translate}}  
                 </button>
-                <button class="btn btn-danger btn-sm d-flex align-items-center" type="button" (click)="addRolesScreenToggle()"> 
+                <button class="btn btn-danger btn-sm d-flex align-items-center" type="button" (click)="CancelData()"> 
                     <svg viewBox="0 0 489 489" class="icon mr-2">
                         <use xlink:href="#cancel"></use>
                     </svg> {{'Cancel'|translate}}
@@ -254,6 +254,35 @@
     
             <button class="btn btn-danger btn-sm ml-auto d-flex align-items-center" type="button"
             (click)="confirmationToggle()" >
+                <svg viewBox="0 0 512 512" class="icon mr-2">
+                    <use xlink:href="#saveDisk"></use>
+                </svg> {{'No'|translate}}
+            </button>
+        </kendo-dialog-actions>
+    </kendo-dialog>
+
+    <!-- Confirmation Dialouge at the time of edit -->
+
+<kendo-dialog *ngIf="confirmationOpenedEdit" (close)="confirmationEditToggle()" [minWidth]="250" [width]="450">
+        <kendo-dialog-titlebar>
+            <div> {{'Please_Confirm'|translate}}</div>
+        </kendo-dialog-titlebar>
+        <div class="">
+            <!-- {{'Do_you_want_to_delete_record'|translate}} -->
+            Your Data will be lost..Do you want to save it?
+    
+        </div>
+        <kendo-dialog-actions class="p-2 align-items-start justify-content-start">
+            <button class="btn btn-success btn-sm d-flex align-items-center mr-2" id='btnCancelEdit' type="button" 
+            (click)="UpdateData('Cancel')">  > 
+                <svg viewBox="0 0 55.25 55.25" class="icon mr-2">
+                    <use xlink:href="#edit"></use>
+                </svg> {{'Yes'|translate}}
+            </button>           
+    
+    
+            <button class="btn btn-danger btn-sm ml-auto d-flex align-items-center" type="button"
+            (click)="addRolesScreenToggle('Cancel')" >
                 <svg viewBox="0 0 512 512" class="icon mr-2">
                     <use xlink:href="#saveDisk"></use>
                 </svg> {{'No'|translate}}

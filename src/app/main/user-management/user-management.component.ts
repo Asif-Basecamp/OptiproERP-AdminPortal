@@ -210,14 +210,14 @@ export class UserManagementComponent implements OnInit {
       warehousedata => {
         for(let i=0;i<warehousedata.Table.length; i++){
           warehousedata.Table[i]["uniqueId"] = index+''+i;
-          this.WHGetSelectiondata(warehousedata.Table[i]); 
+          this.WHGetSelectiondata(warehousedata.Table[i], i); 
           this.UserManagementService.FillDDlWorkCenter(dbName, warehousedata.Table[i].OPTM_WHSE).subscribe(
             WorkCenterdata => {
               this.Loading = false;
                warehousedata.Table[i]["workcenter"] = WorkCenterdata;
                for (let j = 0; j < warehousedata.Table[i].workcenter.length; j++) {      
                 warehousedata.Table[i].workcenter[j]["uniqueId"] = dbName+''+i+''+j;  
-                this.WCGetSelectiondata(warehousedata.Table[i].workcenter[j]);      
+                this.WCGetSelectiondata(warehousedata.Table[i].workcenter[j], i);      
                }
             });
           }
@@ -225,7 +225,7 @@ export class UserManagementComponent implements OnInit {
       });  
   } 
 
-  WHGetSelectiondata(WHData){
+  WHGetSelectiondata(WHData, WHIndex){
     if(this.editUserData){
       this.company_data.forEach((element, index) => {
         this.editUserData.forEach((element2, index2) => {
@@ -233,8 +233,8 @@ export class UserManagementComponent implements OnInit {
             if(WHData.OPTM_WHSE === element2.OPTM_WHSE){
               this.SubmitSave.Warehouse.push({Company: element2.OPTM_COMPID, Id: element2.OPTM_WHSE, 
                 EmployeeId: element2.OPTM_EMPID, 
-                WHIndex: index, bussPart: ""});
-              this.SubmitSave.Warehouse = this.removeDuplicatesWarehouse(this.SubmitSave.Warehouse, 'Id');  
+                WHIndex: WHIndex, bussPart: ""});
+              this.SubmitSave.Warehouse = this.removeDuplicatesValue(this.SubmitSave.Warehouse, 'Id');
               this.warehouseSelection.push(WHData.uniqueId);
             }
           }
@@ -243,17 +243,17 @@ export class UserManagementComponent implements OnInit {
     }
   }
 
-  WCGetSelectiondata(WCData){
+  WCGetSelectiondata(WCData, WCIndex){
   if(this.editUserData){
     this.company_data.forEach((element, index) => {
       this.editUserData.forEach((element2, index2) => {
         if(element.dbName === element2.OPTM_COMPID){
           if(WCData.WorkCenterCode === element2.OPTM_WORKCENTER){
               this.SubmitSave.WorkCenter.push({Company:  element2.OPTM_COMPID, EmployeeId: element2.OPTM_EMPID, 
-                productCode: this.dbClickProductName, WorkCenterCode: element2.OPTM_WORKCENTER, WCIndex: index, 
+                productCode: element2.OPTM_OPTIADDON, WorkCenterCode: element2.OPTM_WORKCENTER, WCIndex: WCIndex, 
                 bussPart: ""});
-              this.SubmitSave.WorkCenter = this.removeDuplicatesWorkcenter(this.SubmitSave.WorkCenter, 'WorkCenterCode');  
-            this.workcenterSelection.push(WCData.uniqueId);
+              this.SubmitSave.WorkCenter = this.removeDuplicatesValue(this.SubmitSave.WorkCenter, 'WorkCenterCode'); 
+              this.workcenterSelection.push(WCData.uniqueId);
           }
         }
       });  
@@ -295,7 +295,7 @@ export class UserManagementComponent implements OnInit {
     }else{
       this.company_data[companyIndex]["selectedCompany"] = 'blank';
     }
-
+    
     /*-- employee array --*/
     if(event.target.checked === true){
       this.SubmitSave.EmployeeId.push({Company: companyData.dbName, 
@@ -312,6 +312,7 @@ export class UserManagementComponent implements OnInit {
     }    
 
     /*-- company array --*/
+   // console.log(this.SubmitSave.Company);
     if(event.target.checked === true){
       this.SubmitSave.Company.push({Company: companyData.dbName, cIndex: companyIndex});            
     }else{
@@ -354,8 +355,6 @@ export class UserManagementComponent implements OnInit {
         }
       });
     });
-
-    console.log(this.SubmitSave.Product);
 
     let array = [];
       this.SubmitSave.Product.forEach((value, index) => {
@@ -402,7 +401,7 @@ export class UserManagementComponent implements OnInit {
         }
       }); 
       this.SubmitSave.WorkCenter.splice(whatIndex4, 1);    
-    } 
+    }
   }
 
   onChangeEmployeeId(e, db, index){
@@ -449,7 +448,8 @@ export class UserManagementComponent implements OnInit {
       return Emp; 
     });
     console.log(JSON.stringify(this.SubmitSave));
-    if(mode == 'add'){
+    this.Loading = false; 
+   /* if(mode == 'add'){
         this.Loading = true; 
         this.UserManagementService.AddUserManagement(this.SubmitSave).subscribe(
           data => {
@@ -475,7 +475,7 @@ export class UserManagementComponent implements OnInit {
             this.Loading = false;   
             this.MessageService.errormessage(error.message);
         });  
-      }
+      }*/
   }
 
   userClickHandler({dataItem}){
@@ -486,39 +486,7 @@ export class UserManagementComponent implements OnInit {
     this.addUserScreen = !this.addUserScreen; 
   }
 
-  removeDuplicatesCompany(array, key) {
-    return array.filter((obj, index, self) =>
-        index === self.findIndex((el) => (
-            el[key] === obj[key]
-        ))
-    )
-  }
-
-  removeDuplicatesEmployee(array, key) {
-    return array.filter((obj, index, self) =>
-        index === self.findIndex((el) => (
-            el[key] === obj[key]
-        ))
-    )
-  }
-
-  removeDuplicatesProduct(array, key) {
-    return array.filter((obj, index, self) =>
-        index === self.findIndex((el) => (
-            el[key] === obj[key]
-        ))
-    )
-  }
-
-  removeDuplicatesWarehouse(array, key) {
-    return array.filter((obj, index, self) =>
-        index === self.findIndex((el) => (
-            el[key] === obj[key]
-        ))
-    )
-  }
-
-  removeDuplicatesWorkcenter(array, key) {
+  removeDuplicatesValue(array, key) {
     return array.filter((obj, index, self) =>
         index === self.findIndex((el) => (
             el[key] === obj[key]
@@ -554,7 +522,8 @@ export class UserManagementComponent implements OnInit {
             if(element.dbName === element2.OPTM_COMPID){
 
               this.SubmitSave.Company.push({Company: this.company_data[index].dbName, cIndex: index}); 
-              this.SubmitSave.Company = this.removeDuplicatesCompany(this.SubmitSave.Company, 'Company');
+              this.SubmitSave.Company = this.removeDuplicatesValue(this.SubmitSave.Company, 'Company');
+              console.log(this.SubmitSave.Company);
               this.companySelection.push(element2.OPTM_COMPID);
 
               const element = this.company_data[index];
@@ -597,22 +566,20 @@ export class UserManagementComponent implements OnInit {
                 empID: this.company_data[index].selectedEmployeeType.empID,
                 bussPart: "", eIndex: index});
 
-              this.SubmitSave.EmployeeId = this.removeDuplicatesEmployee(this.SubmitSave.EmployeeId, 'Company');
-                            
-
+              this.SubmitSave.EmployeeId = this.removeDuplicatesValue(this.SubmitSave.EmployeeId, 'Company');
+              
               this.company_data[index]["selectedCompany"] = element2.OPTM_COMPID;
-
               let productSplitArray = element2.OPTM_OPTIADDON.split(',');
               for(let j=0; j<productSplitArray.length; j++){
                 let productUniqueID = this.company_data[index].product.filter(i => i.ProductId == productSplitArray[j]);
                 if(productUniqueID){
                   this.productSelection.push(productUniqueID[0].UniqueId);
 
-                  this.SubmitSave.Product.push({productCode: productUniqueID[0].productID, pIndex: index, 
+                   this.SubmitSave.Product.push({productCode: productSplitArray[j], pIndex: index, 
                     bussPart: "",
                     Company: this.company_data[index].dbName, EmployeeId: element2.OPTM_EMPID});
 
-                  this.SubmitSave.Product = this.removeDuplicatesProduct(this.SubmitSave.Product, 'productCode');
+                  this.SubmitSave.Product = this.removeDuplicatesValue(this.SubmitSave.Product, 'productCode');
                 }
               }
               this.dbClickProductName = element2.OPTM_COMPID;  
@@ -678,8 +645,28 @@ export class UserManagementComponent implements OnInit {
         this.MessageService.errormessage(error.message); 
       });
   }
+
+  onChange(e){
+    
+    var UserGrpId=[{"UserGroupId": e.groupCode}];
+    this.UserManagementService.GetSAPUserByGrpId(UserGrpId).subscribe(    
+      data => { 
+        if(data.length>0)
+        {
+          this.mappedPass=data[0].OPTM_SAPPASSWORD;
+          this.mapped_user=data[0].OPTM_SAPUSER;
+        }
+      },    
+      error => {
+        debugger
+        this.MessageService.errormessage(error.message); 
+      });
+  
+  }
   
   cancel(){
     this.addUserScreen = !this.addUserScreen; 
   }
+
+  
 }

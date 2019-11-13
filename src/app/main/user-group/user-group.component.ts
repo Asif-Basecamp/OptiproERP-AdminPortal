@@ -23,14 +23,18 @@ export class UserGroupComponent implements OnInit {
   // public paginationInfoPreviousNext = true;
   public dialogOpened = false;
   public confirmationOpened = false;
+  public confirmationOpenedEdit = false;
   public enableSubmit= false;
   // public enableEdit = false;
   public enableUpdate= false;
   public enableDelete = false;
+  public IsGroupCode= true;
   // public Ugroup= true;
   // public UDesc = true;
   // public UUser= true;
   // public UPwd = true;
+  public EditMode :boolean = false;
+  public IsCancelClick :boolean = false;
   public AdminEnable=true;
   public gridData: any[];
   public FilterData: any[];
@@ -67,6 +71,8 @@ export class UserGroupComponent implements OnInit {
       IsAdminEnabled: "",
       USER_CODE: "",
       mapped_user:""
+     
+
     };
      
     }   
@@ -125,13 +131,15 @@ export class UserGroupComponent implements OnInit {
         this.MessageService.errormessage(error.message);   
       });
   }
-  UpdateData()
+  UpdateData(Type)
     {
       if(this.model.PreviousGrpId !=this.model.UserGroupId)
       {
       if(this.IsDuplicate==false)
         {
           this.Update()
+           if(Type==='Cancel')
+          this.confirmationEditToggle();
         }
         else{
           this.MessageService.errormessage(this.translate.instant('UGalreadyExist'));
@@ -140,6 +148,8 @@ export class UserGroupComponent implements OnInit {
       else
       {
       this.Update()
+      if(Type==='Cancel')
+      this.confirmationEditToggle();
       }
     };
 
@@ -241,16 +251,28 @@ FillDropdownList()
         this.MessageService.errormessage(error.message);   
       });
   }
-  
+  CancelData()
+    {
+      debugger
+      if(this.EditMode)
+      {
+        
+        this.confirmationEditToggle();
+        //this.dialougeToggle();
+      }
+      else this.dialougeToggle('');
+    }
   gridUserSelectionChange(gridUser, selection) {
-    this.dialougeToggle();
+    this.dialougeToggle('');
     const GroupCodeData= selection.selectedRows[0].dataItem.OPTM_GROUPCODE
+    this.EditMode=true;
     this.UserGroupService.GetDataByUserId(GroupCodeData).subscribe(    
       data => { 
        this.HeaderText= "Edit -" +' '+  data[0].OPTM_GROUPCODE;
         if(data.length > 0) 
         { 
          this.model = {
+         
           UserGroupId: data[0].OPTM_GROUPCODE,
           UserGroupDesc: data[0].OPTM_DESCRIPTION,
           mapped_Password: data[0].OPTM_SAPPASSWORD,
@@ -262,6 +284,8 @@ FillDropdownList()
         this.enableDelete=true; 
         this.enableUpdate=true; 
         this.enableSubmit=false;
+        this.IsGroupCode=false;
+       // this.EditMode=true
         // this.Ugroup=false;  
         // this.UDesc=false;  
         // this.UUser=false;  
@@ -289,9 +313,8 @@ FillDropdownList()
     
     this.gridData = filterBy(this.FilterData, {
      
-      field:'OPTM_GROUPCODE',
-      //field: 'OPTM_GROUPCODE',
-     operator: 'contains',
+      field:'OPTM_ROLEID',
+      operator: 'contains',
      value: filter,
     //   filters: [
     //     { field: "OPTM_GROUPCODE", operator: "contains", value: filter },
@@ -300,7 +323,7 @@ FillDropdownList()
     }); 
   }
   clearFilter(grid:GridComponent){      
-    //grid.filter.filters=[];
+    grid.filter.filters=[];
   }
 
   // public isMobile(): void {
@@ -312,27 +335,33 @@ FillDropdownList()
   //   }
   // }
 
-  public dialougeToggle() {
+  public dialougeToggle(Type) {
+     debugger
+    if(Type==='Cancel') 
+     {
+      this.confirmationEditToggle();
+     }
     this.HeaderText= "Add New";
     this.FillDropdownList()
     this.clearForm(this.model)
     this.model.IsAdminEnabled = false;
     this.dialogOpened = !this.dialogOpened;
     this.enableSubmit=true;
-    // this.Ugroup=true;  
-    // this.UDesc=true;  
-    // this.UUser=true;  
-    // this.UPwd=true;
-    this.AdminEnable=true;
-    // this.enableEdit=false;  
+    this.AdminEnable=true; 
     this.enableDelete=false; 
     this.enableUpdate=false; 
     this.enableSubmit=true; 
+    this.IsGroupCode=true;
     
   }
   public confirmationToggle() {
    
     this.confirmationOpened = !this.confirmationOpened;
+    
+  }
+  public confirmationEditToggle() {
+   
+    this.confirmationOpenedEdit = !this.confirmationOpenedEdit;
     
   }
   EnableFields()

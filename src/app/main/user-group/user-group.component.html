@@ -117,7 +117,7 @@
                         <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
                             <div class="form-group mb-2 px-1">
                                 <label for="user_group" class="mb-0">{{'Group_Admin'|translate}}<span class="text-danger">*</span></label>
-                                <input type="text" #UserGrpId="ngModel" class="form-control form-control-sm" id="UserGroupId" name="UserGroupId" [(ngModel)]="model.UserGroupId"  (change)="onChange(UserGrpId.value)"   autocomplete="off" required> <!-- [readonly]="!Ugroup" -->
+                                <input type="text" #UserGrpId="ngModel" class="form-control form-control-sm" id="UserGroupId" name="UserGroupId" [readonly]="!IsGroupCode" [(ngModel)]="model.UserGroupId"  (change)="onChange(UserGrpId.value)"   autocomplete="off" required> <!-- [readonly]="!Ugroup" -->
                             </div>
                             <div class="form-group mb-2 px-1">
                                 <label for="description" class="mb-0">{{'Description'|translate}}<span class="text-danger">*</span></label>
@@ -154,7 +154,7 @@
                         </svg>  {{'Save'|translate}}
                     </button>
                     <button class="btn btn-success btn-sm mr-2 d-flex align-items-center" type="button"
-                    (click)="UpdateData()" *ngIf="enableUpdate">
+                    (click)="UpdateData('edit')" *ngIf="enableUpdate">
                         <svg viewBox="0 0 64 64" class="icon mr-2">
                             <use xlink:href="#update"></use>
                         </svg> {{'Update'|translate}}
@@ -164,7 +164,7 @@
                             <use xlink:href="#bin"></use>
                         </svg> {{'Delete'|translate}}
                     </button>
-                    <button class="btn btn-danger btn-sm d-flex align-items-center mr-2" type="button" (click)="dialougeToggle()"> 
+                    <button class="btn btn-danger btn-sm d-flex align-items-center mr-2" type="button" (click)="CancelData()"> 
                         <svg viewBox="0 0 489 489" class="icon mr-2">
                             <use xlink:href="#cancel"></use>
                         </svg> {{'Cancel'|translate}}
@@ -195,6 +195,35 @@
 
         <button class="btn btn-danger btn-sm ml-auto d-flex align-items-center" type="button"
         (click)="confirmationToggle()" >
+            <svg viewBox="0 0 512 512" class="icon mr-2">
+                <use xlink:href="#saveDisk"></use>
+            </svg> {{'No'|translate}}
+        </button>
+    </kendo-dialog-actions>
+</kendo-dialog>
+
+<!-- Confirmation Dialouge at the time of edit -->
+
+<kendo-dialog *ngIf="confirmationOpenedEdit" (close)="confirmationEditToggle()" [minWidth]="250" [width]="450">
+    <kendo-dialog-titlebar>
+        <div> {{'Please_Confirm'|translate}}</div>
+    </kendo-dialog-titlebar>
+    <div class="">
+        <!-- {{'Do_you_want_to_delete_record'|translate}} -->
+        Your Data will be lost..Do you want to save it?
+
+    </div>
+    <kendo-dialog-actions class="p-2 align-items-start justify-content-start">
+        <button class="btn btn-success btn-sm d-flex align-items-center mr-2" id='btnCancelEdit' type="button" 
+        (click)="UpdateData('Cancel')">  > 
+            <svg viewBox="0 0 55.25 55.25" class="icon mr-2">
+                <use xlink:href="#edit"></use>
+            </svg> {{'Yes'|translate}}
+        </button>           
+
+
+        <button class="btn btn-danger btn-sm ml-auto d-flex align-items-center" type="button"
+        (click)="dialougeToggle('Cancel')" >
             <svg viewBox="0 0 512 512" class="icon mr-2">
                 <use xlink:href="#saveDisk"></use>
             </svg> {{'No'|translate}}
