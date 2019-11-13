@@ -373,6 +373,15 @@ kendo-grid-filter-wrapper-cell{
     }
   }
 }
+.k-grid kendo-dropdownlist.form-control-sm{
+  height: 20px;
+}
+.k-grid .k-hierarchy-cell > .k-icon{
+  padding: 5px 0;
+}
+.k-grid tr.clicked{
+  background-color: rgba(1, 228, 209, 0.4) !important;
+}
 //Kendow Modal
 .k-window-titlebar{
   background: $primary-gradiant !important;
