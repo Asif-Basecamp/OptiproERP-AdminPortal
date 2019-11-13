@@ -11,7 +11,8 @@
                         <div class="col-sm-6 col-md-4 mb-sm-0 mb-1">
                             <div class="d-flex align-items-center">
                                 <div class="input-group">
-                                    <input type="text" class="form-control form-control-sm" id="search" placeholder="{{'Search'|translate}}">
+                                        <input type="text" class="form-control form-control-sm" id="search"
+                                        placeholder="{{'Search'|translate}}" (input)="onInput($event.target.value)">
                                     <div class="input-group-append">
                                         <button class="btn btn-primary btn-sm btn-icon" type="button">
                                             <svg viewBox="0 0 410.23 410.23" class="icon">
@@ -246,8 +247,8 @@
     
                             <!-- warehouse grid -->
                             <div class="company-details col-sm-4 mt-3 mt-sm-0">
-                                <div class="section-heading mb-2" *ngIf="databName">
-                                    <h5 class="m-0">Database : {{databName}}({{companyName}})</h5>
+                                <div class="section-heading mb-2" *ngIf="ShowDBName">
+                                    <h5 class="m-0">Database : {{ShowDBName}}</h5>
                                 </div>
                                 <kendo-grid [kendoGridBinding]="WH_WC_Data" [resizable]="true" 
                                 [sortable]="true" class="custom-height-grid" 

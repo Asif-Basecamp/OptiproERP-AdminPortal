@@ -8,6 +8,7 @@ import { MessageService } from '../../common/message.service';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { RowArgs } from '@progress/kendo-angular-grid';
+import { filterBy } from '../../../../node_modules/@progress/kendo-data-query';
 
 @Component({
   selector: 'app-user-management',
@@ -58,7 +59,8 @@ export class UserManagementComponent implements OnInit {
   public gridRefresh: any;
   public PreviousUserId: any;
   public editUserData: any;
-
+  public ShowDBName:string;
+  public FilterData: any[];
   constructor(private cd: ChangeDetectorRef, private UserManagementService:UserManagementService,private MessageService:MessageService,
     private translate: TranslateService, private httpClientSer: HttpClient) { 
     translate.use(localStorage.getItem('applang'));
@@ -90,7 +92,8 @@ export class UserManagementComponent implements OnInit {
       data => { 
         if(data != null) {
           this.Loading = false;   
-          this.userData = data; 
+          this.userData = data;
+          this.FilterData =data;
         }    
         else{ 
           this.Loading = false;    
@@ -264,6 +267,7 @@ export class UserManagementComponent implements OnInit {
   companyClickHandler(e){
     if(e.dataItem.selectedEmployeeType.empID != ''){
       this.dbName = e.dataItem.dbName;
+      this.ShowDBName=e.dataItem.dbName
       if(e.dataItem.selectedUserType){
         this.dbClickUserType = e.dataItem.selectedUserType.value;
       }
@@ -667,6 +671,23 @@ export class UserManagementComponent implements OnInit {
   cancel(){
     this.addUserScreen = !this.addUserScreen; 
   }
+  onInput(filter) {
+    
+    this.userData = filterBy(this.FilterData, {
+     
+      field:'OPTM_USERCODE',
+      operator: 'contains',
+     value: filter,
+    //   filters: [
+    //     { field: "OPTM_GROUPCODE", operator: "contains", value: filter },
+    //     { field: "OPTM_DESCRIPTION", operator: "contains", value:filter },
+    // ]
+    }); 
+  }
+  clearFilter(grid:GridComponent){      
+    grid.filter.filters=[];
+  }
+
 
   
 }

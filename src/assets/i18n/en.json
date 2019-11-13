@@ -183,6 +183,7 @@
    "RecordCreated":"Record Created..",
    "RecordUpdate":"Record Updated..",
    "RecordDelete":"Record Deleted..",
+   "DisableUpdatePermission":"You can not update this record..",
    "Unauthorized":"Unauthorized"
 
 } 
