@@ -101,7 +101,7 @@ export class UserRolesComponent implements OnInit {
       
         if(data.length > 0)  
         {  
-         // this.CheckUncheckValueInsideFrid(data);   
+          this.CheckUncheckValueInsideFrid(data);   
            this.GridDataFormanupulation=data;
            // Set Checked Value 
            this.gridData1=data;
@@ -153,7 +153,8 @@ export class UserRolesComponent implements OnInit {
         this.MessageService.errormessage(error.message);   
       });
   }
-  CheckUncheckValueInsideFrid(data,EditMode)
+
+  CheckUncheckValueInsideFrid(data)
     {
       debugger
       for(let i=0; i<data.length; i++)
