@@ -172,7 +172,7 @@ export class UserRolesComponent implements OnInit {
 
   CheckUncheckValueInsideFrid(data)
     {
-      debugger
+      
       for(let i=0; i<data.length; i++)
       {
         data[i].AllSelected =false;

@@ -54,7 +54,7 @@ export class UserManagementComponent implements OnInit {
   public dbClickProductName: any;
   public SubmitSave:any = {};
   public dbClickUserType: any;
-  public TenantKey: any;
+  //public TenantKey: any;
   public WCIndex: any;
   public gridRefresh: any;
   public PreviousUserId: any;
@@ -217,7 +217,7 @@ export class UserManagementComponent implements OnInit {
     this.gridRefresh = false;
     this.UserManagementService.FillDDlWarehouse(dbName, '').subscribe(
       warehousedata => {
-        debugger
+      
         for(let i=0;i<warehousedata.Table.length; i++){
           warehousedata.Table[i]["uniqueId"] = index+''+i;
           this.WHGetSelectiondata(warehousedata.Table[i], i); 
@@ -236,8 +236,7 @@ export class UserManagementComponent implements OnInit {
   } 
 
   WHGetSelectiondata(WHData, WHIndex){
-    // this.SubmitSave.Warehouse=[];
-    debugger
+    
     if(this.editUserData){
       //onsole.log(this.editUserData)
     //  this.company_data.forEach((element, index) => {
@@ -384,7 +383,7 @@ export class UserManagementComponent implements OnInit {
   }
 
   warehouseSelect(event, warehouseData, warehouseIndex){
-    
+   
     if(event.target.checked === true){
       this.WH_WC_Data[warehouseIndex]["selectedWarehouse"] = warehouseData.OPTM_WHSE;
     }else{
@@ -449,7 +448,7 @@ export class UserManagementComponent implements OnInit {
       SAPPassword: this.mappedPass,
       UserType: this.userType,
       PreviousUserId: this.PreviousUserId,
-      tenant: this.tenant
+      TenantKey: this.tenant
     });
     this.SubmitSave.PreviousUserId.push({PreviousUserId: this.PreviousUserId});
   
@@ -486,20 +485,6 @@ export class UserManagementComponent implements OnInit {
         this.UserManagementService.AddUserManagement(this.SubmitSave).subscribe(
           data => {
             this.Loading = false; 
-            this.SubmitSave='';
-            //this.addUserScreenToggle();
-            this.user_id = ''; 
-    this.user_name = '';
-    this.password = '';
-    this.re_password = '';
-    this.userGroup = {groupCode: ''};
-    this.mapped_user = {USER_CODE: ''};
-    this.mappedPass = '';
-    this.companySelection = [];
-    this.productSelection = [];
-    this.warehouseSelection = [];
-    this.workcenterSelection = [];
-    this.SubmitSave.EmployeeId=[];
             this.MessageService.successmessage("Successfully saved data!");
             this.addUserScreen = !this.addUserScreen; 
             this.getUserList();
@@ -517,16 +502,16 @@ export class UserManagementComponent implements OnInit {
             this.SubmitSave='';
            // this.addUserScreenToggle();
            this.user_id = ''; 
-    this.user_name = '';
-    this.password = '';
-    this.re_password = '';
-    this.userGroup = {groupCode: ''};
-    this.mapped_user = {USER_CODE: ''};
-    this.mappedPass = '';
-    this.companySelection = [];
-    this.productSelection = [];
-    this.warehouseSelection = [];
-    this.workcenterSelection = [];
+          this.user_name = '';
+          this.password = '';
+          this.re_password = '';
+          this.userGroup = {groupCode: ''};
+          this.mapped_user = {USER_CODE: ''};
+          this.mappedPass = '';
+          this.companySelection = [];
+          this.productSelection = [];
+          this.warehouseSelection = [];
+          this.workcenterSelection = [];
             this.MessageService.successmessage("Successfully updated data!");
             this.addUserScreen = !this.addUserScreen; 
             this.getUserList();
@@ -555,10 +540,13 @@ export class UserManagementComponent implements OnInit {
   }
 
   getEditDetailById(userId){
+    var Warehouse=[];
+    var WorkCenter=[];
+    var wc=[];
     this.UserManagementService.getEditDetail(userId).subscribe(    
       data => { 
         this.editUserData = data;
-
+          debugger
         this.Loading = false;
         if(data[0]){
           this.user_id = data[0].OPTM_USERCODE; 
@@ -569,18 +557,32 @@ export class UserManagementComponent implements OnInit {
           this.mapped_user = {USER_CODE: data[0].OPTM_SAPUSER};
           this.mappedPass = data[0].OPTM_SAPPASSWORD;
           this.PreviousUserId = userId;
+          
+          this.tenant=data[0].OPTM_TENANTKEY;
           if(data[0].OPTM_ACTIVE == 1){
             this.accountStatus = 'true';
          }else{
             this.accountStatus = 'false';
          }  
         } 
-
+       
         /*-- company and product selection --*/
         this.company_data.forEach((element, index) => {
           this.editUserData.forEach((element2, index2) => {
             if(element.dbName === element2.OPTM_COMPID){
-
+             
+              this.SubmitSave.Warehouse.push({
+                      Id: element2.OPTM_WHSE,
+                       Company: element2.OPTM_COMPID,
+                       EmployeeId: element2.OPTM_EMPID
+              })
+              this.SubmitSave.WorkCenter.push({
+                Company: element2.OPTM_COMPID,
+                WorkCenterCode: element2.OPTM_WORKCENTER,
+                Warehouse: element2.OPTM_WHSE,
+                productCode: element2.OPTM_OPTIADDON,
+                EmployeeId: element2.OPTM_EMPID
+        })
               this.SubmitSave.Company.push({Company: this.company_data[index].dbName, cIndex: index}); 
               this.SubmitSave.Company = this.removeDuplicatesValue(this.SubmitSave.Company, 'Company');
               
@@ -634,7 +636,7 @@ export class UserManagementComponent implements OnInit {
                 let productSplitArray = element2.OPTM_OPTIADDON.includes(',')? element2.OPTM_OPTIADDON.split(','):[element2.OPTM_OPTIADDON];
                 for(let j=0; j<productSplitArray.length; j++){
                   let productUniqueID = this.company_data[index].product.filter(i => i.ProductId == productSplitArray[j]);
-                 console.log(productUniqueID);
+                
                   if(productUniqueID.length>0){
                     this.productSelection.push(productUniqueID[0].UniqueId);
 
@@ -646,8 +648,11 @@ export class UserManagementComponent implements OnInit {
                     }
                   }
               }
-              this.dbClickProductName = element2.OPTM_COMPID;  
+              
             }
+             /*-- get warehouse and workcenter list --*/
+  
+            
           });  
         });
     }, error => {
@@ -655,7 +660,7 @@ export class UserManagementComponent implements OnInit {
       this.MessageService.errormessage(error.message);   
     });    
   }
-
+ 
   onBlurUserID() {
       this.UserManagementService.CheckDuplicateUserGroup(this.user_id).subscribe(    
         data => { 
@@ -717,14 +722,14 @@ export class UserManagementComponent implements OnInit {
       data => { 
         if(data.length>0)
         {
+          this.mapped_user = {USER_CODE: data[0].OPTM_SAPUSER};
          
-          this.mapped_user= {groupCode: data[0].OPTM_SAPUSER};
           this.mappedPass=data[0].OPTM_SAPPASSWORD;
           
         }
       },    
       error => {
-        debugger
+        
         this.MessageService.errormessage(error.message); 
       });
   

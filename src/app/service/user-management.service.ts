@@ -181,7 +181,7 @@ FillGridData()
         'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
       };  
       this.header = new HttpHeaders(headerSettings);  
-      debugger
+      
      // UserDetails: [{"UserGroupId":"sfes"}]
       var jObject = {UserDetails: JSON.stringify(User) }
       return this.http.post<any>(this.Url+'/api/UserManagement/GetSAPUserByGrpId',jObject,{ headers: headerSettings});

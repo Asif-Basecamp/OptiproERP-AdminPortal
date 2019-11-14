@@ -119,14 +119,14 @@
                                         </div>
                                         <div class="form-group col-md-12 mb-2">
                                             <label class="mb-0" for="password">{{'Password'|translate}}<span class="text-danger">*</span></label>
-                                            <input type="password" class="form-control form-control-sm" id="password" name="password" [(ngModel)]="password" #Password=ngModel required autocomplete="off">
+                                            <input type="password" class="form-control form-control-sm" minlength="5" id="password" name="password" [(ngModel)]="password" #Password=ngModel required autocomplete="off">
                                             <span class="error" *ngIf="Password.errors?.required && Password.touched">
                                                 Password is required
                                             </span>
                                         </div>
                                         <div class="form-group col-md-12 mb-2">
                                             <label class="mb-0" for="re_password">{{'Re-Enter_Password'|translate}}<span class="text-danger">*</span></label>
-                                            <input type="password" class="form-control form-control-sm" id="re_password" name="re_password" [(ngModel)]="re_password" #RePassword=ngModel required  autocomplete="off">
+                                            <input type="password" class="form-control form-control-sm" id="re_password" minlength="5" name="re_password" [(ngModel)]="re_password" #RePassword=ngModel required  autocomplete="off">
                                             <span class="error" *ngIf="RePassword.errors?.required && RePassword.touched">
                                                 Confirm Password is required
                                             </span>
@@ -147,12 +147,12 @@
                                         <div class="form-group col-md-12 mb-2">
                                             <label class="mb-0" for="mapped_user_id">{{'Mapped_SAP_B1_User'|translate}}<span class="text-danger">*</span></label>
                                             <kendo-dropdownlist [data]="ddlSAPUser" id="mapped_user_id" name="mapped_user_id" class="form-control-sm form-control w-100"   textField="USER_CODE"
-                                             valueField="USER_CODE" [(ngModel)]="mapped_user"></kendo-dropdownlist>
+                                             valueField="USER_CODE"  [(ngModel)]="mapped_user"></kendo-dropdownlist>
 
                                         </div>
                                         <div class="form-group col-md-12 mb-2">
                                             <label class="mb-0" for="mapped_user_password">{{'Mapped_SAP_B1_User_Password'|translate}}<span class="text-danger">*</span></label>
-                                            <input type="password" name="mapped_user_password" class="form-control form-control-sm" id="mapped_user_password" [(ngModel)]="mappedPass" #MapPassword=ngModel required autocomplete="off">
+                                            <input type="password"  name="mapped_user_password" minlength="5" class="form-control form-control-sm" id="mapped_user_password" [(ngModel)]="mappedPass" #MapPassword=ngModel required autocomplete="off">
                                             <span class="error" *ngIf="MapPassword.errors?.required && MapPassword.touched">
                                                 User Password is required
                                             </span>
