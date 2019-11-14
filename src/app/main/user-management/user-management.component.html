@@ -146,7 +146,9 @@
                                         </div>
                                         <div class="form-group col-md-12 mb-2">
                                             <label class="mb-0" for="mapped_user_id">{{'Mapped_SAP_B1_User'|translate}}<span class="text-danger">*</span></label>
-                                            <kendo-dropdownlist [data]="ddlSAPUser" id="mapped_user_id" name="mapped_user_id" class="form-control-sm form-control w-100" [valuePrimitive]="true"  textField="USER_CODE" valueField="USER_CODE" [(ngModel)]="mapped_user"></kendo-dropdownlist>
+                                            <kendo-dropdownlist [data]="ddlSAPUser" id="mapped_user_id" name="mapped_user_id" class="form-control-sm form-control w-100"   textField="USER_CODE"
+                                             valueField="USER_CODE" [(ngModel)]="mapped_user"></kendo-dropdownlist>
+
                                         </div>
                                         <div class="form-group col-md-12 mb-2">
                                             <label class="mb-0" for="mapped_user_password">{{'Mapped_SAP_B1_User_Password'|translate}}<span class="text-danger">*</span></label>
@@ -248,7 +250,7 @@
                             <!-- warehouse grid -->
                             <div class="company-details col-sm-4 mt-3 mt-sm-0">
                                 <div class="section-heading mb-2" *ngIf="ShowDBName">
-                                    <h5 class="m-0">Database : {{ShowDBName}}</h5>
+                                    <h5 class="m-0">Database: {{ShowDBName}}({{ShowCompanyName}})</h5>
                                 </div>
                                 <kendo-grid [kendoGridBinding]="WH_WC_Data" [resizable]="true" 
                                 [sortable]="true" class="custom-height-grid" 
@@ -358,4 +360,33 @@
         </kendo-dialog-actions>
     </kendo-dialog>
     
+    <!-- Confirmation Dialouge at the time of edit -->
+
+<kendo-dialog *ngIf="confirmationOpenedEdit" (close)="confirmationEditToggle()" [minWidth]="250" [width]="450">
+        <kendo-dialog-titlebar>
+            <div> {{'Please_Confirm'|translate}}</div>
+        </kendo-dialog-titlebar>
+        <div class="">
+            <!-- {{'Do_you_want_to_delete_record'|translate}} -->
+            Your Data will be lost..Do you want to save it?
+    
+        </div>
+        <kendo-dialog-actions class="p-2 align-items-start justify-content-start">
+            <button class="btn btn-success btn-sm d-flex align-items-center mr-2" id='btnCancelEdit' type="button" 
+            (click)="UpdateData('Cancel')">  > 
+                <svg viewBox="0 0 55.25 55.25" class="icon mr-2">
+                    <use xlink:href="#edit"></use>
+                </svg> {{'Yes'|translate}}
+            </button>           
+    
+    
+            <button class="btn btn-danger btn-sm ml-auto d-flex align-items-center" type="button"
+            (click)="dialougeToggle('Cancel')" >
+                <svg viewBox="0 0 512 512" class="icon mr-2">
+                    <use xlink:href="#saveDisk"></use>
+                </svg> {{'No'|translate}}
+            </button>
+        </kendo-dialog-actions>
+    </kendo-dialog>
+
     <div *ngIf="Loading" class="k-i-loading"></div>

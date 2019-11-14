@@ -42,7 +42,8 @@ export class LoginComponent {
     this.selectedItem = this.translate.instant("Login_Username");
     this.LoginService.Login(this.model).subscribe(    
       data => {    
-        //if(data.Status=="Success") 
+        //if(data.Status=="Success")
+        console.log(data[0]); 
         if(data != null)   
         {       
           this.successmsg = 'token - ' + data[0].access_token; 
