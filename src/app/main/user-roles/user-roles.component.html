@@ -215,7 +215,7 @@
                     </svg> {{'Save'|translate}}
                 </button>
 
-                <button class="btn btn-success btn-sm ml-2 d-flex align-items-center" type="button"
+                <button class="btn btn-success btn-sm ml-2 d-flex align-items-center mr-2" type="button"
                 (click)="UpdateData(gridUser)" *ngIf="enableUpdate">
                     <svg viewBox="0 0 64 64" class="icon mr-2">
                         <use xlink:href="#update"></use>
@@ -244,20 +244,11 @@
         <div class="">
      {{'Do_you_want_to_delete_record'|translate}}
         </div>
-        <kendo-dialog-actions class="p-2 align-items-start justify-content-start">
+        <kendo-dialog-actions class="p-2 align-items-start justify-content-end">
             <button class="btn btn-success btn-sm d-flex align-items-center mr-2" type="button" 
-            (click)="DeleteData()">  > 
-                <svg viewBox="0 0 55.25 55.25" class="icon mr-2">
-                    <use xlink:href="#edit"></use>
-                </svg> {{'Yes'|translate}}
-            </button>           
-    
-            <button class="btn btn-danger btn-sm ml-auto d-flex align-items-center" type="button"
-            (click)="confirmationToggle()" >
-                <svg viewBox="0 0 512 512" class="icon mr-2">
-                    <use xlink:href="#saveDisk"></use>
-                </svg> {{'No'|translate}}
-            </button>
+            (click)="DeleteData()">{{'Yes'|translate}}</button>
+            <button class="btn btn-danger btn-sm d-flex align-items-center" type="button"
+            (click)="confirmationToggle()" > {{'No'|translate}}</button>
         </kendo-dialog-actions>
     </kendo-dialog>
 
@@ -269,24 +260,13 @@
         </kendo-dialog-titlebar>
         <div class="">
             <!-- {{'Do_you_want_to_delete_record'|translate}} -->
-            Your Data will be lost..Do you want to save it?
-    
+            Your Data will be lost..Do you want to save it?    
         </div>
-        <kendo-dialog-actions class="p-2 align-items-start justify-content-start">
+        <kendo-dialog-actions class="p-2 align-items-start justify-content-end">
             <button class="btn btn-success btn-sm d-flex align-items-center mr-2" id='btnCancelEdit' type="button" 
-            (click)="UpdateData('Cancel')">  > 
-                <svg viewBox="0 0 55.25 55.25" class="icon mr-2">
-                    <use xlink:href="#edit"></use>
-                </svg> {{'Yes'|translate}}
-            </button>           
-    
-    
-            <button class="btn btn-danger btn-sm ml-auto d-flex align-items-center" type="button"
-            (click)="addRolesScreenToggle('Cancel')" >
-                <svg viewBox="0 0 512 512" class="icon mr-2">
-                    <use xlink:href="#saveDisk"></use>
-                </svg> {{'No'|translate}}
-            </button>
+            (click)="UpdateData('Cancel')">{{'Yes'|translate}}</button>
+            <button class="btn btn-danger btn-sm d-flex align-items-center" type="button"
+            (click)="addRolesScreenToggle('Cancel')" >{{'No'|translate}}</button>
         </kendo-dialog-actions>
     </kendo-dialog>
     <div *ngIf="Loading" class="k-i-loading"></div>

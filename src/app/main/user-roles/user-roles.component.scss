@@ -6,6 +6,7 @@
     ::ng-deep{
         & .full-height-grid{
             height: 100%;
+            max-height: 290px;
             overflow: auto;
         }
     }
