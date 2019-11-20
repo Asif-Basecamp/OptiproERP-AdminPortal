@@ -9,6 +9,7 @@ import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { RowArgs } from '@progress/kendo-angular-grid';
 import { filterBy } from '../../../../node_modules/@progress/kendo-data-query';
+import { Router } from '../../../../node_modules/@angular/router';
 
 @Component({
   selector: 'app-user-management',
@@ -62,7 +63,13 @@ export class UserManagementComponent implements OnInit {
   public ShowDBName:string;
   public FilterData: any[];
   public ShowCompanyName: string;
-  constructor(private cd: ChangeDetectorRef, private UserManagementService:UserManagementService,private MessageService:MessageService,
+  public FlagWH: boolean = true;
+  public FlagProduct: boolean = true;
+  public FlagWC: boolean = true;
+  public selectedItem: any[];
+  public IsValidate:boolean=false;
+  public IsComparePassword:boolean=true;
+  constructor(private _router: Router,private cd: ChangeDetectorRef, private UserManagementService:UserManagementService,private MessageService:MessageService,
     private translate: TranslateService, private httpClientSer: HttpClient) { 
     translate.use(localStorage.getItem('applang'));
     translate.onLangChange.subscribe((event: LangChangeEvent) => { 
@@ -85,6 +92,7 @@ export class UserManagementComponent implements OnInit {
       { text: "Customer", value: "C" }, 
       { text: "Employee", value: "E" }, 
       { text: "Vendor", value: "V" });
+      //this.selectedItem = this.ddlUserType["E"];
       this.FillCompNGrpNSAPUsrNProd();
   }
 
@@ -144,6 +152,7 @@ export class UserManagementComponent implements OnInit {
           this.ddlSAPUser=[];
           this.ddlSAPUser = data.SAPUser;
         }
+        
         if (data.ProductList.length > 0) {
           this.ddlProductList = data.ProductList;
         }
@@ -163,7 +172,7 @@ export class UserManagementComponent implements OnInit {
                 data.CompanyList[i]["UserType"] = this.ddlUserType;
                 data.CompanyList[i]["Employee"] = employeedata;
                 data.CompanyList[i]["selectedEmployeeType"] = {empID: '', firstName: "Emp ID"};
-                data.CompanyList[i]["selectedUserType"] = { text: "User Type", value: '' };
+                data.CompanyList[i]["selectedUserType"] = { text: "Select UserType", value: '' };
                 data.CompanyList[i]["selectedCompany"] = 'blank';
                 this.company_data = data.CompanyList;
               });
@@ -277,7 +286,9 @@ export class UserManagementComponent implements OnInit {
   }
 
   companyClickHandler(e){
-    if(e.dataItem.selectedEmployeeType.empID != ''){
+    
+    this.userType=e.dataItem.selectedUserType.value;
+    if(e.dataItem.selectedEmployeeType.empID != '' && this.userType !=''){
       this.dbName = e.dataItem.dbName;
       this.ShowDBName=e.dataItem.dbName;
       this.ShowCompanyName=e.dataItem.cmpName;
@@ -290,7 +301,7 @@ export class UserManagementComponent implements OnInit {
       }
       this.FillDDlWarehouse(e.dataItem.dbName, e.rowIndex);
     }else{
-      this.MessageService.errormessage("please select employee"); 
+      this.MessageService.errormessage("please select Employee or UserType"); 
     }
   } 
 
@@ -298,6 +309,8 @@ export class UserManagementComponent implements OnInit {
     if(event.dataItem.selectedCompany == 'blank'){
       this.MessageService.errormessage("please choose company"); 
     }
+   
+
   }
 
   onExpandWarehouse(event){
@@ -344,6 +357,7 @@ export class UserManagementComponent implements OnInit {
   }
 
   productSelect(event: any, product, productIndex, rowIndex){
+    
     if(event.target.checked === true){
       this.productID = product;
       this.SubmitSave.Product.push({productCode: this.productID, pIndex: rowIndex, bussPart: ""});
@@ -436,21 +450,284 @@ export class UserManagementComponent implements OnInit {
     this.company_data[index]["selectedEmployeeType"] = e;
   }
 
+  Validation()
+   {
+     
+    this.IsValidate=true;
+    let elmnt="";
+    let elmntWorkCenter="";
+    let elemntProduct="";
+   // let elmntProduct="";
+   //arr.splice(i, 1); 
+   for(let j=0; j<this.SubmitSave.Warehouse.length; j++)
+       {
+         elmnt = elmnt + ','+ this.SubmitSave.Warehouse[j].Company
+       }
+
+    // Work Center Company
+     if(this.SubmitSave.WorkCenter.length>0)
+       {
+         for(let j=0; j<this.SubmitSave.WorkCenter.length; j++)
+         {
+         elmntWorkCenter = elmntWorkCenter + ','+ this.SubmitSave.WorkCenter[j].Company
+         }
+       }
+
+      // Product Company
+      if(this.SubmitSave.Product.length>0)
+      {
+        for(let j=0; j<this.SubmitSave.Product.length; j++)
+        {
+          elemntProduct = elemntProduct + ','+ this.SubmitSave.Product[j].Company
+        }
+      }
+   
+
+      if(this.SubmitSave.Product.length>0)
+      {
+            this.SubmitSave.Company.forEach((c, pindex) => {
+            
+                  if(elemntProduct.includes(c.Company))
+                  {
+                    this.FlagProduct=true;
+                  }
+                  else {
+                    this.MessageService.errormessage("Product is not selected for Company"+' '+c.company);
+                    this.FlagProduct=false;
+                    this.IsValidate=false;
+                    return;
+                  }
+            });
+          }
+            else {
+              this.MessageService.errormessage("Product is not selected for Company");
+              this.FlagProduct=false;
+              this.IsValidate=false;
+              return;
+            }
+            elemntProduct="";
+   this.SubmitSave.Company.forEach((c, cindex) => {
+      
+      this.SubmitSave.Product.forEach((p, pindex) => {
+       // this.FlagProduct=true;
+        if(c.Company===p.Company)
+         {
+            
+            this.FlagWC=true;
+            this.FlagWH=true;
+            let WhValidation="";
+            let WCValidation="";
+            let WhName="";
+            let TempEmpName="";
+            let WHTempValue="";
+            let SelectedProduct=[];
+           let array = [];
+           let Localarray = [];
+                 this.SubmitSave.Product.forEach((value, index) => {
+                   if(value.Company === c.Company){
+                     array.push( value.productCode );
+                     Localarray.push( value.productCode );
+                     TempEmpName=value.EmployeeId
+                   }
+                 });
+
+           for(let i=0; i <this.ddlProductList.length; i++)
+             {
+               if(this.ddlProductList[i].ProductId===p.productCode)
+               {
+
+                  WhValidation=this.ddlProductList[i].OPTM_ISWHSEENABLED;
+                  WCValidation=this.ddlProductList[i].OPTM_ISWRKCENTERENABLED;
+                 
+               }
+             }
+             // Warehouse validation
+             if(WhValidation==="Y")
+               {
+                 if(this.SubmitSave.Warehouse.length>0)
+                 {
+                   for(let j=0; j <this.SubmitSave.Warehouse.length; j++)
+                   {
+                     if(elmnt.includes(c.Company))
+                       {
+                         if(this.SubmitSave.Warehouse[j].Id===null || this.SubmitSave.Warehouse[j].Id==="")
+                         {
+                          
+                           this.MessageService.errormessage("Warehouse is not selected for Company"+' '+c.Company);
+                           this.FlagWH=false;
+                           this.IsValidate=false;
+                           return;
+                         }
+                         else {
+                           WhName=this.SubmitSave.Warehouse[j].Id;
+                         }
+ 
+                       }
+                       else {
+                         this.MessageService.errormessage("Warehouse is not selected for Company"+' '+c.Company);
+                         this.FlagWH=false;
+                         this.IsValidate=false;
+                         return;
+                       }
+                   }
+                 }
+                 else {
+                   
+                   this.MessageService.errormessage("Warehouse is not selected for Company"+' '+c.Company);
+                   this.IsValidate=false;
+                   this.FlagWH=false;
+                   return;
+                 }
+                 
+               }
+               // WorkCenter Validation
+               
+               if(WCValidation==="Y")
+               {
+                 if(this.SubmitSave.WorkCenter.length>0)
+                 {
+                   for(let j=0; j <this.SubmitSave.WorkCenter.length; j++)
+                     {
+                       if(elmntWorkCenter.includes(c.Company))
+                         {
+                           if(this.SubmitSave.WorkCenter[j].WorkCenterCode==="" && this.SubmitSave.WorkCenter[j].Company===c.Company )
+                            {
+                              this.MessageService.errormessage("WorkCenter is not selected for Company"+' '+c.Company);
+                              this.FlagWC=false;
+                              this.IsValidate=false;
+                              return;
+                              //this.SubmitSave.WorkCenter[j].delete()
+                            }
+                            else {
+
+                              if(this.SubmitSave.WorkCenter[j].Warehouse==="" && this.SubmitSave.WorkCenter[j].Company===c.Company )
+                                {
+                                  var TempData = this.SubmitSave.Warehouse.filter(function (el) {
+                                    return el.Company == this.SubmitSave.WorkCenter[j].Company;
+                                });
+                                if(TempData.length>0)
+                                 {
+                                   
+                                  this.SubmitSave.WorkCenter[j].Warehouse=TempData[0].Id;
+                                 }
+                
+
+                                  
+                                }
+                              
+                            }
+
+                          
+                         }
+                         else {
+                           this.MessageService.errormessage("WorkCenter is not selected for Company"+' '+c.Company);
+                           this.FlagWC=false;
+                           this.IsValidate=false;
+                              return;
+                         }
+                 }
+               
+               }
+               else {
+                 this.MessageService.errormessage("WorkCenter is not selected for Company"+' '+c.Company);
+                 this.FlagWC=false;
+                 this.IsValidate=false;
+                              return;
+               }
+               }
+            
+             
+         }
+
+      });
+    
+   });
+
+   }
+
+   CreaeWorkCenterForBlankWorkcenterSelection()
+    {
+      
+      let TempelmntWorkCenter="";
+      let TempWHName="";
+     
+       this.SubmitSave.Company.forEach((c, cindex) => {
+         this.SubmitSave.Product.forEach((p, pindex) => {
+          // this.FlagProduct=true;
+           if(c.Company===p.Company)
+            {
+               let TempEmpName="";
+               let array = [];
+             
+                    this.SubmitSave.Product.forEach((value, index) => {
+                      if(value.Company === c.Company){
+                        array.push( value.productCode );
+                       
+                        TempEmpName=value.EmployeeId
+                      }
+                      
+                    })
+                     
+                           var filterWareHouse = this.SubmitSave.Warehouse.filter(function (el) {
+                             return el.Company == c.Company;
+                             if(filterWareHouse.length>0)
+                              {
+                                TempWHName=filterWareHouse[0].Id
+                              }
+                             });
+                           //console.log(TempWHName);
+                           var filterWorkcenter = this.SubmitSave.WorkCenter.filter(function (el) {
+                             return el.Company == c.Company && el.productCode===array.toString();
+                         });
+                             //console.log(filterWorkcenter);
+                             if(filterWorkcenter.length===0)
+                             { 
+                               if(filterWareHouse.length>0)
+                               {
+                                TempWHName=filterWareHouse[0].Id;
+                               }
+                               this.SubmitSave.WorkCenter.push({
+                                 Company: c.Company, EmployeeId: TempEmpName, 
+                                   productCode: array.toString(), WorkCenterCode: "",  Warehouse: TempWHName,
+                                   bussPart: ""
+                                   //TempEmpName="";
+                               })
+                             }
+                             TempWHName="";
+                          
+                   }
+                   })
+                 });
+    }
+
+    ClearSelection()
+      {
+        this.addUserScreen = !this.addUserScreen; 
+           
+            this.user_id = ''; 
+            this.user_name = '';
+            this.password = '';
+            this.re_password = '';
+            this.userGroup = {groupCode: ''};
+            this.mapped_user = {USER_CODE: ''};
+            this.mappedPass = '';
+            this.companySelection = [];
+            this.productSelection = [];
+            this.warehouseSelection = [];
+            this.workcenterSelection = [];
+            this.tenant='';
+            this.SubmitSave='';
+            this.FlagProduct=false;
+            this.FlagWC=false;
+            this.FlagWH=false;
+            this.getUserList();
+            this.FillCompNGrpNSAPUsrNProd();
+            
+            // this.addUserScreenToggle();
+      }
+
   saveRecord(mode){
-    this.SubmitSave.Values.push({
-      UserId: this.user_id,
-      Username: this.user_name,
-      Password: this.password,
-      UserGroup: this.userGroup.groupCode,
-      IsActive: this.accountStatus,
-      Company: this.dbName,
-      SAPUser: this.mapped_user.USER_CODE,
-      SAPPassword: this.mappedPass,
-      UserType: this.userType,
-      PreviousUserId: this.PreviousUserId,
-      TenantKey: this.tenant
-    });
-    this.SubmitSave.PreviousUserId.push({PreviousUserId: this.PreviousUserId});
+    
   
     this.SubmitSave.Company.map(function(c) {
       delete c['cIndex'];
@@ -476,19 +753,54 @@ export class UserManagementComponent implements OnInit {
       delete Emp['eIndex'];
       return Emp; 
     });
+   
+    this.Validation();
+    
+     if(this.IsValidate===true)
+        {this.CreaeWorkCenterForBlankWorkcenterSelection();
+        }
+        else {
+          return;
+        }
+    
+    
+    if(this.FlagWC===true && this.FlagWH===true && this.FlagProduct===true)
+      {
+        this.SubmitSave.Values.push({
+          UserId: this.user_id,
+          Username: this.user_name,
+          Password: this.password,
+          UserGroup: this.userGroup.groupCode,
+          IsActive: this.accountStatus,
+          Company: this.dbName,
+          SAPUser: this.mapped_user.USER_CODE,
+          SAPPassword: this.mappedPass,
+          UserType: this.userType,
+          PreviousUserId: this.PreviousUserId,
+          TenantKey: this.tenant
+        });
+        this.SubmitSave.PreviousUserId.push({PreviousUserId: this.PreviousUserId});
+      
+        //console.log("True");
+      }
+      else {
+        this.MessageService.errormessage("Something went worng...! Please check your selection");
+      }
+
 
     console.log(JSON.stringify(this.SubmitSave));
+    
 
     this.Loading = false; 
     if(mode == 'add'){
+     
         this.Loading = true; 
         this.UserManagementService.AddUserManagement(this.SubmitSave).subscribe(
           data => {
+            debugger
             this.Loading = false; 
             this.MessageService.successmessage("Successfully saved data!");
-            this.addUserScreen = !this.addUserScreen; 
-            this.getUserList();
-            //this.ngOnInit();
+            this.ClearSelection();
           },    
           error => {  
             this.Loading = false; 
@@ -498,23 +810,11 @@ export class UserManagementComponent implements OnInit {
         this.Loading = true; 
         this.UserManagementService.EditUserManagement(this.SubmitSave).subscribe(
           data => {
+            
             this.Loading = false; 
-            this.SubmitSave='';
-           // this.addUserScreenToggle();
-           this.user_id = ''; 
-          this.user_name = '';
-          this.password = '';
-          this.re_password = '';
-          this.userGroup = {groupCode: ''};
-          this.mapped_user = {USER_CODE: ''};
-          this.mappedPass = '';
-          this.companySelection = [];
-          this.productSelection = [];
-          this.warehouseSelection = [];
-          this.workcenterSelection = [];
+           
             this.MessageService.successmessage("Successfully updated data!");
-            this.addUserScreen = !this.addUserScreen; 
-            this.getUserList();
+            this.ClearSelection();
           },    
           error => {
             this.Loading = false;   
@@ -546,7 +846,7 @@ export class UserManagementComponent implements OnInit {
     this.UserManagementService.getEditDetail(userId).subscribe(    
       data => { 
         this.editUserData = data;
-          debugger
+          
         this.Loading = false;
         if(data[0]){
           this.user_id = data[0].OPTM_USERCODE; 
@@ -557,7 +857,6 @@ export class UserManagementComponent implements OnInit {
           this.mapped_user = {USER_CODE: data[0].OPTM_SAPUSER};
           this.mappedPass = data[0].OPTM_SAPPASSWORD;
           this.PreviousUserId = userId;
-          
           this.tenant=data[0].OPTM_TENANTKEY;
           if(data[0].OPTM_ACTIVE == 1){
             this.accountStatus = 'true';
@@ -736,7 +1035,8 @@ export class UserManagementComponent implements OnInit {
   }
   
   cancel(){
-    this.addUserScreen = !this.addUserScreen; 
+    this.addUserScreen = !this.addUserScreen;
+   
   }
   onInput(filter) {
     
@@ -755,6 +1055,15 @@ export class UserManagementComponent implements OnInit {
     grid.filter.filters=[];
   }
 
-
+  setCustomValidity() {
+     
+    if (this.password != this.re_password) {
+      this.IsComparePassword=false
+       // input.setCustomValidity('Password Must be Matching.');
+    } else {
+      this.IsComparePassword=true;
+    }
+}
+  
   
 }

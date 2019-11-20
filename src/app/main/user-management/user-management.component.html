@@ -126,9 +126,14 @@
                                         </div>
                                         <div class="form-group col-md-12 mb-2">
                                             <label class="mb-0" for="re_password">{{'Re-Enter_Password'|translate}}<span class="text-danger">*</span></label>
-                                            <input type="password" class="form-control form-control-sm" id="re_password" minlength="5" name="re_password" [(ngModel)]="re_password" #RePassword=ngModel required  autocomplete="off">
+                                            <input type="password" class="form-control form-control-sm" id="re_password" minlength="5"
+                                             name="re_password" [(ngModel)]="re_password" #RePassword=ngModel (change)="setCustomValidity()" required  autocomplete="off">
+                                             
                                             <span class="error" *ngIf="RePassword.errors?.required && RePassword.touched">
                                                 Confirm Password is required
+                                            </span>
+                                            <span class="error" *ngIf="!IsComparePassword">
+                                                Confirm Password does not match with Password
                                             </span>
                                         </div>
 

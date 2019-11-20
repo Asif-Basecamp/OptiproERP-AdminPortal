@@ -29,7 +29,7 @@ export class LoginComponent {
     sessionStorage.clear();    
     this.httpClientSer.get('./assets/config.json').subscribe(
       data => {
-        debugger
+        
         this.arrConfigData = data as string[];
         localStorage.setItem('arrConfigData', this.arrConfigData[0].service_url); 
       },
