@@ -160,7 +160,7 @@
                     </div>
                 </div>
                 <div class="border-top py-3 mt-2">
-                    <div class="form-row align-items-end">
+                     <div class="form-row align-items-end">
                         <div class="col-9 col-sm-5 col-md-4 col-lg-4 col-xl-4">
                             <div class="form-group mb-2">
                                 <label class="mb-0" for="user_group">{{'User_Id'|translate}}</label>
@@ -178,24 +178,26 @@
                         </div>
                         <div class="col-3 col-sm-7 col-md-8 col-lg-8 col-xl-8">
                             <div class="form-group mb-2">
-                                <button class="btn btn-primary btn-sm btn-icon" type="button" [disabled]="!showDisplayBtn" (click)="displayMenu()">
+                                <button class="btn btn-primary btn-sm btn-icon" type="button" [disabled]="!showDisplayBtn" (click)="displayMenu('Arrow')">
                                     <svg viewBox="0 0 21.825 21.825" class="icon">
                                         <use xlink:href="#downArrow"></use>
                                     </svg>
                                 </button>
 
-                                <button class="btn btn-danger btn-sm ml-2 btn-icon" type="button" [disabled]="!showDisplayBtn" (click)="deleteMenu()">
+                                <!-- <button class="btn btn-danger btn-sm ml-2 btn-icon" type="button" [disabled]="!showDisplayBtn" (click)="deleteMenu()">
                                     <svg viewBox="0 0 753.23 753.23" class="icon">
                                         <use xlink:href="#bin"></use>
                                     </svg>
-                                </button>
-                            </div>
+                                </button> -->
+                            <!-- </div> -->
                         </div>
                     </div>
 
                     <div class="row mt-2">
+                        <!--Start User Grid-->
                         <div class="col-sm-12 col-md-5 col-lg-5 col-xl-4">
-                            <kendo-grid [kendoGridBinding]="screenGrid" [resizable]="true" [sortable]="true" [height]="190" class="kendo-responsive-grid" [filterable]=screenGridFilter4 [columnMenu]="false" [selectable]="{ checkboxOnly: true, mode: 'multiple' }" [ngStyle]="{'max-height':'190px'}">
+                            <kendo-grid [kendoGridBinding]="LocalUserGrid" [resizable]="true" [sortable]="true" [height]="190" class="kendo-responsive-grid" [filterable]=screenGridFilter4 [columnMenu]="false" 
+                            [ngStyle]="{'max-height':'190px'}" [selectable]="true" (selectionChange)="displayMenu($event)"> <!--[selectable]="{ checkboxOnly: true, mode: 'multiple' }" -->
                                 <ng-template kendoGridToolbarTemplate>
                                     <div class="d-flex align-items-center">
                                         <label class="custom-checkbox mb-0 mr-2 filter-checkbox">
@@ -210,23 +212,38 @@
                                         </button>
                                     </div>
                                 </ng-template>
-                                <kendo-grid-checkbox-column [width]="38" field="checkbox" class="text-center" headerClass="text-center">
-                                    <!-- <ng-template kendoGridHeaderTemplate>
-                                        <input class="k-checkbox" id="selectAllCheckboxId" kendoGridSelectAllCheckbox (selectAllChange)="onSelectAllChange($event)" [checked]='selectAllCheckBox'>
-                                        <label class="k-checkbox-label" for="selectAllCheckboxId"></label>
-                                    </ng-template> -->
-
-                                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                <!-- <kendo-grid-checkbox-column [width]="38" field="checkbox" class="text-center" headerClass="text-center">
+                                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">                                        
                                         <div class="k-form-field center-checkbox">
                                             <input type="checkbox" name="select_role_checkbox" [checked]=dataItem.checked id="select_role_checkbox1{{rowIndex}}" class="k-checkbox cursor-pointer" />
                                             <label class="k-checkbox-label" for="select_role_checkbox1{{rowIndex}}"></label>
                                         </div>
                                     </ng-template>
-                                </kendo-grid-checkbox-column>
-                                <kendo-grid-column media="(min-width: 768px)" field="user" title="Users"></kendo-grid-column>                               
+                                </kendo-grid-checkbox-column> -->
+                               
+                                <kendo-grid-column field="UserCode" title="User"></kendo-grid-column>
+                                <!-- <kendo-grid-column field="" title="Display"> 
+                                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">                                  
+                                        <button class="btn btn-primary btn-sm btn-icon" type="button" [disabled]="!showDisplayBtn" (click)="displayMenu()">
+                                            <svg viewBox="0 0 21.825 21.825" class="icon">
+                                                <use xlink:href="#downArrow"></use>
+                                            </svg>
+                                        </button>
+                                    </ng-template>
+                                </kendo-grid-column> -->
+                                <kendo-grid-column field="" title="Delete">
+                                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                        <button class="btn btn-danger btn-sm ml-2 btn-icon" type="button" [disabled]="!showDisplayBtn" (click)="deleteMenu(rowIndex,dataItem)">
+                                            <svg viewBox="0 0 753.23 753.23" class="icon">
+                                                <use xlink:href="#bin"></use>
+                                            </svg>
+                                        </button>
+                                    </ng-template>
+                                </kendo-grid-column>                           
                                 <kendo-grid-excel fileName="user.xlsx"></kendo-grid-excel>
                             </kendo-grid>
                         </div>
+                        <!--End User Grid-->
                         <div class="col-sm-12 col-md-7 col-lg-7 col-xl-8">
                             <kendo-grid [kendoGridBinding]="screenGrid" [resizable]="true" [sortable]="true" [height]="190" class="kendo-responsive-grid" [filterable]=screenGridFilter [groupable]=screenGridGroup [columnMenu]="false" [selectable]="{ checkboxOnly: true, mode: 'multiple' }" [ngStyle]="{'max-height':'190px'}">
                                 <ng-template kendoGridToolbarTemplate>

@@ -69,5 +69,12 @@ export class TenantService {
     return this.http.post<any>(this.Url+'/LicenseAssignment/SaveTenantList', jObject,{ headers: headerSettings}); 
   }
 
-
+  DeleteRecord(TenantKey:string){
+    const headerSettings: {[name: string]: string | string[]; } = { 
+      'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
+    };  
+    this.header = new HttpHeaders(headerSettings);
+    let jObject:any={ ItemList: JSON.stringify([{ TenantKey: TenantKey }]) };       
+    return this.http.post<any>(this.Url+'/LicenseAssignment/DeleteRecord', jObject,{ headers: headerSettings}); 
+  }
 }

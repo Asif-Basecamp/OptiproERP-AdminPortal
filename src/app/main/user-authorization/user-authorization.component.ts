@@ -36,6 +36,8 @@ export class UserAuthorizationComponent implements OnInit {
   public confirmationOpened = false;
   public Loading: boolean = false;
   public user_select : any;
+  public LocalUserGrid: any [] = [];
+  public selectedUser: string = '';
 
   constructor(private AuthServ: AuthorizationService, private MessageService:MessageService, private translate: TranslateService, private httpClientSer: HttpClient) {
     translate.use(localStorage.getItem('applang'));
@@ -118,6 +120,7 @@ export class UserAuthorizationComponent implements OnInit {
       this.inputVal = '';     
       this.userGridLookup = []; 
       this.screenGrid = [];
+      this.LocalUserGrid = [];
     }
   }
 
@@ -195,7 +198,22 @@ export class UserAuthorizationComponent implements OnInit {
   }
 
   gridUserSelection($event){
-    this.inputVal = $event.selectedRows[0].dataItem.OPTM_USERCODE;
+    this.inputVal = $event.selectedRows[0].dataItem.OPTM_USERCODE;    
+    if(this.LocalUserGrid.length > 0){
+      var index = this.LocalUserGrid.findIndex(r=>r.UserCode == this.inputVal); 
+      if(index != -1){
+       // this.MessageService.errormessage("User is already selected! Please select another user");
+       alert("User is already selected! Please select another user");
+        this.inputVal = '';
+        return;
+      }    
+    }  
+    
+    // if(index == -1){
+    //   this.LocalUserGrid.push({
+    //     UserCode: this.inputVal
+    //   });
+    // } 
     this.CheckUserPermissionForProduct('grid'); 
   }
 
@@ -221,16 +239,23 @@ export class UserAuthorizationComponent implements OnInit {
   }
 
   getMenuList(state){
+  // if(state != 'show'){
     for(let i=0; i < this.inputRole.length; i++){
       for(let j=0; j < this.gridDataRoles.length; j++){
         if(this.inputRole[i].OPTM_ROLEID == this.gridDataRoles[j].OPTM_ROLEID){
+
+          // let idx = this.oModalData.SelectedRole.findIndex(r=>r.Product == this.inputRole[i].OPTM_ROLEID);
+          // if(this.oModalData.SelectedRole.length > 0){
+          
+          // }          
 
           this.oModalData.SelectedRole.push({
               Product: this.gridDataRoles[j].OPTM_PROD
           })         
         }
       }
-    } 
+    }
+  //} 
   
   if(state == 'show'){
     this.AuthServ.getMenuList(this.inputRole).subscribe(
@@ -286,6 +311,7 @@ export class UserAuthorizationComponent implements OnInit {
         this.ddlUserGroup = this.allUsersDDL.filter(val => val.OPTM_GROUPCODE == userGrp);
         this.defaultItem = this.ddlUserGroup[0];
         this.inputVal = userGrp;
+        this.selectedUser = this.inputVal;
         this.showDisplayBtn = true;  
         this.getRoles('edit');      
     },    
@@ -302,7 +328,8 @@ export class UserAuthorizationComponent implements OnInit {
   
    if(this.isEdit === true){
     let userGroup = this.UserGroup;
-    let inputVal = this.inputVal;
+    //let inputVal = this.inputVal;
+    let selectedUser = this.selectedUser;
     let DataForUserGroup = this.DataForUserGroup;  
     let saveRoleData = this.gridDataRoles.map(function(obj) {
       if(obj.checked == true){
@@ -352,7 +379,8 @@ export class UserAuthorizationComponent implements OnInit {
     });
    }else{
     let userGroup = this.UserGroup;
-    let inputVal = this.inputVal;  
+    //let inputVal = this.inputVal;  
+    let selectedUser = this.selectedUser;
     let saveRoleData = this.gridDataRoles.map(function(obj) {
       if(obj.checked == true){
         oSaveModel.OPTM_ADMIN_AUTHR.push({
@@ -372,7 +400,8 @@ export class UserAuthorizationComponent implements OnInit {
         OPTM_MENUID : obj.OPTM_MENUID,
         OPTM_PERMISSION : obj.OPTM_PERMISSION,
         OPTM_CREATEDATE : "000-00-00",
-        OPTM_USERCODE : inputVal,
+        //OPTM_USERCODE : inputVal,
+        OPTM_USERCODE : selectedUser,
         AddSelected: obj.AddSelected,
         UpdateSelected: obj.UpdateSelected,
         DeleteSelected: obj.DeleteSelected,
@@ -455,11 +484,25 @@ selectCheckboxRole(checkvalue,rowdata,idx){
     this.getMenuList('hide');
  }
 
-  displayMenu(){
+  displayMenu(event){   
+    if(event == 'Arrow'){
+      if(this.inputVal != ''){
+        this.LocalUserGrid.push({
+          UserCode: this.inputVal
+        });
+      this.selectedUser = this.inputVal;
+      this.inputVal = '';
+      }     
+      
+    }
+    else{
+      this.selectedUser = event.selectedRows[0].dataItem.UserCode;
+    }  
+
     this.getMenuList('show');
   }
 
-  deleteMenu(){
+  deleteMenu(rowIndex,dataItem){
     this.screenGrid = [];
   }
 
