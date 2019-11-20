@@ -286,11 +286,11 @@
                             <use xlink:href="#update"></use>
                         </svg> {{'Update'|translate}}
                     </button>
-                    <!-- <button class="btn btn-danger btn-sm d-flex align-items-center mr-2" type="button" (click)="DeleteRecord()"> 
+                    <button class="btn btn-danger btn-sm d-flex align-items-center mr-2" type="button" *ngIf="isEdit" (click)="DeleteRecord($event)"> 
                         <svg viewBox="0 0 753.23 753.23" class="icon mr-2">
                             <use xlink:href="#bin"></use>
                         </svg> {{'Delete'|translate}}
-                    </button> -->
+                    </button>
                     <button class="btn btn-danger btn-sm d-flex align-items-center" type="button" (click)="CancelRecord()"> 
                         <svg viewBox="0 0 489 489" class="icon mr-2">
                             <use xlink:href="#cancel"></use>

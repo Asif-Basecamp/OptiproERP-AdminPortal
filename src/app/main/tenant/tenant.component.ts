@@ -340,12 +340,12 @@ export class TenantComponent implements OnInit {
 
     for(let i=0; i< this.ProductData.length; i++){
       if(this.ProductData[i].rowcheck == true){
-        if(this.ProductData[i].EXTNCODE == 0){
-          this.MessageService.errormessage("Please enter license count");
-          this.loading = false;
-          return;
-        }
-        else if(this.ProductData[i].showErrorMsg == true){
+        // if(this.ProductData[i].EXTNCODE == 0){
+        //   this.MessageService.errormessage("Please enter license count");
+        //   this.loading = false;
+        //   return;
+        // }
+        if(this.ProductData[i].showErrorMsg == true){
           this.MessageService.errormessage("Please enter correct License Count");
           this.loading = false;
           return;
@@ -360,11 +360,11 @@ export class TenantComponent implements OnInit {
       }
     }
 
-    if(flagProduct == false){
-      this.MessageService.errormessage("Please select atleast one product");
-      this.loading = false;
-      return;
-    }
+    // if(flagProduct == false){
+    //   this.MessageService.errormessage("Please select atleast one product");
+    //   this.loading = false;
+    //   return;
+    // }
 
     if(this.UserData != null || this.UserData != undefined){
       if(this.UserData.length >0){
@@ -377,23 +377,23 @@ export class TenantComponent implements OnInit {
             TempUserData.push(map);
           }
         }
-        if(flagUser == false){
-          this.MessageService.errormessage("Please select atleast one user");
-          this.loading = false;
-          return;
-        }    
+        // if(flagUser == false){
+        //   this.MessageService.errormessage("Please select atleast one user");
+        //   this.loading = false;
+        //   return;
+        // }    
       }
-      else{
-        this.MessageService.errormessage("There is no user");
-        this.loading = false;
-        return;
-      }
+      // else{
+      //   this.MessageService.errormessage("There is no user");
+      //   this.loading = false;
+      //   return;
+      // }
     }
-    else{
-      this.MessageService.errormessage("There is no user");
-      this.loading = false;
-      return;
-    }
+    // else{
+    //   this.MessageService.errormessage("There is no user");
+    //   this.loading = false;
+    //   return;
+    // }
     
     this.tenantService.SaveTenant(TempProductData,TempUserData).subscribe(
       data => {
@@ -428,6 +428,29 @@ export class TenantComponent implements OnInit {
     error => {
       this.loading = false;
       this.MessageService.errormessage("Insufficient License");
+    });
+  }
+
+  DeleteRecord($event){
+    this.loading = true;
+    console.log(this.TenantId);
+    this.tenantService.DeleteRecord(this.TenantId).subscribe(
+      data => { 
+        if (data == true){
+          this.MessageService.successmessage("Record saved succesfully");
+          this.addTenantScreenToggle('');  
+        } 
+        else{
+          this.MessageService.errormessage("Error in Delete Record");
+          return;
+        }
+       
+        this.loading = false;
+        this.getTenantList();
+    },
+    error => {
+      this.loading = false;
+      this.MessageService.errormessage(error);
     });
   }
 
