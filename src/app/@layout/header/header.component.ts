@@ -33,7 +33,12 @@ export class HeaderComponent implements OnInit {
      }
 
     Logout(){
-        localStorage.clear();
+        localStorage.removeItem('admin_user');
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('token_type');
+        localStorage.removeItem('expires_in');
+         
+        //localStorage.clear();
         this.router.navigate(['/login']); 
     }
 }
