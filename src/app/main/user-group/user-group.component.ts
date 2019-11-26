@@ -41,6 +41,7 @@ export class UserGroupComponent implements OnInit {
   public DropDownListData: any[];
   public ddlUserType: any[];
   public searchText : string;
+  public Loading: boolean = false;
   constructor(private UserGroupService:UsergroupService, private MessageService:MessageService,
     private translate: TranslateService, private httpClientSer: HttpClient) {
       // let userLang = navigator.language.split('-')[0];
@@ -79,6 +80,7 @@ export class UserGroupComponent implements OnInit {
    
   FillGrid()
   {
+    this.Loading=true;
     this.UserGroupService.GetUserGroupGridData(this.model).subscribe(    
       data => {    
             
@@ -87,6 +89,7 @@ export class UserGroupComponent implements OnInit {
         {     
           this.gridData = data;
           this.FilterData=data;
+          this.Loading=false;
         }    
         else{ this.MessageService.errormessage(this.translate.instant('Somethingwrong'));    
         }    
@@ -99,40 +102,49 @@ export class UserGroupComponent implements OnInit {
   }
   SaveData()
   {
+    this.Loading=true;
     this.UserGroupService.AddUser(this.model).subscribe(    
       data => {    
         if(data==1)   
         {     
          this.FillGrid()
          this.dialogOpened=false;
+         this.Loading=false;
         }    
-        else{ this.MessageService.errormessage(this.translate.instant('Somethingwrong'));    
+        else{ 
+        this.MessageService.errormessage(this.translate.instant('Somethingwrong'));   
+        this.Loading=false; 
         }    
       },    
       error => {
-        this.MessageService.errormessage(error.message);   
+        this.MessageService.errormessage(error.message); 
+        this.Loading=false;   
       });
    
   }
   Update()
   {
-    
+    this.Loading=true;
     this.UserGroupService.UpdateUser(this.model).subscribe(    
       data => {    
         if(data==1)   
         {     
          this.FillGrid()
         this.dialogOpened=false;
+        this.Loading=false;
         }    
         else{ this.MessageService.errormessage(this.translate.instant('Somethingwrong'));    
+        this.Loading=false;
         }    
       },    
       error => {
         this.MessageService.errormessage(error.message);   
+        this.Loading=false;
       });
   }
   UpdateData(Type)
     {
+      //this.Loading=false;
       if(this.model.PreviousGrpId !=this.model.UserGroupId)
       {
       if(this.IsDuplicate==false)
@@ -155,6 +167,7 @@ export class UserGroupComponent implements OnInit {
 
   ChkUserGroupAssociativity()
   {
+    this.Loading=true;
     this.UserGroupService.ChkUserGroupAssociativity(this.model).subscribe(    
       data => {    
       
@@ -166,28 +179,33 @@ export class UserGroupComponent implements OnInit {
             
             this.confirmationOpened=false;
             this.dialogOpened=false;
+            this.Loading=false;
           }
           else{ 
             this.confirmationOpened=false;
             this.dialogOpened=false;
             this.MessageService.errormessage(this.translate.instant('UGallocated'));  
+            this.Loading=false;
           }
         
         }    
         else
         { 
          
-          this.MessageService.errormessage(this.translate.instant('Somethingwrong'));    
+          this.MessageService.errormessage(this.translate.instant('Somethingwrong')); 
+          this.Loading=false;   
         }    
       },    
       error => {
         this.MessageService.errormessage(error.message);   
+        this.Loading=false;
       });
    
   }
 
   DeleteData()
   {
+    this.Loading=true;
     this.UserGroupService.DeleteUser(this.model).subscribe(    
       data => {     
         // if(data==1)   
@@ -195,12 +213,14 @@ export class UserGroupComponent implements OnInit {
          this.FillGrid()
          this.confirmationOpened=false;
          this.dialogOpened=false;
+         this.Loading=false;
         // }    
         // else{ this.MessageService.errormessage("Something went wrong..");    
         // }    
       },    
       error => {
-        this.MessageService.errormessage(error.message);   
+        this.MessageService.errormessage(error.message); 
+        this.Loading=false;  
       });
    
   }
@@ -208,7 +228,7 @@ export class UserGroupComponent implements OnInit {
     this.IsDuplicate=false;
     if(this.model.PreviousGrpId==UserGrpId)
     return
-
+    this.Loading=true;
     this.UserGroupService.CheckDuplicateUserGroup(UserGrpId).subscribe(    
       data => { 
           
@@ -219,18 +239,22 @@ export class UserGroupComponent implements OnInit {
             this.MessageService.errormessage(this.translate.instant('UGalreadyExist'));
             //DuplicateUserGroupId
             this.IsDuplicate=true;
+            this.Loading=false;
           }
           else
           {
             this.IsDuplicate=true;
+            this.Loading=false;
           }  
         }    
         else{    
          this.MessageService.errormessage(this.translate.instant('Somethingwrong'));
+         this.Loading=false;
         }    
       },    
       error => {    
         this.MessageService.errormessage(error.message);
+        this.Loading=false;
       });
 };
 
@@ -253,7 +277,7 @@ FillDropdownList()
   }
   CancelData()
     {
-      debugger
+     
       if(this.EditMode)
       {
         
@@ -263,8 +287,17 @@ FillDropdownList()
       else this.dialougeToggle('');
     }
   gridUserSelectionChange(gridUser, selection) {
-    this.dialougeToggle('');
+    
+    this.Loading=true;
+    
     const GroupCodeData= selection.selectedRows[0].dataItem.OPTM_GROUPCODE
+    
+    if(GroupCodeData==='admin')
+      {
+        this.MessageService.errormessage(this.translate.instant('DisableUpdatePermission'));
+      }
+      else(this.dialougeToggle(''))
+      //this.dialougeToggle('');
     this.EditMode=true;
     this.UserGroupService.GetDataByUserId(GroupCodeData).subscribe(    
       data => { 
@@ -285,6 +318,7 @@ FillDropdownList()
         this.enableUpdate=true; 
         this.enableSubmit=false;
         this.IsGroupCode=false;
+        this.Loading=false;
        // this.EditMode=true
         // this.Ugroup=false;  
         // this.UDesc=false;  
@@ -295,12 +329,15 @@ FillDropdownList()
          else if(data.Status =="Unauthorized")
          {
           this.MessageService.errormessage(this.translate.instant('Unauthorized'));
+          this.Loading=false;
          }
-        else{ this.MessageService.errormessage(this.translate.instant('Somethingwrong'));    
+        else{ this.MessageService.errormessage(this.translate.instant('Somethingwrong')); 
+        this.Loading=false;   
         }    
       },    
       error => {
         this.MessageService.errormessage(error.message);   
+        this.Loading=false;
       });
 }
   onFilterChange(checkBox:any,grid:GridComponent){
@@ -336,7 +373,7 @@ FillDropdownList()
   // }
 
   public dialougeToggle(Type) {
-     debugger
+    
     if(Type==='Cancel') 
      {
       this.confirmationEditToggle();
@@ -352,6 +389,7 @@ FillDropdownList()
     this.enableUpdate=false; 
     this.enableSubmit=true; 
     this.IsGroupCode=true;
+    this.EditMode=false;
     
   }
   public confirmationToggle() {

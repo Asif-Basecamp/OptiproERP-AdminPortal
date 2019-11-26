@@ -29,7 +29,7 @@ export class UserRolesComponent implements OnInit {
   public SelectedRowData:any[]=[];
   public NewSelectedRowData: any[] = [];
   public EditMode :boolean=false;
-  //public SelectedRowData:any[];
+  public Loading :boolean=false;
   public enableSubmit= false;
   public enableEdit = false;
   public enableUpdate= false;
@@ -40,11 +40,8 @@ export class UserRolesComponent implements OnInit {
   public confirmationOpened = false;
   public confirmationOpenedEdit = false;
   public FilterData: any[];
-  //public TableDataBinding: any[]=[];
   constructor(private RoleService:RoleService,private MessageService:MessageService,
     private translate: TranslateService, private httpClientSer: HttpClient) { 
-      // let userLang = navigator.language.split('-')[0];
-      //     userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
           translate.use(localStorage.getItem('applang'));
           translate.onLangChange.subscribe((event: LangChangeEvent) => { 
           }); 
@@ -69,10 +66,6 @@ export class UserRolesComponent implements OnInit {
       field:'OPTM_ROLEID',
       operator: 'contains',
      value: filter,
-    //   filters: [
-    //     { field: "OPTM_GROUPCODE", operator: "contains", value: filter },
-    //     { field: "OPTM_DESCRIPTION", operator: "contains", value:filter },
-    // ]
     }); 
   }
   onFilterChange(checkBox:any,grid:GridComponent){
@@ -82,7 +75,7 @@ export class UserRolesComponent implements OnInit {
   }
    //To get all screen list after product selection
    FillFridOnDropdownSelectedIndexChanged  (ProductName) {
-    debugger
+       
    var  TempArray  =[];
                   if (this.gridData1.length > 0) {
                         // row count of TableDataBinding
@@ -109,13 +102,13 @@ export class UserRolesComponent implements OnInit {
                         }
                       }
                       TempArray=this.NewSelectedRowData;
-                      console.log(this.NewSelectedRowData);
-                      debugger
+                      
                       if(ProductName ==='')
                         {
                           ProductName=this.model.Product;
                           ProductName='';
                         }
+                        this.Loading=true; 
     this.RoleService.FillFridOnDropdownSelectedIndexChanged(ProductName).subscribe(    
       data => { 
       
@@ -145,15 +138,18 @@ export class UserRolesComponent implements OnInit {
                 }
             });
         });
+        this.Loading=false; 
                    
         }    
         else{    
           this.gridData1 = [];
+          this.Loading=false; 
          //this.MessageService.errormessage(this.translate.instant('Somethingwrong'));
         }    
       },    
       error => {    
         this.MessageService.errormessage(error.message);
+        this.Loading=false; 
       });
 }
   FillDropdownList()
@@ -176,7 +172,7 @@ export class UserRolesComponent implements OnInit {
 
   CheckUncheckValueInsideFrid(data)
     {
-      debugger
+      
       for(let i=0; i<data.length; i++)
       {
         data[i].AllSelected =false;
@@ -245,6 +241,7 @@ export class UserRolesComponent implements OnInit {
   }
   FillGridData()
     {
+      this.Loading=true;
       this.RoleService.FillGridData().subscribe(    
         data => {    
              
@@ -252,9 +249,11 @@ export class UserRolesComponent implements OnInit {
           {   
            this.gridData = data;
            this.FilterData=data;
+           this.Loading=false;
           }    
           else{    
-            this.MessageService.errormessage(this.translate.instant('Somethingwrong'));    
+            this.MessageService.errormessage(this.translate.instant('Somethingwrong')); 
+            this.Loading=false;   
           }    
         },    
         error => {  
@@ -446,10 +445,11 @@ export class UserRolesComponent implements OnInit {
     }
 
     onChange(RoleId: string) {
-
+       debugger
       this.IsDuplicate=false;
       if(this.model.PriviousRoleId==RoleId)
-      return
+       {return;}
+      
   
       this.RoleService.CheckDuplicateUserGroup(RoleId).subscribe(    
         data => { 
@@ -481,10 +481,12 @@ export class UserRolesComponent implements OnInit {
        this.onChange(this.model.RoleId);
     
        if(this.IsDuplicate==true)
-       return
+         {
+          return
+         }
       
-       console.log(this.NewSelectedRowData);
-       //if (this.gridData1 != null) {
+      
+       
         // Check if TableDataBinding array have any record 
         if (this.gridData1.length > 0) {
             var sCurrentProductSelected = this.model.Product;
@@ -522,8 +524,9 @@ export class UserRolesComponent implements OnInit {
           this.MessageService.errormessage(this.translate.instant('NoRows')); 
           return
         }
+        
+        this.Loading=true;
         debugger
-        console.log(this.NewSelectedRowData);
       this.RoleService.AddUserRole(this.model,this.NewSelectedRowData).subscribe(    
           data => {    
               
@@ -534,18 +537,21 @@ export class UserRolesComponent implements OnInit {
               this.addRolesScreenToggle('');
              this.gridData1.length=0;
               this.MessageService.successmessage(this.translate.instant('RecordCreated'));
+              this.Loading=false;
               
             }    
-              else{ this.MessageService.errormessage(this.translate.instant('Somethingwrong'));    
+              else{ this.MessageService.errormessage(this.translate.instant('Somethingwrong'));   
+              this.Loading=false; 
               }    
             },    
             error => {
-              this.MessageService.errormessage(error.message);   
+              this.MessageService.errormessage(error.message);  
+              this.Loading=false; 
             });
      }
      
      gridUserRoleSelectionChange(UserRole,selection) {
-     
+      this.Loading=true;
      var NewSelectedRowData = [];
       this.RoleService.GetDataByRoleId(selection.selectedRows[0].dataItem.OPTM_ROLEID).subscribe(    
         data => {
@@ -560,18 +566,22 @@ export class UserRolesComponent implements OnInit {
                   if(data[0].ROLEIDCOUNT==0)
                     {
                       this.IsRoleId=true;
+                      this.Loading=false;
                     }
                   else
                     {
                       this.IsRoleId=false;
+                      this.Loading=false;
                     }  
                   }    
               else{    
                     this.MessageService.errormessage(this.translate.instant('Somethingwrong'));
+                    this.Loading=false;
                   }    
                       },    
                 error => {    
                   this.MessageService.errormessage(error.message);
+                  this.Loading=false;
                     });
           
           console.log()
@@ -625,40 +635,6 @@ export class UserRolesComponent implements OnInit {
   }
    
 
-    // EditData()
-    //     {
-    //       let RoleId=this.model.RoleId;
-          
-    //       this.RoleService.chkIfGroupIdisAssociate(RoleId).subscribe(    
-    //         data => { 
-              
-    //           if(data.length > 0) 
-    //             {
-    //               if(data[0].ROLEIDCOUNT==0)
-    //                 {
-    //                   this.IsRoleId=true;
-    //                 }
-    //               else
-    //                 {
-    //                   this.IsRoleId=false;
-    //                 }  
-    //               }    
-    //           else{    
-    //                 this.MessageService.errormessage(this.translate.instant('Somethingwrong'));
-    //               }    
-    //                   },    
-    //             error => {    
-    //               this.MessageService.errormessage(error.message);
-    //                 });
-    //               this.IsRoleDesc=true ;
-    //               this.IsProduct=true;
-    //               this.enableSubmit=false;
-    //               this.enableEdit=false;
-    //               this.enableDelete=false;
-    //               this.enableUpdate=true;
-    //     }
-
-
         UpdateData (Type) {
         //  var oModel = oCurrentController.getView().getModel();
 
@@ -709,7 +685,7 @@ export class UserRolesComponent implements OnInit {
                           }
                       }
                   }
-                 
+                  this.Loading=true;
             this.RoleService.UpdateUserRole(this.model,this.NewSelectedRowData).subscribe(    
                 data => {    
                     
@@ -723,18 +699,21 @@ export class UserRolesComponent implements OnInit {
                     
                      this.gridData1.length=0;
                      this.MessageService.successmessage(this.translate.instant('RecordUpdate'));
+                     this.Loading=false;
                     }    
-                    else{ this.MessageService.errormessage(data);    
+                    else{ this.MessageService.errormessage(data);
+                      this.Loading=false;    
                     }    
                   },    
                   error => {
                     this.MessageService.errormessage(error.message);   
+                    this.Loading=false;    
                   });
       }  
      
         DeleteData()
           {
-            
+            this.Loading=true;    
             this.RoleService.DeleteUserRole(this.model).subscribe(    
               data => {    
                   
@@ -745,12 +724,15 @@ export class UserRolesComponent implements OnInit {
                    this.addRolesScreenToggle('');
                    this.gridData1.length=0;
                    this.MessageService.successmessage(this.translate.instant('RecordDelete'));
+                   this.Loading=false;    
                   }    
-                  else{ this.MessageService.errormessage(data);    
+                  else{ this.MessageService.errormessage(data);  
+                    this.Loading=false;      
                   }    
                 },    
                 error => {
-                  this.MessageService.errormessage(error.message);   
+                  this.MessageService.errormessage(error.message); 
+                  this.Loading=false;      
                 });
           }
           public confirmationToggle() {
@@ -760,7 +742,7 @@ export class UserRolesComponent implements OnInit {
           }
           CancelData()
           {
-            debugger
+         
             if(this.EditMode)
             {
               
