@@ -1,7 +1,7 @@
 <div class="layout-mode" fxFlex fxLayout="column">
     <div class="page-header">
         <h4 *ngIf="!dialogOpened">{{'User_Group'|translate}}</h4> 
-        <h4 *ngIf="dialogOpened">User Group - Add New</h4>
+        <h4 *ngIf="dialogOpened">{{'UserGrpAddNew'|translate}}</h4>
     </div>
     <div class="card" *ngIf="!dialogOpened" fxFlex>
         <div class="card-body" fxFlex fxLayout="column">
@@ -203,7 +203,9 @@
     </kendo-dialog-titlebar>
     <div class="">
         <!-- {{'Do_you_want_to_delete_record'|translate}} -->
-        Your Data will be lost..Do you want to save it?
+       
+        {{'UsrMgtDataLostErrMsg'|translate}}
+        
     </div>
     <kendo-dialog-actions class="p-2 align-items-start justify-content-end">
         <button class="btn btn-success btn-sm d-flex align-items-center mr-2" id='btnCancelEdit' type="button" 
