@@ -69,10 +69,12 @@ export class ConnectedUsersComponent implements OnInit {
         console.log(data);
       },    
       error => { 
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonService.unauthorizedToken(error);               
-        } 
-        else{ 
+        if(error.error != null && error.error != undefined){
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonService.unauthorizedToken(error);               
+          }
+        }
+        else{
           this.MessageService.errormessage(error.message);
         }
       }); 
@@ -134,8 +136,10 @@ export class ConnectedUsersComponent implements OnInit {
        }
       },    
       error => {  
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonService.unauthorizedToken(error);               
+        if(error.error != null && error.error != undefined){
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonService.unauthorizedToken(error);               
+          }
         }
         else{
           this.MessageService.errormessage(error.message);
@@ -155,7 +159,14 @@ export class ConnectedUsersComponent implements OnInit {
        }
       },    
       error => {  
-        this.MessageService.errormessage(error.message);
+        if(error.error != null && error.error != undefined){
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonService.unauthorizedToken(error);               
+          }
+        }
+        else{
+          this.MessageService.errormessage(error.message);
+        }
     });
   }
  

@@ -221,6 +221,7 @@
    "Items": "Items",
    "User": "User",
    "Select_Product": "Select Product",
-   "Product_ID": "Product ID"
+   "Product_ID": "Product ID",
+   "No_Tenant_Found": "No tenant found!"
 
 } 

@@ -153,15 +153,17 @@ export class UserRolesComponent implements OnInit {
     }    
     else{    
       this.gridData1 = [];
-      //this.MessageService.errormessage(this.translate.instant('Somethingwrong'));
+      //this.MessageService.errormessage(this.translate.instant('UserMgmtSomethimgWntWrngMsg'));
     }    
    
   },    
   error => {  
-    if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-      this.commonService.unauthorizedToken(error);               
-    }
-    else{  
+    if(error.error != null && error.error != undefined){
+      if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+        this.commonService.unauthorizedToken(error);               
+      }
+     }
+    else{
       this.MessageService.errormessage(error.message);
     }
   });
@@ -206,15 +208,17 @@ export class UserRolesComponent implements OnInit {
          this.ProductDataLookup = data;          
         }    
         else{    
-          this.MessageService.errormessage(this.translate.instant('Somethingwrong'));    
+          this.MessageService.errormessage(this.translate.instant('UserMgmtSomethimgWntWrngMsg'));    
         }    
       },    
       error => {  
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonService.unauthorizedToken(error);               
-        }
+        if(error.error != null && error.error != undefined){
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonService.unauthorizedToken(error);               
+          }
+         }
         else{
-          this.MessageService.errormessage(error.message);   
+          this.MessageService.errormessage(error.message);
         }
       });
   }
@@ -355,7 +359,7 @@ export class UserRolesComponent implements OnInit {
            this.Loading=false;
           }    
           else{    
-            this.MessageService.errormessage(this.translate.instant('Somethingwrong')); 
+            this.MessageService.errormessage(this.translate.instant('UserMgmtSomethimgWntWrngMsg')); 
                 
     
             this.Loading=false;   
@@ -574,13 +578,15 @@ export class UserRolesComponent implements OnInit {
           }
         }
         else {
-          this.MessageService.errormessage(this.translate.instant('Somethingwrong'));
+          this.MessageService.errormessage(this.translate.instant('UserMgmtSomethimgWntWrngMsg'));
         }
       },
       error => {
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonService.unauthorizedToken(error);               
-        }
+        if(error.error != null && error.error != undefined){
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonService.unauthorizedToken(error);               
+          }
+         }
         else{
           this.MessageService.errormessage(error.message);
         }
@@ -593,7 +599,6 @@ export class UserRolesComponent implements OnInit {
     if (this.IsDuplicate == true)
       return
 
-    console.log(this.NewSelectedRowData);
     //if (this.gridData1 != null) {
     // Check if TableDataBinding array have any record 
     if (this.gridData1.length > 0) {
@@ -645,18 +650,20 @@ export class UserRolesComponent implements OnInit {
 
         }
         else {
-          this.MessageService.errormessage(this.translate.instant('Somethingwrong'));
+          this.MessageService.errormessage(this.translate.instant('UserMgmtSomethimgWntWrngMsg'));
         }
         this.Loading=false;
       },
       error => {
         this.Loading=false;
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonService.unauthorizedToken(error);               
+        if(error.error != null && error.error != undefined){
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonService.unauthorizedToken(error);               
+          }         
         }
         else{
           this.MessageService.errormessage(error.message);
-        }
+        }        
       });
   }
      
@@ -683,19 +690,20 @@ export class UserRolesComponent implements OnInit {
               }
             }
             else {
-              this.MessageService.errormessage(this.translate.instant('Somethingwrong'));
+              this.MessageService.errormessage(this.translate.instant('UserMgmtSomethimgWntWrngMsg'));
             }
           },
           error => {
+           if(error.error != null && error.error != undefined){
             if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
               this.commonService.unauthorizedToken(error);               
             }
+           }
             else{
               this.MessageService.errormessage(error.message);
             }
           });
-
-        console.log()
+       
         this.addRolesScreenToggle('');
         this.model.PriviousRoleId = selection.selectedRows[0].dataItem.OPTM_ROLEID;
         this.model.RoleId = selection.selectedRows[0].dataItem.OPTM_ROLEID;
@@ -787,7 +795,7 @@ export class UserRolesComponent implements OnInit {
     //                 }  
     //               }    
     //           else{    
-    //                 this.MessageService.errormessage(this.translate.instant('Somethingwrong'));
+    //                 this.MessageService.errormessage(this.translate.instant('UserMgmtSomethimgWntWrngMsg'));
     //               }    
     //                   },    
     //             error => {    
@@ -874,11 +882,13 @@ export class UserRolesComponent implements OnInit {
       },
       error => {
         this.Loading=false;
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonService.unauthorizedToken(error);               
-        }
+        if(error.error != null && error.error != undefined){
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonService.unauthorizedToken(error);               
+          }
+         }
         else{
-          this.MessageService.errormessage(error.message);
+            this.MessageService.errormessage(error.message);
         }
       });
   }  
@@ -902,9 +912,11 @@ export class UserRolesComponent implements OnInit {
       },
       error => {
         this.Loading=false;
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonService.unauthorizedToken(error);               
-        }
+        if(error.error != null && error.error != undefined){
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonService.unauthorizedToken(error);               
+          }
+         }
         else{
           this.MessageService.errormessage(error.message);
         }
