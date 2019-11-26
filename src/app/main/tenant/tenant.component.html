@@ -31,7 +31,8 @@
                 <div class="row" fxFlex="0 1 100%">
                     <div class="col-md-12 col-lg-8 col-xl-6">
                         <div fxLayout="column" fxFlex="100%" class="kendo-grid-wrapper mt-3">
-                            <kendo-grid [kendoGridBinding]="TenantList" [resizable]="true" [sortable]="true" class="full-height-grid kendo-responsive-grid" [filterable]=isColumnFilter [groupable]=isColumnGroup [columnMenu]="false" [selectable]="true" (selectionChange)="editTenant($event)">
+                            <kendo-grid [data]="TenantList" [resizable]="true" [sortable]="true" class="full-height-grid kendo-responsive-grid" [filterable]=isColumnFilter [groupable]=isColumnGroup [columnMenu]="false"
+                             [selectable]="true" (selectionChange)="editTenant($event)" [pageable]="showTenantMainPage" [pageSize]="10">
                                 <ng-template kendoGridToolbarTemplate>
                                     <div class="d-flex align-items-center">
             

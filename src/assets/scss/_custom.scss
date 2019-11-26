@@ -12,6 +12,9 @@ html, body{
     fill:$gray-900;
   }
 }
+.cursor-pointer {
+  cursor: pointer;
+}
 //Layout
 .compact-layout {
   & app-header .navbar-inner, & .layout-mode{

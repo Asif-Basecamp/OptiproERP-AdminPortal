@@ -25,8 +25,8 @@
             <!-- Kendo Grid Start -->
             <div fxLayout="column" fxFlex="100%" class="kendo-grid-wrapper mt-3">
 
-                <kendo-grid [kendoGridBinding]="gridData" [resizable]="true" [sortable]="true" class="full-height-grid kendo-responsive-grid" [filterable]=isColumnFilter
-                    [groupable]=isColumnGroup [columnMenu]="false">
+                <kendo-grid [data]="gridData" [resizable]="true" [sortable]="true" class="full-height-grid kendo-responsive-grid" [filterable]=isColumnFilter
+                    [groupable]=isColumnGroup [columnMenu]="false" [pageable]="showConnectedUserMainPage" [pageSize]="10">
                     <!-- [pageSize]="10" 
                     [pageable]="{
                         buttonCount: paginationButtonCount,
@@ -53,7 +53,7 @@
                                 <span>{{'Enable_grouping'|translate}}</span>
                             </label>
                             <!-- export -->
-                            <button type="button" kendoGridExcelCommand title="Export to excel file" class="ml-auto btn btn-link btn-sm btn-icon p-0">
+                            <button type="button" kendoGridExcelCommand title="{{'Export_to_excel_file'|translate}}" class="ml-auto btn btn-link btn-sm btn-icon p-0">
                                 <svg viewBox="0 0 512 512" class="icon">
                                     <use xlink:href="#download"></use>
                                 </svg>
@@ -82,10 +82,10 @@
                         </ng-template>
                     </kendo-grid-column> -->
 
-                    <kendo-grid-column media="(min-width: 767px)" field="UserName" title="User Name"></kendo-grid-column>
-                    <kendo-grid-column media="(min-width: 767px)" field="GUID" title="GUID"></kendo-grid-column>
-                    <kendo-grid-column media="(min-width: 767px)" field="LastTransactionTime" title="Last Transaction Date Time"></kendo-grid-column>
-                    <kendo-grid-column media="(min-width: 767px)" field="" title="Logout">
+                    <kendo-grid-column media="(min-width: 767px)" field="UserName" title="{{'User_Name'|translate}}"></kendo-grid-column>
+                    <kendo-grid-column media="(min-width: 767px)" field="GUID" title="{{'GUID'|translate}}"></kendo-grid-column>
+                    <kendo-grid-column media="(min-width: 767px)" field="LastTransactionTime" title="{{'Last_Transaction_Date_Time'|translate}}"></kendo-grid-column>
+                    <kendo-grid-column media="(min-width: 767px)" field="" title="{{'Logout'|translate}}">
                         <ng-template kendoGridCellTemplate let-dataItem let-idx='rowIndex'>
                             <button class="btn btn-primary btn-sm d-flex align-items-center mr-2 text-danger" type="button" (click)="logoutUser(dataItem,rowIndex)"> 
                                 <svg viewBox="0 0 55.25 55.25" class="icon mr-2">

@@ -6,6 +6,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { TenantService } from 'src/app/service/tenant.service';
 import { MessageService } from '../../common/message.service';
 import { filterBy } from '@progress/kendo-data-query';
+import { CommonService } from 'src/app/service/common.service';
 
 @Component({
   selector: 'app-tenant',
@@ -39,8 +40,10 @@ export class TenantComponent implements OnInit {
   public isColumnFilterUser:boolean = false;
   public loading = false;
   public FilterData: any[];
+  public showTenantMainPage: boolean = false;
 
-  constructor(private translate: TranslateService, private httpClientSer: HttpClient, private tenantService: TenantService,private MessageService:MessageService) { 
+  constructor(private translate: TranslateService, private httpClientSer: HttpClient, private tenantService: TenantService,
+    private MessageService:MessageService, private commonService: CommonService) { 
       translate.use(localStorage.getItem('applang'));
         translate.onLangChange.subscribe((event: LangChangeEvent) => {
             this.selectedItem = translate.instant("Login_Username"); 
@@ -57,7 +60,7 @@ export class TenantComponent implements OnInit {
   onLicenseCountChange(value,rowindex){
 
     if(value == '' || value == undefined || value == null){
-      this.MessageService.errormessage("Please enter License Count");
+      this.MessageService.errormessage(this.translate.instant('Enter_License_Count'));
       return;
     }
 
@@ -145,7 +148,12 @@ export class TenantComponent implements OnInit {
         else        
         this.ProductListUpdate(); 
         this.loading = false;       
-      });
+      },
+      error => {
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonService.unauthorizedToken(error);               
+        }
+    });
       
   }
 
@@ -167,7 +175,12 @@ export class TenantComponent implements OnInit {
         else{
           console.log("No user found!");
         }        
-      });
+      },
+      error => {
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonService.unauthorizedToken(error);               
+        }
+    });
   }
 
   editTenant($event){
@@ -248,7 +261,11 @@ export class TenantComponent implements OnInit {
         if(data != null && data != undefined){
           if(data.length > 0){           
            this.TenantList = data; 
-           this.FilterData = data;      
+           this.FilterData = data;   
+           if(this.TenantList.length > 10)   
+           this.showTenantMainPage = true;
+           else
+           this.showTenantMainPage = false;
           }
         } 
         else{
@@ -258,7 +275,12 @@ export class TenantComponent implements OnInit {
       },    
       error => {  
         this.loading = false;  
-        this.MessageService.errormessage(error.message);
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonService.unauthorizedToken(error);               
+        }
+        else{
+          this.MessageService.errormessage(error.message);
+        }
     }); 
   }
 
@@ -276,6 +298,11 @@ export class TenantComponent implements OnInit {
           this.loading = false;
         }   
             
+    },
+    error => {
+      if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+        this.commonService.unauthorizedToken(error);               
+      }
     });
   }
 
@@ -325,7 +352,9 @@ export class TenantComponent implements OnInit {
           }
      },
       error => {
-        console.log(error);
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonService.unauthorizedToken(error);               
+        }
     });
   }
 
@@ -346,7 +375,7 @@ export class TenantComponent implements OnInit {
         //   return;
         // }
         if(this.ProductData[i].showErrorMsg == true){
-          this.MessageService.errormessage("Please enter correct License Count");
+          this.MessageService.errormessage(this.translate.instant('Enter_Correct_License_Count'));
           this.loading = false;
           return;
         }
@@ -405,7 +434,7 @@ export class TenantComponent implements OnInit {
               }
             }
             else{
-              this.MessageService.successmessage("Record saved succesfully");
+              this.MessageService.successmessage(this.translate.instant('Record_Saved_Success'));
               this.addTenantScreenToggle('');
               
             } 
@@ -417,7 +446,7 @@ export class TenantComponent implements OnInit {
               }
             }
             else{
-              this.MessageService.successmessage("Record updated succesfully");
+              this.MessageService.successmessage(this.translate.instant('RecordUpdate'));
               this.addTenantScreenToggle('');
                        
             } 
@@ -427,7 +456,12 @@ export class TenantComponent implements OnInit {
     },
     error => {
       this.loading = false;
-      this.MessageService.errormessage("Insufficient License");
+      if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+        this.commonService.unauthorizedToken(error);               
+      }
+      else{
+        this.MessageService.errormessage(this.translate.instant('Insufficient_License'));
+      }
     });
   }
 
@@ -437,11 +471,11 @@ export class TenantComponent implements OnInit {
     this.tenantService.DeleteRecord(this.TenantId).subscribe(
       data => { 
         if (data == true){
-          this.MessageService.successmessage("Record saved succesfully");
+          this.MessageService.successmessage(this.translate.instant('Record_deleted'));
           this.addTenantScreenToggle('');  
         } 
         else{
-          this.MessageService.errormessage("Error in Delete Record");
+          this.MessageService.errormessage(this.translate.instant('Error_Delete_Record'));
           return;
         }
        
@@ -450,7 +484,12 @@ export class TenantComponent implements OnInit {
     },
     error => {
       this.loading = false;
-      this.MessageService.errormessage(error);
+      if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+        this.commonService.unauthorizedToken(error);               
+      }
+      else{
+        this.MessageService.errormessage(error);
+      }
     });
   }
 
