@@ -184,6 +184,26 @@
    "RecordUpdate":"Record Updated..",
    "RecordDelete":"Record Deleted..",
    "DisableUpdatePermission":"You can not update this record..",
-   "Unauthorized":"Unauthorized"
+   "Unauthorized":"Unauthorized",
+
+   "UserMgmtInsertSuccessMsg":"Record Inserted Successfully..!",
+   "UserMgmtUpdateSuccessMsg":"Record Updated Successfully..!",
+   "UserMgmtDeleteSuccessMsg":"Record Deleted Successfully..!",
+   "UserMgmtExistUserIdMsg":"UserId is already exist..!",
+   "UserMgmtSomethimgWntWrngMsg":"Oops ! Something went wrong. Please contact your system administrator",
+   "UserMgmtCompanySelectMsg":"Please checked company selection..",
+   "UserMgmtProductSelectMsg":"Product is not selected for company..",
+   "UserMgmtWarehouseSelectMsg":"Warehouse is not selected for company..",
+   "UserMgmtWorkcenterSelectMsg":"Workcenter is not selected for company..",
+   "UserMgmtCheckSelectionMsg":"Something went worng. Please check your selection..",
+   "UsrMgtUsrIdErrMsg":"User id is required..",
+   "UsrMgtPwdErrMsg":"Password is required..",
+   "UsrMgtCPwdErrMsg":"Confirm Password is required..",
+   "UsrMgtNotMatchErrMsg":"Confirm Password does not match with Password..",
+   "UsrMgtUsPwdErrMsg":" User Password is required..",
+   "UsrMgtDB":"Database",
+   "UsrMgtDataLostErrMsg":"Your Data will be lost. Do you want to save it?"
+   
+   
 
 } 
