@@ -184,6 +184,18 @@
    "RecordUpdate":"Record Updated..",
    "RecordDelete":"Record Deleted..",
    "DisableUpdatePermission":"You can not update this record..",
-   "Unauthorized":"Unauthorized"
+   "Unauthorized":"Unauthorized",
+
+   "User_Already_Selected": "User is already selected! Please select another user",
+   "Product_Already_Selected": "Product is already selected! Please select another product",
+
+   "Enter_License_Count": "Please enter License Count",
+   "Enter_Correct_License_Count": "Please enter correct License Count",
+   "Insufficient_License": "Insufficient License",
+   "Error_Delete_Record": "Error in Delete Record",
+   "Record_Saved_Success": "Record saved succesfully",
+   "No_Record_Found": "No record found",
+   "User_Session_Terminated": "User session has been terminated successfully",
+   "Cannot_Logout": "Cannot Logout user!"
 
 } 

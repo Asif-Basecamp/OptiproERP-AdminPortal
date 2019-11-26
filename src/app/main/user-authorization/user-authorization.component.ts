@@ -8,6 +8,7 @@ import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { RowArgs } from '@progress/kendo-angular-grid';
 import { filterBy } from '@progress/kendo-data-query';
+import { CommonService } from 'src/app/service/common.service';
 
 @Component({
   selector: 'app-user-authorization',
@@ -51,7 +52,8 @@ export class UserAuthorizationComponent implements OnInit {
   //public showGridUserPage: boolean = false;
   //public showGridRolePage: boolean = false;
   
-  constructor(private AuthServ: AuthorizationService, private MessageService:MessageService, private translate: TranslateService, private httpClientSer: HttpClient) {
+  constructor(private AuthServ: AuthorizationService, private MessageService:MessageService, private translate: TranslateService, private httpClientSer: HttpClient,
+    private commonService: CommonService) {
     translate.use(localStorage.getItem('applang'));
       translate.onLangChange.subscribe((event: LangChangeEvent) => { 
     }); 
@@ -100,7 +102,12 @@ export class UserAuthorizationComponent implements OnInit {
       },    
       error => { 
         this.Loading = false; 
-        this.MessageService.errormessage(error.message);
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonService.unauthorizedToken(error);               
+        } 
+        else{
+          this.MessageService.errormessage(error.message);
+        }  
     }); 
   }
 
@@ -111,7 +118,12 @@ export class UserAuthorizationComponent implements OnInit {
         this.userGridLookup = data.USERDETAILS; 
       },    
       error => {  
-        this.MessageService.errormessage(error.message);
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonService.unauthorizedToken(error);               
+        } 
+        else{
+          this.MessageService.errormessage(error.message);
+        }
     });
   }
 
@@ -124,7 +136,13 @@ export class UserAuthorizationComponent implements OnInit {
         this.Loading = false;        
       },    
       error => {  
+        this.Loading = false;    
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonService.unauthorizedToken(error);               
+        }
+        else{
         this.MessageService.errormessage(error.message);
+        }
     });
   }
 
@@ -205,8 +223,13 @@ export class UserAuthorizationComponent implements OnInit {
        this.ddlUserGroup = data; 
       // this.defaultItem = this.ddlUserGroup[0];       
       },    
-      error => {  
+      error => { 
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonService.unauthorizedToken(error);               
+        }
+        else{ 
         this.MessageService.errormessage(error.message);
+        }
     });
   }
 
@@ -245,7 +268,13 @@ export class UserAuthorizationComponent implements OnInit {
       this.Loading = false;
     },    
       error => {  
-        this.MessageService.errormessage(error.message);
+        this.Loading = false;    
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonService.unauthorizedToken(error);               
+        }
+        else{
+          this.MessageService.errormessage(error.message);
+       }
     });
   }
 
@@ -254,8 +283,8 @@ export class UserAuthorizationComponent implements OnInit {
     this.selectedUser = this.inputVal;     
     if(this.LocalUserGrid.length > 0){
       var index = this.LocalUserGrid.findIndex(r=>r.UserCode == this.inputVal); 
-      if(index != -1){      
-       alert("User is already selected! Please select another user");
+      if(index != -1){ 
+        alert(this.translate.instant('User_Already_Selected'));         
         this.inputVal = '';
         this.selectedUser = '';
         return;
@@ -283,8 +312,13 @@ export class UserAuthorizationComponent implements OnInit {
         if(area == 'grid')
         this.dialougeToggle();
       },    
-    error => {  
-      this.MessageService.errormessage(error.message);
+    error => {
+      if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+        this.commonService.unauthorizedToken(error);               
+      }
+      else{  
+       this.MessageService.errormessage(error.message);
+      }
     });
   }
 
@@ -393,7 +427,12 @@ export class UserAuthorizationComponent implements OnInit {
     },    
       error => {  
         this.Loading = false;
-        this.MessageService.errormessage(error.message);
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonService.unauthorizedToken(error);               
+        }
+        else{
+          this.MessageService.errormessage(error.message);
+        }
     }); 
   }
  }
@@ -410,8 +449,6 @@ export class UserAuthorizationComponent implements OnInit {
   }   
   this.isEdit = true;
   this.addAuthScreenToggle('edit');
-  
-  
    
   this.AuthServ.GetDataForUserGroup(userGrp).subscribe(
     data => {    
@@ -434,7 +471,12 @@ export class UserAuthorizationComponent implements OnInit {
     },    
     error => {
       this.Loading = false;  
-      this.MessageService.errormessage(error.message);
+      if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+        this.commonService.unauthorizedToken(error);               
+      }
+      else{
+        this.MessageService.errormessage(error.message);
+      }
   });
 }
 
@@ -508,6 +550,8 @@ getSavedUser(){
     });
    }
 
+   this.Loading = true;    
+
     this.AuthServ.AddPermission(oSaveModel).subscribe(
       data => { 
         if(data == "True"){
@@ -520,9 +564,16 @@ getSavedUser(){
         else{
           this.MessageService.errormessage(data);
         }
+        this.Loading = false;    
       },    
       error => {  
-        this.MessageService.errormessage(error.message);
+        this.Loading = false;    
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonService.unauthorizedToken(error);               
+        }
+        else{
+          this.MessageService.errormessage(error.message);
+        }
     });
    }else{
     let userGroup = this.UserGroup;
@@ -559,7 +610,7 @@ getSavedUser(){
         return obj1; 
      });
     }
-
+    this.Loading = true;    
     this.AuthServ.AddPermission(oSaveModel).subscribe(
       data => { 
         if(data == "True"){
@@ -571,9 +622,16 @@ getSavedUser(){
         else{
           this.MessageService.errormessage(data);
         }
+        this.Loading = false;    
       },    
-      error => {  
-        this.MessageService.errormessage(error.message);
+      error => { 
+        this.Loading = false;     
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonService.unauthorizedToken(error);               
+        }
+        else{
+          this.MessageService.errormessage(error.message);
+        }
     });
    }
 }
@@ -597,7 +655,12 @@ deleteRecord(){
       this.confirmationOpened=false;
       this.dialogOpened=false; 
       this.Loading = false;
-      this.MessageService.errormessage(error.message);
+      if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+        this.commonService.unauthorizedToken(error);               
+      }
+      else{
+        this.MessageService.errormessage(error.message);
+      }
   });
 }
 
@@ -687,9 +750,7 @@ selectCheckboxRole(checkvalue,rowdata,idx){
      
   }
 
-  deleteMenu(rowIndex,dataItem){    
-    
-   
+  deleteMenu(rowIndex,dataItem){ 
     
     //this.MenuGrid = [];
     // if(this.LocalUserGrid[rowIndex+1].UserCode == this.selectedUser){
@@ -827,12 +888,12 @@ selectCheckboxRole(checkvalue,rowdata,idx){
           arr[idx].ReadSelected = false;
           this.oSaveUserScreenModel[i] =  arr;
       }   
-    } 
+    }
 
     if(isCheck)
-    this.MenuGrid[idx].ReadSelected = true;
+     this.MenuGrid[idx].ReadSelected = true;
     else
-    this.MenuGrid[idx].ReadSelected = false;
+     this.MenuGrid[idx].ReadSelected = false;
   }
 
   

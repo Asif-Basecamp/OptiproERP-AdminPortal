@@ -217,9 +217,9 @@
                                     </div>
                                 </ng-template>
                                                                
-                                <kendo-grid-column field="UserCode" title="User"></kendo-grid-column>
+                                <kendo-grid-column field="UserCode" title="{{'User'|translate}}"></kendo-grid-column>
                                 
-                                <kendo-grid-column field="" title="Delete">
+                                <kendo-grid-column field="" title="{{'Delete'|translate}}">
                                     <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                                         <button class="btn btn-danger btn-sm ml-2 btn-icon" type="button" [disabled]="!showDisplayBtn" (click)="deleteMenu(rowIndex,dataItem)">
                                             <svg viewBox="0 0 753.23 753.23" class="icon">
@@ -310,7 +310,7 @@
                                 </kendo-grid-column> -->
 
                                 <kendo-grid-column media="(min-width: 768px)" field="OPTM_PROD" title="{{'Product'|translate}}"></kendo-grid-column>
-                                <kendo-grid-column media="(min-width: 768px)" field="OPTM_MENUNAME" title="Screen"></kendo-grid-column>
+                                <kendo-grid-column media="(min-width: 768px)" field="OPTM_MENUNAME" title="{{'Screen'|translate}}"></kendo-grid-column>
 
                                 <kendo-grid-column media="(min-width: 768px)" field="AddSelected" title="{{'Add'|translate}}" width="60" class="text-center" headerClass="text-center">
                                     <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
@@ -321,7 +321,7 @@
                                     </ng-template>
                                 </kendo-grid-column>
 
-                                <kendo-grid-column media="(min-width: 768px)" field="{{'UpdateSelected'|translate}}" title="Update" width="60" class="text-center" headerClass="text-center">
+                                <kendo-grid-column media="(min-width: 768px)" field="UpdateSelected" title="{{'Update'|translate}}" width="60" class="text-center" headerClass="text-center">
                                     <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                                         <label class="custom-checkbox mb-0">
                                             <input type="checkbox" [disabled]="dataItem.UPDATEENABLED == 'false'" [checked]="dataItem.UpdateSelected" (change)="updateSelectChange($event,rowIndex)">
@@ -458,7 +458,7 @@
     </kendo-dialog-titlebar>
     <div class="">
         <!-- {{'Do_you_want_to_delete_record'|translate}} -->
-        Your Data will be lost. Do you want to save it?    
+        {{'Your_Data_will_be_lost._Do_you_want_to_save_it?'|translate}}    
     </div>
     <kendo-dialog-actions class="p-2 align-items-start justify-content-end">
         <button class="btn btn-success btn-sm d-flex align-items-center mr-2" id='btnCancelEdit' type="button" 

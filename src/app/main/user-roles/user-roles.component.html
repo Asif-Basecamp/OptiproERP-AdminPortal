@@ -160,7 +160,7 @@
                                               <span class="checkbox"></span>
                                               <span>{{'Enable_filter'|translate}}</span>
                                           </label>
-                                          <button type="button" kendoGridExcelCommand title="Export to excel file" class="ml-auto btn btn-link btn-sm btn-icon p-0">
+                                          <button type="button" kendoGridExcelCommand title="{{'Export_to_excel_file'|translate}}" class="ml-auto btn btn-link btn-sm btn-icon p-0">
                                               <svg viewBox="0 0 512 512" class="icon">
                                                   <use xlink:href="#download"></use>
                                               </svg>
@@ -168,9 +168,9 @@
                                       </div>
                                   </ng-template>
                                                           
-                                  <kendo-grid-column field="ProductId" title="Product"></kendo-grid-column>
+                                  <kendo-grid-column field="ProductId" title="{{'Product'|translate}}"></kendo-grid-column>
                                   
-                                  <kendo-grid-column title="Delete">
+                                  <kendo-grid-column title="{{'Delete'|translate}}">
                                       <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                                           <button class="btn btn-danger btn-sm ml-2 btn-icon" type="button" (click)="deleteMenu(rowIndex,dataItem)">
                                               <svg viewBox="0 0 753.23 753.23" class="icon">
@@ -195,15 +195,15 @@
                                             <span class="checkbox"></span>
                                             <span>{{'Enable_filter'|translate}}</span>
                                         </label>
-                                        <button type="button" kendoGridExcelCommand title="Export to excel file" class="ml-auto btn btn-link btn-sm btn-icon p-0">
+                                        <button type="button" kendoGridExcelCommand title="{{'Export_to_excel_file'|translate}}" class="ml-auto btn btn-link btn-sm btn-icon p-0">
                                             <svg viewBox="0 0 512 512" class="icon">
                                                 <use xlink:href="#download"></use>
                                             </svg>
                                         </button>
                                     </div>
                                 </ng-template>
-                                <kendo-grid-column field="ScreenName" title="Screen" [width]="300"></kendo-grid-column>
-                                <kendo-grid-column  field="SelectAll" title="All" width="60" class="text-center" headerClass="text-center">
+                                <kendo-grid-column field="ScreenName" title="{{'Screen'|translate}}" [width]="300"></kendo-grid-column>
+                                <kendo-grid-column  field="SelectAll" title="{{'All'|translate}}" width="60" class="text-center" headerClass="text-center">
                                     <ng-template kendoGridCellTemplate  let-dataItem let-rowIndex="rowIndex">                                                
                                         <label class="custom-checkbox mb-0">                                            
                                             <input type="checkbox" id="SelectAll"  [checked]="dataItem.AllSelected" (change)="GetData($event,dataItem,rowIndex)" name="SelectAll">
@@ -212,7 +212,7 @@
                                     </ng-template>
                                 </kendo-grid-column>
                                 <!-- {{dataItem.AddEnabled}} -->
-                                <kendo-grid-column  field="AddEnabled" title="Add" width="60" class="text-center" headerClass="text-center">
+                                <kendo-grid-column  field="AddEnabled" title="{{'Add'|translate}}" width="60" class="text-center" headerClass="text-center">
                                     <ng-template kendoGridCellTemplate  let-dataItem let-rowIndex="rowIndex">
                                 
                                         <label class="custom-checkbox mb-0">
@@ -224,7 +224,7 @@
                                     </ng-template>
                                 </kendo-grid-column>
                                 <!-- {{dataItem.UpdateEnabled}} -->
-                                <kendo-grid-column  field="UpdateEnabled" title="Update" width="60" class="text-center" headerClass="text-center">
+                                <kendo-grid-column  field="UpdateEnabled" title="{{'Update'|translate}}" width="60" class="text-center" headerClass="text-center">
                                     <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                                         <label class="custom-checkbox mb-0">
                                             <input type="checkbox"  id="UpdateEnabled" (change)="GetData($event,dataItem,rowIndex)" name="UpdateEnabled" [checked]="dataItem.UpdateSelected"  [disabled]="!dataItem.UpdateEnabled">
@@ -233,7 +233,7 @@
                                     </ng-template>
                                 </kendo-grid-column>
                                 <!-- {{dataItem.DeleteEnabled}} -->
-                                <kendo-grid-column  field="DeleteEnabled" title="Delete" width="60" class="text-center" headerClass="text-center">
+                                <kendo-grid-column  field="DeleteEnabled" title="{{'Delete'|translate}}" width="60" class="text-center" headerClass="text-center">
                                     <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                                         <label class="custom-checkbox mb-0">
                                             <input type="checkbox"  id="DeleteEnabled" (change)="GetData($event,dataItem,rowIndex)" name="DeleteEnabled" [checked]="dataItem.DeleteSelected"  [disabled]="!dataItem.DeleteEnabled">
@@ -242,7 +242,7 @@
                                     </ng-template>
                                 </kendo-grid-column>
                                 <!-- {{dataItem.ReadEnabled}} -->
-                                <kendo-grid-column  field="ReadEnabled" title="Read" width="60" class="text-center" headerClass="text-center">
+                                <kendo-grid-column  field="ReadEnabled" title="{{'Read'|translate}}" width="60" class="text-center" headerClass="text-center">
                                     <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                                         
                                         <label class="custom-checkbox mb-0">
@@ -306,7 +306,7 @@
 
 <kendo-dialog *ngIf="lookupOpened" (close)="productLookupToggle()" [minWidth]="250" [width]="750">
     <kendo-dialog-titlebar>
-        <div>Select Product</div>
+        <div>{{'Select_Product'|translate}}</div>
     </kendo-dialog-titlebar>
     <div class="">
         <!-- Lookup Grid-->
@@ -327,8 +327,8 @@
                     </label>
                 </div>
             </ng-template>
-            <kendo-grid-column field="ProductId" title="Product ID"></kendo-grid-column>
-            <kendo-grid-column field="OPTM_PRODDESC" title="Product Description"></kendo-grid-column>
+            <kendo-grid-column field="ProductId" title="{{'Product_ID'|translate}}"></kendo-grid-column>
+            <kendo-grid-column field="OPTM_PRODDESC" title="{{'Product_Description'|translate}}"></kendo-grid-column>
         </kendo-grid>
     </div>
     <kendo-dialog-actions class="p-2 align-items-start">
@@ -363,7 +363,7 @@
         </kendo-dialog-titlebar>
         <div class="">
             <!-- {{'Do_you_want_to_delete_record'|translate}} -->
-            Your Data will be lost..Do you want to save it?    
+            {{'Your_Data_will_be_lost..Do_you_want_to_save_it?'|translate}}   
         </div>
         <kendo-dialog-actions class="p-2 align-items-start justify-content-end">
             <button class="btn btn-success btn-sm d-flex align-items-center mr-2" id='btnCancelEdit' type="button" 

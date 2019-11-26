@@ -5,6 +5,8 @@ import { MessageService } from '../../common/message.service';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { filterBy } from '../../../../node_modules/@progress/kendo-data-query';
+import { CommonService } from 'src/app/service/common.service';
+
 @Component({
   selector: 'app-user-roles',
   templateUrl: './user-roles.component.html',
@@ -51,7 +53,7 @@ export class UserRolesComponent implements OnInit {
 
   //public TableDataBinding: any[]=[];
   constructor(private RoleService:RoleService,private MessageService:MessageService,
-    private translate: TranslateService, private httpClientSer: HttpClient) {
+    private translate: TranslateService, private httpClientSer: HttpClient, private commonService: CommonService) {
     // let userLang = navigator.language.split('-')[0];
     //     userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
     translate.use(localStorage.getItem('applang'));
@@ -155,8 +157,13 @@ export class UserRolesComponent implements OnInit {
     }    
    
   },    
-  error => {    
-    this.MessageService.errormessage(error.message);
+  error => {  
+    if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+      this.commonService.unauthorizedToken(error);               
+    }
+    else{  
+      this.MessageService.errormessage(error.message);
+    }
   });
  }
 
@@ -203,7 +210,12 @@ export class UserRolesComponent implements OnInit {
         }    
       },    
       error => {  
-        this.MessageService.errormessage(error.message);   
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonService.unauthorizedToken(error);               
+        }
+        else{
+          this.MessageService.errormessage(error.message);   
+        }
       });
   }
 
@@ -243,8 +255,8 @@ export class UserRolesComponent implements OnInit {
     let ProductName = $event.selectedRows[0].dataItem.ProductId;
     if(this.LocalProductGrid.length > 0){
       var index = this.LocalProductGrid.findIndex(r=>r.ProductId == ProductName); 
-      if(index != -1){      
-       alert("Product is already selected! Please select another product");
+      if(index != -1){ 
+        alert(this.translate.instant('Product_Already_Selected'));
         this.ProductVal = '';
         this.SelectedProduct = '';
         return;
@@ -344,11 +356,18 @@ export class UserRolesComponent implements OnInit {
           }    
           else{    
             this.MessageService.errormessage(this.translate.instant('Somethingwrong')); 
+                
+    
             this.Loading=false;   
           }    
         },    
-        error => {  
-          this.MessageService.errormessage(error.message);   
+        error => { 
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonService.unauthorizedToken(error);               
+          }
+          else{ 
+            this.MessageService.errormessage(error.message);  
+          }
         });
     }
   
@@ -559,7 +578,12 @@ export class UserRolesComponent implements OnInit {
         }
       },
       error => {
-        this.MessageService.errormessage(error.message);
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonService.unauthorizedToken(error);               
+        }
+        else{
+          this.MessageService.errormessage(error.message);
+        }
       });
   };
   
@@ -627,8 +651,12 @@ export class UserRolesComponent implements OnInit {
       },
       error => {
         this.Loading=false;
-
-        this.MessageService.errormessage(error.message);
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonService.unauthorizedToken(error);               
+        }
+        else{
+          this.MessageService.errormessage(error.message);
+        }
       });
   }
      
@@ -659,7 +687,12 @@ export class UserRolesComponent implements OnInit {
             }
           },
           error => {
-            this.MessageService.errormessage(error.message);
+            if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+              this.commonService.unauthorizedToken(error);               
+            }
+            else{
+              this.MessageService.errormessage(error.message);
+            }
           });
 
         console.log()
@@ -841,7 +874,12 @@ export class UserRolesComponent implements OnInit {
       },
       error => {
         this.Loading=false;
-        this.MessageService.errormessage(error.message);
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonService.unauthorizedToken(error);               
+        }
+        else{
+          this.MessageService.errormessage(error.message);
+        }
       });
   }  
      
@@ -864,7 +902,12 @@ export class UserRolesComponent implements OnInit {
       },
       error => {
         this.Loading=false;
-        this.MessageService.errormessage(error.message);
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonService.unauthorizedToken(error);               
+        }
+        else{
+          this.MessageService.errormessage(error.message);
+        }
       });
   }
 

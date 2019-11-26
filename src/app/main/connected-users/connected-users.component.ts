@@ -5,6 +5,7 @@ import { MessageService } from '../../common/message.service';
 
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { CommonService } from 'src/app/service/common.service';
 
 @Component({
   selector: 'app-connected-users',
@@ -27,7 +28,8 @@ export class ConnectedUsersComponent implements OnInit {
   public Controller: string ='';
   public showConnectedUserMainPage: boolean = false;
  
-  constructor(private translate: TranslateService, private httpClientSer: HttpClient,private ConnectedUserServ: ConnectedUsersService, private MessageService:MessageService) { 
+  constructor(private translate: TranslateService, private httpClientSer: HttpClient,private ConnectedUserServ: ConnectedUsersService, 
+    private MessageService:MessageService, private commonService: CommonService) { 
     translate.use(localStorage.getItem('applang'));
       translate.onLangChange.subscribe((event: LangChangeEvent) => {
           this.selectedItem = translate.instant("Login_Username"); 
@@ -66,8 +68,13 @@ export class ConnectedUsersComponent implements OnInit {
         this.ddlProductList = data; 
         console.log(data);
       },    
-      error => {  
-        this.MessageService.errormessage(error.message);
+      error => { 
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonService.unauthorizedToken(error);               
+        } 
+        else{ 
+          this.MessageService.errormessage(error.message);
+        }
       }); 
   } 
 
@@ -123,11 +130,16 @@ export class ConnectedUsersComponent implements OnInit {
           this.showConnectedUserMainPage = false;
         }     
         else{
-          this.MessageService.errormessage("No record found");
+          this.MessageService.errormessage(this.translate.instant('No_Record_Found'));
        }
       },    
       error => {  
-        this.MessageService.errormessage(error.message);
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonService.unauthorizedToken(error);               
+        }
+        else{
+          this.MessageService.errormessage(error.message);
+        }
     });
   }
 
@@ -135,11 +147,11 @@ export class ConnectedUsersComponent implements OnInit {
     this.ConnectedUserServ.RemoveLoggedInUser(this.Product,this.Controller,dataItem.GUID,dataItem.UserName).subscribe(
       data => {      
         if(data == true){
-          this.MessageService.successmessage("User session has been terminated successfully");
+          this.MessageService.successmessage(this.translate.instant('User_Session_Terminated'));
           this.gridData.splice(rowIndex,1);      
         }     
         else{
-          this.MessageService.errormessage("Cannot Logout user!");
+          this.MessageService.errormessage(this.translate.instant('Cannot_Logout'));
        }
       },    
       error => {  
