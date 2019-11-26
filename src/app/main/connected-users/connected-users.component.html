@@ -25,8 +25,8 @@
             <!-- Kendo Grid Start -->
             <div fxLayout="column" fxFlex="100%" class="kendo-grid-wrapper mt-3">
 
-                <kendo-grid [kendoGridBinding]="gridData" [resizable]="true" [sortable]="true" class="full-height-grid kendo-responsive-grid" [filterable]=isColumnFilter
-                    [groupable]=isColumnGroup [columnMenu]="false">
+                <kendo-grid [data]="gridData" [resizable]="true" [sortable]="true" class="full-height-grid kendo-responsive-grid" [filterable]=isColumnFilter
+                    [groupable]=isColumnGroup [columnMenu]="false" [pageable]="showConnectedUserMainPage" [pageSize]="10">
                     <!-- [pageSize]="10" 
                     [pageable]="{
                         buttonCount: paginationButtonCount,

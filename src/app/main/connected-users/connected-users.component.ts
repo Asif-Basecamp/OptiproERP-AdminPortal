@@ -25,6 +25,7 @@ export class ConnectedUsersComponent implements OnInit {
   selectedItem: string = "";  
   public Product: string ='';
   public Controller: string ='';
+  public showConnectedUserMainPage: boolean = false;
  
   constructor(private translate: TranslateService, private httpClientSer: HttpClient,private ConnectedUserServ: ConnectedUsersService, private MessageService:MessageService) { 
     translate.use(localStorage.getItem('applang'));
@@ -116,6 +117,10 @@ export class ConnectedUsersComponent implements OnInit {
       data => {      
         if(data != undefined && data != null){
           this.gridData = data.LoggedUserData;
+          if(this.gridData.length > 10)
+          this.showConnectedUserMainPage = true;
+          else
+          this.showConnectedUserMainPage = false;
         }     
         else{
           this.MessageService.errormessage("No record found");

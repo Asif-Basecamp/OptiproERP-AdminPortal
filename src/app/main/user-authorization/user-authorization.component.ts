@@ -6,6 +6,9 @@ import { MessageService } from '../../common/message.service';
 
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { RowArgs } from '@progress/kendo-angular-grid';
+import { filterBy } from '@progress/kendo-data-query';
+
 @Component({
   selector: 'app-user-authorization',
   templateUrl: './user-authorization.component.html',
@@ -38,7 +41,16 @@ export class UserAuthorizationComponent implements OnInit {
   public user_select : any;
   public LocalUserGrid: any [] = [];
   public selectedUser: string = '';
-
+  public SavedMenu: any[] = [];
+  public MenuGrid: any[] = [];
+  public oSaveUserScreenModel: any = [];
+  public isUserCodeSelected: any;
+  public confirmationOpenedEdit = false; 
+  public FilterData: any[]; 
+  public showGridDataPage: boolean = false;
+  //public showGridUserPage: boolean = false;
+  //public showGridRolePage: boolean = false;
+  
   constructor(private AuthServ: AuthorizationService, private MessageService:MessageService, private translate: TranslateService, private httpClientSer: HttpClient) {
     translate.use(localStorage.getItem('applang'));
       translate.onLangChange.subscribe((event: LangChangeEvent) => { 
@@ -51,7 +63,11 @@ export class UserAuthorizationComponent implements OnInit {
     }); 
     this.getPermissionView();
     this.oModalData.User = [];
-    this.oModalData.SelectedRole = []; 
+    this.oModalData.SelectedRole = [];    
+  }
+
+  public confirmationEditToggle() {  
+    this.confirmationOpenedEdit = !this.confirmationOpenedEdit;    
   }
 
   onFilterChange(checkBox:any,grid:GridComponent){
@@ -69,11 +85,21 @@ export class UserAuthorizationComponent implements OnInit {
 
   /*-- get list of users on home screen --*/
   getPermissionView(){
+    //this.Loading = true;
     this.AuthServ.getPermissionView().subscribe(
       data => {
-        this.gridData = data; 
+        this.gridData = data;
+        this.FilterData = data;
+        if(this.gridData.length > 10){
+          this.showGridDataPage = true;
+        }
+        else{
+          this.showGridDataPage = false;
+        }   
+        this.Loading = false;
       },    
-      error => {  
+      error => { 
+        this.Loading = false; 
         this.MessageService.errormessage(error.message);
     }); 
   }
@@ -91,9 +117,11 @@ export class UserAuthorizationComponent implements OnInit {
 
   /*-- get list of user group --*/
   getAllUserGroup(){
+    this.Loading = true;
     this.AuthServ.getUserGroup().subscribe(
       data => {
-        this.allUsersDDL = data;         
+        this.allUsersDDL = data; 
+        this.Loading = false;        
       },    
       error => {  
         this.MessageService.errormessage(error.message);
@@ -102,10 +130,33 @@ export class UserAuthorizationComponent implements OnInit {
 
   /*-- condition of add or edit screen --*/
   public addAuthScreenToggle(mode) {
+
+    if(mode == 'confirm' && !this.isEdit)
+       mode = 'Cancel';    
+
+    if(mode == 'confirm'){
+      this.confirmationEditToggle();
+    }
+    else if(mode == 'Cancel'){
+      this.confirmationOpenedEdit = false;
+      this.addAuthScreen = !this.addAuthScreen;
+      this.oSaveUserScreenModel = [];
+      this.inputRole = []; 
+    
+      this.isEdit = false;
+      this.inputVal = '';     
+      this.userGridLookup = []; 
+      this.screenGrid = [];
+      this.MenuGrid = [];
+      this.LocalUserGrid = [];
+    }
+    else{
     this.addAuthScreen = !this.addAuthScreen;
-    this.inputRole = [];
+    this.oSaveUserScreenModel = [];
+    this.inputRole = [];   
+
     if(this.addAuthScreen){
-      if(mode == 'edit'){
+      if(mode == 'edit'){        
         this.getAllUserGroup();       
       } 
       else{
@@ -115,13 +166,8 @@ export class UserAuthorizationComponent implements OnInit {
       }          
       this.getUserGroup();
     }
-    if(mode == 'add'){
-      this.isEdit = false;
-      this.inputVal = '';     
-      this.userGridLookup = []; 
-      this.screenGrid = [];
-      this.LocalUserGrid = [];
-    }
+   }    
+    
   }
 
   /*-- select user screen on click search icon --*/
@@ -132,6 +178,7 @@ export class UserAuthorizationComponent implements OnInit {
       }); 
       return false;
     }else{
+     
       this.dialogOpened = !this.dialogOpened;
     }
   }
@@ -164,71 +211,74 @@ export class UserAuthorizationComponent implements OnInit {
   }
 
   getRoles(mode){
+    this.Loading = true;
     this.AuthServ.getRoles().subscribe(
       data => {       
       this.gridDataRoles = data; 
+      
+      for(let idx=0; idx<this.gridDataRoles.length; idx++){
+        this.gridDataRoles[idx].checked = false;
+      } 
+      
       if(mode == 'edit'){
         for(let i=0; i<this.DataForUserGroup.OPTM_ADMIN_AUTHR.length; i++){
           for(let j=0; j<this.gridDataRoles.length; j++){
             if(this.DataForUserGroup.OPTM_ADMIN_AUTHR[i].OPTM_ROLEID == this.gridDataRoles[j].OPTM_ROLEID ){
               this.gridDataRoles[j].checked = true;
+              this.gridDataRoles[j].OPTM_AUTHCODE = this.DataForUserGroup.OPTM_ADMIN_AUTHR[i].OPTM_AUTHCODE
               this.inputRole.push({
-                OPTM_ROLEID: this.gridDataRoles[j].OPTM_ROLEID
+                OPTM_ROLEID: this.gridDataRoles[j].OPTM_ROLEID,
+                OPTM_AUTHCODE: this.DataForUserGroup.OPTM_ADMIN_AUTHR[i].OPTM_AUTHCODE
               });
-            }
-            else{
-              this.gridDataRoles[j].checked = false;
-            }
+            }          
           }
-        }  
+        } 
         
-        this.getMenuList('show');
+        // if(this.gridDataRoles.length > 10){
+        //   this.showGridRolePage = true;
+        // }
+        
+       // this.getMenuList('show');
+        this.getSavedMenu();
         this.CheckUserPermissionForProduct('editBtn');
       }
-      else{
-          for(let i=0; i<this.gridDataRoles.length; i++){
-          this.gridDataRoles[i].checked = false;
-        } 
-      }
-        
-      },    
+      this.Loading = false;
+    },    
       error => {  
         this.MessageService.errormessage(error.message);
     });
   }
 
   gridUserSelection($event){
-    this.inputVal = $event.selectedRows[0].dataItem.OPTM_USERCODE;    
+    this.inputVal = $event.selectedRows[0].dataItem.OPTM_USERCODE; 
+    this.selectedUser = this.inputVal;     
     if(this.LocalUserGrid.length > 0){
       var index = this.LocalUserGrid.findIndex(r=>r.UserCode == this.inputVal); 
-      if(index != -1){
-       // this.MessageService.errormessage("User is already selected! Please select another user");
+      if(index != -1){      
        alert("User is already selected! Please select another user");
         this.inputVal = '';
+        this.selectedUser = '';
         return;
       }    
-    }  
-    
-    // if(index == -1){
-    //   this.LocalUserGrid.push({
-    //     UserCode: this.inputVal
-    //   });
-    // } 
+    } 
     this.CheckUserPermissionForProduct('grid'); 
   }
 
   CheckUserPermissionForProduct(area){
     this.oModalData.User = [];
     this.oModalData.User.push({
-      User: this.inputVal
+     // User: this.inputVal
+     User: this.selectedUser
     })
     this.AuthServ.checkUserPermissionForProduct(this.oModalData).subscribe(
     data => { 
       if(data != 'exist'){
         this.MessageService.errormessage(data);
-        this.screenGrid = [];
+        //this.screenGrid = [];
+        //this.MenuGrid = [];
       }
-      if(this.inputRole.length > 0 && this.inputVal != '')
+      //if(this.inputRole.length > 0 && this.inputVal != '')
+      if(this.inputRole.length > 0 && this.selectedUser != '')
         this.showDisplayBtn = true;
         if(area == 'grid')
         this.dialougeToggle();
@@ -238,26 +288,69 @@ export class UserAuthorizationComponent implements OnInit {
     });
   }
 
+  getSavedMenu(){ 
+    this.Loading = true;
+    this.oSaveUserScreenModel = [];   
+    this.SavedMenu = this.DataForUserGroup.OPTM_ADMIN_AUTHRUSER;
+    let tempArr = this.SavedMenu;
+    
+    for(let tempIdx=0; tempIdx < this.DataForUserGroup.OPTM_ADMIN_AUTHRUSER.length; tempIdx++){
+      var Permission = this.DataForUserGroup.OPTM_ADMIN_AUTHRUSER[tempIdx].OPTM_PERMISSION.split(",");      
+      for (var iPermissionIndex = 0; iPermissionIndex < Permission.length; iPermissionIndex++) {
+        if (Permission[iPermissionIndex] == "A")
+        this.DataForUserGroup.OPTM_ADMIN_AUTHRUSER[tempIdx].AddSelected = true;
+        else if (Permission[iPermissionIndex] == "U")
+        this.DataForUserGroup.OPTM_ADMIN_AUTHRUSER[tempIdx].UpdateSelected = true;
+        else if (Permission[iPermissionIndex] == "D")
+        this.DataForUserGroup.OPTM_ADMIN_AUTHRUSER[tempIdx].DeleteSelected = true;
+        else if (Permission[iPermissionIndex] == "R")
+        this.DataForUserGroup.OPTM_ADMIN_AUTHRUSER[tempIdx].ReadSelected = true;
+      }
+    }
+    this.SavedMenu = this.DataForUserGroup.OPTM_ADMIN_AUTHRUSER;
+    //this.SavedMenu = tempArr;
+
+    for(let i=0; i<this.LocalUserGrid.length; i++){
+      let UserArr = [];
+      UserArr = this.SavedMenu.filter(val => val.OPTM_USERCODE == this.LocalUserGrid[i].UserCode); 
+      this.oSaveUserScreenModel.push(UserArr);
+    }
+
+    this.Loading = false;
+
+    this.getMenuGridForSelectedUser();
+  }
+
+  getMenuGridForSelectedUser(){ 
+    this.MenuGrid = [];   
+    let arr = [];
+    //this.MenuGrid = this.SavedMenu.filter(val => val.OPTM_USERCODE == this.selectedUser);
+    for(let i=0; i< this.oSaveUserScreenModel.length; i++){
+      arr = this.oSaveUserScreenModel[i].filter(val => val.OPTM_USERCODE == this.selectedUser);   
+      if(arr.length>0){
+        this.MenuGrid = arr;
+      }   
+    }   
+    if(this.MenuGrid.length == 0){
+      this.getMenuList('show');
+    }   
+  }
+
   getMenuList(state){
-  // if(state != 'show'){
+    
+  
     for(let i=0; i < this.inputRole.length; i++){
       for(let j=0; j < this.gridDataRoles.length; j++){
-        if(this.inputRole[i].OPTM_ROLEID == this.gridDataRoles[j].OPTM_ROLEID){
-
-          // let idx = this.oModalData.SelectedRole.findIndex(r=>r.Product == this.inputRole[i].OPTM_ROLEID);
-          // if(this.oModalData.SelectedRole.length > 0){
-          
-          // }          
-
+        if(this.inputRole[i].OPTM_ROLEID == this.gridDataRoles[j].OPTM_ROLEID){          
           this.oModalData.SelectedRole.push({
               Product: this.gridDataRoles[j].OPTM_PROD
           })         
         }
       }
     }
-  //} 
-  
-  if(state == 'show'){
+    
+   if(state == 'show'){
+    this.Loading = true;
     this.AuthServ.getMenuList(this.inputRole).subscribe(
       data => {      
        this.screenGrid = data.Table;
@@ -284,9 +377,22 @@ export class UserAuthorizationComponent implements OnInit {
           else if(permissionVal[j] == 'R')
             this.screenGrid[i].ReadSelected = true;
          }
-      }       
+         this.screenGrid[i].OPTM_USERCODE = this.selectedUser;
+      } 
+     
+      //this.MenuGrid = this.screenGrid;
+      this.oSaveUserScreenModel.push(this.screenGrid);
+      let arr = [];
+      for(let i=0; i< this.oSaveUserScreenModel.length; i++){
+        arr = this.oSaveUserScreenModel[i].filter(val => val.OPTM_USERCODE == this.selectedUser);   
+        if(arr.length>0){
+          this.MenuGrid = arr;
+        }   
+      }
+      this.Loading = false;       
     },    
       error => {  
+        this.Loading = false;
         this.MessageService.errormessage(error.message);
     }); 
   }
@@ -303,23 +409,58 @@ export class UserAuthorizationComponent implements OnInit {
      userGrp = $event.selectedRows[0].dataItem.OPTM_USERGROUP;    
   }   
   this.isEdit = true;
-  this.addAuthScreenToggle('edit'); 
+  this.addAuthScreenToggle('edit');
+  
+  
    
   this.AuthServ.GetDataForUserGroup(userGrp).subscribe(
     data => {    
         this.DataForUserGroup = data;
         this.ddlUserGroup = this.allUsersDDL.filter(val => val.OPTM_GROUPCODE == userGrp);
         this.defaultItem = this.ddlUserGroup[0];
-        this.inputVal = userGrp;
-        this.selectedUser = this.inputVal;
+        this.getSavedUser();
+        //this.inputVal = userGrp;
+        //this.selectedUser = this.inputVal;
+        if(this.LocalUserGrid.length > 0){
+          this.selectedUser = this.LocalUserGrid[0].UserCode;
+          let select = [];       
+          select.push(this.selectedUser);
+          this.isUserCodeSelected = (e: RowArgs) => select.indexOf(e.dataItem.UserCode) >=0 ;  
+        }              
+
         this.showDisplayBtn = true;  
-        this.getRoles('edit');      
+        this.getRoles('edit'); 
+           
     },    
-    error => {  
+    error => {
+      this.Loading = false;  
       this.MessageService.errormessage(error.message);
   });
 }
 
+getSavedUser(){
+  this.Loading = true;
+  this.LocalUserGrid = [];  
+  for(let i=0; i<this.DataForUserGroup.OPTM_ADMIN_AUTHRUSER.length; i++){
+    if(this.LocalUserGrid.length > 0){
+      const index = this.LocalUserGrid.findIndex(r=>r.UserCode == this.DataForUserGroup.OPTM_ADMIN_AUTHRUSER[i].OPTM_USERCODE);
+      if(index == -1){
+        this.LocalUserGrid.push({
+          UserCode: this.DataForUserGroup.OPTM_ADMIN_AUTHRUSER[i].OPTM_USERCODE
+        });
+      }    
+    } 
+    else{
+      this.LocalUserGrid.push({
+        UserCode: this.DataForUserGroup.OPTM_ADMIN_AUTHRUSER[i].OPTM_USERCODE
+      });
+    }   
+  }
+  // if(this.LocalUserGrid.length > 10){
+  //   this.showGridUserPage = true;
+  // }
+  this.Loading = false;    
+}
 
  saveRecord(){  
   var oSaveModel:any = {};
@@ -337,30 +478,35 @@ export class UserAuthorizationComponent implements OnInit {
           OPTM_USERGROUP : userGroup,
           OPTM_ROLEID : obj.OPTM_ROLEID,
           OPTM_CREATEDATE : '000-00-00',
-          OPTM_USERID : 'admin'
+          OPTM_USERID : 'admin',
+          OPTM_AUTHCODE: obj.OPTM_AUTHCODE
       });
       }
       return obj; 
     });
 
-    let saveUserGridData = this.screenGrid.map(function(obj) {
-      const index = DataForUserGroup.OPTM_ADMIN_AUTHRUSER.findIndex(r=>r.OPTM_MENUID == obj.OPTM_MENUID);
-    
+    for(let idx1=0; idx1<this.oSaveUserScreenModel.length; idx1++){
+      //let saveUserGridData = this.screenGrid.map(function(obj) {
+      let saveUserGridData = this.oSaveUserScreenModel[idx1].map(function(obj) {
+     // const index = DataForUserGroup.OPTM_ADMIN_AUTHRUSER.findIndex(r=>r.OPTM_MENUID == obj.OPTM_MENUID);    
       oSaveModel.OPTM_ADMIN_AUTHRUSER.push({
         OPTM_USERGROUP: DataForUserGroup.OPTM_ADMIN_AUTHR[0].OPTM_USERGROUP,
         OPTM_ROLEID: obj.OPTM_ROLEID,
         OPTM_MENUID: obj.OPTM_MENUID,
         OPTM_PERMISSION: obj.OPTM_PERMISSION,
         OPTM_CREATEDATE: '000-00-00',
-        OPTM_USERCODE: DataForUserGroup.OPTM_ADMIN_AUTHR[0].OPTM_USERGROUP,
-        AddSelected: obj.AddSelected,
-        UpdateSelected: obj.UpdateSelected,
-        DeleteSelected: obj.DeleteSelected,
-        ReadSelected: obj.ReadSelected,
+        //OPTM_USERCODE: DataForUserGroup.OPTM_ADMIN_AUTHR[0].OPTM_USERGROUP,
+        OPTM_USERCODE: obj.OPTM_USERCODE,
+        AddSelected: (obj.AddSelected == undefined) ? false: obj.AddSelected,
+        UpdateSelected: (obj.UpdateSelected == undefined) ? false: obj.UpdateSelected,
+        DeleteSelected: (obj.DeleteSelected == undefined) ? false: obj.DeleteSelected,
+        ReadSelected: (obj.ReadSelected == undefined) ? false: obj.ReadSelected,
         OPTM_USERID: 'admin',
+        OPTM_AUTHCODE: obj.OPTM_AUTHCODE
       });
       return obj; 
     });
+   }
 
     this.AuthServ.AddPermission(oSaveModel).subscribe(
       data => { 
@@ -369,6 +515,7 @@ export class UserAuthorizationComponent implements OnInit {
             this.MessageService.successmessage(res);
           }); 
           this.addAuthScreenToggle('edit');
+          this.confirmationOpenedEdit = false;
         }
         else{
           this.MessageService.errormessage(data);
@@ -393,31 +540,33 @@ export class UserAuthorizationComponent implements OnInit {
       return obj; 
     });
 
-    let saveUserGridData = this.screenGrid.map(function(obj) {
-      oSaveModel.OPTM_ADMIN_AUTHRUSER.push({
-        OPTM_USERGROUP : userGroup,
-        OPTM_ROLEID : obj.OPTM_ROLEID,
-        OPTM_MENUID : obj.OPTM_MENUID,
-        OPTM_PERMISSION : obj.OPTM_PERMISSION,
-        OPTM_CREATEDATE : "000-00-00",
-        //OPTM_USERCODE : inputVal,
-        OPTM_USERCODE : selectedUser,
-        AddSelected: obj.AddSelected,
-        UpdateSelected: obj.UpdateSelected,
-        DeleteSelected: obj.DeleteSelected,
-        ReadSelected: obj.ReadSelected,
-        OPTM_USERID: "admin"
-      });
-      return obj; 
-    });
+    for(let idx=0; idx<this.oSaveUserScreenModel.length; idx++){
+      let saveUserGridData = this.oSaveUserScreenModel[idx].map(function(obj1) {
+        oSaveModel.OPTM_ADMIN_AUTHRUSER.push({
+          OPTM_USERGROUP : userGroup,
+          OPTM_ROLEID : obj1.OPTM_ROLEID,
+          OPTM_MENUID : obj1.OPTM_MENUID,
+          OPTM_PERMISSION : obj1.OPTM_PERMISSION,
+          OPTM_CREATEDATE : "000-00-00",
+          //OPTM_USERCODE : inputVal,
+          OPTM_USERCODE : obj1.OPTM_USERCODE,
+          AddSelected: (obj1.AddSelected == undefined) ? false: obj1.AddSelected,
+          UpdateSelected: (obj1.UpdateSelected == undefined) ? false: obj1.UpdateSelected,
+          DeleteSelected: (obj1.DeleteSelected == undefined) ? false: obj1.DeleteSelected,
+          ReadSelected: (obj1.ReadSelected == undefined) ? false: obj1.ReadSelected,
+          OPTM_USERID: "admin"
+        });
+        return obj1; 
+     });
+    }
 
     this.AuthServ.AddPermission(oSaveModel).subscribe(
       data => { 
         if(data == "True"){
-          this.translate.get('Operation_Complete_MSG').subscribe((res: string) => {
+            this.translate.get('Operation_Complete_MSG').subscribe((res: string) => {
             this.MessageService.successmessage(res);
           }); 
-          this.addAuthScreenToggle('add');
+          this.addAuthScreenToggle('Cancel');
         }
         else{
           this.MessageService.errormessage(data);
@@ -484,26 +633,104 @@ selectCheckboxRole(checkvalue,rowdata,idx){
     this.getMenuList('hide');
  }
 
+ userSelection($event){
+ 
+  if(this.selectedUser != ''){
+  if(this.oSaveUserScreenModel.length > 0){
+    for(let i=0; i<this.oSaveUserScreenModel.length;i++){
+     const index = this.oSaveUserScreenModel[i].findIndex(val => val.OPTM_USERCODE === this.selectedUser); 
+     if(index != -1 ){
+      this.oSaveUserScreenModel[i] = this.MenuGrid;
+     }            
+    }   
+  }
+ }
+  
+  this.MenuGrid =[];  
+  this.selectedUser = $event.selectedRows[0].dataItem.UserCode;
+     
+  let select = [];       
+  select.push(this.selectedUser);
+  this.isUserCodeSelected = (e: RowArgs) => select.indexOf(e.dataItem.UserCode) >=0 ;  
+
+  if(this.isEdit){
+    this.getMenuGridForSelectedUser();
+  }
+  else{
+    this.getMenuList('show');
+  }    
+ }
+
   displayMenu(event){   
-    if(event == 'Arrow'){
+     if(event == 'Arrow'){
       if(this.inputVal != ''){
         this.LocalUserGrid.push({
           UserCode: this.inputVal
         });
       this.selectedUser = this.inputVal;
       this.inputVal = '';
-      }     
-      
+      }  
+
+      if(this.LocalUserGrid.length > 0){
+        let select = [];       
+        select.push(this.selectedUser);
+        this.isUserCodeSelected = (e: RowArgs) => select.indexOf(e.dataItem.UserCode) >=0 ;  
+      }
+    }    
+
+    if(this.isEdit){
+      this.getMenuGridForSelectedUser();
     }
     else{
-      this.selectedUser = event.selectedRows[0].dataItem.UserCode;
-    }  
-
-    this.getMenuList('show');
+      this.getMenuList('show');      
+    }
+     
   }
 
-  deleteMenu(rowIndex,dataItem){
-    this.screenGrid = [];
+  deleteMenu(rowIndex,dataItem){    
+    
+   
+    
+    //this.MenuGrid = [];
+    // if(this.LocalUserGrid[rowIndex+1].UserCode == this.selectedUser){
+    //   this.selectedUser = this.LocalUserGrid[rowIndex+1].UserCode;  
+    //   for(let i=0; i<this.oSaveUserScreenModel.length;i++){
+    //     const index1 = this.oSaveUserScreenModel[i].findIndex(val => val.OPTM_USERCODE === this.selectedUser);
+    //      if(index1 != -1 ){
+    //       this.MenuGrid = this.oSaveUserScreenModel[i];
+    //      }
+    //   }    
+    // }
+
+    if(this.oSaveUserScreenModel.length > 0){
+      for(let i=0; i<this.oSaveUserScreenModel.length;i++){
+       const index = this.oSaveUserScreenModel[i].findIndex(val => val.OPTM_USERCODE === dataItem.UserCode); 
+       if(index != -1 ){
+        this.oSaveUserScreenModel.splice(i,1);
+       }
+      }   
+    }
+
+    this.LocalUserGrid.splice(rowIndex,1); 
+    
+    if(this.LocalUserGrid[rowIndex+1] == undefined){
+      this.selectedUser = '';
+      this.MenuGrid = [];
+      let select = [];
+      // if(this.selectedUser == dataItem.UserCode)
+      // select.push(this.LocalUserGrid[0].UserCode);
+      // else
+      // select.push(this.selectedUser);
+      select.push(this.selectedUser);
+      this.isUserCodeSelected = (e: RowArgs) => select.indexOf(e.dataItem.UserCode) >=0 ;
+    }
+
+    // if(this.LocalUserGrid.length > 10){
+    //   this.showGridUserPage = true;
+    // }
+    // else{
+    //   this.showGridUserPage = true;
+    // }
   }
 
   onSelectAllChange($event){
@@ -530,34 +757,92 @@ selectCheckboxRole(checkvalue,rowdata,idx){
   }
 
   addSelectChange(isCheck,idx){
+    
+    let arr = [];
+    for(let i=0; i< this.oSaveUserScreenModel.length; i++){
+      arr = this.oSaveUserScreenModel[i].filter(val => val.OPTM_USERCODE == this.selectedUser);   
+      if(arr.length>0){
+        if(isCheck)
+          arr[idx].AddSelected = true;
+        else
+          arr[idx].AddSelected = false;
+          this.oSaveUserScreenModel[i] =  arr;
+      }   
+    } 
+
     if(isCheck)
-    this.screenGrid[idx].AddSelected = true;
+    this.MenuGrid[idx].AddSelected = true;
     else
-    this.screenGrid[idx].AddSelected = false;
+    this.MenuGrid[idx].AddSelected = false;
   }
 
   updateSelectChange(isCheck,idx){
+
+    let arr = [];
+    for(let i=0; i< this.oSaveUserScreenModel.length; i++){
+      arr = this.oSaveUserScreenModel[i].filter(val => val.OPTM_USERCODE == this.selectedUser);   
+      if(arr.length>0){
+        if(isCheck)
+          arr[idx].UpdateSelected = true;
+        else
+          arr[idx].UpdateSelected = false;
+        this.oSaveUserScreenModel[i] =  arr;
+      }   
+    } 
+
     if(isCheck)
-    this.screenGrid[idx].UpdateSelected = true;
+    this.MenuGrid[idx].UpdateSelected = true;
     else
-    this.screenGrid[idx].UpdateSelected = false;
+    this.MenuGrid[idx].UpdateSelected = false;
   }
 
   deleteSelectChange(isCheck,idx){
+    let arr = [];
+    for(let i=0; i< this.oSaveUserScreenModel.length; i++){
+      arr = this.oSaveUserScreenModel[i].filter(val => val.OPTM_USERCODE == this.selectedUser);   
+      if(arr.length>0){
+        if(isCheck)
+          arr[idx].DeleteSelected = true;
+        else
+          arr[idx].DeleteSelected = false;
+        this.oSaveUserScreenModel[i] =  arr;
+      }   
+    } 
+
     if(isCheck)
-    this.screenGrid[idx].DeleteSelected = true;
+    this.MenuGrid[idx].DeleteSelected = true;
     else
-    this.screenGrid[idx].DeleteSelected = false;
+    this.MenuGrid[idx].DeleteSelected = false;
   }
 
   readSelectChange(isCheck,idx){
+
+    let arr = [];
+    for(let i=0; i< this.oSaveUserScreenModel.length; i++){
+      arr = this.oSaveUserScreenModel[i].filter(val => val.OPTM_USERCODE == this.selectedUser);   
+      if(arr.length>0){
+        if(isCheck)
+          arr[idx].ReadSelected = true;
+        else
+          arr[idx].ReadSelected = false;
+          this.oSaveUserScreenModel[i] =  arr;
+      }   
+    } 
+
     if(isCheck)
-    this.screenGrid[idx].ReadSelected = true;
+    this.MenuGrid[idx].ReadSelected = true;
     else
-    this.screenGrid[idx].ReadSelected = false;
+    this.MenuGrid[idx].ReadSelected = false;
   }
 
   
+  onInput(filter) {    
+    this.gridData = filterBy(this.FilterData, {     
+     field:'OPTM_USERGROUP',     
+     operator: 'contains',
+     value: filter,    
+    }); 
+  }
   
 }
 

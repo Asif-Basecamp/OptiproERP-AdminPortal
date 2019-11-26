@@ -39,6 +39,7 @@ export class TenantComponent implements OnInit {
   public isColumnFilterUser:boolean = false;
   public loading = false;
   public FilterData: any[];
+  public showTenantMainPage: boolean = false;
 
   constructor(private translate: TranslateService, private httpClientSer: HttpClient, private tenantService: TenantService,private MessageService:MessageService) { 
       translate.use(localStorage.getItem('applang'));
@@ -248,7 +249,11 @@ export class TenantComponent implements OnInit {
         if(data != null && data != undefined){
           if(data.length > 0){           
            this.TenantList = data; 
-           this.FilterData = data;      
+           this.FilterData = data;   
+           if(this.TenantList.length > 10)   
+           this.showTenantMainPage = true;
+           else
+           this.showTenantMainPage = false;
           }
         } 
         else{
