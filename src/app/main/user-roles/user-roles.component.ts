@@ -445,10 +445,11 @@ export class UserRolesComponent implements OnInit {
     }
 
     onChange(RoleId: string) {
-
+       debugger
       this.IsDuplicate=false;
       if(this.model.PriviousRoleId==RoleId)
-      return
+       {return;}
+      
   
       this.RoleService.CheckDuplicateUserGroup(RoleId).subscribe(    
         data => { 
@@ -480,7 +481,10 @@ export class UserRolesComponent implements OnInit {
        this.onChange(this.model.RoleId);
     
        if(this.IsDuplicate==true)
-       return
+         {
+          return
+         }
+      
       
        
         // Check if TableDataBinding array have any record 
@@ -522,6 +526,7 @@ export class UserRolesComponent implements OnInit {
         }
         
         this.Loading=true;
+        debugger
       this.RoleService.AddUserRole(this.model,this.NewSelectedRowData).subscribe(    
           data => {    
               

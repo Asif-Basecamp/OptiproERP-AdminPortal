@@ -216,21 +216,44 @@
                                             </label>
                                         </ng-template>
                                     </kendo-grid-checkbox-column>
-                                    <kendo-grid-column field="dbName" title="Database" [width]="150"></kendo-grid-column>
-                                    <kendo-grid-column field="cmpName" title="Company" [width]="150"></kendo-grid-column>
+                                    <kendo-grid-column field="dbName" title="Database" [width]="100"></kendo-grid-column>
+                                    <kendo-grid-column field="cmpName" title="Company" [width]="100"></kendo-grid-column>
                                     <kendo-grid-column title="User Type" [width]="100">
                                         <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                                             <kendo-dropdownlist [data]="dataItem.UserType" [(ngModel)]="dataItem.selectedUserType" (valueChange)="onChangeUserType($event, rowIndex, company_data)" [ngModelOptions]="{standalone: true}"  class="form-control-sm form-control w-100" textField="text" valueField="text"></kendo-dropdownlist>
                                         </ng-template>
                                     </kendo-grid-column>
-                                    <kendo-grid-column title="" [width]="100">
+                                    <kendo-grid-column title="EmpName" [width]="100">
                                         <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
 
-                                            <kendo-dropdownlist *ngIf="!dataItem.BPCode" [data]="dataItem.Employee" textField="firstName" valueField="empID" [(ngModel)]="dataItem.selectedEmployeeType" (valueChange)="onChangeEmployeeId($event, dataItem.dbName, rowIndex)" [ngModelOptions]="{standalone: true}" class="form-control-sm form-control w-100" [disabled]="dataItem.selectedCompany != 'blank'"></kendo-dropdownlist>
+                                            <kendo-dropdownlist  [data]="dataItem.Employee" textField="firstName" 
+                                            valueField="empID" [(ngModel)]="dataItem.selectedEmployeeType" 
+                                            (valueChange)="onChangeEmployeeId($event, dataItem.dbName, rowIndex)" 
+                                            [ngModelOptions]="{standalone: true}" class="form-control-sm form-control w-100" 
+                                            [disabled]="dataItem.selectedCompany != 'blank'"></kendo-dropdownlist>
 
-                                            <kendo-dropdownlist *ngIf="dataItem.BPCode" [data]="listItems" class="form-control-sm form-control w-100" [defaultItem]="'BP ID'"></kendo-dropdownlist>
+                                            <!-- <kendo-dropdownlist  [data]="listItems" class="form-control-sm form-control w-100" [defaultItem]="'BP ID'">
+
+                                            </kendo-dropdownlist> -->
                                         </ng-template>
                                     </kendo-grid-column>
+
+                                    <kendo-grid-column title="BPCode" [width]="100" >
+                                        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+
+                                            <kendo-dropdownlist  [data]="dataItem.listItems" textField="CardName" 
+                                            valueField="CardCode" [(ngModel)]="dataItem.selectedBP" 
+                                            (valueChange)="onChangeBPID($event, dataItem.dbName, rowIndex)" 
+                                            [ngModelOptions]="{standalone: true}" class="form-control-sm form-control w-100" 
+                                            ></kendo-dropdownlist>
+
+                                            <!-- <kendo-dropdownlist  [data]="listItems" class="form-control-sm form-control w-100" [defaultItem]="'BP ID'"> -->
+
+                                            
+                                        </ng-template>
+                                    </kendo-grid-column>
+
+
                                     <ng-template kendoGridDetailTemplate let-dataItem let-productRowIndex="rowIndex">
                                         <kendo-grid *ngIf="dataItem.selectedCompany != 'blank'" [kendoGridBinding]="dataItem.product" [resizable]="true" [sortable]="true" class="" [filterable]=false [groupable]=false 
                                         [kendoGridSelectBy]="'UniqueId'" [selectedKeys]="productSelection" [columnMenu]="false" 

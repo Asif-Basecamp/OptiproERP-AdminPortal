@@ -19,15 +19,42 @@ FillCompNGrpNSAPUsrNProd()
       this.header = new HttpHeaders(headerSettings); 
       return this.http.get<any>(this.Url+'/api/UserManagement/GetCompNGrpNSAPUsrNProd',{ headers: this.header});
     }
-FillDDlEmployee(selDataBase:string)
+FillDDlEmployee(selDataBase:string,BPCode:string)
     { 
       const headerSettings: {[name: string]: string | string[]; } = {
         'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
       };  
       this.header = new HttpHeaders(headerSettings); 
-      var jObject = { CompanyName: JSON.stringify([{ CompanyDBId: selDataBase }]) };
-      return this.http.post<any>(this.Url+'/api/UserManagement/GetEmployee',jObject,{ headers: this.header})
+     if(BPCode==='' || BPCode===null || BPCode===undefined)
+       {
+        var jObject = { CompanyName: JSON.stringify([{ CompanyDBId: selDataBase }]) };
+        return this.http.post<any>(this.Url+'/api/UserManagement/GetEmployee',jObject,{ headers: this.header})
+       }
+       else {
+        if(BPCode==="V")
+        {
+          BPCode="S"
+        }
+      var jObject = { CompanyName: JSON.stringify([{ CompanyDBId: selDataBase , bpType: BPCode}]) };
+      return this.http.post<any>(this.Url+'/api/UserManagement/GetBusinessPartner',jObject,{ headers: this.header})
+       }
+
+      
     }
+    
+  // FillBusinessPartnerData(selDataBase:string,BPCode:string)
+  //   { 
+  //     const headerSettings: {[name: string]: string | string[]; } = {
+  //       'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
+  //     };  
+  //     this.header = new HttpHeaders(headerSettings); 
+  //     if(BPCode==="V")
+  //       {
+  //         BPCode="S"
+  //       }
+  //     var jObject = { CompanyName: JSON.stringify([{ CompanyDBId: selDataBase , bpType: BPCode}]) };
+  //     return this.http.post<any>(this.Url+'/api/UserManagement/GetBusinessPartner',jObject,{ headers: this.header})
+  //   }
 FillGridData()
     { 
       const headerSettings: {[name: string]: string | string[]; } = {

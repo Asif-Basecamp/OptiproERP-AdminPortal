@@ -18,6 +18,9 @@ import { Router } from '../../../../node_modules/@angular/router';
 })
 
 export class UserManagementComponent implements OnInit {
+  cats(arg0: any): any {
+    throw new Error("Method not implemented.");
+  }
   public addUserScreen = false;
   dbName: any; 
   public ddlUserGroup: any[];
@@ -28,6 +31,7 @@ export class UserManagementComponent implements OnInit {
   public userData: any[] ;
   public WH_WC_Data: any;
   public EmpID: any;
+  public BPID: any;
   public WHCode: any;
   public WCCode: any;
   public productID: any;
@@ -51,7 +55,9 @@ export class UserManagementComponent implements OnInit {
   public confirmationOpened = false;
   public Loading: boolean = false;
   public employeeData: any;
+  public BPData: any;
   public dbClickEmployeeName: any;
+  public dbClickBPName: any;
   public dbClickProductName: any;
   public SubmitSave:any = {};
   public dbClickUserType: any;
@@ -88,6 +94,7 @@ export class UserManagementComponent implements OnInit {
     this.SubmitSave.Values = [];
     this.SubmitSave.PreviousUserId = [];
     this.EmpID=[]
+    this.BPID=''
     
     this.ddlUserType=[];
     this.ddlUserType.push(
@@ -143,7 +150,8 @@ export class UserManagementComponent implements OnInit {
     this.SubmitSave.WorkCenter = [];
     this.SubmitSave.Values = [];
     this.SubmitSave.PreviousUserId = [];
-    this.EmpID=[]
+    this.EmpID=[];
+    this.BPID='';
     //this.FillCompNGrpNSAPUsrNProd();
    // this.SubmitSave=[];
   }
@@ -175,17 +183,14 @@ export class UserManagementComponent implements OnInit {
               products[j]["UniqueId"] = i+''+j;       
             }
             element["product"] = products;
-            this.UserManagementService.FillDDlEmployee(data.CompanyList[i].dbName).subscribe(
-              employeedata => {
-                this.Loading = false;
-                this.employeeData = employeedata;
-                data.CompanyList[i]["UserType"] = this.ddlUserType;
-                data.CompanyList[i]["Employee"] = employeedata;
-                data.CompanyList[i]["selectedEmployeeType"] = {empID: '', firstName: "Emp ID"};
-                data.CompanyList[i]["selectedUserType"] = { text: "Select UserType", value: '' };
-                data.CompanyList[i]["selectedCompany"] = 'blank';
-                this.company_data = data.CompanyList;
-              });
+            data.CompanyList[i]["UserType"] = this.ddlUserType;
+            //data.CompanyList[i]["Employee"] = employeedata;
+            data.CompanyList[i]["selectedEmployeeType"] = {empID: '', firstName: "Select Employee"};
+            data.CompanyList[i]["selectedBP"] = {CardCode: '', CardName: "Select BP Code"};
+            data.CompanyList[i]["selectedUserType"] = { text: "Select UserType", value: '' };
+            data.CompanyList[i]["selectedCompany"] = 'blank';
+            this.company_data = data.CompanyList;
+           
           }
         }
         }    
@@ -199,9 +204,47 @@ export class UserManagementComponent implements OnInit {
         this.MessageService.errormessage(error.message);   
       });
   }
-   
+   //Get Employee Data
+   FillEmployee(e, index, CPdata)
+     {
+       
+       let DatabaseName=CPdata[index].dbName;
+       this.UserManagementService.FillDDlEmployee(DatabaseName,"").subscribe(
+        employeedata => {
+          this.Loading = false;
+          this.employeeData = employeedata;
+          //data.CompanyList[i]["UserType"] = this.ddlUserType;
+          this.company_data[index]["Employee"] = employeedata;
+         
+        });
+     }
+
+      //Get Businiss Partner Data
+   FillBusinessPartnerData(e, index, CPdata)
+   {
+     
+     let DatabaseName=CPdata[index].dbName;
+    this.UserManagementService.FillDDlEmployee(DatabaseName,e.value).subscribe(
+      BPData => {
+        this.Loading = false;
+        this.BPData = BPData;
+        //data.CompanyList[i]["UserType"] = this.ddlUserType;
+        this.company_data[index]["listItems"] = BPData;
+       
+      });
+   }
   /*-- on change user type get list of products --*/
   onChangeUserType(e, index, CPdata){
+    debugger
+    if(e.value==="C" || e.value==="V")
+     {
+      this.FillBusinessPartnerData(e, index, CPdata)
+     }
+     else {
+      this.FillEmployee(e, index, CPdata);
+     }
+   
+ 
     const element = this.company_data[index];
     let products = JSON.parse(JSON.stringify(this.ddlProductList));
     for (let j = 0; j < products.length; j++) {      
@@ -229,7 +272,9 @@ export class UserManagementComponent implements OnInit {
     }
     this.userType = e.value;
   }
-
+   delay(ms: number) {
+    return new Promise( resolve => setTimeout(resolve, ms) );
+}
   /*-- get warehouse and workcenter list --*/
   FillDDlWarehouse(dbName, index){
     this.Loading = true;
@@ -243,11 +288,20 @@ export class UserManagementComponent implements OnInit {
           this.UserManagementService.FillDDlWorkCenter(dbName, warehousedata.Table[i].OPTM_WHSE).subscribe(
             WorkCenterdata => {
               this.Loading = false;
-               warehousedata.Table[i]["workcenter"] = WorkCenterdata;
-               for (let j = 0; j < warehousedata.Table[i].workcenter.length; j++) {      
-                warehousedata.Table[i].workcenter[j]["uniqueId"] = dbName+''+i+''+j;  
-                this.WCGetSelectiondata(warehousedata.Table[i].workcenter[j], i);      
-               }
+              warehousedata.Table[i]["workcenter"] = WorkCenterdata;
+              this.delay(5000).then(any=>{
+                if(warehousedata.Table[i].workcenter.length>0){
+                  for (let j = 0; j < warehousedata.Table[i].workcenter.length; j++) {      
+                    warehousedata.Table[i].workcenter[j]["uniqueId"] = dbName+''+i+''+j;  
+                    this.WCGetSelectiondata(warehousedata.Table[i].workcenter[j], i);      
+                   }
+                }
+               
+                //your task after delay.
+           });
+               
+              // return Observable.from(WorkCenterdata).delay(2000);
+               
             });
           }
         this.WH_WC_Data = warehousedata.Table;
@@ -266,7 +320,7 @@ export class UserManagementComponent implements OnInit {
             if(WHData.OPTM_WHSE === element2.OPTM_WHSE){
               this.SubmitSave.Warehouse.push({Company: element2.OPTM_COMPID, Id: element2.OPTM_WHSE, 
                 EmployeeId: element2.OPTM_EMPID, 
-                WHIndex: WHIndex, bussPart: ""});
+                WHIndex: WHIndex,  bussPart:element2.OPTM_BPCODE});
               this.SubmitSave.Warehouse = this.removeDuplicatesValue(this.SubmitSave.Warehouse, 'Id');
               this.warehouseSelection.push(WHData.uniqueId);
             }
@@ -285,7 +339,7 @@ export class UserManagementComponent implements OnInit {
           if(WCData.WorkCenterCode === element2.OPTM_WORKCENTER){
               this.SubmitSave.WorkCenter.push({Company:  element2.OPTM_COMPID, EmployeeId: element2.OPTM_EMPID, 
                 productCode: element2.OPTM_OPTIADDON, WorkCenterCode: element2.OPTM_WORKCENTER, WCIndex: WCIndex, 
-                bussPart: ""});
+               bussPart:element2.OPTM_BPCODE});
               this.SubmitSave.WorkCenter = this.removeDuplicatesValue(this.SubmitSave.WorkCenter, 'WorkCenterCode'); 
               this.workcenterSelection.push(WCData.uniqueId);
           }
@@ -297,22 +351,29 @@ export class UserManagementComponent implements OnInit {
 
   companyClickHandler(e){
     
+    
+
+    console.log(this.SubmitSave.Product)
     this.userType=e.dataItem.selectedUserType.value;
-    if(e.dataItem.selectedEmployeeType.empID != '' && this.userType !=''){
+    //if(e.dataItem.selectedEmployeeType.empID != '' && this.userType !=''){
       this.dbName = e.dataItem.dbName;
       this.ShowDBName=e.dataItem.dbName;
       this.ShowCompanyName=e.dataItem.cmpName;
       if(e.dataItem.selectedUserType){
         this.dbClickUserType = e.dataItem.selectedUserType.value;
       }
+      
+      if(e.dataItem.BPCode){
+         this.BPID=e.dataItem.selectedBP.CardCode;
+      }
       if(e.dataItem.selectedEmployeeType){
         this.dbClickEmployeeName = e.dataItem.selectedEmployeeType.empID;
         this.EmpID = e.dataItem.selectedEmployeeType.empID;
       }
       this.FillDDlWarehouse(e.dataItem.dbName, e.rowIndex);
-    }else{
-      this.MessageService.errormessage("please select Employee or UserType"); 
-    }
+    // }else{
+    //   this.MessageService.errormessage("please select Employee or UserType"); 
+    // }
   } 
 
   onExpandCompany(event){
@@ -330,6 +391,7 @@ export class UserManagementComponent implements OnInit {
   }
  
   companySelect(event: any, companyData, companyIndex){
+    debugger
     if(event.target.checked === true){
       this.company_data[companyIndex]["selectedCompany"] = companyData.dbName;
     }else{
@@ -337,10 +399,11 @@ export class UserManagementComponent implements OnInit {
     }
     
     /*-- employee array --*/
+   // this.BPID=companyData.selectedBP.CardCode;
     if(event.target.checked === true){
       this.SubmitSave.EmployeeId.push({Company: companyData.dbName, 
         empID: companyData.selectedEmployeeType.empID,
-        bussPart: "", eIndex: companyIndex});
+        bussPart: companyData.selectedBP.CardCode, eIndex: companyIndex});
     }else{
       let whatIndex = null;
       this.SubmitSave.EmployeeId.forEach((value, index) => {
@@ -367,10 +430,10 @@ export class UserManagementComponent implements OnInit {
   }
 
   productSelect(event: any, product, productIndex, rowIndex){
-    
+    debugger
     if(event.target.checked === true){
       this.productID = product;
-      this.SubmitSave.Product.push({productCode: this.productID, pIndex: rowIndex, bussPart: ""});
+      this.SubmitSave.Product.push({productCode: this.productID, pIndex: rowIndex, bussPart: this.BPID});
     }else{
       let whatIndexTwo = null;
       this.SubmitSave.Product.forEach((value, index) => {
@@ -408,6 +471,19 @@ export class UserManagementComponent implements OnInit {
 
   warehouseSelect(event, warehouseData, warehouseIndex){
    
+    if(this.IsEditMode)
+     {
+        if(event.target.checked === true){
+          for(let i=0; i <this.SubmitSave.WorkCenter.length; i++)
+           {
+             if(this.dbName===this.SubmitSave.WorkCenter[i].Company && this.SubmitSave.WorkCenter[i].Warehouse==='' || this.SubmitSave.WorkCenter[i].Warehouse=== undefined)
+              {
+                this.SubmitSave.WorkCenter[i].Warehouse= warehouseData.OPTM_WHSE;
+              }
+              
+           }
+      }
+    }
     if(event.target.checked === true){
       this.WH_WC_Data[warehouseIndex]["selectedWarehouse"] = warehouseData.OPTM_WHSE;
     }else{
@@ -417,7 +493,7 @@ export class UserManagementComponent implements OnInit {
     if(event.target.checked === true){
       this.WHCode = warehouseData.OPTM_WHSE;
       this.SubmitSave.Warehouse.push({Company: this.dbName, Id: this.WHCode, EmployeeId: this.EmpID, 
-        WHIndex: warehouseIndex, bussPart: ""});
+        WHIndex: warehouseIndex, bussPart: this.BPID});
     }else{
       let whatIndex3 = null;
       this.SubmitSave.Warehouse.forEach((value, index) => {
@@ -433,11 +509,13 @@ export class UserManagementComponent implements OnInit {
     this.IsEditWorkcenter=false;
     if(event.target.checked === true)
     {
+      
       for(let i=0; i< this.SubmitSave.WorkCenter.length; i++)
      {
-      if(this.SubmitSave.WorkCenter[i].Warehouse===workCenterData.Warehouse)
+      if(this.SubmitSave.WorkCenter[i].Warehouse===workCenterData.Warehouse && this.dbName===this.SubmitSave.WorkCenter[i].Company)
         {
          this.SubmitSave.WorkCenter[i].WorkCenterCode=workCenterData.WorkCenterCode;
+         this.SubmitSave.WorkCenter[i].productCode=this.dbClickProductName;
          this.IsEditWorkcenter=true;
          return;
         }
@@ -479,7 +557,7 @@ export class UserManagementComponent implements OnInit {
                 this.WCCode = workCenterData.WorkCenterCode;
                 this.SubmitSave.WorkCenter.push({Company: this.dbName, EmployeeId: this.EmpID, 
                 productCode: TempSoreProductKey, WorkCenterCode: this.WCCode, Warehouse: workCenterData.Warehouse, 
-                bussPart: ""});
+                bussPart: this.BPID});
                 this.IsEditWorkcenter=true;
               }else{
                 let whatIndex4 = null;
@@ -505,11 +583,13 @@ export class UserManagementComponent implements OnInit {
         debugger
         if(this.IsEditWorkcenter===false)
          {
+           console.log(this.dbClickProductName);
+           console.log( this.EmpID);
           if(event.target.checked === true){
             this.WCCode = workCenterData.WorkCenterCode;
             this.SubmitSave.WorkCenter.push({Company: this.dbName, EmployeeId: this.EmpID, 
             productCode: this.dbClickProductName, WorkCenterCode: this.WCCode, WCIndex: workCenterIndex, 
-            bussPart: ""});
+            bussPart: this.BPID});
           }else{
             let whatIndex4 = null;
             this.SubmitSave.WorkCenter.forEach((value, index) => {
@@ -539,26 +619,16 @@ export class UserManagementComponent implements OnInit {
   onChangeEmployeeId(e, db, index){
     this.company_data[index]["selectedEmployeeType"] = e;
   }
-
-  Validation()
+  onChangeBPID(e, db, index)
    {
-    this.IsValidate=true;
-    let elmnt="";
-    let elmntWorkCenter="";
-    let elemntProduct="";
-   for(let j=0; j<this.SubmitSave.Warehouse.length; j++)
-       {
-         elmnt = elmnt + ','+ this.SubmitSave.Warehouse[j].Company
-       }
-    // Work Center Company
-     if(this.SubmitSave.WorkCenter.length>0)
-       {
-         for(let j=0; j<this.SubmitSave.WorkCenter.length; j++)
-         {
-         elmntWorkCenter = elmntWorkCenter + ','+ this.SubmitSave.WorkCenter[j].Company
-         }
-       }
-      // Product Company
+    this.company_data[index]["selectedBP"] = e;
+    
+   }
+
+   ProductValidation()
+      {
+        let elemntProduct="";
+        // Product Company
       if(this.SubmitSave.Product.length>0)
       {
         for(let j=0; j<this.SubmitSave.Product.length; j++)
@@ -566,8 +636,13 @@ export class UserManagementComponent implements OnInit {
           elemntProduct = elemntProduct + ','+ this.SubmitSave.Product[j].Company
         }
       }
+      else {
+        this.MessageService.errormessage("Product is not selected for Company");
+      }
+          
       if(this.SubmitSave.Product.length>0)
       {
+        debugger
             this.SubmitSave.Company.forEach((c, pindex) => {
             
                   if(elemntProduct.includes(c.Company))
@@ -589,6 +664,27 @@ export class UserManagementComponent implements OnInit {
               return;
             }
             elemntProduct="";
+      }
+
+  Validation()
+   {
+    this.IsValidate=true;
+    let elmnt="";
+    let elmntWorkCenter="";
+    let elemntProduct="";
+   for(let j=0; j<this.SubmitSave.Warehouse.length; j++)
+       {
+         elmnt = elmnt + ','+ this.SubmitSave.Warehouse[j].Company
+       }
+    // Work Center Company
+     if(this.SubmitSave.WorkCenter.length>0)
+       {
+         for(let j=0; j<this.SubmitSave.WorkCenter.length; j++)
+         {
+         elmntWorkCenter = elmntWorkCenter + ','+ this.SubmitSave.WorkCenter[j].Company
+         }
+       }
+  
       this.SubmitSave.Company.forEach((c, cindex) => {
       this.SubmitSave.Product.forEach((p, pindex) => {
         if(c.Company===p.Company)
@@ -671,10 +767,13 @@ export class UserManagementComponent implements OnInit {
                               return;
                             }
                             else {
-
+                              var TempAssignWareHouse=[];
+                              let TempLocalVarCompany='';
+                              TempLocalVarCompany=this.SubmitSave.WorkCenter[j].Company;
+                              TempAssignWareHouse=this.SubmitSave.Warehouse;
                               if(this.SubmitSave.WorkCenter[j].Warehouse==="" && this.SubmitSave.WorkCenter[j].Company===c.Company )
                                 {
-                                  var TempData = this.SubmitSave.Warehouse.filter(function (el) {
+                                  var TempData = TempAssignWareHouse.filter(function (el) {
                                     return el.Company == this.SubmitSave.WorkCenter[j].Company;
                                 });
                                 if(TempData.length>0)
@@ -695,44 +794,149 @@ export class UserManagementComponent implements OnInit {
                }
                }}});});
             }
+    CheckWorkCenterExist()
+             {
+              this.SubmitSave.Company.forEach((c, cindex) => {
+                var filterWCRow = this.SubmitSave.WorkCenter.filter(function (el) {
+                    return el.Company === c.Company ;
+                });
+                if(filterWCRow.length===0)
+                    {
+                      let TempEmpName="";
+                      let Tempbusspart="";
+                      let Singlearray = [];
+                    debugger
+                           this.SubmitSave.Product.forEach((value, index) => {
+                             if(value.Company === c.Company){
+                              Singlearray.push(value.productCode);
+                               if(value.EmployeeId!='')
+                                {
+                                  TempEmpName=value.EmployeeId
+                                }
+                                else {
+                                  Tempbusspart=value.bussPart
+                                }
+                             
+                            // }
+                            }})
+                            this.SubmitSave.WorkCenter.push({
+                              Company: c.Company, EmployeeId: TempEmpName, 
+                               productCode: Singlearray.toString(), WorkCenterCode: "",  Warehouse: "",
+                               bussPart: Tempbusspart
+                              });
+                              TempEmpName='';
+                              Tempbusspart='';
+                    }
+                  });
+
+                 
+             }
 
    CreaeWorkCenterForBlankWorkcenterSelection()
     {
       let TempelmntWorkCenter="";
       let TempWHName="";
+     debugger
+      
+      
      
        this.SubmitSave.Company.forEach((c, cindex) => {
          this.SubmitSave.Product.forEach((p, pindex) => {
           // this.FlagProduct=true;
            if(c.Company===p.Company)
               {
+debugger
                     let TempWorkCenterElmnt="";
+                    let TempWCCompany="";
                     for(let j=0; j<this.SubmitSave.WorkCenter.length; j++)
                      {
                       TempWorkCenterElmnt=TempWorkCenterElmnt+','+this.SubmitSave.WorkCenter[j].Warehouse
+                      TempWCCompany=TempWCCompany+','+this.SubmitSave.WorkCenter[j].Company
                      }
-                     for(let i=0; i<this.SubmitSave.Warehouse.length; i++)
-                        {
-                          let TempEmpName="";
-                          let array = [];
-                        
-                               this.SubmitSave.Product.forEach((value, index) => {
-                                 if(value.Company === this.SubmitSave.Warehouse[i].Company){
-                                   array.push( value.productCode );
-                                   TempEmpName=value.EmployeeId
-                                 }})
-                         
-                            if(TempWorkCenterElmnt.includes(this.SubmitSave.Warehouse[i].Id))
-                              {}
-                              else {
-                                this.SubmitSave.WorkCenter.push({
-                                  Company: this.SubmitSave.Warehouse[i].Company, EmployeeId: TempEmpName, 
-                                   productCode: array.toString(), WorkCenterCode: "",  Warehouse: this.SubmitSave.Warehouse[i].Id,
-                                   bussPart: ""
-                                   //TempEmpName="";
-                               })
-                               TempWorkCenterElmnt=TempWorkCenterElmnt+','+this.SubmitSave.Warehouse[i].Id
-                              }}} }) });}
+                      if(this.SubmitSave.Warehouse.length>0)
+                          {
+                            for(let i=0; i<this.SubmitSave.Warehouse.length; i++)
+                            {
+                              let TempEmpName='';
+                              let TempBussPart='';
+                              let array = [];
+                            
+                                   this.SubmitSave.Product.forEach((value, index) => {
+                                     if(value.Company === this.SubmitSave.Warehouse[i].Company){
+                                       array.push( value.productCode );
+                                       TempEmpName=value.EmployeeId
+                                       TempBussPart=value.bussPart
+                                     }})
+                             
+                                if(TempWorkCenterElmnt.includes(this.SubmitSave.Warehouse[i].Id) && TempWCCompany.includes(this.SubmitSave.Warehouse[i].Company))
+                                  {}
+                                  else {
+                                    this.SubmitSave.WorkCenter.push({
+                                      Company: this.SubmitSave.Warehouse[i].Company, EmployeeId: TempEmpName, 
+                                       productCode: array.toString(), WorkCenterCode: "",  Warehouse: this.SubmitSave.Warehouse[i].Id,
+                                       bussPart: TempBussPart
+                                       //TempEmpName="";
+                                   })
+                                   TempWorkCenterElmnt=TempWorkCenterElmnt+','+this.SubmitSave.Warehouse[i].Id
+                                   TempEmpName='';
+                                   TempBussPart='';
+
+                                  }}
+                          }
+                          else {
+                          
+                            let TempEmpName="";
+                            let Tempbusspart="";
+                            let array = [];
+                          
+                                 this.SubmitSave.Product.forEach((value, index) => {
+                                   if(value.Company === c.Company){
+                                     array.push( value.productCode );
+                                     if(value.EmployeeId!='')
+                                      {
+                                        TempEmpName=value.EmployeeId
+                                      }
+                                      else {
+                                        Tempbusspart=value.bussPart
+                                      }
+                                   
+                                  // }
+                                  }})
+
+                                  if(this.SubmitSave.WorkCenter.length>0)
+                                      {
+                                          for(let i=0; i< this.SubmitSave.WorkCenter.length; i++)
+                                            {
+                                              if(TempWCCompany.includes(this.SubmitSave.WorkCenter[i].Company))
+                                               {}
+                                               else
+                                                {
+                                                  this.SubmitSave.WorkCenter.push({
+                                                    Company: c.Company, EmployeeId: TempEmpName, 
+                                                     productCode: array.toString(), WorkCenterCode: "",  Warehouse: "",
+                                                     bussPart: Tempbusspart
+                                                    })
+                                                    TempWCCompany=TempWCCompany+','+this.SubmitSave.WorkCenter[i].Company
+                                                }
+                                            }
+                                      }
+                                   else {
+                                    this.SubmitSave.WorkCenter.push({
+                                      Company: c.Company, EmployeeId: TempEmpName, 
+                                       productCode: array.toString(), WorkCenterCode: "",  Warehouse: "",
+                                       bussPart: Tempbusspart
+                                      })
+                                   }
+                                   
+                                  
+                                  // }
+                                  
+                                     //TempEmpName="";
+                                
+                                 //TempWorkCenterElmnt=TempWorkCenterElmnt+','+this.SubmitSave.Warehouse[i].Id
+                          }
+                     
+                            } }) });}
 
     ClearSelection()
       {
@@ -749,6 +953,14 @@ export class UserManagementComponent implements OnInit {
             this.productSelection = [];
             this.warehouseSelection = [];
             this.workcenterSelection = [];
+            this.SubmitSave.EmployeeId =[];
+            this.SubmitSave.Company = [];
+            this.SubmitSave.Product = [];
+            this.SubmitSave.Warehouse = [];
+            this.SubmitSave.WorkCenter = [];
+            this.SubmitSave.Values = [];
+            this.SubmitSave.PreviousUserId = [];
+            this.company_data=[];
             this.tenant='';
             //this.SubmitSave='';
             this.FlagProduct=false;
@@ -756,6 +968,7 @@ export class UserManagementComponent implements OnInit {
             this.FlagWH=false;
             this.IsEditMode=false;
             this.getUserList();
+            this.FillCompNGrpNSAPUsrNProd();
           
             
             // this.addUserScreenToggle();
@@ -790,6 +1003,7 @@ export class UserManagementComponent implements OnInit {
     });
    
     this.Validation();
+    this.ProductValidation();
     
      if(this.IsValidate===true)
         {this.CreaeWorkCenterForBlankWorkcenterSelection();
@@ -817,6 +1031,7 @@ export class UserManagementComponent implements OnInit {
           TenantKey: this.tenant
         });
         this.SubmitSave.PreviousUserId.push({PreviousUserId: this.PreviousUserId});
+        this.CheckWorkCenterExist();
       
         //console.log("True");
       }
@@ -932,85 +1147,121 @@ export class UserManagementComponent implements OnInit {
                 WorkCenterCode: element2.OPTM_WORKCENTER,
                 Warehouse: element2.OPTM_WHSE,
                 productCode: element2.OPTM_OPTIADDON,
-                EmployeeId: element2.OPTM_EMPID
+                EmployeeId: element2.OPTM_EMPID,
+                bussPart:element2.OPTM_BPCODE
         })
         this.SubmitSave.WorkCenter=WorkCenter;
          if(element2.OPTM_WHSE !='' && element2.OPTM_WHSE!=undefined && element2.OPTM_WHSE !=null){
           Warehouse.push({
             Id: element2.OPTM_WHSE,
              Company: element2.OPTM_COMPID,
-             EmployeeId: element2.OPTM_EMPID
+             EmployeeId: element2.OPTM_EMPID,
+             bussPart:element2.OPTM_BPCODE
           })
 
-             }
+      }
+      
+      let empID="";
+      let BPID="";
+      let Val="";
+      //this.FillEmployee("",index,this.company_data);
+       if(element2.OPTM_USERTYPE==="C" || element2.OPTM_USERTYPE==="V")
+          {
+            Val=element2.OPTM_USERTYPE;
+          }
+      this.UserManagementService.FillDDlEmployee(element2.OPTM_COMPID,Val).subscribe(
+        employeedata => {
+          //this.Loading = false;
+          this.employeeData = employeedata;
+          //data.CompanyList[i]["UserType"] = this.ddlUserType;
+          if(Val==="")
+            {
+              this.company_data[index]["Employee"] = employeedata;
+              empID = this.company_data[index].Employee.filter(i => i.empID == element2.OPTM_EMPID);
+             this.company_data[index]["selectedEmployeeType"] = empID[0];
+            }
+            else {
+              this.company_data[index]["listItems"]= employeedata;
+              BPID = this.company_data[index].listItems.filter(i => i.CardCode == element2.OPTM_BPCODE);
+             this.company_data[index]["selectedBP"] = BPID[0];
+            }
+          
 
+          this.SubmitSave.Warehouse= Warehouse;    
+          this.SubmitSave.Company.push({Company: this.company_data[index].dbName, cIndex: index}); 
+          this.SubmitSave.Company = this.removeDuplicatesValue(this.SubmitSave.Company, 'Company');
+          
+          this.companySelection.push(element2.OPTM_COMPID);
+
+          const element = this.company_data[index];
+          let products = JSON.parse(JSON.stringify(this.ddlProductList));
+          for (let j = 0; j < products.length; j++) {      
+            products[j]["UniqueId"] = index+''+j;       
+          }
+          debugger
+          element["product"] = products;
+
+          if(element2.OPTM_USERTYPE == 'C'){
+            this.company_data[index]["selectedUserType"] = { text: "Customer", value: element2.OPTM_USERTYPE };
+
+            let productByStoreID = element.product.filter(product => product.ProductId === 'CVP');
+            this.company_data[index]["product"] = productByStoreID;
+            this.company_data[index]["BPCode"] = true;
+
+          }else if(element2.OPTM_USERTYPE == 'E'){
+            this.company_data[index]["selectedUserType"] = { text: "Employee", value: element2.OPTM_USERTYPE };
+
+            let productByStoreID = element.product.filter(product => product.ProductId === 'ATD' 
+            ||  product.ProductId === 'SFES' || product.ProductId === 'WMS' || product.ProductId === 'CNF'
+            ||  product.ProductId === 'MMO' || product.ProductId === 'DSB');
+            this.company_data[index]["product"] = productByStoreID;
+            this.company_data[index]["BPCode"] = false;
+
+          }else if(element2.OPTM_USERTYPE == 'V'){
+            this.company_data[index]["selectedUserType"] = { text: "Vendor", value: element2.OPTM_USERTYPE };
+
+            let productByStoreID = element.product.filter(product => product.ProductId === 'CVP' 
+            ||  product.ProductId === 'MMO');
+            this.company_data[index]["product"] = productByStoreID;
+            this.company_data[index]["BPCode"] = true;
+          }
+          this.userType = element2.OPTM_USERTYPE;
+
+          this.SubmitSave.EmployeeId.push({Company: this.company_data[index].dbName, 
+            empID: this.company_data[index].selectedEmployeeType.empID,
+            bussPart:  this.company_data[index].selectedBP.CardCode, eIndex: index});
+            
+          this.SubmitSave.EmployeeId = this.removeDuplicatesValue(this.SubmitSave.EmployeeId, 'Company');
+          
+          this.company_data[index]["selectedCompany"] = element2.OPTM_COMPID;
+          
+          if(element2.OPTM_OPTIADDON!=null && element2.OPTM_OPTIADDON!=''){
+            let productSplitArray = element2.OPTM_OPTIADDON.includes(',')? element2.OPTM_OPTIADDON.split(','):[element2.OPTM_OPTIADDON];
+            for(let j=0; j<productSplitArray.length; j++){
+              let productUniqueID = this.company_data[index].product.filter(i => i.ProductId == productSplitArray[j]);
+            
+              if(productUniqueID.length>0){
+                this.productSelection.push(productUniqueID[0].UniqueId);
+
+                this.SubmitSave.Product.push({productCode: productSplitArray[j], pIndex: index, 
+                  bussPart:  element2.OPTM_BPCODE,
+                  Company: this.company_data[index].dbName, EmployeeId: element2.OPTM_EMPID});
+//pIndex
+                //this.SubmitSave.Product = this.removeDuplicatesValue(this.SubmitSave.Product, 'productCode');
+              // this.SubmitSave.Product = this.removeDuplicatesValue(this.SubmitSave.Product, 'pIndex');
+              this.SubmitSave.Product = this.SubmitSave.Product.filter((thing, index, self) =>
+              index === self.findIndex((t) => (
+              t.Company === thing.Company && t.productCode === thing.productCode && t.EmployeeId===thing.EmployeeId
+            ))
+          )
+                }
+              }
+          }
+         
+        });
         
-            this.SubmitSave.Warehouse= Warehouse;    
-              this.SubmitSave.Company.push({Company: this.company_data[index].dbName, cIndex: index}); 
-              this.SubmitSave.Company = this.removeDuplicatesValue(this.SubmitSave.Company, 'Company');
-              
-              this.companySelection.push(element2.OPTM_COMPID);
-
-              const element = this.company_data[index];
-              let products = JSON.parse(JSON.stringify(this.ddlProductList));
-              for (let j = 0; j < products.length; j++) {      
-                products[j]["UniqueId"] = index+''+j;       
-              }
-              element["product"] = products;
-
-              if(element2.OPTM_USERTYPE == 'C'){
-                this.company_data[index]["selectedUserType"] = { text: "Customer", value: element2.OPTM_USERTYPE };
-
-                let productByStoreID = element.product.filter(product => product.ProductId === 'CVP');
-                this.company_data[index]["product"] = productByStoreID;
-                this.company_data[index]["BPCode"] = true;
-
-              }else if(element2.OPTM_USERTYPE == 'E'){
-                this.company_data[index]["selectedUserType"] = { text: "Employee", value: element2.OPTM_USERTYPE };
-
-                let productByStoreID = element.product.filter(product => product.ProductId === 'ATD' 
-                ||  product.ProductId === 'SFES' || product.ProductId === 'WMS' || product.ProductId === 'CNF'
-                ||  product.ProductId === 'MMO' || product.ProductId === 'DSB');
-                this.company_data[index]["product"] = productByStoreID;
-                this.company_data[index]["BPCode"] = false;
-
-              }else if(element2.OPTM_USERTYPE == 'V'){
-                this.company_data[index]["selectedUserType"] = { text: "Vendor", value: element2.OPTM_USERTYPE };
-
-                let productByStoreID = element.product.filter(product => product.ProductId === 'CVP' 
-                ||  product.ProductId === 'MMO');
-                this.company_data[index]["product"] = productByStoreID;
-                this.company_data[index]["BPCode"] = true;
-              }
-              this.userType = element2.OPTM_USERTYPE;
-
-              let empID = this.company_data[index].Employee.filter(i => i.empID == element2.OPTM_EMPID);
-              this.company_data[index]["selectedEmployeeType"] = empID[0];
-
-              this.SubmitSave.EmployeeId.push({Company: this.company_data[index].dbName, 
-                empID: this.company_data[index].selectedEmployeeType.empID,
-                bussPart: "", eIndex: index});
-
-              this.SubmitSave.EmployeeId = this.removeDuplicatesValue(this.SubmitSave.EmployeeId, 'Company');
-              
-              this.company_data[index]["selectedCompany"] = element2.OPTM_COMPID;
-              
-              if(element2.OPTM_OPTIADDON!=null && element2.OPTM_OPTIADDON!=''){
-                let productSplitArray = element2.OPTM_OPTIADDON.includes(',')? element2.OPTM_OPTIADDON.split(','):[element2.OPTM_OPTIADDON];
-                for(let j=0; j<productSplitArray.length; j++){
-                  let productUniqueID = this.company_data[index].product.filter(i => i.ProductId == productSplitArray[j]);
-                
-                  if(productUniqueID.length>0){
-                    this.productSelection.push(productUniqueID[0].UniqueId);
-
-                    this.SubmitSave.Product.push({productCode: productSplitArray[j], pIndex: index, 
-                      bussPart: "",
-                      Company: this.company_data[index].dbName, EmployeeId: element2.OPTM_EMPID});
-
-                    this.SubmitSave.Product = this.removeDuplicatesValue(this.SubmitSave.Product, 'productCode');
-                    }
-                  }
-              }
+        
+         
               
             }
              /*-- get warehouse and workcenter list --*/
@@ -1101,7 +1352,7 @@ export class UserManagementComponent implements OnInit {
   cancel(){
     ///this.addUserScreen = !this.addUserScreen;
     this.ClearSelection();
-    this.FillCompNGrpNSAPUsrNProd();
+    //this.FillCompNGrpNSAPUsrNProd();
     //this.SubmitSave.Warehouse =  {};
    
   }
