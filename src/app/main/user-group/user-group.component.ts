@@ -62,7 +62,7 @@ export class UserGroupComponent implements OnInit {
       { text: "Vendor", value: "V" }  
          
     );
-    console.log(this.ddlUserType);
+    
   }
   clearForm(model: any) {
     this.model = {
@@ -72,8 +72,6 @@ export class UserGroupComponent implements OnInit {
       IsAdminEnabled: "",
       USER_CODE: "",
       mapped_user:""
-     
-
     };
      
     }   
@@ -91,7 +89,7 @@ export class UserGroupComponent implements OnInit {
           this.FilterData=data;
           this.Loading=false;
         }    
-        else{ this.MessageService.errormessage(this.translate.instant('Somethingwrong'));    
+        else{ this.MessageService.errormessage(this.translate.instant('UserMgmtSomethimgWntWrngMsg'));    
         }    
       },    
       error => {
@@ -112,7 +110,7 @@ export class UserGroupComponent implements OnInit {
          this.Loading=false;
         }    
         else{ 
-        this.MessageService.errormessage(this.translate.instant('Somethingwrong'));   
+        this.MessageService.errormessage(this.translate.instant('UserMgmtSomethimgWntWrngMsg'));   
         this.Loading=false; 
         }    
       },    
@@ -133,7 +131,7 @@ export class UserGroupComponent implements OnInit {
         this.dialogOpened=false;
         this.Loading=false;
         }    
-        else{ this.MessageService.errormessage(this.translate.instant('Somethingwrong'));    
+        else{ this.MessageService.errormessage(this.translate.instant('UserMgmtSomethimgWntWrngMsg'));    
         this.Loading=false;
         }    
       },    
@@ -192,7 +190,7 @@ export class UserGroupComponent implements OnInit {
         else
         { 
          
-          this.MessageService.errormessage(this.translate.instant('Somethingwrong')); 
+          this.MessageService.errormessage(this.translate.instant('UserMgmtSomethimgWntWrngMsg')); 
           this.Loading=false;   
         }    
       },    
@@ -248,7 +246,7 @@ export class UserGroupComponent implements OnInit {
           }  
         }    
         else{    
-         this.MessageService.errormessage(this.translate.instant('Somethingwrong'));
+         this.MessageService.errormessage(this.translate.instant('UserMgmtSomethimgWntWrngMsg'));
          this.Loading=false;
         }    
       },    
@@ -268,7 +266,7 @@ FillDropdownList()
          this.DropDownListData = data; 
         }    
         else{    
-          this.MessageService.errormessage(this.translate.instant('Somethingwrong'));    
+          this.MessageService.errormessage(this.translate.instant('UserMgmtSomethimgWntWrngMsg'));    
         }    
       },    
       error => {  
@@ -331,7 +329,7 @@ FillDropdownList()
           this.MessageService.errormessage(this.translate.instant('Unauthorized'));
           this.Loading=false;
          }
-        else{ this.MessageService.errormessage(this.translate.instant('Somethingwrong')); 
+        else{ this.MessageService.errormessage(this.translate.instant('UserMgmtSomethimgWntWrngMsg')); 
         this.Loading=false;   
         }    
       },    
@@ -393,26 +391,15 @@ FillDropdownList()
     
   }
   public confirmationToggle() {
-   
     this.confirmationOpened = !this.confirmationOpened;
-    
   }
   public confirmationEditToggle() {
-   
     this.confirmationOpenedEdit = !this.confirmationOpenedEdit;
-    
   }
   EnableFields()
   {
-    // this.Ugroup=true;  
-    // this.UDesc=true;  
-    // this.UUser=true;  
-    // this.UPwd=true;
-    this.AdminEnable=true;
-    // this.enableEdit=false;  
+    this.AdminEnable=true;  
     this.enableDelete=false; 
-    this.enableUpdate=true; 
-   
-    //sthis.enableSubmit=true;
+    this.enableUpdate=true;
   }
 }
