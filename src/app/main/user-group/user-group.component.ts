@@ -5,6 +5,7 @@ import { MessageService } from '../../common/message.service';
 import { filterBy, FilterDescriptor } from '@progress/kendo-data-query';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { CommonService } from 'src/app/service/common.service';
 @Component({
   selector: 'app-user-group',
   templateUrl: './user-group.component.html',
@@ -42,8 +43,10 @@ export class UserGroupComponent implements OnInit {
   public ddlUserType: any[];
   public searchText : string;
   public Loading: boolean = false;
+  public showGridUserGroupPage: boolean = false;
+
   constructor(private UserGroupService:UsergroupService, private MessageService:MessageService,
-    private translate: TranslateService, private httpClientSer: HttpClient) {
+    private translate: TranslateService, private httpClientSer: HttpClient,private commonService: CommonService) {
       // let userLang = navigator.language.split('-')[0];
       //   userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
       translate.use(localStorage.getItem('applang'));
@@ -80,20 +83,36 @@ export class UserGroupComponent implements OnInit {
   {
     this.Loading=true;
     this.UserGroupService.GetUserGroupGridData(this.model).subscribe(    
-      data => {    
-            
+      data => {  
         //if(data.Status=="Success") 
         if(data.length>0) 
         {     
           this.gridData = data;
           this.FilterData=data;
+
+          if(this.gridData.length > 10){
+            this.showGridUserGroupPage = true;
+          }
+          else{
+            this.showGridUserGroupPage = false;
+          }  
+                  
           this.Loading=false;
         }    
-        else{ this.MessageService.errormessage(this.translate.instant('UserMgmtSomethimgWntWrngMsg'));    
+        else{ this.MessageService.errormessage(this.translate.instant('UserMgmtSomethimgWntWrngMsg'));  
+        this.Loading=false;  
         }    
       },    
       error => {
-        this.MessageService.errormessage(error.message);   
+        this.Loading=false;
+        if(error.error != null && error.error != undefined){
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonService.unauthorizedToken(error);               
+          }
+         }
+        else{
+          this.MessageService.errormessage(error.message);
+        }        
       });
    // this.gridData = UsergroupService;
     // this.isMobile();
@@ -115,8 +134,16 @@ export class UserGroupComponent implements OnInit {
         }    
       },    
       error => {
-        this.MessageService.errormessage(error.message); 
-        this.Loading=false;   
+        this.Loading=false;  
+        if(error.error != null && error.error != undefined){
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonService.unauthorizedToken(error);               
+          }
+         }
+        else{
+          this.MessageService.errormessage(error.message);
+        }
+       // this.MessageService.errormessage(error.message);         
       });
    
   }
@@ -136,8 +163,17 @@ export class UserGroupComponent implements OnInit {
         }    
       },    
       error => {
-        this.MessageService.errormessage(error.message);   
         this.Loading=false;
+        if(error.error != null && error.error != undefined){
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonService.unauthorizedToken(error);               
+          }
+         }
+        else{
+          this.MessageService.errormessage(error.message);
+        }
+        //this.MessageService.errormessage(error.message);   
+       
       });
   }
   UpdateData(Type)
@@ -188,15 +224,22 @@ export class UserGroupComponent implements OnInit {
         
         }    
         else
-        { 
-         
+        {          
           this.MessageService.errormessage(this.translate.instant('UserMgmtSomethimgWntWrngMsg')); 
           this.Loading=false;   
         }    
       },    
       error => {
-        this.MessageService.errormessage(error.message);   
+        //this.MessageService.errormessage(error.message);   
         this.Loading=false;
+        if(error.error != null && error.error != undefined){
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonService.unauthorizedToken(error);               
+          }
+         }
+        else{
+          this.MessageService.errormessage(error.message);
+        }
       });
    
   }
@@ -217,8 +260,16 @@ export class UserGroupComponent implements OnInit {
         // }    
       },    
       error => {
-        this.MessageService.errormessage(error.message); 
+        //this.MessageService.errormessage(error.message); 
         this.Loading=false;  
+        if(error.error != null && error.error != undefined){
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonService.unauthorizedToken(error);               
+          }
+         }
+        else{
+          this.MessageService.errormessage(error.message);
+        }
       });
    
   }
@@ -229,7 +280,6 @@ export class UserGroupComponent implements OnInit {
     this.Loading=true;
     this.UserGroupService.CheckDuplicateUserGroup(UserGrpId).subscribe(    
       data => { 
-          
         if(data.length > 0) 
         {
           if(data[0].GroupCodeCount==1)
@@ -251,8 +301,16 @@ export class UserGroupComponent implements OnInit {
         }    
       },    
       error => {    
-        this.MessageService.errormessage(error.message);
+        //this.MessageService.errormessage(error.message);
         this.Loading=false;
+        if(error.error != null && error.error != undefined){
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonService.unauthorizedToken(error);               
+          }
+         }
+        else{
+          this.MessageService.errormessage(error.message);
+        }
       });
 };
 
@@ -270,7 +328,15 @@ FillDropdownList()
         }    
       },    
       error => {  
-        this.MessageService.errormessage(error.message);   
+        if(error.error != null && error.error != undefined){
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonService.unauthorizedToken(error);               
+          }
+         }
+        else{
+          this.MessageService.errormessage(error.message);
+        }
+        //this.MessageService.errormessage(error.message);   
       });
   }
   CancelData()
@@ -334,8 +400,16 @@ FillDropdownList()
         }    
       },    
       error => {
-        this.MessageService.errormessage(error.message);   
+        //this.MessageService.errormessage(error.message);   
         this.Loading=false;
+        if(error.error != null && error.error != undefined){
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonService.unauthorizedToken(error);               
+          }
+         }
+        else{
+          this.MessageService.errormessage(error.message);
+        }
       });
 }
   onFilterChange(checkBox:any,grid:GridComponent){
@@ -348,7 +422,7 @@ FillDropdownList()
     
     this.gridData = filterBy(this.FilterData, {
      
-      field:'OPTM_ROLEID',
+      field:'OPTM_GROUPCODE',
       operator: 'contains',
      value: filter,
     //   filters: [

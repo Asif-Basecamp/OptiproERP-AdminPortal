@@ -10,7 +10,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { RowArgs } from '@progress/kendo-angular-grid';
 import { filterBy } from '../../../../node_modules/@progress/kendo-data-query';
 import { Router } from '../../../../node_modules/@angular/router';
-
+import { CommonService } from 'src/app/service/common.service';
 @Component({
   selector: 'app-user-management',
   templateUrl: './user-management.component.html',
@@ -77,8 +77,11 @@ export class UserManagementComponent implements OnInit {
   public IsComparePassword:boolean=true;
   public IsEditMode:boolean=false;
   public IsEditWorkcenter:boolean=false;
+  public showGridUserMgmtPage: boolean = false;
+  public confirmationOpenedEdit = false; 
+
   constructor(private _router: Router,private cd: ChangeDetectorRef, private UserManagementService:UserManagementService,private MessageService:MessageService,
-    private translate: TranslateService, private httpClientSer: HttpClient) { 
+    private translate: TranslateService, private httpClientSer: HttpClient,private commonService: CommonService) { 
     translate.use(localStorage.getItem('applang'));
     translate.onLangChange.subscribe((event: LangChangeEvent) => { 
     }); 
@@ -105,6 +108,10 @@ export class UserManagementComponent implements OnInit {
       this.FillCompNGrpNSAPUsrNProd();
   }
 
+  public confirmationEditToggle() {  
+    this.confirmationOpenedEdit = !this.confirmationOpenedEdit;    
+  }
+
   /*-- get list of users --*/
   getUserList(){
     this.Loading = true;  
@@ -114,6 +121,13 @@ export class UserManagementComponent implements OnInit {
           this.Loading = false;   
           this.userData = data;
           this.FilterData =data;
+
+          if(this.userData.length > 10){
+            this.showGridUserMgmtPage = true;
+          }
+          else{
+            this.showGridUserMgmtPage = false;
+          } 
         }    
         else{ 
           this.Loading = false;    
@@ -122,7 +136,14 @@ export class UserManagementComponent implements OnInit {
       },    
       error => { 
         this.Loading = false;  
-        this.MessageService.errormessage(error.message);   
+        if(error.error != null && error.error != undefined){
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonService.unauthorizedToken(error);               
+          }
+         }
+        else{
+          this.MessageService.errormessage(error.message);
+        }  
       });
     }
   
@@ -200,8 +221,16 @@ export class UserManagementComponent implements OnInit {
         }    
       },    
       error => {
-        this.Loading = false;
-        this.MessageService.errormessage(error.message);   
+        //this.Loading = false;
+        this.MessageService.errormessage(error.message); 
+        if(error.error != null && error.error != undefined){
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonService.unauthorizedToken(error);               
+          }
+         }
+        else{
+          this.MessageService.errormessage(error.message);
+        }  
       });
   }
    //Get Employee Data
@@ -217,8 +246,16 @@ export class UserManagementComponent implements OnInit {
           this.company_data[index]["Employee"] = employeedata;
          
         },  error => {    
-          this.MessageService.errormessage(error.message);
+          //this.MessageService.errormessage(error.message);
           this.Loading=false;
+          if(error.error != null && error.error != undefined){
+            if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+              this.commonService.unauthorizedToken(error);               
+            }
+           }
+          else{
+            this.MessageService.errormessage(error.message);
+          }
         });
      }
 
@@ -236,19 +273,23 @@ export class UserManagementComponent implements OnInit {
        
       },
       error => {    
-        this.MessageService.errormessage(error.message);
+        //this.MessageService.errormessage(error.message);
         this.Loading=false;
+        if(error.error != null && error.error != undefined){
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonService.unauthorizedToken(error);               
+          }
+         }
+        else{
+          this.MessageService.errormessage(error.message);
+        }
       });
    }
   
-  //  UserTypeValidation()
-  //   {
-      
-  //   }
   /*-- on change user type get list of products --*/
  
   onChangeUserType(e, index, CPdata){
-    debugger
+    
     if(e.value==="C" || e.value==="V")
      {
       this.FillBusinessPartnerData(e, index, CPdata)
@@ -320,8 +361,16 @@ export class UserManagementComponent implements OnInit {
         this.WH_WC_Data = warehousedata.Table;
       },
       error => {    
-        this.MessageService.errormessage(error.message);
+        //this.MessageService.errormessage(error.message);
         this.Loading=false;
+        if(error.error != null && error.error != undefined){
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonService.unauthorizedToken(error);               
+          }
+         }
+        else{
+          this.MessageService.errormessage(error.message);
+        }
       });  
   } 
 
@@ -401,7 +450,7 @@ export class UserManagementComponent implements OnInit {
   }
  
   companySelect(event: any, companyData, companyIndex){
-    debugger
+    
     if(event.target.checked === true){
       this.company_data[companyIndex]["selectedCompany"] = companyData.dbName;
     }else{
@@ -440,7 +489,7 @@ export class UserManagementComponent implements OnInit {
   }
 
   productSelect(event: any, product, productIndex, rowIndex){
-    debugger
+    
     if(event.target.checked === true){
       this.productID = product;
       this.SubmitSave.Product.push({productCode: this.productID, pIndex: rowIndex, bussPart: this.BPID});
@@ -542,7 +591,7 @@ export class UserManagementComponent implements OnInit {
      this.IsEditWorkcenter=true; 
      return; 
    }
-      debugger
+     
    if(this.IsEditWorkcenter===false)
          {
           let  TempProductKey="";
@@ -589,17 +638,21 @@ export class UserManagementComponent implements OnInit {
         { 
          this.WorkCenterSelectEditMode(event, workCenterData, workCenterIndex);
        }
-    
-        debugger
         if(this.IsEditWorkcenter===false)
          {
-           console.log(this.dbClickProductName);
-           console.log( this.EmpID);
           if(event.target.checked === true){
             this.WCCode = workCenterData.WorkCenterCode;
-            this.SubmitSave.WorkCenter.push({Company: this.dbName, EmployeeId: this.EmpID, 
-            productCode: this.dbClickProductName, WorkCenterCode: this.WCCode, WCIndex: workCenterIndex, 
-            bussPart: this.BPID});
+            if(this.dbClickProductName!='' && this.dbClickProductName!=undefined)
+               {
+                this.SubmitSave.WorkCenter.push({Company: this.dbName, EmployeeId: this.EmpID, 
+                  productCode: this.dbClickProductName, WorkCenterCode: this.WCCode, WCIndex: workCenterIndex, 
+                  bussPart: this.BPID});
+               }
+               else {
+                this.MessageService.errormessage(this.translate.instant('UserMgmtProductSelectMsg'));
+                 return; 
+               }
+           
           }else{
             let whatIndex4 = null;
             this.SubmitSave.WorkCenter.forEach((value, index) => {
@@ -609,7 +662,6 @@ export class UserManagementComponent implements OnInit {
             }); 
             this.SubmitSave.WorkCenter.splice(whatIndex4, 1);    
           }
-        
               this.SubmitSave.Warehouse.forEach((WH, WHindex) => {
                 this.SubmitSave.WorkCenter.forEach((WC, WCindex) => {
                   if(WH.WHIndex === WC.WCIndex){
@@ -618,12 +670,6 @@ export class UserManagementComponent implements OnInit {
                 });
               });
          }
-       
-     // }
- 
-     
-    //console.log(this.SubmitSave.Warehouse)
-  
   }
 
   onChangeEmployeeId(e, db, index){
@@ -652,7 +698,7 @@ export class UserManagementComponent implements OnInit {
           
       if(this.SubmitSave.Product.length>0)
       {
-        debugger
+        
             this.SubmitSave.Company.forEach((c, pindex) => {
             
                   if(elemntProduct.includes(c.Company))
@@ -815,7 +861,7 @@ export class UserManagementComponent implements OnInit {
                       let TempEmpName="";
                       let Tempbusspart="";
                       let Singlearray = [];
-                    debugger
+                    
                            this.SubmitSave.Product.forEach((value, index) => {
                              if(value.Company === c.Company){
                               Singlearray.push(value.productCode);
@@ -960,6 +1006,7 @@ export class UserManagementComponent implements OnInit {
             this.SubmitSave.PreviousUserId = [];
             this.company_data=[];
             this.tenant='';
+            this.BPID='';
             //this.SubmitSave='';
             this.FlagProduct=false;
             this.FlagWC=false;
@@ -1030,8 +1077,6 @@ export class UserManagementComponent implements OnInit {
         });
         this.SubmitSave.PreviousUserId.push({PreviousUserId: this.PreviousUserId});
         this.CheckWorkCenterExist();
-      
-        //console.log("True");
       }
       else {
         this.MessageService.errormessage(this.translate.instant('UserMgmtCheckSelectionMsg'));
@@ -1042,7 +1087,7 @@ export class UserManagementComponent implements OnInit {
         this.Loading = true; 
         this.UserManagementService.AddUserManagement(this.SubmitSave).subscribe(
           data => {
-            debugger
+           
           if(data=="True")
             {
               this.Loading = false; 
@@ -1058,7 +1103,15 @@ export class UserManagementComponent implements OnInit {
           },    
           error => {  
             this.Loading = false; 
-            this.MessageService.errormessage(error.message);
+            //this.MessageService.errormessage(error.message);
+            if(error.error != null && error.error != undefined){
+              if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+                this.commonService.unauthorizedToken(error);               
+              }
+             }
+            else{
+              this.MessageService.errormessage(error.message);
+            }
         });
       }else{
         this.Loading = true; 
@@ -1077,7 +1130,15 @@ export class UserManagementComponent implements OnInit {
           },    
           error => {
             this.Loading = false;   
-            this.MessageService.errormessage(error.message);
+            //this.MessageService.errormessage(error.message);
+            if(error.error != null && error.error != undefined){
+              if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+                this.commonService.unauthorizedToken(error);               
+              }
+             }
+            else{
+              this.MessageService.errormessage(error.message);
+            }
         });  
       }
   }
@@ -1116,8 +1177,6 @@ export class UserManagementComponent implements OnInit {
     this.UserManagementService.getEditDetail(userId).subscribe(    
       data => { 
         this.editUserData = data;
-        console.log(this.editUserData);
-          
         this.Loading = false;
         if(data[0]){
           this.user_id = data[0].OPTM_USERCODE; 
@@ -1196,7 +1255,7 @@ export class UserManagementComponent implements OnInit {
           for (let j = 0; j < products.length; j++) {      
             products[j]["UniqueId"] = index+''+j;       
           }
-          debugger
+       
           element["product"] = products;
 
           if(element2.OPTM_USERTYPE == 'C'){
@@ -1256,6 +1315,17 @@ export class UserManagementComponent implements OnInit {
               }
           }
          
+        },error => {
+          //this.MessageService.errormessage(error.message); 
+          this.Loading=false;
+          if(error.error != null && error.error != undefined){
+            if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+              this.commonService.unauthorizedToken(error);               
+            }
+           }
+          else{
+            this.MessageService.errormessage(error.message);
+          }
         });
             }
              /*-- get warehouse and workcenter list --*/
@@ -1263,7 +1333,15 @@ export class UserManagementComponent implements OnInit {
         });
     }, error => {
       this.Loading = false;    
-      this.MessageService.errormessage(error.message);   
+      if(error.error != null && error.error != undefined){
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonService.unauthorizedToken(error);               
+        }
+       }
+      else{
+        this.MessageService.errormessage(error.message);
+      }
+      //this.MessageService.errormessage(error.message);   
     });    
   }
  
@@ -1280,8 +1358,17 @@ export class UserManagementComponent implements OnInit {
             this.MessageService.errormessage(this.translate.instant('UserMgmtSomethimgWntWrngMsg'));
           }    
         },    
-        error => {    
-          this.MessageService.errormessage(error.message);
+        error => {
+          //this.MessageService.errormessage(error.message); 
+          this.Loading=false;
+          if(error.error != null && error.error != undefined){
+            if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+              this.commonService.unauthorizedToken(error);               
+            }
+           }
+          else{
+            this.MessageService.errormessage(error.message);
+          }
         });
   };
 
@@ -1291,6 +1378,7 @@ export class UserManagementComponent implements OnInit {
 
   userRefrenceCheck(mode){
     this.confirmationOpened=false;
+    this.confirmationOpenedEdit = false;
     this.Loading = true;
     this.UserManagementService.userRefrenceCheck(this.userId).subscribe(    
       data => {    
@@ -1303,7 +1391,15 @@ export class UserManagementComponent implements OnInit {
          }
       },    
       error => {
-        this.MessageService.errormessage(error.message);   
+        this.Loading=false;
+        if(error.error != null && error.error != undefined){
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonService.unauthorizedToken(error);               
+          }
+         }
+        else{
+          this.MessageService.errormessage(error.message);
+        } 
       });
   }
   
@@ -1314,12 +1410,21 @@ export class UserManagementComponent implements OnInit {
       data => { 
         this.Loading = false;   
         this.MessageService.successmessage(this.translate.instant('UserMgmtDeleteSuccessMsg'));
-        this.addUserScreen = !this.addUserScreen; 
-        this.getUserList();
+        this.ClearSelection();
+        //this.addUserScreen = !this.addUserScreen; 
+        //this.getUserList();
       },    
       error => {
         this.Loading = false;  
-        this.MessageService.errormessage(error.message); 
+        //this.MessageService.errormessage(error.message); 
+        if(error.error != null && error.error != undefined){
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonService.unauthorizedToken(error);               
+          }
+         }
+        else{
+          this.MessageService.errormessage(error.message);
+        }
       });
   }
 
@@ -1336,15 +1441,35 @@ export class UserManagementComponent implements OnInit {
         }
       },    
       error => {
-        this.MessageService.errormessage(error.message); 
+        //this.MessageService.errormessage(error.message); 
         this.Loading=false;
+        if(error.error != null && error.error != undefined){
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonService.unauthorizedToken(error);               
+          }
+         }
+        else{
+          this.MessageService.errormessage(error.message);
+        }
       });
   
   }
+
+  cancelConfirm(){
+    if(this.addscreenmode == 'edit'){
+      this.confirmationOpenedEdit = true;     
+      //this.confirmationEditToggle();      
+    }
+    else{      
+      this.cancel();
+    }
+  }
   
-  cancel(){
+  cancel(){    
+    this.confirmationOpenedEdit = false;  
     this.ClearSelection();
   }
+
   onInput(filter) {
     
     this.userData = filterBy(this.FilterData, {

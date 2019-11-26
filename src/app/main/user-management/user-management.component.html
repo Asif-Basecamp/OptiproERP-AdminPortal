@@ -32,7 +32,8 @@
                 </form>
                     <div fxLayout="column" fxFlex="100%" class="kendo-grid-wrapper mt-3">
     
-                    <kendo-grid [kendoGridBinding]="userData" [resizable]="true" [sortable]="true" class="full-height-grid kendo-responsive-grid" [filterable]=isColumnFilter [groupable]=isColumnGroup [columnMenu]="false" (cellClick)="userClickHandler($event)">
+                    <kendo-grid [data]="userData" [resizable]="true" [sortable]="true" class="full-height-grid kendo-responsive-grid" [filterable]=isColumnFilter [groupable]=isColumnGroup 
+                    [columnMenu]="false" (cellClick)="userClickHandler($event)" [pageable]="showGridUserMgmtPage" [pageSize]="10">
     
                         <ng-template kendoGridToolbarTemplate>
                             <div class="d-flex align-items-center">
@@ -224,16 +225,16 @@
                                             </label>
                                         </ng-template>
                                     </kendo-grid-checkbox-column>
-                                    <kendo-grid-column field="dbName" title="Database" [width]="100"></kendo-grid-column>
-                                    <kendo-grid-column field="cmpName" title="Company" [width]="100"></kendo-grid-column>
-                                    <kendo-grid-column title="User Type" [width]="100">
+                                    <kendo-grid-column field="dbName" title="{{'UsrMgtDB'|translate}}" [width]="100"></kendo-grid-column>
+                                    <kendo-grid-column field="cmpName" title="{{'Company'|translate}}" [width]="100"></kendo-grid-column>
+                                    <kendo-grid-column title="{{'User_Type'|translate}}" [width]="100">
                                         <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                                             <kendo-dropdownlist [data]="dataItem.UserType" [(ngModel)]="dataItem.selectedUserType" 
                                             (valueChange)="onChangeUserType($event, rowIndex, company_data)" [ngModelOptions]="{standalone: true}"  
                                             class="form-control-sm form-control w-100" textField="text" valueField="text"></kendo-dropdownlist>
                                         </ng-template>
                                     </kendo-grid-column>
-                                    <kendo-grid-column title="EmpName" [width]="100">
+                                    <kendo-grid-column title="{{'EmpName'|translate}}" [width]="100">
                                         <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
 
                                             <kendo-dropdownlist  [data]="dataItem.Employee" textField="firstName" 
@@ -249,7 +250,7 @@
                                         </ng-template>
                                     </kendo-grid-column>
 
-                                    <kendo-grid-column title="BPCode" [width]="100" >
+                                    <kendo-grid-column title="{{'BPCode'|translate}}" [width]="100" >
                                         <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
 
                                             <kendo-dropdownlist  [data]="dataItem.listItems" textField="CardName" 
@@ -279,8 +280,8 @@
                                                     </label>
                                                 </ng-template>
                                             </kendo-grid-checkbox-column>
-                                            <kendo-grid-column field="ProductId" title="Product Name"></kendo-grid-column>
-                                            <kendo-grid-column field="OPTM_PRODDESC" title="Description"></kendo-grid-column>
+                                            <kendo-grid-column field="ProductId" title="{{'ProductName'|translate}}"></kendo-grid-column>
+                                            <kendo-grid-column field="OPTM_PRODDESC" title="{{'ProductDescription'|translate}}"></kendo-grid-column>
                                         </kendo-grid>
                                     </ng-template>
                                     <kendo-grid-excel fileName="User-management.xlsx"></kendo-grid-excel>
@@ -351,7 +352,7 @@
                     <button class="btn btn-primary btn-sm d-flex align-items-center mr-2" type="button" *ngIf="addscreenmode == 'edit'" (click)="userRefrenceCheck('edit')">
                         <svg viewBox="0 0 55.25 55.25" class="icon mr-2">
                             <use xlink:href="#edit"></use>
-                        </svg> Update
+                        </svg>{{'Update'|translate}} 
                     </button>
     
                     <button class="btn btn-success btn-sm mr-2 d-flex align-items-center" type="button" *ngIf="addscreenmode == 'add'" (click)="saveRecord('add')" [disabled]="addUserForm.invalid">
@@ -364,7 +365,7 @@
                             <use xlink:href="#bin"></use>
                         </svg> {{'Delete'|translate}}
                     </button>
-                    <button class="btn btn-danger btn-sm d-flex align-items-center" type="button" (click)="cancel()">
+                    <button class="btn btn-danger btn-sm d-flex align-items-center" type="button" (click)="cancelConfirm()">
                         <svg viewBox="0 0 489 489" class="icon mr-2">
                             <use xlink:href="#cancel"></use>
                         </svg> {{'Cancel'|translate}}
@@ -400,13 +401,13 @@
         </div>
         <kendo-dialog-actions class="p-2 align-items-start justify-content-start">
             <button class="btn btn-success btn-sm d-flex align-items-center mr-2" id='btnCancelEdit' type="button" 
-            (click)="UpdateData('Cancel')">  > 
+            (click)="userRefrenceCheck('edit')">  > 
                 <svg viewBox="0 0 55.25 55.25" class="icon mr-2">
                     <use xlink:href="#edit"></use>
                 </svg> {{'Yes'|translate}}
             </button>  
             <button class="btn btn-danger btn-sm ml-auto d-flex align-items-center" type="button"
-            (click)="dialougeToggle('Cancel')" >
+            (click)="cancel()" >
                 <svg viewBox="0 0 512 512" class="icon mr-2">
                     <use xlink:href="#saveDisk"></use>
                 </svg> {{'No'|translate}}

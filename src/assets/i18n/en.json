@@ -205,8 +205,8 @@
    "UsrMgtDataLostErrMsg":"Your Data will be lost. Do you want to save it?",
    
    
-   "User_Already_Selected": "User is already selected! Please select another user",
-   "Product_Already_Selected": "Product is already selected! Please select another product",
+   "User_Already_Selected": "User is already selected. Please select another user",
+   "Product_Already_Selected": "Product is already selected. Please select another product",
 
    "Enter_License_Count": "Please enter License Count",
    "Enter_Correct_License_Count": "Please enter correct License Count",
@@ -222,6 +222,11 @@
    "User": "User",
    "Select_Product": "Select Product",
    "Product_ID": "Product ID",
-   "No_Tenant_Found": "No tenant found!"
+   "No_Tenant_Found": "No tenant found!",
+   "EmpName": "EmpName",
+   "BPCode": "BPCode",
+   "ProductName": "Product Name",
+   "ProductDescription": "Description",
+   "UserGrpAddNew": "User Group - Add New"
 
 } 
