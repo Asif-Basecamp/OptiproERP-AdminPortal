@@ -196,6 +196,12 @@
    "Record_Saved_Success": "Record saved succesfully",
    "No_Record_Found": "No record found",
    "User_Session_Terminated": "User session has been terminated successfully",
-   "Cannot_Logout": "Cannot Logout user!"
+   "Cannot_Logout": "Cannot Logout user!",
+
+   "Select": "Select",
+   "Items": "Items",
+   "User": "User",
+   "Select_Product": "Select Product",
+   "Product_ID": "Product ID"
 
 } 
