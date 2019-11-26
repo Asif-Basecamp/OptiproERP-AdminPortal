@@ -11,7 +11,8 @@
                         <div class="col-sm-6 col-md-4 mb-sm-0 mb-1">
                             <div class="d-flex align-items-center">
                                 <div class="input-group">
-                                    <input type="text" class="form-control form-control-sm" id="search" placeholder="{{'Search'|translate}}">
+                                        <input type="text" class="form-control form-control-sm" id="search"
+                                        placeholder="{{'Search'|translate}}" (input)="onInput($event.target.value)">
                                     <div class="input-group-append">
                                         <button class="btn btn-primary btn-sm btn-icon" type="button">
                                             <svg viewBox="0 0 410.23 410.23" class="icon">
@@ -118,16 +119,21 @@
                                         </div>
                                         <div class="form-group col-md-12 mb-2">
                                             <label class="mb-0" for="password">{{'Password'|translate}}<span class="text-danger">*</span></label>
-                                            <input type="password" class="form-control form-control-sm" id="password" name="password" [(ngModel)]="password" #Password=ngModel required autocomplete="off">
+                                            <input type="password" class="form-control form-control-sm" minlength="5" id="password" name="password" [(ngModel)]="password" #Password=ngModel required autocomplete="off">
                                             <span class="error" *ngIf="Password.errors?.required && Password.touched">
                                                 Password is required
                                             </span>
                                         </div>
                                         <div class="form-group col-md-12 mb-2">
                                             <label class="mb-0" for="re_password">{{'Re-Enter_Password'|translate}}<span class="text-danger">*</span></label>
-                                            <input type="password" class="form-control form-control-sm" id="re_password" name="re_password" [(ngModel)]="re_password" #RePassword=ngModel required  autocomplete="off">
+                                            <input type="password" class="form-control form-control-sm" id="re_password" minlength="5"
+                                             name="re_password" [(ngModel)]="re_password" #RePassword=ngModel (change)="setCustomValidity()" required  autocomplete="off">
+                                             
                                             <span class="error" *ngIf="RePassword.errors?.required && RePassword.touched">
                                                 Confirm Password is required
+                                            </span>
+                                            <span class="error" *ngIf="!IsComparePassword">
+                                                Confirm Password does not match with Password
                                             </span>
                                         </div>
 
@@ -145,11 +151,13 @@
                                         </div>
                                         <div class="form-group col-md-12 mb-2">
                                             <label class="mb-0" for="mapped_user_id">{{'Mapped_SAP_B1_User'|translate}}<span class="text-danger">*</span></label>
-                                            <kendo-dropdownlist [data]="ddlSAPUser" id="mapped_user_id" name="mapped_user_id" class="form-control-sm form-control w-100" [valuePrimitive]="true"  textField="USER_CODE" valueField="USER_CODE" [(ngModel)]="mapped_user"></kendo-dropdownlist>
+                                            <kendo-dropdownlist [data]="ddlSAPUser" id="mapped_user_id" name="mapped_user_id" class="form-control-sm form-control w-100"   textField="USER_CODE"
+                                             valueField="USER_CODE"  [(ngModel)]="mapped_user"></kendo-dropdownlist>
+
                                         </div>
                                         <div class="form-group col-md-12 mb-2">
                                             <label class="mb-0" for="mapped_user_password">{{'Mapped_SAP_B1_User_Password'|translate}}<span class="text-danger">*</span></label>
-                                            <input type="password" name="mapped_user_password" class="form-control form-control-sm" id="mapped_user_password" [(ngModel)]="mappedPass" #MapPassword=ngModel required autocomplete="off">
+                                            <input type="password"  name="mapped_user_password" minlength="5" class="form-control form-control-sm" id="mapped_user_password" [(ngModel)]="mappedPass" #MapPassword=ngModel required autocomplete="off">
                                             <span class="error" *ngIf="MapPassword.errors?.required && MapPassword.touched">
                                                 User Password is required
                                             </span>
@@ -208,21 +216,44 @@
                                             </label>
                                         </ng-template>
                                     </kendo-grid-checkbox-column>
-                                    <kendo-grid-column field="dbName" title="Database" [width]="150"></kendo-grid-column>
-                                    <kendo-grid-column field="cmpName" title="Company" [width]="150"></kendo-grid-column>
+                                    <kendo-grid-column field="dbName" title="Database" [width]="100"></kendo-grid-column>
+                                    <kendo-grid-column field="cmpName" title="Company" [width]="100"></kendo-grid-column>
                                     <kendo-grid-column title="User Type" [width]="100">
                                         <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                                             <kendo-dropdownlist [data]="dataItem.UserType" [(ngModel)]="dataItem.selectedUserType" (valueChange)="onChangeUserType($event, rowIndex, company_data)" [ngModelOptions]="{standalone: true}"  class="form-control-sm form-control w-100" textField="text" valueField="text"></kendo-dropdownlist>
                                         </ng-template>
                                     </kendo-grid-column>
-                                    <kendo-grid-column title="" [width]="100">
+                                    <kendo-grid-column title="EmpName" [width]="100">
                                         <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
 
-                                            <kendo-dropdownlist *ngIf="!dataItem.BPCode" [data]="dataItem.Employee" textField="firstName" valueField="empID" [(ngModel)]="dataItem.selectedEmployeeType" (valueChange)="onChangeEmployeeId($event, dataItem.dbName, rowIndex)" [ngModelOptions]="{standalone: true}" class="form-control-sm form-control w-100" [disabled]="dataItem.selectedCompany != 'blank'"></kendo-dropdownlist>
+                                            <kendo-dropdownlist  [data]="dataItem.Employee" textField="firstName" 
+                                            valueField="empID" [(ngModel)]="dataItem.selectedEmployeeType" 
+                                            (valueChange)="onChangeEmployeeId($event, dataItem.dbName, rowIndex)" 
+                                            [ngModelOptions]="{standalone: true}" class="form-control-sm form-control w-100" 
+                                            [disabled]="dataItem.selectedCompany != 'blank'"></kendo-dropdownlist>
 
-                                            <kendo-dropdownlist *ngIf="dataItem.BPCode" [data]="listItems" class="form-control-sm form-control w-100" [defaultItem]="'BP ID'"></kendo-dropdownlist>
+                                            <!-- <kendo-dropdownlist  [data]="listItems" class="form-control-sm form-control w-100" [defaultItem]="'BP ID'">
+
+                                            </kendo-dropdownlist> -->
                                         </ng-template>
                                     </kendo-grid-column>
+
+                                    <kendo-grid-column title="BPCode" [width]="100" >
+                                        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+
+                                            <kendo-dropdownlist  [data]="dataItem.listItems" textField="CardName" 
+                                            valueField="CardCode" [(ngModel)]="dataItem.selectedBP" 
+                                            (valueChange)="onChangeBPID($event, dataItem.dbName, rowIndex)" 
+                                            [ngModelOptions]="{standalone: true}" class="form-control-sm form-control w-100" 
+                                            ></kendo-dropdownlist>
+
+                                            <!-- <kendo-dropdownlist  [data]="listItems" class="form-control-sm form-control w-100" [defaultItem]="'BP ID'"> -->
+
+                                            
+                                        </ng-template>
+                                    </kendo-grid-column>
+
+
                                     <ng-template kendoGridDetailTemplate let-dataItem let-productRowIndex="rowIndex">
                                         <kendo-grid *ngIf="dataItem.selectedCompany != 'blank'" [kendoGridBinding]="dataItem.product" [resizable]="true" [sortable]="true" class="" [filterable]=false [groupable]=false 
                                         [kendoGridSelectBy]="'UniqueId'" [selectedKeys]="productSelection" [columnMenu]="false" 
@@ -246,8 +277,8 @@
     
                             <!-- warehouse grid -->
                             <div class="company-details col-sm-4 mt-3 mt-sm-0">
-                                <div class="section-heading mb-2" *ngIf="databName">
-                                    <h5 class="m-0">Database : {{databName}}({{companyName}})</h5>
+                                <div class="section-heading mb-2" *ngIf="ShowDBName">
+                                    <h5 class="m-0">Database: {{ShowDBName}}({{ShowCompanyName}})</h5>
                                 </div>
                                 <kendo-grid [kendoGridBinding]="WH_WC_Data" [resizable]="true" 
                                 [sortable]="true" class="custom-height-grid" 
@@ -345,4 +376,33 @@
         </kendo-dialog-actions>
     </kendo-dialog>
     
+    <!-- Confirmation Dialouge at the time of edit -->
+
+<kendo-dialog *ngIf="confirmationOpenedEdit" (close)="confirmationEditToggle()" [minWidth]="250" [width]="450">
+        <kendo-dialog-titlebar>
+            <div> {{'Please_Confirm'|translate}}</div>
+        </kendo-dialog-titlebar>
+        <div class="">
+            <!-- {{'Do_you_want_to_delete_record'|translate}} -->
+            Your Data will be lost..Do you want to save it?
+    
+        </div>
+        <kendo-dialog-actions class="p-2 align-items-start justify-content-start">
+            <button class="btn btn-success btn-sm d-flex align-items-center mr-2" id='btnCancelEdit' type="button" 
+            (click)="UpdateData('Cancel')">  > 
+                <svg viewBox="0 0 55.25 55.25" class="icon mr-2">
+                    <use xlink:href="#edit"></use>
+                </svg> {{'Yes'|translate}}
+            </button>           
+    
+    
+            <button class="btn btn-danger btn-sm ml-auto d-flex align-items-center" type="button"
+            (click)="dialougeToggle('Cancel')" >
+                <svg viewBox="0 0 512 512" class="icon mr-2">
+                    <use xlink:href="#saveDisk"></use>
+                </svg> {{'No'|translate}}
+            </button>
+        </kendo-dialog-actions>
+    </kendo-dialog>
+
     <div *ngIf="Loading" class="k-i-loading"></div>

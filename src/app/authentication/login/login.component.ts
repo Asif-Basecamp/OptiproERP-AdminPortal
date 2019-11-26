@@ -29,8 +29,9 @@ export class LoginComponent {
     sessionStorage.clear();    
     this.httpClientSer.get('./assets/config.json').subscribe(
       data => {
+        
         this.arrConfigData = data as string[];
-        localStorage.setItem('arrConfigData', this.arrConfigData.service_url); 
+        localStorage.setItem('arrConfigData', this.arrConfigData[0].service_url); 
       },
       (err: HttpErrorResponse) => {
         console.log(err.message);
@@ -42,7 +43,8 @@ export class LoginComponent {
     this.selectedItem = this.translate.instant("Login_Username");
     this.LoginService.Login(this.model).subscribe(    
       data => {    
-        //if(data.Status=="Success") 
+        //if(data.Status=="Success")
+        console.log(data[0]); 
         if(data != null)   
         {       
           this.successmsg = 'token - ' + data[0].access_token; 

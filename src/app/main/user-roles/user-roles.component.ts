@@ -29,7 +29,7 @@ export class UserRolesComponent implements OnInit {
   public SelectedRowData:any[]=[];
   public NewSelectedRowData: any[] = [];
   public EditMode :boolean=false;
-  //public SelectedRowData:any[];
+  public Loading :boolean=false;
   public enableSubmit= false;
   public enableEdit = false;
   public enableUpdate= false;
@@ -74,12 +74,8 @@ export class UserRolesComponent implements OnInit {
     this.gridData = filterBy(this.FilterData, {
       field: 'OPTM_ROLEID',
       operator: 'contains',
-      value: filter,
-      //   filters: [
-      //     { field: "OPTM_GROUPCODE", operator: "contains", value: filter },
-      //     { field: "OPTM_DESCRIPTION", operator: "contains", value:filter },
-      // ]
-    });
+     value: filter,
+    }); 
   }
 
   onFilterChange(checkBox:any,grid:GridComponent){
@@ -330,6 +326,7 @@ export class UserRolesComponent implements OnInit {
   }
   FillGridData()
     {
+      this.Loading=true;
       this.RoleService.FillGridData().subscribe(    
         data => {    
              
@@ -342,9 +339,12 @@ export class UserRolesComponent implements OnInit {
            this.showProductMainPage = true;
            else
            this.showProductMainPage = false;
+
+           this.Loading=false;
           }    
           else{    
-            this.MessageService.errormessage(this.translate.instant('Somethingwrong'));    
+            this.MessageService.errormessage(this.translate.instant('Somethingwrong')); 
+            this.Loading=false;   
           }    
         },    
         error => {  
@@ -610,6 +610,7 @@ export class UserRolesComponent implements OnInit {
     //  console.log(this.NewSelectedRowData);
     this.RoleService.AddUserRole(this.model, this.NewSelectedRowData).subscribe(
       data => {
+        this.Loading=true;
 
         if (data == "True") {
           this.NewSelectedRowData = [];
@@ -622,8 +623,11 @@ export class UserRolesComponent implements OnInit {
         else {
           this.MessageService.errormessage(this.translate.instant('Somethingwrong'));
         }
+        this.Loading=false;
       },
       error => {
+        this.Loading=false;
+
         this.MessageService.errormessage(error.message);
       });
   }
@@ -815,6 +819,7 @@ export class UserRolesComponent implements OnInit {
         }
       }
     }
+    this.Loading=true;
 
     this.RoleService.UpdateUserRole(this.model, this.NewSelectedRowData).subscribe(
       data => {
@@ -832,14 +837,16 @@ export class UserRolesComponent implements OnInit {
         else {
           this.MessageService.errormessage(data);
         }
+        this.Loading=false;
       },
       error => {
+        this.Loading=false;
         this.MessageService.errormessage(error.message);
       });
   }  
      
   DeleteData() {
-
+    this.Loading=true;
     this.RoleService.DeleteUserRole(this.model).subscribe(
       data => {
 
@@ -853,8 +860,10 @@ export class UserRolesComponent implements OnInit {
         else {
           this.MessageService.errormessage(data);
         }
+        this.Loading=false;
       },
       error => {
+        this.Loading=false;
         this.MessageService.errormessage(error.message);
       });
   }
