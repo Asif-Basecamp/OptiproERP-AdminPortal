@@ -216,6 +216,13 @@
    "No_Record_Found": "No record found",
    "User_Session_Terminated": "User session has been terminated successfully",
    "Cannot_Logout": "Cannot Logout user!",
+
+   "Select": "Select",
+   "Items": "Items",
+   "User": "User",
+   "Select_Product": "Select Product",
+   "Product_ID": "Product ID",
+   "No_Tenant_Found": "No tenant found!",
    "EmpName": "EmpName",
    "BPCode": "BPCode",
    "ProductName": "Product Name",

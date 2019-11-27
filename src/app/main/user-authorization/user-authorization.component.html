@@ -53,7 +53,7 @@
                     </ng-template>
 
                     <!-- Mobile view column -->
-                    <kendo-grid-column media="(max-width: 767px)" title="Items">
+                    <kendo-grid-column media="(max-width: 767px)" title="{{'Items'|translate}}">
                         <ng-template kendoGridCellTemplate let-dataItem>
                             <div class="d-flex">
                                 <dl class="mb-0 w-50 pr-1">
@@ -209,7 +209,7 @@
                                             <span class="checkbox"></span>
                                             <span>{{'Enable_filter'|translate}}</span>
                                         </label>
-                                        <button type="button" kendoGridExcelCommand title="Export to excel file" class="ml-auto btn btn-link btn-sm btn-icon p-0">
+                                        <button type="button" kendoGridExcelCommand title="{{'Export_to_excel_file'|translate}}" class="ml-auto btn btn-link btn-sm btn-icon p-0">
                                             <svg viewBox="0 0 512 512" class="icon">
                                                 <use xlink:href="#download"></use>
                                             </svg>
@@ -246,7 +246,7 @@
                                             <span class="checkbox"></span>
                                             <span>{{'Enable_grouping'|translate}}</span>
                                         </label>
-                                        <button type="button" kendoGridExcelCommand title="Export to excel file" class="ml-auto btn btn-link btn-sm btn-icon p-0">
+                                        <button type="button" kendoGridExcelCommand title="{{'Export_to_excel_file'|translate}}" class="ml-auto btn btn-link btn-sm btn-icon p-0">
                                             <svg viewBox="0 0 512 512" class="icon">
                                                 <use xlink:href="#download"></use>
                                             </svg>
@@ -458,7 +458,8 @@
     </kendo-dialog-titlebar>
     <div class="">
         <!-- {{'Do_you_want_to_delete_record'|translate}} -->
-        {{'Your_Data_will_be_lost._Do_you_want_to_save_it?'|translate}}    
+        <!-- {{'Your_Data_will_be_lost..Do_you_want_to_save_it?'|translate}}     -->
+        {{'UsrMgtDataLostErrMsg' |translate}}
     </div>
     <kendo-dialog-actions class="p-2 align-items-start justify-content-end">
         <button class="btn btn-success btn-sm d-flex align-items-center mr-2" id='btnCancelEdit' type="button" 

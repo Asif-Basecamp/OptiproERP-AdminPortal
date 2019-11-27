@@ -150,8 +150,13 @@ export class TenantComponent implements OnInit {
         this.loading = false;       
       },
       error => {
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonService.unauthorizedToken(error);               
+        if(error.error != null && error.error != undefined){
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonService.unauthorizedToken(error);               
+          }
+        }
+        else{
+          this.MessageService.errormessage(error.message);
         }
     });
       
@@ -177,8 +182,13 @@ export class TenantComponent implements OnInit {
         }        
       },
       error => {
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonService.unauthorizedToken(error);               
+        if(error.error != null && error.error != undefined){
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonService.unauthorizedToken(error);               
+          }
+        }
+        else{
+          this.MessageService.errormessage(error.message);
         }
     });
   }
@@ -269,14 +279,16 @@ export class TenantComponent implements OnInit {
           }
         } 
         else{
-          this.MessageService.errormessage("No tenant found!");
+          this.MessageService.errormessage(this.translate.instant('No_Tenant_Found'));
         } 
         this.loading = false;
       },    
       error => {  
         this.loading = false;  
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonService.unauthorizedToken(error);               
+        if(error.error != null && error.error != undefined){
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonService.unauthorizedToken(error);               
+          }
         }
         else{
           this.MessageService.errormessage(error.message);
@@ -300,8 +312,13 @@ export class TenantComponent implements OnInit {
             
     },
     error => {
-      if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-        this.commonService.unauthorizedToken(error);               
+      if(error.error != null && error.error != undefined){
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonService.unauthorizedToken(error);               
+        }
+      }
+      else{
+        this.MessageService.errormessage(error.message);
       }
     });
   }
@@ -352,8 +369,13 @@ export class TenantComponent implements OnInit {
           }
      },
       error => {
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonService.unauthorizedToken(error);               
+        if(error.error != null && error.error != undefined){
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonService.unauthorizedToken(error);               
+          }
+        }
+        else{
+          this.MessageService.errormessage(error.message);
         }
     });
   }
@@ -456,11 +478,13 @@ export class TenantComponent implements OnInit {
     },
     error => {
       this.loading = false;
-      if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-        this.commonService.unauthorizedToken(error);               
+      if(error.error != null && error.error != undefined){
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonService.unauthorizedToken(error);               
+        }
       }
       else{
-        this.MessageService.errormessage(this.translate.instant('Insufficient_License'));
+        this.MessageService.errormessage(error.message);
       }
     });
   }
@@ -484,11 +508,13 @@ export class TenantComponent implements OnInit {
     },
     error => {
       this.loading = false;
-      if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-        this.commonService.unauthorizedToken(error);               
+      if(error.error != null && error.error != undefined){
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonService.unauthorizedToken(error);               
+        }
       }
       else{
-        this.MessageService.errormessage(error);
+        this.MessageService.errormessage(error.message);
       }
     });
   }

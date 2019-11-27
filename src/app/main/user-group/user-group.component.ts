@@ -43,6 +43,8 @@ export class UserGroupComponent implements OnInit {
   public ddlUserType: any[];
   public searchText : string;
   public Loading: boolean = false;
+  public showGridUserGroupPage: boolean = false;
+
   constructor(private UserGroupService:UsergroupService, private MessageService:MessageService,
     private translate: TranslateService, private httpClientSer: HttpClient,private commonService: CommonService) {
       // let userLang = navigator.language.split('-')[0];
@@ -87,6 +89,14 @@ export class UserGroupComponent implements OnInit {
         {     
           this.gridData = data;
           this.FilterData=data;
+
+          if(this.gridData.length > 10){
+            this.showGridUserGroupPage = true;
+          }
+          else{
+            this.showGridUserGroupPage = false;
+          }  
+                  
           this.Loading=false;
         }    
         else{ this.MessageService.errormessage(this.translate.instant('UserMgmtSomethimgWntWrngMsg'));  
@@ -96,13 +106,14 @@ export class UserGroupComponent implements OnInit {
       error => {
         
         this.Loading=false;
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonService.unauthorizedToken(error);               
-        }
+        if(error.error != null && error.error != undefined){
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonService.unauthorizedToken(error);               
+          }
+         }
         else{
-          this.MessageService.errormessage(error.message);   
-        }
-        
+          this.MessageService.errormessage(error.message);
+        }        
       });
    // this.gridData = UsergroupService;
     // this.isMobile();
@@ -124,14 +135,16 @@ export class UserGroupComponent implements OnInit {
         }    
       },    
       error => {
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonService.unauthorizedToken(error);               
-        }
+        this.Loading=false;  
+        if(error.error != null && error.error != undefined){
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonService.unauthorizedToken(error);               
+          }
+         }
         else{
-          this.MessageService.errormessage(error.message);   
+          this.MessageService.errormessage(error.message);
         }
-       // this.MessageService.errormessage(error.message); 
-        this.Loading=false;   
+       // this.MessageService.errormessage(error.message);         
       });
    
   }
@@ -152,11 +165,13 @@ export class UserGroupComponent implements OnInit {
       },    
       error => {
         this.Loading=false;
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonService.unauthorizedToken(error);               
-        }
+        if(error.error != null && error.error != undefined){
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonService.unauthorizedToken(error);               
+          }
+         }
         else{
-          this.MessageService.errormessage(error.message);   
+          this.MessageService.errormessage(error.message);
         }
         //this.MessageService.errormessage(error.message);   
        
@@ -210,8 +225,7 @@ export class UserGroupComponent implements OnInit {
         
         }    
         else
-        { 
-         
+        {          
           this.MessageService.errormessage(this.translate.instant('UserMgmtSomethimgWntWrngMsg')); 
           this.Loading=false;   
         }    
@@ -219,11 +233,13 @@ export class UserGroupComponent implements OnInit {
       error => {
         //this.MessageService.errormessage(error.message);   
         this.Loading=false;
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonService.unauthorizedToken(error);               
-        }
+        if(error.error != null && error.error != undefined){
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonService.unauthorizedToken(error);               
+          }
+         }
         else{
-          this.MessageService.errormessage(error.message);   
+          this.MessageService.errormessage(error.message);
         }
       });
    
@@ -247,11 +263,13 @@ export class UserGroupComponent implements OnInit {
       error => {
         //this.MessageService.errormessage(error.message); 
         this.Loading=false;  
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonService.unauthorizedToken(error);               
-        }
+        if(error.error != null && error.error != undefined){
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonService.unauthorizedToken(error);               
+          }
+         }
         else{
-          this.MessageService.errormessage(error.message);   
+          this.MessageService.errormessage(error.message);
         }
       });
    
@@ -286,11 +304,13 @@ export class UserGroupComponent implements OnInit {
       error => {    
         //this.MessageService.errormessage(error.message);
         this.Loading=false;
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonService.unauthorizedToken(error);               
-        }
+        if(error.error != null && error.error != undefined){
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonService.unauthorizedToken(error);               
+          }
+         }
         else{
-          this.MessageService.errormessage(error.message);   
+          this.MessageService.errormessage(error.message);
         }
       });
 };
@@ -309,11 +329,13 @@ FillDropdownList()
         }    
       },    
       error => {  
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonService.unauthorizedToken(error);               
-        }
-        else{ 
-          this.MessageService.errormessage(error.message);  
+        if(error.error != null && error.error != undefined){
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonService.unauthorizedToken(error);               
+          }
+         }
+        else{
+          this.MessageService.errormessage(error.message);
         }
         //this.MessageService.errormessage(error.message);   
       });
@@ -381,11 +403,13 @@ FillDropdownList()
       error => {
         //this.MessageService.errormessage(error.message);   
         this.Loading=false;
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonService.unauthorizedToken(error);               
-        }
+        if(error.error != null && error.error != undefined){
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonService.unauthorizedToken(error);               
+          }
+         }
         else{
-          this.MessageService.errormessage(error.message);   
+          this.MessageService.errormessage(error.message);
         }
       });
 }

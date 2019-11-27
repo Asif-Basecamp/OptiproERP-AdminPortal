@@ -56,7 +56,7 @@
                                 </ng-template>
             
                                 <!-- Mobile view column -->
-                                <kendo-grid-column media="(max-width: 767px)" title="Tenant">
+                                <kendo-grid-column media="(max-width: 767px)" title="{{'Tenant'|translate}}">
                                     <ng-template kendoGridCellTemplate let-dataItem>
                                         <div class="d-flex">
                                             <dl class="mb-0 w-50 pr-1">
@@ -125,7 +125,7 @@
                                         <span>{{'Enable_grouping'|translate}}</span>
                                     </label> -->
                                     <!-- export -->
-                                    <button type="button" kendoGridExcelCommand title="Export to excel file" class="ml-auto btn btn-link btn-sm btn-icon p-0">
+                                    <button type="button" kendoGridExcelCommand title="{{'Export_to_excel_file'|translate}}" class="ml-auto btn btn-link btn-sm btn-icon p-0">
                                         <svg viewBox="0 0 512 512" class="icon">
                                             <use xlink:href="#download"></use>
                                         </svg>
@@ -139,7 +139,7 @@
                             
                             <!-- <kendo-grid-checkbox-column [width]="38" showSelectAll="true" class="text-center" headerClass="text-center"></kendo-grid-checkbox-column> -->
 
-                            <kendo-grid-checkbox-column field="checkbox" title="Select" [width]="33" class="text-center" headerClass="text-center">
+                            <kendo-grid-checkbox-column field="checkbox" title="{{'Select'|translate}}" [width]="33" class="text-center" headerClass="text-center">
                                 <ng-template kendoGridHeaderTemplate let-column let-rowIndex="rowIndex">
                                     <div class="k-form-field d-flex center-checkbox">
                                         <input type="checkbox" name="view_parent_checkbox" class="cursor-pointer" #Selectallcheckedvalue (change)="on_Selectall_checkbox_checked(Selectallcheckedvalue.checked)"
@@ -157,7 +157,7 @@
                             </kendo-grid-checkbox-column>
     
                             <!-- Mobile view column -->
-                            <kendo-grid-column media="(max-width: 767px)" title="Items">
+                            <kendo-grid-column media="(max-width: 767px)" title="{{'Items'|translate}}">
                                 <ng-template kendoGridCellTemplate let-dataItem>
                                     <div class="d-flex">
                                         <dl class="mb-0 w-50 pr-1">
@@ -236,7 +236,7 @@
                                         <span>Enable grouping</span>
                                     </label>  -->
                                     <!-- export -->
-                                    <button type="button" kendoGridExcelCommand title="Export to excel file" class="ml-auto btn btn-link btn-sm btn-icon p-0">
+                                    <button type="button" kendoGridExcelCommand title="{{'Export_to_excel_file'|translate}}" class="ml-auto btn btn-link btn-sm btn-icon p-0">
                                         <svg viewBox="0 0 512 512" class="icon">
                                             <use xlink:href="#download"></use>
                                         </svg>
@@ -246,7 +246,7 @@
 
                             <!-- columns for mid-size devices -->
                             <!-- <kendo-grid-checkbox-column [width]="38" showSelectAll="true" class="text-center" headerClass="text-center"></kendo-grid-checkbox-column> -->
-                            <kendo-grid-checkbox-column field="checkbox" title="Select" width="33" class="text-center" headerClass="text-center">
+                            <kendo-grid-checkbox-column field="checkbox" title="{{'Select'|translate}}" width="33" class="text-center" headerClass="text-center">
 
                                 <ng-template kendoGridHeaderTemplate let-column let-rowIndex="rowIndex">
                                     <div class="k-form-field d-flex center-checkbox">

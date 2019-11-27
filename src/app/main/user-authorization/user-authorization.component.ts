@@ -102,12 +102,14 @@ export class UserAuthorizationComponent implements OnInit {
       },    
       error => { 
         this.Loading = false; 
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonService.unauthorizedToken(error);               
-        } 
+        if(error.error != null && error.error != undefined){
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonService.unauthorizedToken(error);               
+          }
+        }
         else{
           this.MessageService.errormessage(error.message);
-        }  
+        }
     }); 
   }
 
@@ -118,9 +120,11 @@ export class UserAuthorizationComponent implements OnInit {
         this.userGridLookup = data.USERDETAILS; 
       },    
       error => {  
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonService.unauthorizedToken(error);               
-        } 
+        if(error.error != null && error.error != undefined){
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonService.unauthorizedToken(error);               
+          }
+        }
         else{
           this.MessageService.errormessage(error.message);
         }
@@ -137,11 +141,13 @@ export class UserAuthorizationComponent implements OnInit {
       },    
       error => {  
         this.Loading = false;    
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonService.unauthorizedToken(error);               
+        if(error.error != null && error.error != undefined){
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonService.unauthorizedToken(error);               
+          }
         }
         else{
-        this.MessageService.errormessage(error.message);
+          this.MessageService.errormessage(error.message);
         }
     });
   }
@@ -224,11 +230,13 @@ export class UserAuthorizationComponent implements OnInit {
       // this.defaultItem = this.ddlUserGroup[0];       
       },    
       error => { 
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonService.unauthorizedToken(error);               
+        if(error.error != null && error.error != undefined){
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonService.unauthorizedToken(error);               
+          }
         }
-        else{ 
-        this.MessageService.errormessage(error.message);
+        else{
+          this.MessageService.errormessage(error.message);
         }
     });
   }
@@ -269,12 +277,14 @@ export class UserAuthorizationComponent implements OnInit {
     },    
       error => {  
         this.Loading = false;    
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonService.unauthorizedToken(error);               
+        if(error.error != null && error.error != undefined){
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonService.unauthorizedToken(error);               
+          }
         }
         else{
           this.MessageService.errormessage(error.message);
-       }
+        }
     });
   }
 
@@ -313,11 +323,13 @@ export class UserAuthorizationComponent implements OnInit {
         this.dialougeToggle();
       },    
     error => {
-      if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-        this.commonService.unauthorizedToken(error);               
+      if(error.error != null && error.error != undefined){
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonService.unauthorizedToken(error);               
+        }
       }
-      else{  
-       this.MessageService.errormessage(error.message);
+      else{
+        this.MessageService.errormessage(error.message);
       }
     });
   }
@@ -427,8 +439,10 @@ export class UserAuthorizationComponent implements OnInit {
     },    
       error => {  
         this.Loading = false;
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonService.unauthorizedToken(error);               
+        if(error.error != null && error.error != undefined){
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonService.unauthorizedToken(error);               
+          }
         }
         else{
           this.MessageService.errormessage(error.message);
@@ -471,8 +485,10 @@ export class UserAuthorizationComponent implements OnInit {
     },    
     error => {
       this.Loading = false;  
-      if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-        this.commonService.unauthorizedToken(error);               
+      if(error.error != null && error.error != undefined){
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonService.unauthorizedToken(error);               
+        }
       }
       else{
         this.MessageService.errormessage(error.message);
@@ -568,8 +584,10 @@ getSavedUser(){
       },    
       error => {  
         this.Loading = false;    
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonService.unauthorizedToken(error);               
+        if(error.error != null && error.error != undefined){
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonService.unauthorizedToken(error);               
+          }
         }
         else{
           this.MessageService.errormessage(error.message);
@@ -626,8 +644,10 @@ getSavedUser(){
       },    
       error => { 
         this.Loading = false;     
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonService.unauthorizedToken(error);               
+        if(error.error != null && error.error != undefined){
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonService.unauthorizedToken(error);               
+          }
         }
         else{
           this.MessageService.errormessage(error.message);
@@ -655,8 +675,10 @@ deleteRecord(){
       this.confirmationOpened=false;
       this.dialogOpened=false; 
       this.Loading = false;
-      if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-        this.commonService.unauthorizedToken(error);               
+      if(error.error != null && error.error != undefined){
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonService.unauthorizedToken(error);               
+        }
       }
       else{
         this.MessageService.errormessage(error.message);

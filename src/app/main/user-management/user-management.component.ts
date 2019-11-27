@@ -77,6 +77,9 @@ export class UserManagementComponent implements OnInit {
   public IsComparePassword:boolean=true;
   public IsEditMode:boolean=false;
   public IsEditWorkcenter:boolean=false;
+  public showGridUserMgmtPage: boolean = false;
+  public confirmationOpenedEdit = false; 
+
   constructor(private _router: Router,private cd: ChangeDetectorRef, private UserManagementService:UserManagementService,private MessageService:MessageService,
     private translate: TranslateService, private httpClientSer: HttpClient,private commonService: CommonService) { 
     translate.use(localStorage.getItem('applang'));
@@ -105,6 +108,10 @@ export class UserManagementComponent implements OnInit {
       this.FillCompNGrpNSAPUsrNProd();
   }
 
+  public confirmationEditToggle() {  
+    this.confirmationOpenedEdit = !this.confirmationOpenedEdit;    
+  }
+
   /*-- get list of users --*/
   getUserList(){
     this.Loading = true;  
@@ -114,6 +121,13 @@ export class UserManagementComponent implements OnInit {
           this.Loading = false;   
           this.userData = data;
           this.FilterData =data;
+
+          if(this.userData.length > 10){
+            this.showGridUserMgmtPage = true;
+          }
+          else{
+            this.showGridUserMgmtPage = false;
+          } 
         }    
         else{ 
           this.Loading = false;    
@@ -122,13 +136,14 @@ export class UserManagementComponent implements OnInit {
       },    
       error => { 
         this.Loading = false;  
-        //this.MessageService.errormessage(error.message);
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonService.unauthorizedToken(error);               
-        }
+        if(error.error != null && error.error != undefined){
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonService.unauthorizedToken(error);               
+          }
+         }
         else{
-          this.MessageService.errormessage(error.message);   
-        }   
+          this.MessageService.errormessage(error.message);
+        }  
       });
     }
   
@@ -208,11 +223,13 @@ export class UserManagementComponent implements OnInit {
       error => {
         //this.Loading = false;
         this.MessageService.errormessage(error.message); 
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonService.unauthorizedToken(error);               
-        }
+        if(error.error != null && error.error != undefined){
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonService.unauthorizedToken(error);               
+          }
+         }
         else{
-          this.MessageService.errormessage(error.message);   
+          this.MessageService.errormessage(error.message);
         }  
       });
   }
@@ -231,11 +248,13 @@ export class UserManagementComponent implements OnInit {
         },  error => {    
           //this.MessageService.errormessage(error.message);
           this.Loading=false;
-          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-            this.commonService.unauthorizedToken(error);               
-          }
+          if(error.error != null && error.error != undefined){
+            if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+              this.commonService.unauthorizedToken(error);               
+            }
+           }
           else{
-            this.MessageService.errormessage(error.message);   
+            this.MessageService.errormessage(error.message);
           }
         });
      }
@@ -256,11 +275,13 @@ export class UserManagementComponent implements OnInit {
       error => {    
         //this.MessageService.errormessage(error.message);
         this.Loading=false;
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonService.unauthorizedToken(error);               
-        }
+        if(error.error != null && error.error != undefined){
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonService.unauthorizedToken(error);               
+          }
+         }
         else{
-          this.MessageService.errormessage(error.message);   
+          this.MessageService.errormessage(error.message);
         }
       });
    }
@@ -342,11 +363,13 @@ export class UserManagementComponent implements OnInit {
       error => {    
         //this.MessageService.errormessage(error.message);
         this.Loading=false;
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonService.unauthorizedToken(error);               
-        }
+        if(error.error != null && error.error != undefined){
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonService.unauthorizedToken(error);               
+          }
+         }
         else{
-          this.MessageService.errormessage(error.message);   
+          this.MessageService.errormessage(error.message);
         }
       });  
   } 
@@ -1080,7 +1103,15 @@ export class UserManagementComponent implements OnInit {
           },    
           error => {  
             this.Loading = false; 
-            this.MessageService.errormessage(error.message);
+            //this.MessageService.errormessage(error.message);
+            if(error.error != null && error.error != undefined){
+              if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+                this.commonService.unauthorizedToken(error);               
+              }
+             }
+            else{
+              this.MessageService.errormessage(error.message);
+            }
         });
       }else{
         this.Loading = true; 
@@ -1098,13 +1129,15 @@ export class UserManagementComponent implements OnInit {
             }
           },    
           error => {
-            //this.Loading = false;   
-            this.MessageService.errormessage(error.message);
-            if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-              this.commonService.unauthorizedToken(error);               
-            }
+            this.Loading = false;   
+            //this.MessageService.errormessage(error.message);
+            if(error.error != null && error.error != undefined){
+              if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+                this.commonService.unauthorizedToken(error);               
+              }
+             }
             else{
-              this.MessageService.errormessage(error.message);   
+              this.MessageService.errormessage(error.message);
             }
         });  
       }
@@ -1285,11 +1318,13 @@ export class UserManagementComponent implements OnInit {
         },error => {
           //this.MessageService.errormessage(error.message); 
           this.Loading=false;
-          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-            this.commonService.unauthorizedToken(error);               
-          }
+          if(error.error != null && error.error != undefined){
+            if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+              this.commonService.unauthorizedToken(error);               
+            }
+           }
           else{
-            this.MessageService.errormessage(error.message);   
+            this.MessageService.errormessage(error.message);
           }
         });
             }
@@ -1298,11 +1333,13 @@ export class UserManagementComponent implements OnInit {
         });
     }, error => {
       this.Loading = false;    
-      if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-        this.commonService.unauthorizedToken(error);               
-      }
+      if(error.error != null && error.error != undefined){
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonService.unauthorizedToken(error);               
+        }
+       }
       else{
-        this.MessageService.errormessage(error.message);   
+        this.MessageService.errormessage(error.message);
       }
       //this.MessageService.errormessage(error.message);   
     });    
@@ -1324,11 +1361,13 @@ export class UserManagementComponent implements OnInit {
         error => {
           //this.MessageService.errormessage(error.message); 
           this.Loading=false;
-          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-            this.commonService.unauthorizedToken(error);               
-          }
+          if(error.error != null && error.error != undefined){
+            if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+              this.commonService.unauthorizedToken(error);               
+            }
+           }
           else{
-            this.MessageService.errormessage(error.message);   
+            this.MessageService.errormessage(error.message);
           }
         });
   };
@@ -1339,6 +1378,7 @@ export class UserManagementComponent implements OnInit {
 
   userRefrenceCheck(mode){
     this.confirmationOpened=false;
+    this.confirmationOpenedEdit = false;
     this.Loading = true;
     this.UserManagementService.userRefrenceCheck(this.userId).subscribe(    
       data => {    
@@ -1352,13 +1392,14 @@ export class UserManagementComponent implements OnInit {
       },    
       error => {
         this.Loading=false;
-        //this.MessageService.errormessage(error.message); 
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonService.unauthorizedToken(error);               
-        }
+        if(error.error != null && error.error != undefined){
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonService.unauthorizedToken(error);               
+          }
+         }
         else{
-          this.MessageService.errormessage(error.message);   
-        }  
+          this.MessageService.errormessage(error.message);
+        } 
       });
   }
   
@@ -1376,11 +1417,13 @@ export class UserManagementComponent implements OnInit {
       error => {
         this.Loading = false;  
         //this.MessageService.errormessage(error.message); 
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonService.unauthorizedToken(error);               
-        }
+        if(error.error != null && error.error != undefined){
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonService.unauthorizedToken(error);               
+          }
+         }
         else{
-          this.MessageService.errormessage(error.message);   
+          this.MessageService.errormessage(error.message);
         }
       });
   }
@@ -1400,19 +1443,33 @@ export class UserManagementComponent implements OnInit {
       error => {
         //this.MessageService.errormessage(error.message); 
         this.Loading=false;
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonService.unauthorizedToken(error);               
-        }
+        if(error.error != null && error.error != undefined){
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonService.unauthorizedToken(error);               
+          }
+         }
         else{
-          this.MessageService.errormessage(error.message);   
+          this.MessageService.errormessage(error.message);
         }
       });
   
   }
+
+  cancelConfirm(){
+    if(this.addscreenmode == 'edit'){
+      this.confirmationOpenedEdit = true;     
+      //this.confirmationEditToggle();      
+    }
+    else{      
+      this.cancel();
+    }
+  }
   
-  cancel(){
+  cancel(){    
+    this.confirmationOpenedEdit = false;  
     this.ClearSelection();
   }
+
   onInput(filter) {
     
     this.userData = filterBy(this.FilterData, {
