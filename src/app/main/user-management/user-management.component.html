@@ -220,7 +220,7 @@
                                         <ng-template kendoGridCellTemplate let-dataItem let-companyRowIndex="rowIndex">
                                             <label class="custom-checkbox m-0">
                                                 <input type="checkbox" (change)="companySelect($event, dataItem, companyRowIndex)" [kendoGridSelectionCheckbox]="companyRowIndex" 
-                                                [disabled]="dataItem.selectedEmployeeType && dataItem.selectedEmployeeType.firstName == 'Emp ID'">
+                                                >
                                                 <span class="checkbox"></span>
                                             </label>
                                         </ng-template>
@@ -391,12 +391,12 @@
     
     <!-- Confirmation Dialouge at the time of edit -->
 
-<kendo-dialog *ngIf="confirmationOpenedEdit" (close)="confirmationEditToggle()" [minWidth]="250" [width]="450">
+<!-- <kendo-dialog *ngIf="confirmationOpenedEdit" (close)="confirmationEditToggle()" [minWidth]="250" [width]="450">
         <kendo-dialog-titlebar>
             <div> {{'Please_Confirm'|translate}}</div>
         </kendo-dialog-titlebar>
         <div class="">
-            <!-- {{'Do_you_want_to_delete_record'|translate}} -->
+           
             {{'UsrMgtDataLostErrMsg'|translate}}
         </div>
         <kendo-dialog-actions class="p-2 align-items-start justify-content-start">
@@ -413,6 +413,26 @@
                 </svg> {{'No'|translate}}
             </button>
         </kendo-dialog-actions>
-    </kendo-dialog>
+    </kendo-dialog> -->
+    <kendo-dialog *ngIf="confirmationOpenedEdit" (close)="confirmationEditToggle()" [minWidth]="250" [width]="450">
+            <kendo-dialog-titlebar>
+                <div> {{'Please_Confirm'|translate}}</div>
+            </kendo-dialog-titlebar>
+            <div class="">
+                <!-- {{'Do_you_want_to_delete_record'|translate}} -->
+               
+                {{'UsrMgtDataLostErrMsg'|translate}}
+                
+            </div>
+            <kendo-dialog-actions class="p-2 align-items-start justify-content-end">
+                <button class="btn btn-success btn-sm d-flex align-items-center mr-2" id='btnCancelEdit' type="button" 
+                (click)="userRefrenceCheck('edit')">{{'Yes'|translate}}</button>           
+        
+        
+                <button class="btn btn-danger btn-sm d-flex align-items-center" type="button"
+                (click)="cancel()">{{'No'|translate}}
+                </button>
+            </kendo-dialog-actions>
+        </kendo-dialog>
 
     <div *ngIf="Loading" class="k-i-loading"></div>
