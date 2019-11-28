@@ -41,6 +41,7 @@ export class TenantComponent implements OnInit {
   public loading = false;
   public FilterData: any[];
   public showTenantMainPage: boolean = false;
+  public confirmationOpenedEdit = false; 
 
   constructor(private translate: TranslateService, private httpClientSer: HttpClient, private tenantService: TenantService,
     private MessageService:MessageService, private commonService: CommonService) { 
@@ -150,6 +151,7 @@ export class TenantComponent implements OnInit {
         this.loading = false;       
       },
       error => {
+        this.loading = false; 
         if(error.error != null && error.error != undefined){
           if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
             this.commonService.unauthorizedToken(error);               
@@ -182,6 +184,7 @@ export class TenantComponent implements OnInit {
         }        
       },
       error => {
+        this.loading = false; 
         if(error.error != null && error.error != undefined){
           if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
             this.commonService.unauthorizedToken(error);               
@@ -312,6 +315,7 @@ export class TenantComponent implements OnInit {
             
     },
     error => {
+      this.loading = false; 
       if(error.error != null && error.error != undefined){
         if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
           this.commonService.unauthorizedToken(error);               
@@ -369,6 +373,7 @@ export class TenantComponent implements OnInit {
           }
      },
       error => {
+        this.loading = false; 
         if(error.error != null && error.error != undefined){
           if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
             this.commonService.unauthorizedToken(error);               
@@ -382,6 +387,7 @@ export class TenantComponent implements OnInit {
 
   SaveRecord(operation){
 
+    this.confirmationOpenedEdit = false;
     this.loading = true;
     let TempProductData = [];
     let TempUserData = [];
@@ -391,11 +397,11 @@ export class TenantComponent implements OnInit {
 
     for(let i=0; i< this.ProductData.length; i++){
       if(this.ProductData[i].rowcheck == true){
-        // if(this.ProductData[i].EXTNCODE == 0){
-        //   this.MessageService.errormessage("Please enter license count");
-        //   this.loading = false;
-        //   return;
-        // }
+        if(this.ProductData[i].EXTNCODE == 0){
+          this.MessageService.errormessage(this.translate.instant('Enter_License_Count'));
+          this.loading = false;
+          return;
+        }
         if(this.ProductData[i].showErrorMsg == true){
           this.MessageService.errormessage(this.translate.instant('Enter_Correct_License_Count'));
           this.loading = false;
@@ -411,11 +417,11 @@ export class TenantComponent implements OnInit {
       }
     }
 
-    // if(flagProduct == false){
-    //   this.MessageService.errormessage("Please select atleast one product");
-    //   this.loading = false;
-    //   return;
-    // }
+    if(flagProduct == false){
+      this.MessageService.errormessage(this.translate.instant('Select_One_Product'));
+      this.loading = false;
+      return;
+    }
 
     if(this.UserData != null || this.UserData != undefined){
       if(this.UserData.length >0){
@@ -428,23 +434,23 @@ export class TenantComponent implements OnInit {
             TempUserData.push(map);
           }
         }
-        // if(flagUser == false){
-        //   this.MessageService.errormessage("Please select atleast one user");
-        //   this.loading = false;
-        //   return;
-        // }    
+        if(flagUser == false){
+          this.MessageService.errormessage(this.translate.instant('Select_One_User'));
+          this.loading = false;
+          return;
+        }    
       }
-      // else{
-      //   this.MessageService.errormessage("There is no user");
-      //   this.loading = false;
-      //   return;
-      // }
+      else{
+        this.MessageService.errormessage(this.translate.instant('No_User'));
+        this.loading = false;
+        return;
+      }
     }
-    // else{
-    //   this.MessageService.errormessage("There is no user");
-    //   this.loading = false;
-    //   return;
-    // }
+    else{
+      this.MessageService.errormessage(this.translate.instant('No_User'));
+      this.loading = false;
+      return;
+    }
     
     this.tenantService.SaveTenant(TempProductData,TempUserData).subscribe(
       data => {
@@ -519,9 +525,23 @@ export class TenantComponent implements OnInit {
     });
   }
 
-  CancelRecord(){
-    this.isEdit = false;
-    this.addTenantScreenToggle('');
+  CancelRecord(action){
+    if(this.isEdit)
+    {
+      this.confirmationEditToggle();
+      if(action == 'confirm'){
+        this.isEdit = false;
+        this.addTenantScreenToggle('');
+      }     
+    }
+    else{
+      this.isEdit = false;
+      this.addTenantScreenToggle('');
+    }    
+  }
+
+  public confirmationEditToggle() {  
+    this.confirmationOpenedEdit = !this.confirmationOpenedEdit;    
   }
 
   numberOnly(event){

@@ -227,6 +227,10 @@
    "BPCode": "BPCode",
    "ProductName": "Product Name",
    "ProductDescription": "Description",
-   "UserGrpAddNew": "User Group - Add New"
+   "UserGrpAddNew": "User Group - Add New",
 
+   "Select_One_Product": "Please select atleast one product",
+   "Select_One_User": "Please select atleast one user",
+   "No_User": "There is no user"
+   
 } 

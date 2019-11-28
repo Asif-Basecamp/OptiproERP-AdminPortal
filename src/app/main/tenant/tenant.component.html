@@ -69,7 +69,7 @@
                                 </kendo-grid-column>
             
                                 <!-- Desktop view column -->
-                                <kendo-grid-column media="(min-width: 767px)" field="TENANTKEY" title="{{'TenantName'|translate}}">
+                                <kendo-grid-column media="(min-width: 767px)" field="TENANTKEY" title="{{'TenantName'|translate}}" class="cursor-pointer">
                                 </kendo-grid-column>
                                 
                                 <kendo-grid-excel fileName="TenantList.xlsx"></kendo-grid-excel>
@@ -287,12 +287,12 @@
                             <use xlink:href="#update"></use>
                         </svg> {{'Update'|translate}}
                     </button>
-                    <button class="btn btn-danger btn-sm d-flex align-items-center mr-2" type="button" *ngIf="isEdit" (click)="DeleteRecord($event)"> 
+                    <!-- <button class="btn btn-danger btn-sm d-flex align-items-center mr-2" type="button" *ngIf="isEdit" (click)="DeleteRecord($event)"> 
                         <svg viewBox="0 0 753.23 753.23" class="icon mr-2">
                             <use xlink:href="#bin"></use>
                         </svg> {{'Delete'|translate}}
-                    </button>
-                    <button class="btn btn-danger btn-sm d-flex align-items-center" type="button" (click)="CancelRecord()"> 
+                    </button> -->
+                    <button class="btn btn-danger btn-sm d-flex align-items-center" type="button" (click)="CancelRecord('')"> 
                         <svg viewBox="0 0 489 489" class="icon mr-2">
                             <use xlink:href="#cancel"></use>
                         </svg> {{'Cancel'|translate}}
@@ -301,6 +301,25 @@
             </div>            
         
         </form></div>
+
+    <!-- Confirmation Dialouge at the time of edit -->
+
+    <kendo-dialog *ngIf="confirmationOpenedEdit" (close)="confirmationEditToggle()" [minWidth]="250" [width]="450">
+            <kendo-dialog-titlebar>
+                <div> {{'Please_Confirm'|translate}}</div>
+            </kendo-dialog-titlebar>
+            <div class="">
+                <!-- {{'Do_you_want_to_delete_record'|translate}} -->
+               
+                {{'UsrMgtDataLostErrMsg'|translate}}   
+            </div>
+            <kendo-dialog-actions class="p-2 align-items-start justify-content-end">
+                <button class="btn btn-success btn-sm d-flex align-items-center mr-2" id='btnCancelEdit' type="button" 
+                (click)="SaveRecord('Update')">{{'Yes'|translate}}</button>
+                <button class="btn btn-danger btn-sm d-flex align-items-center" type="button"
+                (click)="CancelRecord('confirm')" >{{'No'|translate}}</button>
+            </kendo-dialog-actions>
+        </kendo-dialog>   
         <div *ngIf="loading" class="k-i-loading"></div>
     </div>
         
