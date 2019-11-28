@@ -99,6 +99,7 @@ export class UserManagementComponent implements OnInit {
     this.SubmitSave.PreviousUserId = [];
     this.EmpID=[]
     this.BPID=''
+    this.tenant='';
     
     this.ddlUserType=[];
     this.ddlUserType.push(
