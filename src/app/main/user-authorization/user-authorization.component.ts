@@ -649,6 +649,7 @@ getSavedUser(){
             this.translate.get('Operation_Complete_MSG').subscribe((res: string) => {
             this.MessageService.successmessage(res);
           }); 
+          this.getPermissionView();
           this.addAuthScreenToggle('Cancel');
           this.getPermissionView();
         }

@@ -71,6 +71,7 @@ export class UserManagementComponent implements OnInit {
   public ShowCompanyName: string;
   public FlagWH: boolean = true;
   public FlagProduct: boolean = true;
+  public FlagEmployee: boolean = true;
   public FlagWC: boolean = true;
   public selectedItem: any[];
   public IsValidate:boolean=false;
@@ -290,6 +291,18 @@ export class UserManagementComponent implements OnInit {
  
   onChangeUserType(e, index, CPdata){
     
+    if(this.dbClickUserType===undefined || this.dbClickUserType==='')
+       {
+
+       }
+       else if(this.dbClickUserType!=CPdata[index].selectedUserType.value)
+         {
+          this.MessageService.errormessage(this.translate.instant('UserSameUserTypeErrMsg')); 
+           CPdata[index]["selectedUserType"] = { text: "--Select--", value: '' };
+           return
+         }
+    //if(CPdata[index].selectedUserType.value===undefined )
+    
     if(e.value==="C" || e.value==="V")
      {
       this.FillBusinessPartnerData(e, index, CPdata)
@@ -421,11 +434,9 @@ export class UserManagementComponent implements OnInit {
       this.dbName = e.dataItem.dbName;
       this.ShowDBName=e.dataItem.dbName;
       this.ShowCompanyName=e.dataItem.cmpName;
-   
-        if(this.dbClickUserType === e.dataItem.selectedUserType.value)
-           {
-            this.dbClickUserType = e.dataItem.selectedUserType.value;
-           }
+      
+      this.dbClickUserType = e.dataItem.selectedUserType.value;
+           
       if(e.dataItem.BPCode){
          this.BPID=e.dataItem.selectedBP.CardCode;
       }
@@ -450,7 +461,11 @@ export class UserManagementComponent implements OnInit {
   }
  
   companySelect(event: any, companyData, companyIndex){
-    
+    if(companyData.selectedUserType.value==='')
+       {
+        this.MessageService.errormessage(this.translate.instant('UserTypeValidationmsg'));
+         return;
+       }
     if(event.target.checked === true){
       this.company_data[companyIndex]["selectedCompany"] = companyData.dbName;
     }else{
@@ -460,6 +475,21 @@ export class UserManagementComponent implements OnInit {
     /*-- employee array --*/
    // this.BPID=companyData.selectedBP.CardCode;
     if(event.target.checked === true){
+      if(companyData.selectedUserType.value==='E')
+         {
+           if(companyData.selectedEmployeeType.empID ==='' || companyData.selectedEmployeeType.empID===undefined)
+              {
+                this.MessageService.errormessage(this.translate.instant('EmployeeValidationmsg'));
+                return;
+              }
+         }
+        else {
+          if(companyData.selectedBP.CardCode ==='' || companyData.selectedBP.CardCode===undefined)
+              {
+                this.MessageService.errormessage(this.translate.instant('BPCodeValidationmsg'));
+                return;
+              }
+        }
       this.SubmitSave.EmployeeId.push({Company: companyData.dbName, 
         empID: companyData.selectedEmployeeType.empID,
         bussPart: companyData.selectedBP.CardCode, eIndex: companyIndex});
@@ -642,6 +672,11 @@ export class UserManagementComponent implements OnInit {
          {
           if(event.target.checked === true){
             this.WCCode = workCenterData.WorkCenterCode;
+            if(this.EmpID==='' && this.BPID==='')
+                {
+                  this.MessageService.errormessage(this.translate.instant('EmployeeAndBPValidationmsg'));
+                  return;
+                }
             if(this.dbClickProductName!='' && this.dbClickProductName!=undefined)
                {
                 this.SubmitSave.WorkCenter.push({Company: this.dbName, EmployeeId: this.EmpID, 
@@ -706,7 +741,7 @@ export class UserManagementComponent implements OnInit {
                     this.FlagProduct=true;
                   }
                   else {
-                    this.MessageService.errormessage(this.translate.instant('UserMgmtProductSelectMsg'+' '+c.company));
+                    this.MessageService.errormessage(this.translate.instant('UserMgmtProductSelectMsg')+' '+c.company);
                     this.FlagProduct=false;
                     this.IsValidate=false;
                     return;
@@ -721,6 +756,21 @@ export class UserManagementComponent implements OnInit {
             }
             elemntProduct="";
       }
+  EmployeeValidation()
+    {
+      
+      this.FlagEmployee=true;
+      for(let i=0; i <this.SubmitSave.Product.length; i++)
+         {
+           if(this.SubmitSave.Product[i].EmployeeId==='' && this.SubmitSave.Product[i].bussPart==='' || this.SubmitSave.Product[i].EmployeeId===undefined)
+             {
+              this.MessageService.errormessage(this.translate.instant('EmployeeAndBPValidationmsg'));
+              this.FlagEmployee=false;
+              this.IsValidate=false;
+              return;
+             }
+         }
+    }    
 
   Validation()
    {
@@ -783,7 +833,7 @@ export class UserManagementComponent implements OnInit {
                          if(this.SubmitSave.Warehouse[j].Id===null || this.SubmitSave.Warehouse[j].Id==="")
                          {
                           
-                           this.MessageService.errormessage(this.translate.instant('UserMgmtWarehouseSelectMsg'+' '+c.Company));
+                           this.MessageService.errormessage(this.translate.instant('UserMgmtWarehouseSelectMsg')+' '+c.Company);
                            this.FlagWH=false;
                            this.IsValidate=false;
                            return;
@@ -794,14 +844,14 @@ export class UserManagementComponent implements OnInit {
  
                        }
                        else {
-                         this.MessageService.errormessage(this.translate.instant('UserMgmtWarehouseSelectMsg'+' '+c.Company));
+                         this.MessageService.errormessage(this.translate.instant('UserMgmtWarehouseSelectMsg')+' '+c.Company);
                          this.FlagWH=false;
                          this.IsValidate=false;
                          return;
                        }}}
                  else {
                    
-                   this.MessageService.errormessage(this.translate.instant('UserMgmtWarehouseSelectMsg'+' '+c.Company));
+                   this.MessageService.errormessage(this.translate.instant('UserMgmtWarehouseSelectMsg')+' '+c.Company);
                    this.IsValidate=false;
                    this.FlagWH=false;
                    return;
@@ -817,7 +867,7 @@ export class UserManagementComponent implements OnInit {
                          {
                            if(this.SubmitSave.WorkCenter[j].WorkCenterCode==="" && this.SubmitSave.WorkCenter[j].Company===c.Company )
                             {
-                              this.MessageService.errormessage(this.translate.instant('UserMgmtWorkcenterSelectMsg'+' '+c.Company));
+                              this.MessageService.errormessage(this.translate.instant('UserMgmtWorkcenterSelectMsg')+' '+c.Company);
                               this.FlagWC=false;
                               this.IsValidate=false;
                               return;
@@ -837,13 +887,13 @@ export class UserManagementComponent implements OnInit {
                                   this.SubmitSave.WorkCenter[j].Warehouse=TempData[0].Id;
                                  }}}}
                          else {
-                           this.MessageService.errormessage(this.translate.instant('UserMgmtWorkcenterSelectMsg'+' '+c.Company));
+                           this.MessageService.errormessage(this.translate.instant('UserMgmtWorkcenterSelectMsg')+' '+c.Company);
                            this.FlagWC=false;
                            this.IsValidate=false;
                               return;
                          }} }
                else {
-                 this.MessageService.errormessage(this.translate.instant('UserMgmtWorkcenterSelectMsg'+' '+c.Company));
+                 this.MessageService.errormessage(this.translate.instant('UserMgmtWorkcenterSelectMsg')+' '+c.Company);
                  this.FlagWC=false;
                  this.IsValidate=false;
                               return;
@@ -890,6 +940,7 @@ export class UserManagementComponent implements OnInit {
 
    CreaeWorkCenterForBlankWorkcenterSelection()
     {
+      if(this.FlagEmployee===false) return;
       let TempelmntWorkCenter="";
       let TempWHName="";
        this.SubmitSave.Company.forEach((c, cindex) => {
@@ -1005,13 +1056,16 @@ export class UserManagementComponent implements OnInit {
             this.SubmitSave.Values = [];
             this.SubmitSave.PreviousUserId = [];
             this.company_data=[];
+            this.WH_WC_Data=[];
             this.tenant='';
             this.BPID='';
             //this.SubmitSave='';
-            this.FlagProduct=false;
-            this.FlagWC=false;
-            this.FlagWH=false;
+            this.FlagProduct=true;
+            this.FlagWC=true;
+            this.FlagWH=true;
+            this.FlagEmployee=true;
             this.IsEditMode=false;
+            this.dbClickUserType='';
             this.getUserList();
             this.FillCompNGrpNSAPUsrNProd();
           
@@ -1046,7 +1100,7 @@ export class UserManagementComponent implements OnInit {
       delete Emp['eIndex'];
       return Emp; 
     });
-   
+   this.EmployeeValidation();
     this.Validation();
     this.ProductValidation();
     
@@ -1060,7 +1114,7 @@ export class UserManagementComponent implements OnInit {
         }
     
     
-    if(this.FlagWC===true && this.FlagWH===true && this.FlagProduct===true)
+    if(this.FlagWC===true && this.FlagWH===true && this.FlagProduct===true && this.FlagEmployee===true) 
       {
         this.SubmitSave.Values.push({
           UserId: this.user_id,
@@ -1079,7 +1133,9 @@ export class UserManagementComponent implements OnInit {
         this.CheckWorkCenterExist();
       }
       else {
+
         this.MessageService.errormessage(this.translate.instant('UserMgmtCheckSelectionMsg'));
+        return;
       }
     this.Loading = false; 
     if(mode == 'add'){
@@ -1176,9 +1232,11 @@ export class UserManagementComponent implements OnInit {
      this.Loading=true;
     this.UserManagementService.getEditDetail(userId).subscribe(    
       data => { 
+
         this.editUserData = data;
         this.Loading = false;
         if(data[0]){
+          
           this.user_id = data[0].OPTM_USERCODE; 
           this.user_name = data[0].OPTM_USERNAME;
           this.password = data[0].OPTM_PASSWORD;
@@ -1188,6 +1246,7 @@ export class UserManagementComponent implements OnInit {
           this.mappedPass = data[0].OPTM_SAPPASSWORD;
           this.PreviousUserId = userId;
           this.tenant=data[0].OPTM_TENANTKEY;
+          this.dbClickUserType=data[0].OPTM_USERTYPE
           if(data[0].OPTM_ACTIVE == 1){
             this.accountStatus = 'true';
          }else{

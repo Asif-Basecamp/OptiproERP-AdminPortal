@@ -104,6 +104,7 @@ export class UserGroupComponent implements OnInit {
         }    
       },    
       error => {
+        
         this.Loading=false;
         if(error.error != null && error.error != undefined){
           if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
