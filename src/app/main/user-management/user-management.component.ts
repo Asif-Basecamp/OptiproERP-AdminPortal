@@ -97,8 +97,9 @@ export class UserManagementComponent implements OnInit {
     this.SubmitSave.WorkCenter = [];
     this.SubmitSave.Values = [];
     this.SubmitSave.PreviousUserId = [];
-    this.EmpID=[]
-    this.BPID=''
+    this.EmpID=[];
+    this.BPID='';
+    this.tenant = '';
     
     this.ddlUserType=[];
     this.ddlUserType.push(
@@ -123,7 +124,7 @@ export class UserManagementComponent implements OnInit {
           this.userData = data;
           this.FilterData =data;
 
-          if(this.userData.length > 10){
+          if(this.userData.length > 15){
             this.showGridUserMgmtPage = true;
           }
           else{

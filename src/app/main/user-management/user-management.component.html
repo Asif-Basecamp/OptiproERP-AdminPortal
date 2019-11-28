@@ -32,8 +32,8 @@
                 </form>
                     <div fxLayout="column" fxFlex="100%" class="kendo-grid-wrapper mt-3">
     
-                    <kendo-grid [data]="userData" [resizable]="true" [sortable]="true" class="full-height-grid kendo-responsive-grid" [filterable]=isColumnFilter [groupable]=isColumnGroup 
-                    [columnMenu]="false" (cellClick)="userClickHandler($event)" [pageable]="showGridUserMgmtPage" [pageSize]="10">
+                    <kendo-grid [kendoGridBinding]="userData" [resizable]="true" [sortable]="true" class="full-height-grid kendo-responsive-grid" [filterable]=isColumnFilter [groupable]=isColumnGroup 
+                    [columnMenu]="false" (cellClick)="userClickHandler($event)" [pageable]="showGridUserMgmtPage" [pageSize]="15">
     
                         <ng-template kendoGridToolbarTemplate>
                             <div class="d-flex align-items-center">

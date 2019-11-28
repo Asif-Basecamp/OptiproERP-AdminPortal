@@ -105,7 +105,7 @@ export class TenantComponent implements OnInit {
    ProductListNew(){
     this.ProdCodeArr = [];
     if(this.ProductData != null && this.ProductData != undefined){
-      if(this.ProductData.length > 10)
+      if(this.ProductData.length > 15)
         this.showViewGridPage = true;
     }
     else{
@@ -176,7 +176,7 @@ export class TenantComponent implements OnInit {
             return obj;
           });
 
-          if(this.UserData.length > 10)
+          if(this.UserData.length > 15)
           this.showUserGridPage = true;
         }
         else{
@@ -220,10 +220,10 @@ export class TenantComponent implements OnInit {
       }
     }
 
-    if(!this.isEdit)
-    this.getUserByProductList('',this.ProdCodeArr);
-    else
-    this.getUserByProductList(this.TenantId,this.ProdCodeArr);
+    // if(!this.isEdit)
+    // this.getUserByProductList('',this.ProdCodeArr);
+    // else
+    // this.getUserByProductList(this.TenantId,this.ProdCodeArr);
   }
 
   selectUser(checkvalue,rowdata,index){  
@@ -275,7 +275,7 @@ export class TenantComponent implements OnInit {
           if(data.length > 0){           
            this.TenantList = data; 
            this.FilterData = data;   
-           if(this.TenantList.length > 10)   
+           if(this.TenantList.length > 15)   
            this.showTenantMainPage = true;
            else
            this.showTenantMainPage = false;
@@ -365,7 +365,7 @@ export class TenantComponent implements OnInit {
            }  
           }         
 
-          if(this.UserData.length > 10)
+          if(this.UserData.length > 15)
            this.showUserGridPage = true;
           // }
           else{

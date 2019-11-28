@@ -29,7 +29,7 @@
             </form>
             <div fxLayout="column" fxFlex="100%" class="kendo-grid-wrapper mt-3">
                 <kendo-grid [kendoGridBinding]="gridData" [resizable]="true" [sortable]="true" class="full-height-grid kendo-responsive-grid " [filterable]=isColumnFilter [groupable]=isColumnGroup [columnMenu]="false" 
-                [selectable]="true" (selectionChange)="editUser($event)" [pageable]="showGridDataPage" [pageSize]="10">
+                [selectable]="true" (selectionChange)="editUser($event)" [pageable]="showGridDataPage" [pageSize]="15">
                     <ng-template kendoGridToolbarTemplate>
                         <div class="d-flex align-items-center">
 
@@ -198,7 +198,7 @@
                     <div class="row mt-2">
                         <!--Start User Grid  [pageable]="showGridUserPage" [pageSize]="10" -->
                         <div class="col-sm-12 col-md-5 col-lg-5 col-xl-4">
-                          <kendo-grid [data]="LocalUserGrid" [resizable]="true" [sortable]="true" [height]="190" class="kendo-responsive-grid" [filterable]=screenGridFilter4 [columnMenu]="false" 
+                          <kendo-grid [kendoGridBinding]="LocalUserGrid" [resizable]="true" [sortable]="true" [height]="190" class="kendo-responsive-grid" [filterable]=screenGridFilter4 [columnMenu]="false" 
                             [ngStyle]="{'cursor': 'pointer','max-height':'190px'}" [selectable]="true" (selectionChange)="userSelection($event)"
                             [rowSelected]="isUserCodeSelected" >  <!-- [selectable]="{ checkboxOnly: true, mode: 'multiple' }" -->
 

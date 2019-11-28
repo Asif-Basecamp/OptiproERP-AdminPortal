@@ -92,7 +92,7 @@ export class UserAuthorizationComponent implements OnInit {
       data => {
         this.gridData = data;
         this.FilterData = data;
-        if(this.gridData.length > 10){
+        if(this.gridData.length > 15){
           this.showGridDataPage = true;
         }
         else{
