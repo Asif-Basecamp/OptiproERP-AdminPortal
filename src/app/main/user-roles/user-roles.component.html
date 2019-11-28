@@ -32,9 +32,9 @@
             <!-- Kendo Grid Start -->
             <div fxLayout="column" fxFlex="100%" class="kendo-grid-wrapper mt-3">
 
-                <kendo-grid #gridUserRole [data]="gridData" [resizable]="true" [sortable]="true" class="full-height-grid kendo-responsive-grid" [filterable]=isColumnFilter
+                <kendo-grid #gridUserRole [kendoGridBinding]="gridData" [resizable]="true" [sortable]="true" class="full-height-grid kendo-responsive-grid" [filterable]=isColumnFilter
                     [groupable]=isColumnGroup [columnMenu]="false"  [ngStyle]="{'cursor': 'pointer'}"
-                    (selectionChange)="gridUserRoleSelectionChange(gridUserRole, $event)"  [selectable]="true" [pageable]="showProductMainPage" [pageSize]="10">
+                    (selectionChange)="gridUserRoleSelectionChange(gridUserRole, $event)"  [selectable]="true" [pageable]="showProductMainPage" [pageSize]="15">
                     <!-- [pageSize]="10" 
                     [pageable]="{
                         buttonCount: paginationButtonCount,
@@ -150,7 +150,7 @@
                 <div class="row mt-4">
                      <!--Start Product Grid  [pageable]="showGridProductPage" [pageSize]="10"  -->
                      <div class="col-sm-12 col-md-5 col-lg-5 col-xl-4">
-                            <kendo-grid [data]="LocalProductGrid" [resizable]="true" [sortable]="true" [height]="190" lass="kendo-responsive-grid" [groupable]="false" [filterable]=screenGridFilter4 [columnMenu]="false"  [ngStyle]="{'cursor': 'pointer','max-height':'190px'}" [selectable]="true" (selectionChange)="productSelection($event)" [rowSelected]="isProductIdSelected">  
+                            <kendo-grid [kendoGridBinding]="LocalProductGrid" [resizable]="true" [sortable]="true" [height]="190" lass="kendo-responsive-grid" [groupable]="false" [filterable]=screenGridFilter4 [columnMenu]="false"  [ngStyle]="{'cursor': 'pointer','max-height':'190px'}" [selectable]="true" (selectionChange)="productSelection($event)" [rowSelected]="isProductIdSelected">  
                                 <!-- [selectable]="{ checkboxOnly: true, mode: 'multiple' }" -->
   
                                   <ng-template kendoGridToolbarTemplate>
@@ -187,7 +187,7 @@
                     
                     <div class="col-sm-12 col-md-7 col-lg-7 col-xl-8">
                         <div class="kendo-grid-wrapper"  fxFlex="0 1 100%">
-                            <kendo-grid [resizable]="true" [filterable]=screenGridFilter5  [sortable]="true" class="full-height-grid kendo-responsive-grid" [data]="gridData1" #gridUser [selectable]="{ checkboxOnly: true, mode: 'multiple' }">
+                            <kendo-grid [resizable]="true" [filterable]=screenGridFilter5  [sortable]="true" class="full-height-grid kendo-responsive-grid" [kendoGridBinding]="gridData1" #gridUser [selectable]="{ checkboxOnly: true, mode: 'multiple' }">
                                 <ng-template kendoGridToolbarTemplate>
                                     <div class="d-flex align-items-center">
                                         <label class="custom-checkbox mb-0 mr-2 filter-checkbox">

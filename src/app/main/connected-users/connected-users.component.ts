@@ -126,7 +126,7 @@ export class ConnectedUsersComponent implements OnInit {
       data => {      
         if(data != undefined && data != null){
           this.gridData = data.LoggedUserData;
-          if(this.gridData.length > 10)
+          if(this.gridData.length > 15)
           this.showConnectedUserMainPage = true;
           else
           this.showConnectedUserMainPage = false;

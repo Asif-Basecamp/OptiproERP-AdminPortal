@@ -31,8 +31,8 @@
                 <div class="row" fxFlex="0 1 100%">
                     <div class="col-md-12 col-lg-8 col-xl-6">
                         <div fxLayout="column" fxFlex="100%" class="kendo-grid-wrapper mt-3">
-                            <kendo-grid [data]="TenantList" [resizable]="true" [sortable]="true" class="full-height-grid kendo-responsive-grid" [filterable]=isColumnFilter [groupable]=isColumnGroup [columnMenu]="false"
-                             [selectable]="true" (selectionChange)="editTenant($event)" [pageable]="showTenantMainPage" [pageSize]="10">
+                            <kendo-grid [kendoGridBinding]="TenantList" [resizable]="true" [sortable]="true" class="full-height-grid kendo-responsive-grid" [filterable]=isColumnFilter [groupable]=isColumnGroup [columnMenu]="false"
+                             [selectable]="true" (selectionChange)="editTenant($event)" [pageable]="showTenantMainPage" [pageSize]="15">
                                 <ng-template kendoGridToolbarTemplate>
                                     <div class="d-flex align-items-center">
             
@@ -69,7 +69,7 @@
                                 </kendo-grid-column>
             
                                 <!-- Desktop view column -->
-                                <kendo-grid-column media="(min-width: 767px)" field="TENANTKEY" title="{{'TenantName'|translate}}">
+                                <kendo-grid-column media="(min-width: 767px)" field="TENANTKEY" title="{{'TenantName'|translate}}" class="cursor-pointer">
                                 </kendo-grid-column>
                                 
                                 <kendo-grid-excel fileName="TenantList.xlsx"></kendo-grid-excel>
@@ -103,7 +103,7 @@
         
                     <!-- Kendo Grid Start -->
                     <div fxLayout="column" fxFlex="100%" class="kendo-grid-wrapper mt-3">    
-                        <kendo-grid [kendoGridBinding]="ProductData" [resizable]="true" [pageable]="showViewGridPage" [pageSize]="10" [sortable]="true" class="custom-height-grid kendo-responsive-grid" [filterable]=isColumnFilterView
+                        <kendo-grid [kendoGridBinding]="ProductData" [resizable]="true" [pageable]="showViewGridPage" [pageSize]="15" [sortable]="true" class="custom-height-grid kendo-responsive-grid" [filterable]=isColumnFilterView
                             [groupable]=isColumnGroup [columnMenu]="false" [selectable]="{ checkboxOnly: true, mode: 'multiple' }">
                             
                             <!-- grid template start -->
@@ -207,7 +207,7 @@
                         </kendo-grid>
     
                         <kendo-grid [kendoGridBinding]="UserData" [resizable]="true" [sortable]="true" class="custom-height-grid mt-3" [filterable]=isColumnFilterUser
-                            [groupable]=false [columnMenu]="false" [pageable]="showUserGridPage" [pageSize]="10" [selectable]="{ checkboxOnly: true, mode: 'multiple' }">
+                            [groupable]=false [columnMenu]="false" [pageable]="showUserGridPage" [pageSize]="15" [selectable]="{ checkboxOnly: true, mode: 'multiple' }">
                             <!-- [pageSize]="10" 
                             [pageable]="{
                                 buttonCount: paginationButtonCount,
@@ -287,12 +287,12 @@
                             <use xlink:href="#update"></use>
                         </svg> {{'Update'|translate}}
                     </button>
-                    <button class="btn btn-danger btn-sm d-flex align-items-center mr-2" type="button" *ngIf="isEdit" (click)="DeleteRecord($event)"> 
+                    <!-- <button class="btn btn-danger btn-sm d-flex align-items-center mr-2" type="button" *ngIf="isEdit" (click)="DeleteRecord($event)"> 
                         <svg viewBox="0 0 753.23 753.23" class="icon mr-2">
                             <use xlink:href="#bin"></use>
                         </svg> {{'Delete'|translate}}
-                    </button>
-                    <button class="btn btn-danger btn-sm d-flex align-items-center" type="button" (click)="CancelRecord()"> 
+                    </button> -->
+                    <button class="btn btn-danger btn-sm d-flex align-items-center" type="button" (click)="CancelRecord('')"> 
                         <svg viewBox="0 0 489 489" class="icon mr-2">
                             <use xlink:href="#cancel"></use>
                         </svg> {{'Cancel'|translate}}
@@ -301,6 +301,25 @@
             </div>            
         
         </form></div>
+
+    <!-- Confirmation Dialouge at the time of edit -->
+
+    <kendo-dialog *ngIf="confirmationOpenedEdit" (close)="confirmationEditToggle()" [minWidth]="250" [width]="450">
+            <kendo-dialog-titlebar>
+                <div> {{'Please_Confirm'|translate}}</div>
+            </kendo-dialog-titlebar>
+            <div class="">
+                <!-- {{'Do_you_want_to_delete_record'|translate}} -->
+               
+                {{'UsrMgtDataLostErrMsg'|translate}}   
+            </div>
+            <kendo-dialog-actions class="p-2 align-items-start justify-content-end">
+                <button class="btn btn-success btn-sm d-flex align-items-center mr-2" id='btnCancelEdit' type="button" 
+                (click)="SaveRecord('Update')">{{'Yes'|translate}}</button>
+                <button class="btn btn-danger btn-sm d-flex align-items-center" type="button"
+                (click)="CancelRecord('confirm')" >{{'No'|translate}}</button>
+            </kendo-dialog-actions>
+        </kendo-dialog>   
         <div *ngIf="loading" class="k-i-loading"></div>
     </div>
         

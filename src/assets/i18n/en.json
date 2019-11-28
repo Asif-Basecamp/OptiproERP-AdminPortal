@@ -232,6 +232,10 @@
    "UserTypeValidationmsg": "Please Select User Type.",
    "EmployeeValidationmsg": "Please Select EmployeeName.",
    "BPCodeValidationmsg": "Please Select EmployeeName.",
-   "EmployeeAndBPValidationmsg": "Please Select EmployeeName or Business Partner."
+   "EmployeeAndBPValidationmsg": "Please Select EmployeeName or Business Partner.",
 
+   "Select_One_Product": "Please select atleast one product",
+   "Select_One_User": "Please select atleast one user",
+   "No_User": "There is no user"
+   
 } 

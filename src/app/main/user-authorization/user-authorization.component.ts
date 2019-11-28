@@ -92,7 +92,7 @@ export class UserAuthorizationComponent implements OnInit {
       data => {
         this.gridData = data;
         this.FilterData = data;
-        if(this.gridData.length > 10){
+        if(this.gridData.length > 15){
           this.showGridDataPage = true;
         }
         else{
@@ -271,6 +271,7 @@ export class UserAuthorizationComponent implements OnInit {
         
        // this.getMenuList('show');
         this.getSavedMenu();
+        this.getModalArray();
         this.CheckUserPermissionForProduct('editBtn');
       }
       this.Loading = false;
@@ -286,6 +287,18 @@ export class UserAuthorizationComponent implements OnInit {
           this.MessageService.errormessage(error.message);
         }
     });
+  }
+
+  getModalArray(){
+    for(let i=0; i < this.inputRole.length; i++){
+      for(let j=0; j < this.gridDataRoles.length; j++){
+        if(this.inputRole[i].OPTM_ROLEID == this.gridDataRoles[j].OPTM_ROLEID){          
+          this.oModalData.SelectedRole.push({
+              Product: this.gridDataRoles[j].OPTM_PROD
+          })         
+        }
+      }
+    }
   }
 
   gridUserSelection($event){
@@ -314,7 +327,7 @@ export class UserAuthorizationComponent implements OnInit {
       if(data != 'exist'){
         this.MessageService.errormessage(data);
         //this.screenGrid = [];
-        //this.MenuGrid = [];
+        this.MenuGrid = [];        
       }
       //if(this.inputRole.length > 0 && this.inputVal != '')
       if(this.inputRole.length > 0 && this.selectedUser != '')
@@ -384,7 +397,8 @@ export class UserAuthorizationComponent implements OnInit {
 
   getMenuList(state){
     
-  
+    this.oModalData.SelectedRole = [];
+
     for(let i=0; i < this.inputRole.length; i++){
       for(let j=0; j < this.gridDataRoles.length; j++){
         if(this.inputRole[i].OPTM_ROLEID == this.gridDataRoles[j].OPTM_ROLEID){          
@@ -637,10 +651,12 @@ getSavedUser(){
           }); 
           this.getPermissionView();
           this.addAuthScreenToggle('Cancel');
+          this.getPermissionView();
         }
         else{
           this.MessageService.errormessage(data);
         }
+        
         this.Loading = false;    
       },    
       error => { 
@@ -670,7 +686,10 @@ deleteRecord(){
       this.Loading = false;
       this.translate.get('Record_deleted').subscribe((res: string) => {
         this.MessageService.successmessage(res);
-      });   
+        this.addAuthScreenToggle('Cancel');
+        this.getPermissionView();
+      });
+
     },    
     error => { 
       this.confirmationOpened=false;

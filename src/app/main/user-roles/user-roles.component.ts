@@ -351,7 +351,7 @@ export class UserRolesComponent implements OnInit {
            this.gridData = data;
            this.FilterData=data;
 
-           if(this.gridData.length > 10)
+           if(this.gridData.length > 15)
            this.showProductMainPage = true;
            else
            this.showProductMainPage = false;
