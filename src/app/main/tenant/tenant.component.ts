@@ -397,23 +397,25 @@ export class TenantComponent implements OnInit {
 
     for(let i=0; i< this.ProductData.length; i++){
       if(this.ProductData[i].rowcheck == true){
-        if(this.ProductData[i].EXTNCODE == 0){
-          this.MessageService.errormessage(this.translate.instant('Enter_License_Count'));
-          this.loading = false;
-          return;
-        }
+        // if(this.ProductData[i].EXTNCODE == 0){
+        //   this.MessageService.errormessage(this.translate.instant('Enter_License_Count'));
+        //   this.loading = false;
+        //   return;
+        // }
         if(this.ProductData[i].showErrorMsg == true){
           this.MessageService.errormessage(this.translate.instant('Enter_Correct_License_Count'));
           this.loading = false;
           return;
         }
-        flagProduct = true;
-        let map = {};
-        map['Product'] = this.ProductData[i].OPTM_PRODCODE;
-        map['License'] = this.ProductData[i].EXTNCODE;
-        map['Tenant'] = tenant;
-        map['Operation'] = operation;
-        TempProductData.push(map);
+        if(this.ProductData[i].EXTNCODE != 0){  
+          flagProduct = true;
+          let map = {};
+          map['Product'] = this.ProductData[i].OPTM_PRODCODE;
+          map['License'] = this.ProductData[i].EXTNCODE;
+          map['Tenant'] = tenant;
+          map['Operation'] = operation;
+          TempProductData.push(map);      
+        }        
       }
     }
 
@@ -434,23 +436,23 @@ export class TenantComponent implements OnInit {
             TempUserData.push(map);
           }
         }
-        if(flagUser == false){
-          this.MessageService.errormessage(this.translate.instant('Select_One_User'));
-          this.loading = false;
-          return;
-        }    
+        // if(flagUser == false){
+        //   this.MessageService.errormessage(this.translate.instant('Select_One_User'));
+        //   this.loading = false;
+        //   return;
+        // }    
       }
-      else{
-        this.MessageService.errormessage(this.translate.instant('No_User'));
-        this.loading = false;
-        return;
-      }
+      // else{
+      //   this.MessageService.errormessage(this.translate.instant('No_User'));
+      //   this.loading = false;
+      //   return;
+      // }
     }
-    else{
-      this.MessageService.errormessage(this.translate.instant('No_User'));
-      this.loading = false;
-      return;
-    }
+    // else{
+    //   this.MessageService.errormessage(this.translate.instant('No_User'));
+    //   this.loading = false;
+    //   return;
+    // }
     
     this.tenantService.SaveTenant(TempProductData,TempUserData).subscribe(
       data => {

@@ -315,7 +315,7 @@
                                 <kendo-grid-column media="(min-width: 768px)" field="AddSelected" title="{{'Add'|translate}}" width="60" class="text-center" headerClass="text-center">
                                     <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                                         <label class="custom-checkbox mb-0">
-                                            <input type="checkbox" [disabled]="dataItem.ADDENABLED == 'false'" [checked]="dataItem.AddSelected" (change)="addSelectChange($event,rowIndex)">
+                                            <input type="checkbox" [disabled]="dataItem.ADDENABLED == 'false'" #checkedaddvalue  [checked]="dataItem.AddSelected"  (change)="addSelectChange(checkedaddvalue.checked,rowIndex)">
                                             <span class="checkbox"></span>
                                         </label>
                                     </ng-template>
@@ -324,7 +324,7 @@
                                 <kendo-grid-column media="(min-width: 768px)" field="UpdateSelected" title="{{'Update'|translate}}" width="60" class="text-center" headerClass="text-center">
                                     <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                                         <label class="custom-checkbox mb-0">
-                                            <input type="checkbox" [disabled]="dataItem.UPDATEENABLED == 'false'" [checked]="dataItem.UpdateSelected" (change)="updateSelectChange($event,rowIndex)">
+                                            <input type="checkbox" [disabled]="dataItem.UPDATEENABLED == 'false'" #checkedupdatevalue [checked]="dataItem.UpdateSelected"  (change)="updateSelectChange(checkedupdatevalue.checked,rowIndex)">
                                             <span class="checkbox"></span>
                                         </label>
                                     </ng-template>
@@ -333,7 +333,7 @@
                                 <kendo-grid-column media="(min-width: 768px)" field="DeleteSelected" title="{{'Delete'|translate}}" width="60" class="text-center" headerClass="text-center">
                                     <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                                         <label class="custom-checkbox mb-0">
-                                            <input type="checkbox" [disabled]="dataItem.DELETEENABLED == 'false'" [checked]="dataItem.DeleteSelected" (change)="deleteSelectChange($event,rowIndex)">
+                                            <input type="checkbox" [disabled]="dataItem.DELETEENABLED == 'false'" #checkeddeletevalue [checked]="dataItem.DeleteSelected"  (change)="deleteSelectChange(checkeddeletevalue.checked,rowIndex)">
                                             <span class="checkbox"></span>
                                         </label>
                                     </ng-template>
@@ -343,7 +343,7 @@
                                     <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                                         
                                         <label class="custom-checkbox mb-0">
-                                            <input type="checkbox" [disabled]="dataItem.READENABLED == 'false'" #readcheck [checked]="dataItem.ReadSelected" (change)="readSelectChange(readcheck.checked,rowIndex)">
+                                            <input type="checkbox" [disabled]="dataItem.READENABLED == 'false'" #checkedreadvalue [checked]="dataItem.ReadSelected" (change)="readSelectChange(checkedreadvalue.checked,rowIndex)">
                                             <span class="checkbox"></span>
                                         </label>
                                     </ng-template>

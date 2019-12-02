@@ -180,14 +180,11 @@ export class UserAuthorizationComponent implements OnInit {
     this.inputRole = [];   
 
     if(this.addAuthScreen){
-      if(mode == 'edit'){        
-        this.getAllUserGroup();       
-      } 
-      else{
+      if(mode != 'edit'){
         this.UserGroup = this.user_select;
         this.defaultItem = '';
-        this.getRoles(mode);
-      }          
+        this.getRoles(mode);      
+      }              
       this.getUserGroup();
     }
    }    
@@ -227,7 +224,7 @@ export class UserAuthorizationComponent implements OnInit {
         }    
       }    
        this.ddlUserGroup = data; 
-      // this.defaultItem = this.ddlUserGroup[0];       
+      
       },    
       error => { 
         if(error.error != null && error.error != undefined){
@@ -265,14 +262,10 @@ export class UserAuthorizationComponent implements OnInit {
           }
         } 
         
-        // if(this.gridDataRoles.length > 10){
-        //   this.showGridRolePage = true;
-        // }
-        
        // this.getMenuList('show');
         this.getSavedMenu();
         this.getModalArray();
-        this.CheckUserPermissionForProduct('editBtn');
+        //this.CheckUserPermissionForProduct('editBtn');
       }
       this.Loading = false;
     },    
@@ -326,10 +319,15 @@ export class UserAuthorizationComponent implements OnInit {
     data => { 
       if(data != 'exist'){
         this.MessageService.errormessage(data);
+        if(area == 'grid'){
+          this.inputVal = '';
+          this.selectedUser = '';
+        }        
         //this.screenGrid = [];
-        this.MenuGrid = [];        
+        //this.MenuGrid = [];        
+        //this.LocalUserGrid = [];
       }
-      //if(this.inputRole.length > 0 && this.inputVal != '')
+      
       if(this.inputRole.length > 0 && this.selectedUser != '')
         this.showDisplayBtn = true;
         if(area == 'grid')
@@ -383,16 +381,20 @@ export class UserAuthorizationComponent implements OnInit {
   getMenuGridForSelectedUser(){ 
     this.MenuGrid = [];   
     let arr = [];
-    //this.MenuGrid = this.SavedMenu.filter(val => val.OPTM_USERCODE == this.selectedUser);
-    for(let i=0; i< this.oSaveUserScreenModel.length; i++){
-      arr = this.oSaveUserScreenModel[i].filter(val => val.OPTM_USERCODE == this.selectedUser);   
-      if(arr.length>0){
-        this.MenuGrid = arr;
-      }   
-    }   
-    if(this.MenuGrid.length == 0){
-      this.getMenuList('show');
-    }   
+    
+    if(this.selectedUser != ''){
+      for(let i=0; i< this.oSaveUserScreenModel.length; i++){
+        arr = this.oSaveUserScreenModel[i].filter(val => val.OPTM_USERCODE == this.selectedUser);   
+        if(arr.length>0){
+          this.MenuGrid = arr;
+        }   
+      } 
+
+      if(this.MenuGrid.length == 0){
+        this.getMenuList('show');
+      } 
+    }     
+      
   }
 
   getMenuList(state){
@@ -440,15 +442,16 @@ export class UserAuthorizationComponent implements OnInit {
          this.screenGrid[i].OPTM_USERCODE = this.selectedUser;
       } 
      
-      //this.MenuGrid = this.screenGrid;
       this.oSaveUserScreenModel.push(this.screenGrid);
-      let arr = [];
-      for(let i=0; i< this.oSaveUserScreenModel.length; i++){
+      if(this.selectedUser != ''){
+        let arr = [];
+        for(let i=0; i< this.oSaveUserScreenModel.length; i++){
         arr = this.oSaveUserScreenModel[i].filter(val => val.OPTM_USERCODE == this.selectedUser);   
         if(arr.length>0){
           this.MenuGrid = arr;
         }   
-      }
+      }        
+     }      
       this.Loading = false;       
     },    
       error => {  
@@ -466,6 +469,8 @@ export class UserAuthorizationComponent implements OnInit {
  }
 
  editUser($event){
+  this.selectedUser = '';
+  this.getAllUserGroup();
   let userGrp ;
   if($event.selectedRows.length > 0){
      userGrp = $event.selectedRows[0].dataItem.OPTM_USERGROUP;
@@ -475,6 +480,7 @@ export class UserAuthorizationComponent implements OnInit {
   else{
      userGrp = $event.selectedRows[0].dataItem.OPTM_USERGROUP;    
   }   
+    
   this.isEdit = true;
   this.addAuthScreenToggle('edit');
    
@@ -483,19 +489,19 @@ export class UserAuthorizationComponent implements OnInit {
         this.DataForUserGroup = data;
         this.ddlUserGroup = this.allUsersDDL.filter(val => val.OPTM_GROUPCODE == userGrp);
         this.defaultItem = this.ddlUserGroup[0];
-        this.getSavedUser();
-        //this.inputVal = userGrp;
-        //this.selectedUser = this.inputVal;
-        if(this.LocalUserGrid.length > 0){
-          this.selectedUser = this.LocalUserGrid[0].UserCode;
-          let select = [];       
-          select.push(this.selectedUser);
-          this.isUserCodeSelected = (e: RowArgs) => select.indexOf(e.dataItem.UserCode) >=0 ;  
-        }              
 
         this.showDisplayBtn = true;  
-        this.getRoles('edit'); 
-           
+
+        if(this.DataForUserGroup.OPTM_ADMIN_AUTHRUSER.length > 0){
+          this.getSavedUser();        
+          if(this.LocalUserGrid.length > 0){
+            this.selectedUser = this.LocalUserGrid[0].UserCode;
+            let select = [];       
+            select.push(this.selectedUser);
+            this.isUserCodeSelected = (e: RowArgs) => select.indexOf(e.dataItem.UserCode) >=0 ;  
+          }        
+        } 
+        this.getRoles('edit');  
     },    
     error => {
       this.Loading = false;  
@@ -527,10 +533,7 @@ getSavedUser(){
         UserCode: this.DataForUserGroup.OPTM_ADMIN_AUTHRUSER[i].OPTM_USERCODE
       });
     }   
-  }
-  // if(this.LocalUserGrid.length > 10){
-  //   this.showGridUserPage = true;
-  // }
+  }  
   this.Loading = false;    
 }
 
@@ -569,10 +572,10 @@ getSavedUser(){
         OPTM_CREATEDATE: '000-00-00',
         //OPTM_USERCODE: DataForUserGroup.OPTM_ADMIN_AUTHR[0].OPTM_USERGROUP,
         OPTM_USERCODE: obj.OPTM_USERCODE,
-        AddSelected: (obj.AddSelected == undefined) ? false: obj.AddSelected,
-        UpdateSelected: (obj.UpdateSelected == undefined) ? false: obj.UpdateSelected,
-        DeleteSelected: (obj.DeleteSelected == undefined) ? false: obj.DeleteSelected,
-        ReadSelected: (obj.ReadSelected == undefined) ? false: obj.ReadSelected,
+        AddSelected: (obj.AddSelected == undefined || obj.AddSelected == "" ) ? false: obj.AddSelected,
+        UpdateSelected: (obj.UpdateSelected == undefined || obj.UpdateSelected == "") ? false: obj.UpdateSelected,
+        DeleteSelected: (obj.DeleteSelected == undefined || obj.DeleteSelected == "") ? false: obj.DeleteSelected,
+        ReadSelected: (obj.ReadSelected == undefined || obj.ReadSelected == "") ? false: obj.ReadSelected,
         OPTM_USERID: 'admin',
         OPTM_AUTHCODE: obj.OPTM_AUTHCODE
       });
@@ -633,10 +636,10 @@ getSavedUser(){
           OPTM_CREATEDATE : "000-00-00",
           //OPTM_USERCODE : inputVal,
           OPTM_USERCODE : obj1.OPTM_USERCODE,
-          AddSelected: (obj1.AddSelected == undefined) ? false: obj1.AddSelected,
-          UpdateSelected: (obj1.UpdateSelected == undefined) ? false: obj1.UpdateSelected,
-          DeleteSelected: (obj1.DeleteSelected == undefined) ? false: obj1.DeleteSelected,
-          ReadSelected: (obj1.ReadSelected == undefined) ? false: obj1.ReadSelected,
+          AddSelected: (obj1.AddSelected == undefined || obj1.AddSelected == "") ? false: obj1.AddSelected,
+          UpdateSelected: (obj1.UpdateSelected == undefined || obj1.UpdateSelected == "") ? false: obj1.UpdateSelected,
+          DeleteSelected: (obj1.DeleteSelected == undefined || obj1.DeleteSelected == "") ? false: obj1.DeleteSelected,
+          ReadSelected: (obj1.ReadSelected == undefined || obj1.ReadSelected == "") ? false: obj1.ReadSelected,
           OPTM_USERID: "admin"
         });
         return obj1; 
@@ -649,7 +652,7 @@ getSavedUser(){
             this.translate.get('Operation_Complete_MSG').subscribe((res: string) => {
             this.MessageService.successmessage(res);
           }); 
-          this.getPermissionView();
+          
           this.addAuthScreenToggle('Cancel');
           this.getPermissionView();
         }

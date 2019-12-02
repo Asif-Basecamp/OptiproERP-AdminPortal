@@ -91,7 +91,9 @@ export class UserRolesComponent implements OnInit {
     this.SelectedProduct = ProductName;
     let select = [];       
     select.push(this.SelectedProduct);
-    this.isProductIdSelected = (e: RowArgs) => select.indexOf(e.dataItem.ProductId) >=0 ;    
+    this.isProductIdSelected = (e: RowArgs) => select.indexOf(e.dataItem.ProductId) >=0 ;   
+    
+    console.log(this.NewSelectedRowData);
 
     var  TempArray  =[];
     if (this.gridData1.length > 0) {
@@ -189,12 +191,7 @@ export class UserRolesComponent implements OnInit {
     this.NewSelectedRowData = this.NewSelectedRowData.filter(val => val.OPTM_PROD !== dataItem.ProductId);   
   }
 
-  this.LocalProductGrid.splice(rowIndex,1);  
-  
-  // if(this.LocalProductGrid.length > 10)
-  //  this.showGridProductPage = true;
-  // else
-  //  this.showGridProductPage = false;
+  this.LocalProductGrid.splice(rowIndex,1); 
  }
 
   FillDropdownList()
@@ -599,38 +596,48 @@ export class UserRolesComponent implements OnInit {
     if (this.IsDuplicate == true)
       return
 
-    //if (this.gridData1 != null) {
+    if (this.gridData1 != null && this.gridData != undefined) {
     // Check if TableDataBinding array have any record 
     if (this.gridData1.length > 0) {
-      var sCurrentProductSelected = this.model.Product;
-      // row count of SelectedRowData
-      var iSelectedTbl;
-      //Set Checked Value 
-      // For each loop of all screens of a Product
-      for (iSelectedTbl = 0; iSelectedTbl < this.NewSelectedRowData.length; iSelectedTbl++) {
+      // var sCurrentProductSelected = this.model.Product;
+      // // row count of SelectedRowData
+      // var iSelectedTbl;
+      // //Set Checked Value 
+      // // For each loop of all screens of a Product
+      // for (iSelectedTbl = 0; iSelectedTbl < this.NewSelectedRowData.length; iSelectedTbl++) {
 
-        if (this.NewSelectedRowData[iSelectedTbl].OPTM_PROD == sCurrentProductSelected) {
-          this.NewSelectedRowData.splice(iSelectedTbl, 1);
-          iSelectedTbl = iSelectedTbl - 1;
+      //   if (this.NewSelectedRowData[iSelectedTbl].OPTM_PROD == sCurrentProductSelected) {
+      //     this.NewSelectedRowData.splice(iSelectedTbl, 1);
+      //     iSelectedTbl = iSelectedTbl - 1;
+      //   }
+
+      // }
+      // // row count of TableDataBinding
+      // var iTblCount = 0;
+      // // row count of SelectedRowData
+      // var iSelectedTbl: any;
+      // iSelectedTbl = this.NewSelectedRowData.length;
+      // // For each loop of all screens of a Product
+      // for (iTblCount = 0; iTblCount < this.gridData1.length; iTblCount++) {
+
+      //   if (this.gridData1[iTblCount].AddSelected == true || this.gridData1[iTblCount].UpdateSelected == true || this.gridData1[iTblCount].DeleteSelected == true || this.gridData1[iTblCount].ReadSelected == true) {
+      //     // Select row of TableDataBinding if any checkbox is checked
+      //     this.NewSelectedRowData[iSelectedTbl] = this.gridData1[iTblCount];
+      //     // increase index value of SelectedRowData
+      //     iSelectedTbl = iSelectedTbl + 1;
+      //   }
+      // }
+
+      this.NewSelectedRowData = this.NewSelectedRowData.filter(item => item.OPTM_PROD != this.gridData1[0].OPTM_PROD);
+      let locArr = this.NewSelectedRowData;
+      for(let idx=0; idx<this.gridData1.length; idx++){
+        if (this.gridData1[idx].AddSelected == true || this.gridData1[idx].UpdateSelected == true || this.gridData1[idx].DeleteSelected == true || this.gridData1[idx].ReadSelected == true) {
+          locArr.push(this.gridData1[idx]);
         }
-
       }
-      // row count of TableDataBinding
-      var iTblCount = 0;
-      // row count of SelectedRowData
-      var iSelectedTbl: any;
-      iSelectedTbl = this.NewSelectedRowData.length;
-      // For each loop of all screens of a Product
-      for (iTblCount = 0; iTblCount < this.gridData1.length; iTblCount++) {
-
-        if (this.gridData1[iTblCount].AddSelected == true || this.gridData1[iTblCount].UpdateSelected == true || this.gridData1[iTblCount].DeleteSelected == true || this.gridData1[iTblCount].ReadSelected == true) {
-          // Select row of TableDataBinding if any checkbox is checked
-          this.NewSelectedRowData[iSelectedTbl] = this.gridData1[iTblCount];
-          // increase index value of SelectedRowData
-          iSelectedTbl = iSelectedTbl + 1;
-        }
-      }
+      this.NewSelectedRowData = locArr;
     }
+  }
 
     if (this.NewSelectedRowData.length == 0) {
       this.MessageService.errormessage(this.translate.instant('NoRows'));
@@ -643,8 +650,9 @@ export class UserRolesComponent implements OnInit {
 
         if (data == "True") {
           this.NewSelectedRowData = [];
-          this.FillGridData();
           this.addRolesScreenToggle('');
+          this.FillGridData();
+          
           this.gridData1.length = 0;
           this.MessageService.successmessage(this.translate.instant('RecordCreated'));
 
@@ -821,45 +829,57 @@ export class UserRolesComponent implements OnInit {
       if (this.gridData1.length > 0) {
         // var sCurrentProductSelected = oCurrentController.getView().byId("cmbxProductId").getValue();
         // row count of SelectedRowData
-        var iSelectedTbl;
+        //var iSelectedTbl;
         //Set Checked Value 
+
         // Remove Rows of current selected Product
-        var sCurrentProductSelected = this.model.Product;
-        for (iSelectedTbl = 0; iSelectedTbl < this.NewSelectedRowData.length; iSelectedTbl++) {
-          if (this.NewSelectedRowData[iSelectedTbl].OPTM_PROD == sCurrentProductSelected) {
-            this.NewSelectedRowData.splice(iSelectedTbl, 1);
-            iSelectedTbl = iSelectedTbl - 1;
-          }
+        // var sCurrentProductSelected = this.model.Product;
+        // for (iSelectedTbl = 0; iSelectedTbl < this.NewSelectedRowData.length; iSelectedTbl++) {
+        //   if (this.NewSelectedRowData[iSelectedTbl].OPTM_PROD == sCurrentProductSelected) {
+        //     this.NewSelectedRowData.splice(iSelectedTbl, 1);
+        //     iSelectedTbl = iSelectedTbl - 1;
+        //   }
+        // }
 
-        }
         // Remove all unchecked Rows
-        for (iSelectedTbl = 0; iSelectedTbl < this.NewSelectedRowData.length; iSelectedTbl++) {
-          if (this.NewSelectedRowData[iSelectedTbl].AddSelected != true && this.NewSelectedRowData[iSelectedTbl].UpdateSelected != true &&
-            this.NewSelectedRowData[iSelectedTbl].DeleteSelected != true &&
-            this.NewSelectedRowData[iSelectedTbl].ReadSelected != true) {
+    //     for (iSelectedTbl = 0; iSelectedTbl < this.NewSelectedRowData.length; iSelectedTbl++) {
+    //       if (this.NewSelectedRowData[iSelectedTbl].AddSelected != true && this.NewSelectedRowData[iSelectedTbl].UpdateSelected != true &&
+    //         this.NewSelectedRowData[iSelectedTbl].DeleteSelected != true &&
+    //         this.NewSelectedRowData[iSelectedTbl].ReadSelected != true) {
 
-            this.NewSelectedRowData.splice(iSelectedTbl, 1);
-            iSelectedTbl = iSelectedTbl - 1;
+    //         this.NewSelectedRowData.splice(iSelectedTbl, 1);
+    //         iSelectedTbl = iSelectedTbl - 1;
+    //       }
+    //     }
+    //     // row count of TableDataBinding
+    //     var iTblCount = 0;
+    //     var iSelectedTbl: any;
+    //     // row count of SelectedRowData
+    //     iSelectedTbl = this.NewSelectedRowData.length;
+    //     // For each loop of all screens of a Product
+    //     for (iTblCount = 0; iTblCount < this.gridData1.length; iTblCount++) {
+
+    //       if (this.gridData1[iTblCount].AddSelected == true || this.gridData1[iTblCount].UpdateSelected == true || this.gridData1[iTblCount].DeleteSelected == true || this.gridData1[iTblCount].ReadSelected == true) {
+    //         // Select row of TableDataBinding if any checkbox is checked
+    //         this.NewSelectedRowData[iSelectedTbl] = this.gridData1[iTblCount];
+    //         // increase index value of SelectedRowData
+    //         iSelectedTbl = iSelectedTbl + 1;
+    //       }
+    //     }
+
+        this.NewSelectedRowData = this.NewSelectedRowData.filter(item => item.OPTM_PROD != this.gridData1[0].OPTM_PROD);
+
+        let locArr = this.NewSelectedRowData;
+
+        for(let idx=0; idx<this.gridData1.length; idx++){
+          if (this.gridData1[idx].AddSelected == true || this.gridData1[idx].UpdateSelected == true || this.gridData1[idx].DeleteSelected == true || this.gridData1[idx].ReadSelected == true) {
+            locArr.push(this.gridData1[idx]);
           }
-
         }
-        // row count of TableDataBinding
-        var iTblCount = 0;
-        var iSelectedTbl: any;
-        // row count of SelectedRowData
-        iSelectedTbl = this.NewSelectedRowData.length;
-        // For each loop of all screens of a Product
-        for (iTblCount = 0; iTblCount < this.gridData1.length; iTblCount++) {
+        this.NewSelectedRowData = locArr;
+       }     
+     }
 
-          if (this.gridData1[iTblCount].AddSelected == true || this.gridData1[iTblCount].UpdateSelected == true || this.gridData1[iTblCount].DeleteSelected == true || this.gridData1[iTblCount].ReadSelected == true) {
-            // Select row of TableDataBinding if any checkbox is checked
-            this.NewSelectedRowData[iSelectedTbl] = this.gridData1[iTblCount];
-            // increase index value of SelectedRowData
-            iSelectedTbl = iSelectedTbl + 1;
-          }
-        }
-      }
-    }
     this.Loading=true;
 
     this.RoleService.UpdateUserRole(this.model, this.NewSelectedRowData).subscribe(
