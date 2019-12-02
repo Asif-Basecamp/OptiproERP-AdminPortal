@@ -387,12 +387,28 @@ export class UserAuthorizationComponent implements OnInit {
     for(let i=0; i< this.oSaveUserScreenModel.length; i++){
       arr = this.oSaveUserScreenModel[i].filter(val => val.OPTM_USERCODE == this.selectedUser);   
       if(arr.length>0){
-        this.MenuGrid = arr;
+
+        this.setCheckBoxVal(arr);
+        //this.MenuGrid = arr;
       }   
     }   
     if(this.MenuGrid.length == 0){
       this.getMenuList('show');
     }   
+  }
+
+  setCheckBoxVal(arr){
+    for(let i=0; i<arr.length; i++){
+      if(arr[i].AddSelected == '')
+      arr[i].AddSelected = false;
+      if(arr[i].UpdateSelected == '')
+      arr[i].UpdateSelected = false;
+      if(arr[i].DeleteSelected == '')
+      arr[i].DeleteSelected = false;
+      if(arr[i].ReadSelected == '')
+      arr[i].ReadSelected = false;
+    }
+    this.MenuGrid = arr;
   }
 
   getMenuList(state){
@@ -444,10 +460,12 @@ export class UserAuthorizationComponent implements OnInit {
       this.oSaveUserScreenModel.push(this.screenGrid);
       let arr = [];
       for(let i=0; i< this.oSaveUserScreenModel.length; i++){
-        arr = this.oSaveUserScreenModel[i].filter(val => val.OPTM_USERCODE == this.selectedUser);   
-        if(arr.length>0){
-          this.MenuGrid = arr;
-        }   
+        if(this.selectedUser != ''){
+          arr = this.oSaveUserScreenModel[i].filter(val => val.OPTM_USERCODE == this.selectedUser);   
+          if(arr.length>0){
+            this.MenuGrid = arr;
+          }  
+        }        
       }
       this.Loading = false;       
     },    

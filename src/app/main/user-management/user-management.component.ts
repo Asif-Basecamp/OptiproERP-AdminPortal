@@ -97,9 +97,9 @@ export class UserManagementComponent implements OnInit {
     this.SubmitSave.WorkCenter = [];
     this.SubmitSave.Values = [];
     this.SubmitSave.PreviousUserId = [];
-    this.EmpID=[];
-    this.BPID='';
-    this.tenant = '';
+    this.EmpID=[]
+    this.BPID=''
+    this.tenant='';
     
     this.ddlUserType=[];
     this.ddlUserType.push(
@@ -332,17 +332,19 @@ export class UserManagementComponent implements OnInit {
     }
 
     if(e.value === 'E'){
-      let productByStoreID = element.product.filter(product => product.ProductId === 'ATD' 
-      ||  product.ProductId === 'SFES' || product.ProductId === 'WMS' || product.ProductId === 'CNF'
-      ||  product.ProductId === 'MMO' || product.ProductId === 'DSB');
+      // let productByStoreID = element.product.filter(product => product.ProductId === 'ATD' 
+      // ||  product.ProductId === 'SFES' || product.ProductId === 'WMS' || product.ProductId === 'CNF'
+      // ||  product.ProductId === 'MMO' || product.ProductId === 'DSB' || product.ProductId === 'TDC');
+      let productByStoreID = element.product.filter(product => product.ProductId != 'CVP');
+      
       this.company_data[index]["product"] = productByStoreID;
       this.company_data[index]["BPCode"] = false;
     }
     this.userType = e.value;
   }
-   delay(ms: number) {
-    return new Promise( resolve => setTimeout(resolve, ms) );
-}
+//    delay(ms: number) {
+//     return new Promise( resolve => setTimeout(resolve, ms) );
+// }
   /*-- get warehouse and workcenter list --*/
   FillDDlWarehouse(dbName, index){
     this.Loading = true;
@@ -357,16 +359,20 @@ export class UserManagementComponent implements OnInit {
             WorkCenterdata => {
               this.Loading = false;
               warehousedata.Table[i]["workcenter"] = WorkCenterdata;
-              this.delay(5000).then(any=>{
-                if(warehousedata.Table[i].workcenter.length>0){
-                  for (let j = 0; j < warehousedata.Table[i].workcenter.length; j++) {      
-                    warehousedata.Table[i].workcenter[j]["uniqueId"] = dbName+''+i+''+j;  
-                    this.WCGetSelectiondata(warehousedata.Table[i].workcenter[j], i);      
-                   }
-                }
+             //this.delay(5000).then(any=>{
+               if(warehousedata.Table[i].workcenter !=null && warehousedata.Table[i].workcenter !=undefined)
+                 {
+                  if(warehousedata.Table[i].workcenter.length>0){
+                    for (let j = 0; j < warehousedata.Table[i].workcenter.length; j++) {      
+                      warehousedata.Table[i].workcenter[j]["uniqueId"] = dbName+''+i+''+j;  
+                      this.WCGetSelectiondata(warehousedata.Table[i].workcenter[j], i);      
+                     }
+                  }
+                 }
+                
                
                 //your task after delay.
-           });
+          // });
                
               // return Observable.from(WorkCenterdata).delay(2000);
                
@@ -389,8 +395,9 @@ export class UserManagementComponent implements OnInit {
   } 
 
   WHGetSelectiondata(WHData, WHIndex){
-    
-    if(this.editUserData){
+    debugger
+    if(this.IsEditMode===true)
+     {if(this.editUserData.length>0){
       //onsole.log(this.editUserData)
     //  this.company_data.forEach((element, index) => {
         this.editUserData.forEach((element2, index2) => {
@@ -407,26 +414,31 @@ export class UserManagementComponent implements OnInit {
           }
         });  
     //  });
-    }
+    }}
+    
   }
 
   WCGetSelectiondata(WCData, WCIndex){
-  if(this.editUserData){
-    //this.company_data.forEach((element, index) => {
-      this.editUserData.forEach((element2, index2) => {
-        //if(element.dbName === element2.OPTM_COMPID){
-          if(this.ShowDBName === element2.OPTM_COMPID){
-          if(WCData.WorkCenterCode === element2.OPTM_WORKCENTER){
-              this.SubmitSave.WorkCenter.push({Company:  element2.OPTM_COMPID, EmployeeId: element2.OPTM_EMPID, 
-                productCode: element2.OPTM_OPTIADDON, WorkCenterCode: element2.OPTM_WORKCENTER, WCIndex: WCIndex, 
-               bussPart:element2.OPTM_BPCODE});
-              this.SubmitSave.WorkCenter = this.removeDuplicatesValue(this.SubmitSave.WorkCenter, 'WorkCenterCode'); 
-              this.workcenterSelection.push(WCData.uniqueId);
-          }
-        }
-      });  
-    //});
-  }
+    if(this.IsEditMode===true)
+    {
+      if(this.editUserData.length>0){
+        //this.company_data.forEach((element, index) => {
+          this.editUserData.forEach((element2, index2) => {
+            //if(element.dbName === element2.OPTM_COMPID){
+              if(this.ShowDBName === element2.OPTM_COMPID){
+              if(WCData.WorkCenterCode === element2.OPTM_WORKCENTER){
+                  this.SubmitSave.WorkCenter.push({Company:  element2.OPTM_COMPID, EmployeeId: element2.OPTM_EMPID, 
+                    productCode: element2.OPTM_OPTIADDON, WorkCenterCode: element2.OPTM_WORKCENTER, WCIndex: WCIndex, 
+                   bussPart:element2.OPTM_BPCODE});
+                  this.SubmitSave.WorkCenter = this.removeDuplicatesValue(this.SubmitSave.WorkCenter, 'WorkCenterCode'); 
+                  this.workcenterSelection.push(WCData.uniqueId);
+              }
+            }
+          });  
+        //});
+      }
+    }
+  
   }
 
   companyClickHandler(e){
@@ -523,7 +535,7 @@ export class UserManagementComponent implements OnInit {
     
     if(event.target.checked === true){
       this.productID = product;
-      this.SubmitSave.Product.push({productCode: this.productID, pIndex: rowIndex, bussPart: this.BPID});
+          this.SubmitSave.Product.push({productCode: this.productID, pIndex: rowIndex, bussPart: this.BPID});
     }else{
       let whatIndexTwo = null;
       this.SubmitSave.Product.forEach((value, index) => {
@@ -549,7 +561,11 @@ export class UserManagementComponent implements OnInit {
         }
       });
     });
-
+    this.SubmitSave.Product = this.SubmitSave.Product.filter((thing, index, self) =>
+    index === self.findIndex((t) => (
+    t.Company === thing.Company && t.productCode === thing.productCode && t.EmployeeId===thing.EmployeeId
+  ))
+)
     let array = [];
       this.SubmitSave.Product.forEach((value, index) => {
         if(value.pIndex === rowIndex){
@@ -557,6 +573,16 @@ export class UserManagementComponent implements OnInit {
         }
       });
       this.dbClickProductName = array.toString();
+       if(this.IsEditMode===true)
+           {
+             for(let i=0; i <this.SubmitSave.WorkCenter.length; i++)
+                 {
+                  if(this.dbName===this.SubmitSave.WorkCenter[i].Company)
+                    {
+                      this.SubmitSave.WorkCenter[i].productCode=this.dbClickProductName;
+                    }
+                 }
+           }
   }
 
   warehouseSelect(event, warehouseData, warehouseIndex){
@@ -573,6 +599,7 @@ export class UserManagementComponent implements OnInit {
               
            }
       }
+      
     }
     if(event.target.checked === true){
       this.WH_WC_Data[warehouseIndex]["selectedWarehouse"] = warehouseData.OPTM_WHSE;
@@ -585,13 +612,24 @@ export class UserManagementComponent implements OnInit {
       this.SubmitSave.Warehouse.push({Company: this.dbName, Id: this.WHCode, EmployeeId: this.EmpID, 
         WHIndex: warehouseIndex, bussPart: this.BPID});
     }else{
+
+
       let whatIndex3 = null;
       this.SubmitSave.Warehouse.forEach((value, index) => {
         if(value.Id === warehouseData.OPTM_WHSE){
             whatIndex3 = index;
         }
+          
       }); 
       this.SubmitSave.Warehouse.splice(whatIndex3, 1); 
+      //Removeing warehouse name from workcenter array if user deselect option at the time of edit
+      for(let j=0; j <this.SubmitSave.WorkCenter.length; j++ )
+          {
+            if(this.SubmitSave.WorkCenter[j].Warehouse==warehouseData.OPTM_WHSE)
+              {
+                this.SubmitSave.WorkCenter[j].Warehouse="";
+              }
+          }
     }
   }
   WorkCenterSelectEditMode(event, workCenterData, workCenterIndex)
@@ -604,10 +642,14 @@ export class UserManagementComponent implements OnInit {
      {
       if(this.SubmitSave.WorkCenter[i].Warehouse===workCenterData.Warehouse && this.dbName===this.SubmitSave.WorkCenter[i].Company)
         {
-         this.SubmitSave.WorkCenter[i].WorkCenterCode=workCenterData.WorkCenterCode;
-         this.SubmitSave.WorkCenter[i].productCode=this.dbClickProductName;
-         this.IsEditWorkcenter=true;
-         return;
+          if(this.SubmitSave.WorkCenter[i].WorkCenterCode ==="")
+           {
+            this.SubmitSave.WorkCenter[i].WorkCenterCode=workCenterData.WorkCenterCode;
+            this.SubmitSave.WorkCenter[i].productCode=this.dbClickProductName;
+            this.IsEditWorkcenter=true;
+            return;
+           }
+         
         }
      }
    }
@@ -664,7 +706,7 @@ export class UserManagementComponent implements OnInit {
         
          }
   workCenterSelect(event, workCenterData, workCenterIndex){
-    
+    this.IsEditWorkcenter=false;
     if(this.IsEditMode)
         { 
          this.WorkCenterSelectEditMode(event, workCenterData, workCenterIndex);
@@ -1067,6 +1109,9 @@ export class UserManagementComponent implements OnInit {
             this.FlagEmployee=true;
             this.IsEditMode=false;
             this.dbClickUserType='';
+            this.dbName='';
+            this.ShowDBName='';
+            this.ShowCompanyName='';
             this.getUserList();
             this.FillCompNGrpNSAPUsrNProd();
           
@@ -1328,9 +1373,10 @@ export class UserManagementComponent implements OnInit {
           }else if(element2.OPTM_USERTYPE == 'E'){
             this.company_data[index]["selectedUserType"] = { text: "Employee", value: element2.OPTM_USERTYPE };
 
-            let productByStoreID = element.product.filter(product => product.ProductId === 'ATD' 
-            ||  product.ProductId === 'SFES' || product.ProductId === 'WMS' || product.ProductId === 'CNF'
-            ||  product.ProductId === 'MMO' || product.ProductId === 'DSB');
+            // let productByStoreID = element.product.filter(product => product.ProductId === 'ATD' 
+            // ||  product.ProductId === 'SFES' || product.ProductId === 'WMS' || product.ProductId === 'CNF'
+            // ||  product.ProductId === 'MMO' || product.ProductId === 'DSB');
+            let productByStoreID = element.product.filter(product => product.ProductId != 'CVP');
             this.company_data[index]["product"] = productByStoreID;
             this.company_data[index]["BPCode"] = false;
 

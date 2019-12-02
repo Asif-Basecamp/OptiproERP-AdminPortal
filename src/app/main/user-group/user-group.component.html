@@ -33,7 +33,7 @@
             <!-- Kendo Grid Start -->
             <div fxLayout="column" fxFlex="100%" class="kendo-grid-wrapper mt-3">
 
-                <kendo-grid #gridUser [data]="gridData" [resizable]="true" [sortable]="true" class="full-height-grid kendo-responsive-grid" [filterable]=isColumnFilter
+                <kendo-grid #gridUser [kendoGridBinding]="gridData" [resizable]="true" [sortable]="true" class="full-height-grid kendo-responsive-grid" [filterable]=isColumnFilter
                     [groupable]=isColumnGroup [columnMenu]="false"
                     [selectable]="true" 
                     (selectionChange)="gridUserSelectionChange(gridUser, $event)" [pageable]="showGridUserGroupPage" [pageSize]="15">

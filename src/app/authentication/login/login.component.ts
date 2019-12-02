@@ -11,12 +11,13 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {    
-    
+  public Loading: boolean = false;
   model : any={};    
   successmsg: any;  
   selectedItem: string = ""; 
   errorMessage:string;    
   arrConfigData:any=[];
+
   constructor(private router:Router,private LoginService:LoginService,private MessageService:MessageService,
     private translate: TranslateService, private httpClientSer: HttpClient) { 
       translate.use(localStorage.getItem('applang'));
@@ -40,13 +41,19 @@ export class LoginComponent {
   }  
 
   login(){     
+       localStorage.removeItem('admin_user');
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('token_type');
+        localStorage.removeItem('expires_in');
     this.selectedItem = this.translate.instant("Login_Username");
+    this.Loading=true;
     this.LoginService.Login(this.model).subscribe(    
       data => {    
         //if(data.Status=="Success")
         console.log(data[0]); 
         if(data != null)   
-        {       
+        { 
+          this.Loading=false;      
           this.successmsg = 'token - ' + data[0].access_token; 
           localStorage.setItem('admin_user', data[0].adminUser);  
           localStorage.setItem('access_token', data[0].access_token);       
@@ -58,29 +65,35 @@ export class LoginComponent {
         }     
         else{ 
           this.MessageService.errormessage(this.translate.instant('UPInvaild'));
+          this.Loading=false;   
           //this.errorMessage = data.Message;    
         }    
       },    
       error => { 
         this.MessageService.errormessage(error.message); 
+        this.Loading=false;   
       });    
   };    
   AdminLoginLog(){ 
+    this.Loading=true;   
     this.LoginService.AdminLoginLog(this.model).subscribe(    
       data => {     
         //if(data.Status=="Success") 
         if(data == "True")   
-        {     
+        {   
+          this.Loading=false;     
           this.router.navigate(['/main']);       
         }    
         else{ 
           this.MessageService.errormessage(this.translate.instant('UPInvaild'));
+          this.Loading=false;   
           //this.errorMessage = data.Message;    
           //comments here  
         }     
       },    
       error => { 
         this.MessageService.errormessage(error.message); 
+        this.Loading=false;   
       });   
   }
 }
