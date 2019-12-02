@@ -380,8 +380,7 @@ export class UserAuthorizationComponent implements OnInit {
 
   getMenuGridForSelectedUser(){ 
     this.MenuGrid = [];   
-    let arr = [];
-    
+    let arr = [];    
     if(this.selectedUser != ''){
       for(let i=0; i< this.oSaveUserScreenModel.length; i++){
         arr = this.oSaveUserScreenModel[i].filter(val => val.OPTM_USERCODE == this.selectedUser);   
@@ -389,12 +388,25 @@ export class UserAuthorizationComponent implements OnInit {
           this.MenuGrid = arr;
         }   
       } 
-
       if(this.MenuGrid.length == 0){
         this.getMenuList('show');
       } 
     }     
       
+  }
+
+  setCheckBoxVal(arr){
+    for(let i=0; i<arr.length; i++){
+      if(arr[i].AddSelected == '')
+      arr[i].AddSelected = false;
+      if(arr[i].UpdateSelected == '')
+      arr[i].UpdateSelected = false;
+      if(arr[i].DeleteSelected == '')
+      arr[i].DeleteSelected = false;
+      if(arr[i].ReadSelected == '')
+      arr[i].ReadSelected = false;
+    }
+    this.MenuGrid = arr;
   }
 
   getMenuList(state){

@@ -363,10 +363,11 @@ export class TenantComponent implements OnInit {
                 return obj;
               }); 
            }  
+           if(this.UserData.length > 15)
+           this.showUserGridPage = true;
           }         
 
-          if(this.UserData.length > 15)
-           this.showUserGridPage = true;
+          
           // }
           else{
             console.log("No user found!");         
