@@ -41,6 +41,10 @@ export class LoginComponent {
   }  
 
   login(){     
+       localStorage.removeItem('admin_user');
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('token_type');
+        localStorage.removeItem('expires_in');
     this.selectedItem = this.translate.instant("Login_Username");
     this.Loading=true;
     this.LoginService.Login(this.model).subscribe(    
