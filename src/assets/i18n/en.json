@@ -236,6 +236,7 @@
 
    "Select_One_Product": "Please select atleast one product",
    "Select_One_User": "Please select atleast one user",
-   "No_User": "There is no user"
+   "No_User": "There is no user",
+   "CantDelete": "You can not delete this record."
    
 } 
