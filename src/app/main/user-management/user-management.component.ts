@@ -351,7 +351,6 @@ export class UserManagementComponent implements OnInit {
     this.gridRefresh = false;
     this.UserManagementService.FillDDlWarehouse(dbName, '').subscribe(
       warehousedata => {
-      
         for(let i=0;i<warehousedata.Table.length; i++){
           warehousedata.Table[i]["uniqueId"] = index+''+i;
           this.WHGetSelectiondata(warehousedata.Table[i], i); 
@@ -369,14 +368,22 @@ export class UserManagementComponent implements OnInit {
                      }
                   }
                  }
-                
-               
-                //your task after delay.
-          // });
-               
-              // return Observable.from(WorkCenterdata).delay(2000);
-               
-            });
+            },
+           
+      error => {    
+        //this.MessageService.errormessage(error.message);
+        this.Loading=false;
+        if(error.error != null && error.error != undefined){
+          this.Loading=false;
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonService.unauthorizedToken(error);               
+          }
+         }
+        else{
+          this.Loading=false;
+          this.MessageService.errormessage(error.message);
+        }
+      });  
           }
         this.WH_WC_Data = warehousedata.Table;
       },
@@ -395,7 +402,7 @@ export class UserManagementComponent implements OnInit {
   } 
 
   WHGetSelectiondata(WHData, WHIndex){
-    debugger
+    
     if(this.IsEditMode===true)
      {if(this.editUserData.length>0){
       //onsole.log(this.editUserData)
@@ -1457,6 +1464,7 @@ export class UserManagementComponent implements OnInit {
           if(data.length > 0){
             if(data[0].UserCodeCount>0){
               this.MessageService.errormessage(this.translate.instant('UserMgmtExistUserIdMsg'))
+              this.user_id='';
             }else{
             }  
           }    
@@ -1482,21 +1490,21 @@ export class UserManagementComponent implements OnInit {
     this.confirmationOpened = !this.confirmationOpened;
   }
 
-  userRefrenceCheck(mode){
+  userRefrenceCheck(mode){    
     this.confirmationOpened=false;
     this.confirmationOpenedEdit = false;
     this.Loading = true;
     this.UserManagementService.userRefrenceCheck(this.userId).subscribe(    
-      data => {    
+      data => {  
          if(data[0].OPTMCODECOUNT == 0 && mode == 'delete'){
           this.deleteRecord();
-         }else if(data[0].OPTMCODECOUNT == 0 && mode == 'edit'){
-           this.saveRecord(mode);
-         }else{
-            this.getUserList();
+         }
+         else{
+          this.MessageService.errormessage(this.translate.instant('CantDelete'));
          }
       },    
       error => {
+        //console.log('e')
         this.Loading=false;
         if(error.error != null && error.error != undefined){
           if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
