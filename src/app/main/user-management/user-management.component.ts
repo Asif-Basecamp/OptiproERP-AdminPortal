@@ -481,6 +481,7 @@ export class UserManagementComponent implements OnInit {
   }
  
   companySelect(event: any, companyData, companyIndex){
+    debugger
     if(companyData.selectedUserType.value==='')
        {
         this.MessageService.errormessage(this.translate.instant('UserTypeValidationmsg'));
@@ -534,9 +535,27 @@ export class UserManagementComponent implements OnInit {
             whatIndex = index;
         }
       }); 
-      this.SubmitSave.Company.splice(whatIndex, 1);    
+      this.SubmitSave.Company.splice(whatIndex, 1);  
+      if(this.IsEditMode)  
+       {
+        this.RemoveDataOnCompanyUncheck(companyData);
+       }
     } 
   }
+  RemoveDataOnCompanyUncheck(companyData)
+    {
+    
+        this.SubmitSave.WorkCenter = this.SubmitSave.WorkCenter.filter(function (el) {
+          return el.Company != companyData.dbName;
+      });
+      this.SubmitSave.Warehouse = this.SubmitSave.Warehouse.filter(function (el) {
+        return el.Company != companyData.dbName;
+    });
+    this.SubmitSave.Product = this.SubmitSave.Product.filter(function (el) {
+      return el.Company != companyData.dbName;
+  });
+    
+    }
 
   productSelect(event: any, product, productIndex, rowIndex){
     
@@ -1308,6 +1327,7 @@ export class UserManagementComponent implements OnInit {
         } 
        
         /*-- company and product selection --*/
+       
         this.company_data.forEach((element, index) => {
           this.editUserData.forEach((element2, index2) => {
             if(element.dbName === element2.OPTM_COMPID){
@@ -1346,12 +1366,20 @@ export class UserManagementComponent implements OnInit {
           if(Val==="")
             {
               this.company_data[index]["Employee"] = employeedata;
-              empID = this.company_data[index].Employee.filter(i => i.empID == element2.OPTM_EMPID);
+              empID = this.company_data[index].Employee.filter(function (el) {
+                return el.empID == element2.OPTM_EMPID;
+            });
+              //empID = this.company_data[index].Employee.filter(i => i.empID == element2.OPTM_EMPID);
+              if(empID.length>0)
              this.company_data[index]["selectedEmployeeType"] = empID[0];
             }
             else {
               this.company_data[index]["listItems"]= employeedata;
-              BPID = this.company_data[index].listItems.filter(i => i.CardCode == element2.OPTM_BPCODE);
+              BPID = this.company_data[index].listItems.filter(function (el) {
+                return el.CardCode == element2.OPTM_BPCODE;
+              });
+              //BPID = this.company_data[index].listItems.filter(i => i.CardCode == element2.OPTM_BPCODE);
+              if(BPID.length>0)
              this.company_data[index]["selectedBP"] = BPID[0];
             }
           
