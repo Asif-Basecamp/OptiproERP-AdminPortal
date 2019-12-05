@@ -65,7 +65,8 @@ export class ConnectedUsersComponent implements OnInit {
 
     this.ConnectedUserServ.getProductList().subscribe(
       data => {
-        this.ddlProductList = data; 
+        this.ddlProductList = data;
+        this.ddlProductList = this.ddlProductList.filter(val => val.ProductId != 'ATD' && val.ProductId != 'DSB' && val.ProductId != 'CVP' && val.ProductId != 'TDC');
         console.log(data);
       },    
       error => { 

@@ -202,7 +202,8 @@ export class UserRolesComponent implements OnInit {
         if(data.length > 0)  
         {  
          this.DropDownListData = data; 
-         this.ProductDataLookup = data;          
+         this.ProductDataLookup = data;
+         this.ProductDataLookup = this.ProductDataLookup.filter(val => val.ProductId != 'ATD' && val.ProductId != 'DSB' && val.ProductId != 'MMO' && val.ProductId != 'TDC');      
         }    
         else{    
           this.MessageService.errormessage(this.translate.instant('UserMgmtSomethimgWntWrngMsg'));    

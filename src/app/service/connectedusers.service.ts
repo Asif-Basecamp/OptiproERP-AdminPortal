@@ -14,6 +14,8 @@ export class ConnectedUsersService {
   }
 
   getProductList(){
+
+      
       const headerSettings: {[name: string]: string | string[]; } = { 
         'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
       };  

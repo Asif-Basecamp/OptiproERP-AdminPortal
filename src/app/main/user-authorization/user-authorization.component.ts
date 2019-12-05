@@ -64,6 +64,7 @@ export class UserAuthorizationComponent implements OnInit {
       this.user_select = res;
     }); 
     this.getPermissionView();
+    this.getAllUserGroup();
     this.oModalData.User = [];
     this.oModalData.SelectedRole = [];    
   }
@@ -482,7 +483,7 @@ export class UserAuthorizationComponent implements OnInit {
 
  editUser($event){
   this.selectedUser = '';
-  this.getAllUserGroup();
+  //this.getAllUserGroup();
   let userGrp ;
   if($event.selectedRows.length > 0){
      userGrp = $event.selectedRows[0].dataItem.OPTM_USERGROUP;
@@ -499,6 +500,7 @@ export class UserAuthorizationComponent implements OnInit {
   this.AuthServ.GetDataForUserGroup(userGrp).subscribe(
     data => {    
         this.DataForUserGroup = data;
+        console.log(this.allUsersDDL);
         this.ddlUserGroup = this.allUsersDDL.filter(val => val.OPTM_GROUPCODE == userGrp);
         this.defaultItem = this.ddlUserGroup[0];
 
@@ -550,9 +552,17 @@ getSavedUser(){
 }
 
  saveRecord(){  
+
+  let checkRoleSelected = this.gridDataRoles.filter(item => item.checked == true);
+  if(checkRoleSelected.length == 0)
+  {
+    this.MessageService.errormessage(this.translate.instant('Select_One_Product'));
+    return;
+  }
+
   var oSaveModel:any = {};
   oSaveModel.OPTM_ADMIN_AUTHR = [];
-  oSaveModel.OPTM_ADMIN_AUTHRUSER = [];
+  oSaveModel.OPTM_ADMIN_AUTHRUSER = [];   
   
    if(this.isEdit === true){
     let userGroup = this.UserGroup;
@@ -572,56 +582,54 @@ getSavedUser(){
       return obj; 
     });
 
-    for(let idx1=0; idx1<this.oSaveUserScreenModel.length; idx1++){
-      //let saveUserGridData = this.screenGrid.map(function(obj) {
-      let saveUserGridData = this.oSaveUserScreenModel[idx1].map(function(obj) {
-     // const index = DataForUserGroup.OPTM_ADMIN_AUTHRUSER.findIndex(r=>r.OPTM_MENUID == obj.OPTM_MENUID);    
-      oSaveModel.OPTM_ADMIN_AUTHRUSER.push({
-        OPTM_USERGROUP: DataForUserGroup.OPTM_ADMIN_AUTHR[0].OPTM_USERGROUP,
-        OPTM_ROLEID: obj.OPTM_ROLEID,
-        OPTM_MENUID: obj.OPTM_MENUID,
-        OPTM_PERMISSION: obj.OPTM_PERMISSION,
-        OPTM_CREATEDATE: '000-00-00',
-        //OPTM_USERCODE: DataForUserGroup.OPTM_ADMIN_AUTHR[0].OPTM_USERGROUP,
-        OPTM_USERCODE: obj.OPTM_USERCODE,
-        AddSelected: (obj.AddSelected == undefined || obj.AddSelected == "" ) ? false: obj.AddSelected,
-        UpdateSelected: (obj.UpdateSelected == undefined || obj.UpdateSelected == "") ? false: obj.UpdateSelected,
-        DeleteSelected: (obj.DeleteSelected == undefined || obj.DeleteSelected == "") ? false: obj.DeleteSelected,
-        ReadSelected: (obj.ReadSelected == undefined || obj.ReadSelected == "") ? false: obj.ReadSelected,
-        OPTM_USERID: 'admin',
-        OPTM_AUTHCODE: obj.OPTM_AUTHCODE
-      });
-      return obj; 
-    });
-   }
+    this.Loading = true;      
 
-   this.Loading = true;    
+     for (let idx1 = 0; idx1 < this.oSaveUserScreenModel.length; idx1++) {
+       let saveUserGridData = this.oSaveUserScreenModel[idx1].map(function (obj) {
+         oSaveModel.OPTM_ADMIN_AUTHRUSER.push({
+           OPTM_USERGROUP: DataForUserGroup.OPTM_ADMIN_AUTHR[0].OPTM_USERGROUP,
+           OPTM_ROLEID: obj.OPTM_ROLEID,
+           OPTM_MENUID: obj.OPTM_MENUID,
+           OPTM_PERMISSION: obj.OPTM_PERMISSION,
+           OPTM_CREATEDATE: '000-00-00',
+           //OPTM_USERCODE: DataForUserGroup.OPTM_ADMIN_AUTHR[0].OPTM_USERGROUP,
+           OPTM_USERCODE: obj.OPTM_USERCODE,
+           AddSelected: (obj.AddSelected == undefined || obj.AddSelected == "") ? false : obj.AddSelected,
+           UpdateSelected: (obj.UpdateSelected == undefined || obj.UpdateSelected == "") ? false : obj.UpdateSelected,
+           DeleteSelected: (obj.DeleteSelected == undefined || obj.DeleteSelected == "") ? false : obj.DeleteSelected,
+           ReadSelected: (obj.ReadSelected == undefined || obj.ReadSelected == "") ? false : obj.ReadSelected,
+           OPTM_USERID: 'admin',
+           OPTM_AUTHCODE: obj.OPTM_AUTHCODE
+         });
+         return obj;
+       });
+     }
 
-    this.AuthServ.AddPermission(oSaveModel).subscribe(
-      data => { 
-        if(data == "True"){
-         this.translate.get('Operation_Update_MSG').subscribe((res: string) => {
-            this.MessageService.successmessage(res);
-          }); 
-          this.addAuthScreenToggle('edit');
-          this.confirmationOpenedEdit = false;
-        }
-        else{
-          this.MessageService.errormessage(data);
-        }
-        this.Loading = false;    
-      },    
-      error => {  
-        this.Loading = false;    
-        if(error.error != null && error.error != undefined){
-          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-            this.commonService.unauthorizedToken(error);               
-          }
-        }
-        else{
-          this.MessageService.errormessage(error.message);
-        }
-    });
+     this.AuthServ.AddPermission(oSaveModel).subscribe(
+       data => {
+         if (data == "True") {
+           this.translate.get('Operation_Update_MSG').subscribe((res: string) => {
+             this.MessageService.successmessage(res);
+           });
+           this.addAuthScreenToggle('edit');
+           this.confirmationOpenedEdit = false;
+         }
+         else {
+           this.MessageService.errormessage(data);
+         }
+         this.Loading = false;
+       },
+       error => {
+         this.Loading = false;
+         if (error.error != null && error.error != undefined) {
+           if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+             this.commonService.unauthorizedToken(error);
+           }
+         }
+         else {
+           this.MessageService.errormessage(error.message);
+         }
+       });  
    }else{
     let userGroup = this.UserGroup;
     //let inputVal = this.inputVal;  
@@ -656,7 +664,9 @@ getSavedUser(){
         });
         return obj1; 
      });
-    }
+     }
+    
+
     this.Loading = true;    
     this.AuthServ.AddPermission(oSaveModel).subscribe(
       data => { 

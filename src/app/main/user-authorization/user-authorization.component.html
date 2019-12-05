@@ -219,7 +219,7 @@
                                                                
                                 <kendo-grid-column field="UserCode" title="{{'User'|translate}}"></kendo-grid-column>
                                 
-                                <kendo-grid-column field="" title="{{'Delete'|translate}}">
+                                <kendo-grid-column title="{{'Delete'|translate}}">
                                     <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                                         <button class="btn btn-danger btn-sm ml-2 btn-icon" type="button" [disabled]="!showDisplayBtn" (click)="deleteMenu(rowIndex,dataItem)">
                                             <svg viewBox="0 0 753.23 753.23" class="icon">

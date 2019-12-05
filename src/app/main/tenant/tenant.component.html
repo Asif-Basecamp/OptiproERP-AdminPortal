@@ -287,7 +287,7 @@
                             <use xlink:href="#update"></use>
                         </svg> {{'Update'|translate}}
                     </button>
-                    <button class="btn btn-danger btn-sm d-flex align-items-center mr-2" type="button" *ngIf="isEdit" (click)="DeleteRecord($event)"> 
+                    <button class="btn btn-danger btn-sm d-flex align-items-center mr-2" type="button" *ngIf="isEdit" (click)="confirmationDeleteToggle()"> 
                         <svg viewBox="0 0 753.23 753.23" class="icon mr-2">
                             <use xlink:href="#bin"></use>
                         </svg> {{'Delete'|translate}}
@@ -309,8 +309,6 @@
                 <div> {{'Please_Confirm'|translate}}</div>
             </kendo-dialog-titlebar>
             <div class="">
-                <!-- {{'Do_you_want_to_delete_record'|translate}} -->
-               
                 {{'UsrMgtDataLostErrMsg'|translate}}   
             </div>
             <kendo-dialog-actions class="p-2 align-items-start justify-content-end">
@@ -320,6 +318,23 @@
                 (click)="CancelRecord('confirm')" >{{'No'|translate}}</button>
             </kendo-dialog-actions>
         </kendo-dialog>   
+
+    <!-- Confirmation Dialouge at the time of Delete-->
+        <kendo-dialog *ngIf="confirmationOpenedDelete" (close)="confirmationDeleteToggle()" [minWidth]="250" [width]="450">
+            <kendo-dialog-titlebar>
+                <div> {{'Please_Confirm'|translate}}</div>
+            </kendo-dialog-titlebar>
+            <div class="">
+            {{'Do_you_want_to_delete_record'|translate}}
+            </div>
+            <kendo-dialog-actions class="p-2 align-items-start justify-content-end">
+                <button class="btn btn-success btn-sm d-flex align-items-center mr-2" type="button" 
+                (click)="DeleteRecord()">{{'Yes'|translate}}</button>
+                <button class="btn btn-danger btn-sm d-flex align-items-center" type="button"
+                (click)="confirmationDeleteToggle()" > {{'No'|translate}}</button>
+            </kendo-dialog-actions>
+        </kendo-dialog>
+
         <div *ngIf="loading" class="k-i-loading"></div>
     </div>
         

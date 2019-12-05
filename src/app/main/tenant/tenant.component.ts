@@ -41,7 +41,8 @@ export class TenantComponent implements OnInit {
   public loading = false;
   public FilterData: any[];
   public showTenantMainPage: boolean = false;
-  public confirmationOpenedEdit = false; 
+  public confirmationOpenedEdit = false;
+  public confirmationOpenedDelete = false; 
 
   constructor(private translate: TranslateService, private httpClientSer: HttpClient, private tenantService: TenantService,
     private MessageService:MessageService, private commonService: CommonService) { 
@@ -498,17 +499,23 @@ export class TenantComponent implements OnInit {
     });
   }
 
-  DeleteRecord($event){
+  confirmationDeleteToggle(){
+    this.confirmationOpenedDelete = !this.confirmationOpenedDelete;
+  }
+
+  DeleteRecord(){
+    this.confirmationOpenedDelete = false;
     this.loading = true;
-    console.log(this.TenantId);
-    this.tenantService.DeleteRecord(this.TenantId).subscribe(
+    
+    this.tenantService.DeleteTenantListByName(this.TenantId).subscribe(
       data => { 
-        if (data == true){
+        if (data == "Success"){
           this.MessageService.successmessage(this.translate.instant('Record_deleted'));
           this.addTenantScreenToggle('');  
         } 
         else{
           this.MessageService.errormessage(this.translate.instant('Error_Delete_Record'));
+          this.loading = false;
           return;
         }
        
