@@ -50,7 +50,7 @@ export class UserRolesComponent implements OnInit {
   public isProductIdSelected: any;
   //public showGridProductPage:boolean = false;
   public showProductMainPage: boolean = false;
-
+  public IsUpdateForCheck :boolean = false;
   //public TableDataBinding: any[]=[];
   constructor(private RoleService:RoleService,private MessageService:MessageService,
     private translate: TranslateService, private httpClientSer: HttpClient, private commonService: CommonService) {
@@ -333,6 +333,7 @@ export class UserRolesComponent implements OnInit {
     this.NewSelectedRowData=[];
     this.gridData1=[];
     this.LocalProductGrid = [];
+    this.IsUpdateForCheck=false;
     if(Type==='Cancel') 
     {
      this.confirmationEditToggle();
@@ -375,7 +376,7 @@ export class UserRolesComponent implements OnInit {
   
   GetData(event,dataItem,rowIndex)
     {
-      
+      if(this.EditMode) this.IsUpdateForCheck=true;
       switch (event.currentTarget.name)   
       {   
       case'SelectAll':   
@@ -557,7 +558,7 @@ export class UserRolesComponent implements OnInit {
     }
 
   onChange(RoleId: string) {
-
+   if(this.EditMode) this.IsUpdateForCheck=true;
     this.IsDuplicate=false;
     if(this.model.PriviousRoleId==RoleId)
     return
@@ -760,7 +761,11 @@ export class UserRolesComponent implements OnInit {
         this.EditMode = true
       });
   }  
-  
+  IsUpdate()
+  {
+    if(this.EditMode)
+    this.IsUpdateForCheck=true;
+  }
   getLocalGridProduct(tempArr){
     for(let i=0; i<tempArr.length; i++){
       if(this.LocalProductGrid.length > 0){
@@ -949,8 +954,12 @@ export class UserRolesComponent implements OnInit {
   }
 
   CancelData() {
+    debugger
     if (this.EditMode) {
+      if(this.IsUpdateForCheck)
       this.confirmationEditToggle();
+      else 
+      this.addRolesScreenToggle('');
       //this.dialougeToggle();
     }
     else this.addRolesScreenToggle('');

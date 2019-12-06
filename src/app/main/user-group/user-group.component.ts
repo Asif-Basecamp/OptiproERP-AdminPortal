@@ -17,11 +17,7 @@ export class UserGroupComponent implements OnInit {
   IsDuplicate: boolean=false;
   HeaderText:string="";
   selectedItem: string = ""; 
-  // public paginationButtonCount = 5;
-  // public paginationInfo = true;
-  // public paginationType: 'input';
-  // public paginationPageSizes = true;
-  // public paginationInfoPreviousNext = true;
+  
   public dialogOpened = false;
   public confirmationOpened = false;
   public confirmationOpenedEdit = false;
@@ -35,6 +31,7 @@ export class UserGroupComponent implements OnInit {
   // public UUser= true;
   // public UPwd = true;
   public EditMode :boolean = false;
+  public IsUpdateForCheck :boolean = false;
   public IsCancelClick :boolean = false;
   public AdminEnable=true;
   public gridData: any[];
@@ -75,6 +72,7 @@ export class UserGroupComponent implements OnInit {
       IsAdminEnabled: "",
       USER_CODE: "",
       mapped_user:""
+     
     };
      
     }   
@@ -128,6 +126,7 @@ export class UserGroupComponent implements OnInit {
          this.FillGrid()
          this.dialogOpened=false;
          this.Loading=false;
+         this.IsUpdateForCheck===false;
         }    
         else{ 
         this.MessageService.errormessage(this.translate.instant('UserMgmtSomethimgWntWrngMsg'));   
@@ -158,6 +157,7 @@ export class UserGroupComponent implements OnInit {
          this.FillGrid()
         this.dialogOpened=false;
         this.Loading=false;
+        this.IsUpdateForCheck===false;
         }    
         else{ this.MessageService.errormessage(this.translate.instant('UserMgmtSomethimgWntWrngMsg'));    
         this.Loading=false;
@@ -256,6 +256,7 @@ export class UserGroupComponent implements OnInit {
          this.confirmationOpened=false;
          this.dialogOpened=false;
          this.Loading=false;
+         this.IsUpdateForCheck=false;
         // }    
         // else{ this.MessageService.errormessage("Something went wrong..");    
         // }    
@@ -274,7 +275,16 @@ export class UserGroupComponent implements OnInit {
       });
    
   }
+  IsUpdate()
+    {
+      if(this.EditMode)
+      this.IsUpdateForCheck=true;
+    }
   onChange(UserGrpId: string) {
+     if(this.EditMode)
+        {
+          this.IsUpdateForCheck=true;
+        }
     this.IsDuplicate=false;
     if(this.model.PreviousGrpId==UserGrpId)
     return
@@ -345,8 +355,9 @@ FillDropdownList()
      
       if(this.EditMode)
       {
-        
+        if(this.IsUpdateForCheck===true)
         this.confirmationEditToggle();
+        else this.dialougeToggle('');
         //this.dialougeToggle();
       }
       else this.dialougeToggle('');
@@ -436,15 +447,6 @@ FillDropdownList()
     grid.filter.filters=[];
   }
 
-  // public isMobile(): void {
-  //   if(window.innerWidth <= 991){
-  //     // this.paginationInfo = false;
-  //     this.paginationPageSizes = false; 
-  //     this.paginationInfoPreviousNext = false;  
-  //     this.paginationButtonCount = 3;                 
-  //   }
-  // }
-
   public dialougeToggle(Type) {
     
     if(Type==='Cancel') 
@@ -463,6 +465,7 @@ FillDropdownList()
     this.enableSubmit=true; 
     this.IsGroupCode=true;
     this.EditMode=false;
+    this.IsUpdateForCheck===false
     
   }
   public confirmationToggle() {
@@ -470,6 +473,7 @@ FillDropdownList()
   }
   public confirmationEditToggle() {
     this.confirmationOpenedEdit = !this.confirmationOpenedEdit;
+    this.IsUpdateForCheck=false;
   }
   EnableFields()
   {
