@@ -80,7 +80,7 @@ export class UserManagementComponent implements OnInit {
   public IsEditWorkcenter:boolean=false;
   public showGridUserMgmtPage: boolean = false;
   public confirmationOpenedEdit = false; 
-
+  public IsUpdateForCheck :boolean = false;
   constructor(private _router: Router,private cd: ChangeDetectorRef, private UserManagementService:UserManagementService,private MessageService:MessageService,
     private translate: TranslateService, private httpClientSer: HttpClient,private commonService: CommonService) { 
     translate.use(localStorage.getItem('applang'));
@@ -291,6 +291,8 @@ export class UserManagementComponent implements OnInit {
   /*-- on change user type get list of products --*/
  
   onChangeUserType(e, index, CPdata){
+
+    if(this.IsEditMode)this.IsUpdateForCheck=true;
     
     if(this.dbClickUserType===undefined || this.dbClickUserType==='')
        {
@@ -481,7 +483,7 @@ export class UserManagementComponent implements OnInit {
   }
  
   companySelect(event: any, companyData, companyIndex){
-    debugger
+    if(this.IsEditMode)this.IsUpdateForCheck=true;
     if(companyData.selectedUserType.value==='')
        {
         this.MessageService.errormessage(this.translate.instant('UserTypeValidationmsg'));
@@ -608,6 +610,7 @@ export class UserManagementComponent implements OnInit {
                       this.SubmitSave.WorkCenter[i].productCode=this.dbClickProductName;
                     }
                  }
+                 this.IsUpdateForCheck=true;
            }
   }
 
@@ -615,6 +618,7 @@ export class UserManagementComponent implements OnInit {
    
     if(this.IsEditMode)
      {
+     this.IsUpdateForCheck=true;
         if(event.target.checked === true){
           for(let i=0; i <this.SubmitSave.WorkCenter.length; i++)
            {
@@ -622,7 +626,6 @@ export class UserManagementComponent implements OnInit {
               {
                 this.SubmitSave.WorkCenter[i].Warehouse= warehouseData.OPTM_WHSE;
               }
-              
            }
       }
       
@@ -735,6 +738,7 @@ export class UserManagementComponent implements OnInit {
     this.IsEditWorkcenter=false;
     if(this.IsEditMode)
         { 
+          this.IsUpdateForCheck=true;
          this.WorkCenterSelectEditMode(event, workCenterData, workCenterIndex);
        }
         if(this.IsEditWorkcenter===false)
@@ -777,10 +781,12 @@ export class UserManagementComponent implements OnInit {
   }
 
   onChangeEmployeeId(e, db, index){
+    if(this.IsEditMode)this.IsUpdateForCheck=true;
     this.company_data[index]["selectedEmployeeType"] = e;
   }
   onChangeBPID(e, db, index)
    {
+    if(this.IsEditMode)this.IsUpdateForCheck=true;
     this.company_data[index]["selectedBP"] = e;
     
    }
@@ -1140,7 +1146,7 @@ export class UserManagementComponent implements OnInit {
             this.ShowCompanyName='';
             this.getUserList();
             this.FillCompNGrpNSAPUsrNProd();
-          
+           this.IsUpdateForCheck=false;
             
             // this.addUserScreenToggle();
       }
@@ -1250,6 +1256,7 @@ export class UserManagementComponent implements OnInit {
               this.MessageService.successmessage(this.translate.instant('UserMgmtUpdateSuccessMsg'));
               this.ClearSelection();
               this.FillCompNGrpNSAPUsrNProd();
+              this.confirmationOpenedEdit = false
             }
             else {
               this.MessageService.errormessage(data);
@@ -1270,7 +1277,11 @@ export class UserManagementComponent implements OnInit {
         });  
       }
   }
-
+  IsUpdate()
+  {
+    if(this.IsEditMode)
+    this.IsUpdateForCheck=true;
+  }
   userClickHandler({dataItem}){
     this.Loading = true;
     this.addscreenmode = 'edit'; 
@@ -1487,6 +1498,7 @@ export class UserManagementComponent implements OnInit {
   }
  
   onBlurUserID() {
+    if(this.IsEditMode)this.IsUpdateForCheck=true;
       this.UserManagementService.CheckDuplicateUserGroup(this.user_id).subscribe(    
         data => { 
           if(data.length > 0){
@@ -1519,6 +1531,7 @@ export class UserManagementComponent implements OnInit {
   }
 
   userRefrenceCheck(mode){    
+    
     this.confirmationOpened=false;
     this.confirmationOpenedEdit = false;
     this.Loading = true;
@@ -1571,6 +1584,7 @@ export class UserManagementComponent implements OnInit {
   }
 
   onChange(e){
+    if(this.IsEditMode)this.IsUpdateForCheck=true;
     this.Loading=true;
     var UserGrpId=[{"UserGroupId": e.groupCode}];
     this.UserManagementService.GetSAPUserByGrpId(UserGrpId).subscribe(    
@@ -1599,7 +1613,9 @@ export class UserManagementComponent implements OnInit {
 
   cancelConfirm(){
     if(this.addscreenmode == 'edit'){
-      this.confirmationOpenedEdit = true;     
+      if(this.IsUpdateForCheck)
+      this.confirmationOpenedEdit = true; 
+      else   this.cancel();   
       //this.confirmationEditToggle();      
     }
     else{      

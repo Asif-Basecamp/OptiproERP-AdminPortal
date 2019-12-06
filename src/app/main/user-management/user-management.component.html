@@ -114,7 +114,8 @@
                                         </div>
                                         <div class="form-group col-md-12 mb-2">
                                             <label class="mb-0" for="user_name">{{'User_Name'|translate}}</label>
-                                            <input type="text" class="form-control form-control-sm" id="user_name" name="user_name" [(ngModel)]="user_name" #UserName=ngModel required autocomplete="off">
+                                            <input type="text" class="form-control form-control-sm" id="user_name" name="user_name" [(ngModel)]="user_name" 
+                                            #UserName=ngModel required autocomplete="off" (change)="IsUpdate()">
                                             <span class="error" *ngIf="UserName.errors?.required && UserName.touched">
                                                     {{'UsrMgtUsrNameErrMsg'|translate}}
                                                 
@@ -122,7 +123,8 @@
                                         </div>
                                         <div class="form-group col-md-12 mb-2">
                                             <label class="mb-0" for="password">{{'Password'|translate}}<span class="text-danger">*</span></label>
-                                            <input type="password" class="form-control form-control-sm" minlength="5" id="password" name="password" [(ngModel)]="password" #Password=ngModel required autocomplete="off">
+                                            <input type="password" class="form-control form-control-sm" minlength="5" id="password" name="password" 
+                                            [(ngModel)]="password" #Password=ngModel required autocomplete="off" (change)="IsUpdate()">
                                             <span class="error" *ngIf="Password.errors?.required && Password.touched">
                                                     {{'UsrMgtPwdErrMsg'|translate}}
                                                
@@ -131,7 +133,8 @@
                                         <div class="form-group col-md-12 mb-2">
                                             <label class="mb-0" for="re_password">{{'Re-Enter_Password'|translate}}<span class="text-danger">*</span></label>
                                             <input type="password" class="form-control form-control-sm" id="re_password" minlength="5"
-                                             name="re_password" [(ngModel)]="re_password" #RePassword=ngModel (change)="setCustomValidity()" required  autocomplete="off">
+                                             name="re_password" [(ngModel)]="re_password" #RePassword=ngModel (change)="setCustomValidity()"
+                                              required  autocomplete="off">
                                              
                                             <span class="error" *ngIf="RePassword.errors?.required && RePassword.touched">
                                                
@@ -158,13 +161,15 @@
                                         </div>
                                         <div class="form-group col-md-12 mb-2">
                                             <label class="mb-0" for="mapped_user_id">{{'Mapped_SAP_B1_User'|translate}}<span class="text-danger">*</span></label>
-                                            <kendo-dropdownlist [data]="ddlSAPUser" id="mapped_user_id" name="mapped_user_id" class="form-control-sm form-control w-100"   textField="USER_CODE"
-                                             valueField="USER_CODE"  [(ngModel)]="mapped_user"></kendo-dropdownlist>
+                                            <kendo-dropdownlist [data]="ddlSAPUser" id="mapped_user_id" name="mapped_user_id" 
+                                            class="form-control-sm form-control w-100"   textField="USER_CODE"
+                                             valueField="USER_CODE"  [(ngModel)]="mapped_user" (selectionChange)="IsUpdate()"></kendo-dropdownlist>
 
                                         </div>
                                         <div class="form-group col-md-12 mb-2">
                                             <label class="mb-0" for="mapped_user_password">{{'Mapped_SAP_B1_User_Password'|translate}}<span class="text-danger">*</span></label>
-                                            <input type="password"  name="mapped_user_password" minlength="5" class="form-control form-control-sm" id="mapped_user_password" [(ngModel)]="mappedPass" #MapPassword=ngModel required autocomplete="off">
+                                            <input type="password"  name="mapped_user_password" minlength="5" class="form-control form-control-sm" 
+                                            id="mapped_user_password" [(ngModel)]="mappedPass" #MapPassword=ngModel required autocomplete="off" (change)="IsUpdate()">
                                             <span class="error" *ngIf="MapPassword.errors?.required && MapPassword.touched">
                                                
                                                 {{'UsrMgtUsPwdErrMsg'|translate}}
@@ -173,11 +178,13 @@
                                         </div>
                                         <div class="form-group col-md-12 mb-2">
                                             <label class="mb-0" for="tenant">{{'Tenant'|translate}}</label>
-                                            <input type="text" id="tenant" name="tenant" [(ngModel)]="tenant" class="form-control-sm form-control w-100" autocomplete="off">
+                                            <input type="text" id="tenant" name="tenant" [(ngModel)]="tenant" class="form-control-sm form-control w-100" 
+                                            autocomplete="off" (change)="IsUpdate()">
                                         </div>
                                         <div class="form-group col-md-12 mb-2">
                                             <div class="custom-control custom-switch mt-1">
-                                                <input type="checkbox" class="custom-control-input" name="account_status" id="account_status" [(ngModel)]="accountStatus">
+                                                <input type="checkbox" class="custom-control-input" name="account_status" id="account_status" 
+                                                [(ngModel)]="accountStatus" (change)="IsUpdate()">
                                                 <label class="custom-control-label" for="account_status">{{ accountStatus ? 'Active': 'Inactive' }}</label>
                                             </div>
                                         </div>
@@ -426,7 +433,7 @@
             </div>
             <kendo-dialog-actions class="p-2 align-items-start justify-content-end">
                 <button class="btn btn-success btn-sm d-flex align-items-center mr-2" id='btnCancelEdit' type="button" 
-                (click)="userRefrenceCheck('edit')">{{'Yes'|translate}}</button>           
+                (click)="saveRecord('edit')">{{'Yes'|translate}}</button>           
         
         
                 <button class="btn btn-danger btn-sm d-flex align-items-center" type="button"
