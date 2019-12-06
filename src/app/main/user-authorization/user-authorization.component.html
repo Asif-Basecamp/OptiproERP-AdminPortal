@@ -88,7 +88,8 @@
                     <div class="col-sm-5 col-md-4 col-lg-4 col-xl-4">
                         <div class="form-group mb-2">
                             <label class="mb-0" for="user_group">{{'User_Group'|translate}}</label>
-                            <kendo-dropdownlist id="user_group" name="user_group" class="form-control-sm form-control w-100" [data]="ddlUserGroup" textField="OPTM_GROUPCODE" valueField="OPTM_GROUPCODE" [defaultItem]="defaultItem" (selectionChange)="userGroupChange($event)" [disabled]="isEdit">
+                            <kendo-dropdownlist id="user_group" name="user_group" class="form-control-sm form-control w-100" [data]="ddlUserGroup" textField="OPTM_GROUPCODE" valueField="OPTM_GROUPCODE" [defaultItem]="defaultItem" 
+                            (selectionChange)="userGroupChange($event)" [disabled]="isEdit">
                             </kendo-dropdownlist>
                         </div>
                     </div>

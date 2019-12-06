@@ -49,8 +49,7 @@ export class UserAuthorizationComponent implements OnInit {
   public confirmationOpenedEdit = false; 
   public FilterData: any[]; 
   public showGridDataPage: boolean = false;
-  //public showGridUserPage: boolean = false;
-  //public showGridRolePage: boolean = false;
+  public isChange: boolean = false;
   
   constructor(private AuthServ: AuthorizationService, private MessageService:MessageService, private translate: TranslateService, private httpClientSer: HttpClient,
     private commonService: CommonService) {
@@ -84,6 +83,11 @@ export class UserAuthorizationComponent implements OnInit {
       return {
         exceptional: isEven,
       };
+  }
+
+  isChangeTrue(){
+    if(this.isEdit)
+    this.isChange =  true;
   }
 
   /*-- get list of users on home screen --*/
@@ -159,7 +163,7 @@ export class UserAuthorizationComponent implements OnInit {
     if(mode == 'confirm' && !this.isEdit)
        mode = 'Cancel';    
 
-    if(mode == 'confirm'){
+    if(mode == 'confirm' && this.isChange){
       this.confirmationEditToggle();
     }
     else if(mode == 'Cancel'){
@@ -167,6 +171,7 @@ export class UserAuthorizationComponent implements OnInit {
       this.addAuthScreen = !this.addAuthScreen;
       this.oSaveUserScreenModel = [];
       this.inputRole = []; 
+      this.isChange =  false;
     
       this.isEdit = false;
       this.inputVal = '';     
@@ -207,6 +212,7 @@ export class UserAuthorizationComponent implements OnInit {
 
   /*-- on click user group --*/
   userGroupChange($event){
+    this.isChangeTrue();
     this.UserGroup = $event.OPTM_GROUPCODE;
     this.getUserForLookup();
   }
@@ -613,6 +619,7 @@ getSavedUser(){
            });
            this.addAuthScreenToggle('edit');
            this.confirmationOpenedEdit = false;
+           this.isChange =  false;
          }
          else {
            this.MessageService.errormessage(data);
@@ -733,6 +740,7 @@ deleteRecord(){
 
 selectCheckboxRole(checkvalue,rowdata,idx){ 
 
+  this.isChangeTrue();
   this.oModalData.SelectedRole = [];       
     if(checkvalue){ 
 
@@ -862,6 +870,7 @@ selectCheckboxRole(checkvalue,rowdata,idx){
   }
 
   onSelectAllChange($event){
+    this.isChangeTrue();
     this.oModalData.SelectedRole = [];       
     if($event == "checked"){ 
      this.selectAllCheckBox = true;
@@ -885,6 +894,8 @@ selectCheckboxRole(checkvalue,rowdata,idx){
   }
 
   addSelectChange(isCheck,idx){
+
+    this.isChangeTrue();
     
     let arr = [];
     for(let i=0; i< this.oSaveUserScreenModel.length; i++){
@@ -906,6 +917,8 @@ selectCheckboxRole(checkvalue,rowdata,idx){
 
   updateSelectChange(isCheck,idx){
 
+    this.isChangeTrue();
+
     let arr = [];
     for(let i=0; i< this.oSaveUserScreenModel.length; i++){
       arr = this.oSaveUserScreenModel[i].filter(val => val.OPTM_USERCODE == this.selectedUser);   
@@ -925,6 +938,7 @@ selectCheckboxRole(checkvalue,rowdata,idx){
   }
 
   deleteSelectChange(isCheck,idx){
+    this.isChangeTrue();
     let arr = [];
     for(let i=0; i< this.oSaveUserScreenModel.length; i++){
       arr = this.oSaveUserScreenModel[i].filter(val => val.OPTM_USERCODE == this.selectedUser);   
@@ -944,7 +958,7 @@ selectCheckboxRole(checkvalue,rowdata,idx){
   }
 
   readSelectChange(isCheck,idx){
-
+    this.isChangeTrue();
     let arr = [];
     for(let i=0; i< this.oSaveUserScreenModel.length; i++){
       arr = this.oSaveUserScreenModel[i].filter(val => val.OPTM_USERCODE == this.selectedUser);   

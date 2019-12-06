@@ -16,12 +16,6 @@ import { CommonService } from 'src/app/service/common.service';
 
 export class TenantComponent implements OnInit {
 
-  // public paginationButtonCount = 5;
-  // public paginationInfo = true;
-  // public paginationType: 'input';
-  // public paginationPageSizes = true;
-  // public paginationInfoPreviousNext = true;
-
   selectedItem: string = ""; 
   public checkedKeys: any[] = [];
 
@@ -43,6 +37,7 @@ export class TenantComponent implements OnInit {
   public showTenantMainPage: boolean = false;
   public confirmationOpenedEdit = false;
   public confirmationOpenedDelete = false; 
+  public isChange: boolean = false;
 
   constructor(private translate: TranslateService, private httpClientSer: HttpClient, private tenantService: TenantService,
     private MessageService:MessageService, private commonService: CommonService) { 
@@ -60,7 +55,7 @@ export class TenantComponent implements OnInit {
   }
 
   onLicenseCountChange(value,rowindex){
-
+    this.isChangeTrue();
     if(value == '' || value == undefined || value == null){
       this.MessageService.errormessage(this.translate.instant('Enter_License_Count'));
       return;
@@ -80,6 +75,7 @@ export class TenantComponent implements OnInit {
   }
 
   public addTenantScreenToggle(mode) {
+    this.isChange = false;
     this.isColumnFilterView = false;
     this.isColumnFilterUser = false;
     this.addTenantScreen = !this.addTenantScreen;  
@@ -203,7 +199,14 @@ export class TenantComponent implements OnInit {
     this.addTenantScreenToggle('edit'); 
   }
 
+  isChangeTrue(){
+    if(this.isEdit)
+    this.isChange =  true;
+  }
+
   selectProduct(checkvalue,rowdata,index){
+
+   this.isChangeTrue();
 
     for(let i=0; i < this.ProductData.length; i++){
       if(this.ProductData[i].OPTM_PRODCODE == rowdata.OPTM_PRODCODE){
@@ -228,7 +231,7 @@ export class TenantComponent implements OnInit {
   }
 
   selectUser(checkvalue,rowdata,index){  
-
+    this.isChangeTrue();
     let userList = this.UserData;
      userList.filter(function(value,key){
       if(value.OPTM_USERCODE == rowdata.OPTM_USERCODE){
@@ -242,6 +245,7 @@ export class TenantComponent implements OnInit {
   }
 
   on_Selectall_checkbox_checked(checkall){
+    this.isChangeTrue();
     if(checkall == true){
       for(let i=0; i<this.ProductData.length;i++){
         this.ProductData[i].rowcheck = true;
@@ -254,7 +258,8 @@ export class TenantComponent implements OnInit {
     }
   }
 
-  user_Selectall_checkbox_checked(checkall){    
+  user_Selectall_checkbox_checked(checkall){  
+    this.isChangeTrue();  
     if(checkall == true){
       for(let i=0; i<this.UserData.length;i++){
         this.UserData[i].rowcheck = true;
@@ -390,6 +395,7 @@ export class TenantComponent implements OnInit {
   SaveRecord(operation){
 
     this.confirmationOpenedEdit = false;
+    this.isChange =  false;
     this.loading = true;
     let TempProductData = [];
     let TempUserData = [];
@@ -535,12 +541,13 @@ export class TenantComponent implements OnInit {
     });
   }
 
-  CancelRecord(action){
-    if(this.isEdit)
+  CancelRecord(action){    
+    if(this.isEdit && this.isChange)
     {
       this.confirmationEditToggle();
       if(action == 'confirm'){
         this.isEdit = false;
+        this.isChange = false
         this.addTenantScreenToggle('');
       }     
     }
