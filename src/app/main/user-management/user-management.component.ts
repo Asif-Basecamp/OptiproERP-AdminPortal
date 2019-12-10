@@ -76,6 +76,10 @@ export class UserManagementComponent implements OnInit {
   public selectedItem: any[];
   public IsValidate:boolean=false;
   public IsComparePassword:boolean=true;
+  public isColumnFilter:boolean=false;
+  public isColumnFilter14:boolean=false;
+  
+  
   public IsEditMode:boolean=false;
   public IsEditWorkcenter:boolean=false;
   public showGridUserMgmtPage: boolean = false;
@@ -238,6 +242,7 @@ export class UserManagementComponent implements OnInit {
    //Get Employee Data
    FillEmployee(e, index, CPdata)
      {
+      // alert(index);
        this.Loading=true;
        let DatabaseName=CPdata[index].dbName;
        this.UserManagementService.FillDDlEmployee(DatabaseName,"").subscribe(
@@ -954,8 +959,10 @@ export class UserManagementComponent implements OnInit {
                               TempAssignWareHouse=this.SubmitSave.Warehouse;
                               if(this.SubmitSave.WorkCenter[j].Warehouse==="" && this.SubmitSave.WorkCenter[j].Company===c.Company )
                                 {
+                                  let WHCompany='';
+                                  WHCompany=this.SubmitSave.WorkCenter[j].Company;
                                   var TempData = TempAssignWareHouse.filter(function (el) {
-                                    return el.Company == this.SubmitSave.WorkCenter[j].Company;
+                                    return el.Company == WHCompany;
                                 });
                                 if(TempData.length>0)
                                  {
@@ -967,13 +974,13 @@ export class UserManagementComponent implements OnInit {
                            this.IsValidate=false;
                               return;
                          }} }
-               else {
-                 this.MessageService.errormessage(this.translate.instant('UserMgmtWorkcenterSelectMsg')+' '+c.Company);
-                 this.FlagWC=false;
-                 this.IsValidate=false;
-                              return;
-               }
-               }}});});
+                      else {
+                        this.MessageService.errormessage(this.translate.instant('UserMgmtWorkcenterSelectMsg')+' '+c.Company);
+                        this.FlagWC=false;
+                        this.IsValidate=false;
+                                      return;
+                      }
+                      }}});});
             }
     CheckWorkCenterExist()
              {
@@ -1641,7 +1648,8 @@ export class UserManagementComponent implements OnInit {
     // ]
     }); 
   }
-  clearFilter(grid:GridComponent){      
+  clearFilter(grid:GridComponent){  
+        
     grid.filter.filters=[];
   }
 
