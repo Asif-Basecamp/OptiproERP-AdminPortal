@@ -226,8 +226,10 @@
                                     <kendo-grid-checkbox-column headerClass="text-center" class="text-center" [width]="40">
                                         <ng-template kendoGridCellTemplate let-dataItem let-companyRowIndex="rowIndex">
                                             <label class="custom-checkbox m-0">
-                                                <input type="checkbox" (change)="companySelect($event, dataItem, companyRowIndex)" [kendoGridSelectionCheckbox]="companyRowIndex" 
-                                                >
+                                                <!-- <input type="checkbox" (change)="companySelect($event, dataItem, companyRowIndex)" [kendoGridSelectionCheckbox]="companyRowIndex" 
+                                                > -->
+                                                <input type="checkbox"  (change)="companySelect($event,dataItem,companyRowIndex)" 
+                                                id="SingleCompSelection"  [checked]="dataItem.SingleCompSelection" name="SingleCompSelection">
                                                 <span class="checkbox"></span>
                                             </label>
                                         </ng-template>
