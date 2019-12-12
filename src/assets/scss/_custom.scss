@@ -385,6 +385,10 @@ kendo-grid-filter-wrapper-cell{
 .k-grid tr.clicked{
   background-color: rgba(1, 228, 209, 0.4) !important;
 }
+kendo-pager, kendo-pager-next-buttons{
+  display: flex;
+  align-items: center;
+}
 //Kendow Modal
 .k-window-titlebar{
   background: $primary-gradiant !important;
