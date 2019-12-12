@@ -15,8 +15,9 @@ import { UserAuthorizationComponent } from './user-authorization/user-authorizat
 import { UserRolesComponent } from './user-roles/user-roles.component';
 import { ConnectedUsersComponent } from './connected-users/connected-users.component';
 import { TenantComponent } from './tenant/tenant.component';
-import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
+import { TranslateModule, TranslateLoader} from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { SplitterModule } from '@progress/kendo-angular-layout';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -33,6 +34,7 @@ export function createTranslateLoader(http: HttpClient) {
     MainRoutingModule,
     FlexLayoutModule,
     TreeViewModule,
+    SplitterModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

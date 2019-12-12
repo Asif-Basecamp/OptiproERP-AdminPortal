@@ -37,14 +37,14 @@
 }
 
 .custom-height-grid{
-    max-height: calc(100vh - 469px) !important;
+    max-height: calc(100% - 30px) !important;
     min-height: 180px;
-    @media screen and (max-width:767px){
-        max-height: calc(100vh - 439px) !important;
-    }
-    @media screen and (max-width:575px){
-        max-height: calc(100vh - 700px) !important;
-    }
+    // @media screen and (max-width:767px){
+    //     max-height: calc(100vh - 439px) !important;
+    // }
+    // @media screen and (max-width:575px){
+    //     max-height: calc(100vh - 700px) !important;
+    // }
 }
 
 .form-grid-wrapper .custom-height-grid{

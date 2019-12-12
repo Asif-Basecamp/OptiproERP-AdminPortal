@@ -61,7 +61,13 @@
           }
         }
       }
-    }
+      & .logo-img{
+        display: none;
+      }   
+      & .logo-icon-sm{
+        display:flex;
+      }   
+    }    
   } 
   @media screen and (max-width:1199px){
     flex: 1 1 200px !important;
@@ -86,4 +92,10 @@
       }
     }
   }
+}
+
+.logo-icon-sm{
+  display: none;
+  fill:  $primary;
+  height:45px;
 }
