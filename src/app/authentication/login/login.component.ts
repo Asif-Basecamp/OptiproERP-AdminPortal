@@ -50,9 +50,10 @@ export class LoginComponent {
     this.LoginService.Login(this.model).subscribe(    
       data => {    
         //if(data.Status=="Success")
-        console.log(data[0]); 
+        //console.log(data[0]); 
         if(data != null)   
         { 
+          console.log(data[0]); 
           this.Loading=false;      
           this.successmsg = 'token - ' + data[0].access_token; 
           localStorage.setItem('admin_user', data[0].adminUser);  
