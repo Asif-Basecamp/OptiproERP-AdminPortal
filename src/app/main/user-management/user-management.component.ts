@@ -81,7 +81,8 @@ export class UserManagementComponent implements OnInit {
   public isColumnFilter33:boolean=false;
   
   public SingleCompSelection:boolean=false;
-  
+  public SingleProductSelection:boolean=false;
+  public IsCustomeVendorSelected:boolean=false;
   
   public IsEditMode:boolean=false;
   public IsEditWorkcenter:boolean=false;
@@ -210,16 +211,18 @@ export class UserManagementComponent implements OnInit {
             const element = data.CompanyList[i];
             let products = JSON.parse(JSON.stringify(this.ddlProductList));
             for (let j = 0; j < products.length; j++) {      
-              products[j]["UniqueId"] = i+''+j;       
+              products[j]["UniqueId"] = i+''+j;
+              products[j]["SingleProductSelection"]=false;       
             }
             element["product"] = products;
             data.CompanyList[i]["UserType"] = this.ddlUserType;
             //data.CompanyList[i]["Employee"] = employeedata;
             data.CompanyList[i]["selectedEmployeeType"] = {empID: '', firstName: "--Select--"};
             data.CompanyList[i]["selectedBP"] = {CardCode: '', CardName: "--Select--"};
-            data.CompanyList[i]["selectedUserType"] = { text: "--Select--", value: '' };
+            data.CompanyList[i]["selectedUserType"] = { text: "Employee", value: 'E' };
             data.CompanyList[i]["selectedCompany"] = 'blank';
             data.CompanyList[i]["SingleCompSelection"] = false;
+
            // this.SingleCompSelection[index].checked
             this.company_data = data.CompanyList;
            
@@ -245,19 +248,22 @@ export class UserManagementComponent implements OnInit {
       });
   }
    //Get Employee Data
-   FillEmployee(e, index, CPdata)
+   FillEmployee(CPdata)
      {
-       
       // alert(index);
        this.Loading=true;
       // let DatabaseName=CPdata[index].dbName;
-      let DatabaseName=this.dbName
+      let DatabaseName=CPdata
 
        this.UserManagementService.FillDDlEmployee(DatabaseName,"").subscribe(
         employeedata => {
           this.Loading = false;
           this.employeeData = employeedata;
-        
+          
+          for(let i=0; i <employeedata.length; i++)
+              {
+                this.employeeData[i]["MergrEmpName"] = employeedata[i].firstName+'   '+employeedata[i].empID;
+              }
           var findex =this.company_data.findIndex(function (x) { return x.dbName == DatabaseName });
           //data.CompanyList[i]["UserType"] = this.ddlUserType;
           this.company_data[findex]["Employee"] = employeedata;
@@ -313,60 +319,42 @@ export class UserManagementComponent implements OnInit {
   onChangeUserType(e, index, CPdata){
 
     if(this.IsEditMode)this.IsUpdateForCheck=true;
-    
-    if(this.dbClickUserType===undefined || this.dbClickUserType==='')
-       {
-
-       }
-       else if(this.dbClickUserType!=CPdata[index].selectedUserType.value)
-         {
-          this.MessageService.errormessage(this.translate.instant('UserSameUserTypeErrMsg')); 
-           CPdata[index]["selectedUserType"] = { text: "--Select--", value: '' };
-           return
-         }
-    //if(CPdata[index].selectedUserType.value===undefined )
-    
     if(e.value==="C" || e.value==="V")
      {
       this.FillBusinessPartnerData(e, index, CPdata)
      }
-     else {
-      this.FillEmployee(e, index, CPdata);
-     }
-   
- 
-    const element = this.company_data[index];
-    let products = JSON.parse(JSON.stringify(this.ddlProductList));
-    for (let j = 0; j < products.length; j++) {      
-      products[j]["UniqueId"] = index+''+j;       
-    }
-    element["product"] = products;
-    if(e.value === 'C'){
-      let productByStoreID = element.product.filter(product => product.ProductId === 'CVP');
-      this.company_data[index]["product"] = productByStoreID;
-      this.company_data[index]["BPCode"] = true;
-    }
-    if(e.value === 'V'){
-      let productByStoreID = element.product.filter(product => product.ProductId === 'CVP' 
-      ||  product.ProductId === 'MMO');
-      this.company_data[index]["product"] = productByStoreID;
-      this.company_data[index]["BPCode"] = true;
-    }
-
-    if(e.value === 'E'){
-      // let productByStoreID = element.product.filter(product => product.ProductId === 'ATD' 
-      // ||  product.ProductId === 'SFES' || product.ProductId === 'WMS' || product.ProductId === 'CNF'
-      // ||  product.ProductId === 'MMO' || product.ProductId === 'DSB' || product.ProductId === 'TDC');
-      let productByStoreID = element.product.filter(product => product.ProductId != 'CVP');
-      
-      this.company_data[index]["product"] = productByStoreID;
-      this.company_data[index]["BPCode"] = false;
-    }
+    this.BindProductWithCompany(e.value,index);
     this.userType = e.value;
   }
-//    delay(ms: number) {
-//     return new Promise( resolve => setTimeout(resolve, ms) );
-// }
+  BindProductWithCompany(ProductValue,index)
+     {
+       debugger
+      const element = this.company_data[index];
+      let products = JSON.parse(JSON.stringify(this.ddlProductList));
+      for (let j = 0; j < products.length; j++) {      
+        products[j]["UniqueId"] = index+''+j;
+        products[j]["SingleProductSelection"] = false;  
+              
+      }
+      element["product"] = products;
+      if(ProductValue === 'C'){
+        let productByStoreID = element.product.filter(product => product.ProductId === 'CVP');
+        this.company_data[index]["product"] = productByStoreID;
+        this.company_data[index]["BPCode"] = true;
+      }
+      if(ProductValue === 'V'){
+        let productByStoreID = element.product.filter(product => product.ProductId === 'CVP' 
+        ||  product.ProductId === 'MMO');
+        this.company_data[index]["product"] = productByStoreID;
+        this.company_data[index]["BPCode"] = true;
+      }
+  
+      if(ProductValue === 'E'){
+        let productByStoreID = element.product.filter(product => product.ProductId != 'CVP');
+        this.company_data[index]["product"] = productByStoreID;
+        this.company_data[index]["BPCode"] = false;
+      }
+     }
   /*-- get warehouse and workcenter list --*/
   FillDDlWarehouse(dbName, index){
     this.Loading = true;
@@ -471,6 +459,7 @@ export class UserManagementComponent implements OnInit {
   }
 
   companyClickHandler(e){
+    debugger
     this.userType=e.dataItem.selectedUserType.value;
     //if(e.dataItem.selectedEmployeeType.empID != '' && this.userType !=''){
       this.dbName = e.dataItem.dbName;
@@ -486,14 +475,42 @@ export class UserManagementComponent implements OnInit {
         this.dbClickEmployeeName = e.dataItem.selectedEmployeeType.empID;
         this.EmpID = e.dataItem.selectedEmployeeType.empID;
       }
+     if(this.IsEditMode===false)this.CheckIfProductIsChecked(e)
       this.FillDDlWarehouse(e.dataItem.dbName, e.rowIndex);
-   
   } 
-
+  CheckIfProductIsChecked(e)
+   {
+    if(this.SubmitSave.Product.length>0)
+    {
+      debugger
+      for(let i=0; i <this.SubmitSave.Product.length; i++)
+          {
+          if(this.SubmitSave.Product[i].Company===e.dataItem.dbName)
+             {
+              e.dataItem.product[i].SingleProductSelection=true;
+             }
+          }
+    }
+   }
   onExpandCompany(event){
+    debugger
+   
     if(event.dataItem.selectedCompany == 'blank'){
       this.MessageService.errormessage(this.translate.instant('UserMgmtCompanySelectMsg')); 
     }
+    if(event.dataItem.selectedUserType.value==="")this.MessageService.errormessage(this.translate.instant('UserTypeValidationmsg')); 
+    if(event.dataItem.selectedUserType.value==="E")
+    {
+      if(event.dataItem.selectedEmployeeType.empID===""){}
+      //this.MessageService.errormessage(this.translate.instant('EmployeeValidationmsg')); 
+    }
+    else {
+      if(event.dataItem.selectedBP.CardCode!="" && event.dataItem.selectedBP.CardCode !=null){
+       this.IsCustomeVendorSelected=true;
+      }
+      //this.MessageService.errormessage(this.translate.instant('BPCodeValidationmsg')); 
+    }
+    if(this.IsEditMode===false)this.CheckIfProductIsChecked(event)
   }
 
   onExpandWarehouse(event){
@@ -506,55 +523,22 @@ export class UserManagementComponent implements OnInit {
    
     
     if(this.IsEditMode)this.IsUpdateForCheck=true;
+    this.FillEmployee (companyData.dbName)
     var index = this.company_data.findIndex(function (x) { return x.dbName == companyData.dbName });
-    if(companyData.selectedUserType.value==='')
-       {
-        event.target.checked=false;
-        this.MessageService.errormessage(this.translate.instant('UserTypeValidationmsg'));
-         return;
-       }
+    
     if(event.target.checked === true){
       if(index>0)
+      this.BindProductWithCompany(companyData.selectedUserType.value,index)
       this.company_data[index]["selectedCompany"] = companyData.dbName;
+    
+     
     }else{
       this.company_data[index]["selectedCompany"] = 'blank';
     }
     
     /*-- employee array --*/
    // this.BPID=companyData.selectedBP.CardCode;
-    if(event.target.checked === true){
-      if(companyData.selectedUserType.value==='E')
-         {
-           if(companyData.selectedEmployeeType.empID ==='' || companyData.selectedEmployeeType.empID===undefined)
-              {
-                event.target.checked=false;
-                this.company_data[index]["selectedCompany"] = 'blank';
-                this.MessageService.errormessage(this.translate.instant('EmployeeValidationmsg'));
-                return;
-              }
-         }
-        else {
-          if(companyData.selectedBP.CardCode ==='' || companyData.selectedBP.CardCode===undefined)
-              {
-                event.target.checked=false;
-                this.company_data[index]["selectedCompany"] = 'blank';
-                this.MessageService.errormessage(this.translate.instant('BPCodeValidationmsg'));
-                return;
-              }
-        }
-      this.SubmitSave.EmployeeId.push({Company: companyData.dbName, 
-        empID: companyData.selectedEmployeeType.empID,
-        bussPart: companyData.selectedBP.CardCode, eIndex: companyIndex});
-    }else{
-      let whatIndex = null;
-      this.SubmitSave.EmployeeId.forEach((value, index) => {
-        if(value.Company == companyData.dbName){
-            whatIndex = index;
-        }
-      }); 
-      this.SubmitSave.EmployeeId.splice(whatIndex, 1);    
-    }    
-
+    
     /*-- company array --*/
    // console.log(this.SubmitSave.Company);
     if(event.target.checked === true){
@@ -567,6 +551,7 @@ export class UserManagementComponent implements OnInit {
         }
       }); 
       this.SubmitSave.Company.splice(whatIndex, 1);  
+      debugger
       if(this.IsEditMode)  
        {
         this.RemoveDataOnCompanyUncheck(companyData);
@@ -575,7 +560,7 @@ export class UserManagementComponent implements OnInit {
   }
   RemoveDataOnCompanyUncheck(companyData)
     {
-    
+   
         this.SubmitSave.WorkCenter = this.SubmitSave.WorkCenter.filter(function (el) {
           return el.Company != companyData.dbName;
       });
@@ -589,6 +574,29 @@ export class UserManagementComponent implements OnInit {
     }
 
   productSelect(event: any, product, productIndex, rowIndex){
+    
+    let EmployeeCheck='';
+    if(this.IsCustomeVendorSelected===false)
+        {
+          if(this.SubmitSave.EmployeeId.length===0)
+          {
+            this.MessageService.errormessage(this.translate.instant('EmployeeAndBPValidationmsg'));
+            event.target.checked=false; 
+            return
+          }
+          else {
+            let DatabaseName=this.dbName;
+            EmployeeCheck = this.SubmitSave.EmployeeId.filter(function (el) {
+              return el.Company == DatabaseName;
+          });
+          if(EmployeeCheck.length==0){
+            this.MessageService.errormessage(this.translate.instant('EmployeeValidationmsg')); 
+            event.target.checked=false;
+            return
+          }
+          
+          }
+        }
     
     if(event.target.checked === true){
       this.productID = product;
@@ -810,13 +818,22 @@ export class UserManagementComponent implements OnInit {
   }
 
   onChangeEmployeeId(e, db, index){
+    debugger
     if(this.IsEditMode)this.IsUpdateForCheck=true;
     this.company_data[index]["selectedEmployeeType"] = e;
+    this.SubmitSave.EmployeeId.push({Company: db, 
+      empID: e.empID,
+      bussPart:"", eIndex: index});
   }
   onChangeBPID(e, db, index)
    {
+     debugger
+     this.BPID=e.CardCode;
     if(this.IsEditMode)this.IsUpdateForCheck=true;
     this.company_data[index]["selectedBP"] = e;
+    this.SubmitSave.EmployeeId.push({Company: db, 
+      empID: "",
+      bussPart:e.CardCode, eIndex: index});
     
    }
 
@@ -1407,6 +1424,10 @@ export class UserManagementComponent implements OnInit {
           //data.CompanyList[i]["UserType"] = this.ddlUserType;
           if(Val==="")
             {
+              for(let i=0; i <employeedata.length; i++)
+              {
+                this.employeeData[i]["MergrEmpName"] = employeedata[i].firstName+'   '+employeedata[i].empID;
+              }
               this.company_data[index]["Employee"] = employeedata;
               empID = this.company_data[index].Employee.filter(function (el) {
                 return el.empID == element2.OPTM_EMPID;
@@ -1437,7 +1458,8 @@ export class UserManagementComponent implements OnInit {
           const element = this.company_data[index];
           let products = JSON.parse(JSON.stringify(this.ddlProductList));
           for (let j = 0; j < products.length; j++) {      
-            products[j]["UniqueId"] = index+''+j;       
+            products[j]["UniqueId"] = index+''+j; 
+            products[j]["SingleProductSelection"] =false;     
           }
        
           element["product"] = products;
@@ -1484,7 +1506,8 @@ export class UserManagementComponent implements OnInit {
             
               if(productUniqueID.length>0){
                 this.productSelection.push(productUniqueID[0].UniqueId);
-
+                debugger
+                productUniqueID[0].SingleProductSelection=true;
                 this.SubmitSave.Product.push({productCode: productSplitArray[j], pIndex: index, 
                   bussPart:  element2.OPTM_BPCODE,
                   Company: this.company_data[index].dbName, EmployeeId: element2.OPTM_EMPID});
