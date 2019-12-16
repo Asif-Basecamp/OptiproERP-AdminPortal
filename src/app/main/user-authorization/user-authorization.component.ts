@@ -45,11 +45,12 @@ export class UserAuthorizationComponent implements OnInit {
   public SavedMenu: any[] = [];
   public MenuGrid: any[] = [];
   public oSaveUserScreenModel: any = [];
-  public isUserCodeSelected: any;
+  //public isUserCodeSelected: any;
   public confirmationOpenedEdit = false; 
   public FilterData: any[]; 
   public showGridDataPage: boolean = false;
   public isChange: boolean = false;
+  public UserCodeSelected : any[] = [];
   
   constructor(private AuthServ: AuthorizationService, private MessageService:MessageService, private translate: TranslateService, private httpClientSer: HttpClient,
     private commonService: CommonService) {
@@ -189,6 +190,8 @@ export class UserAuthorizationComponent implements OnInit {
       if(mode != 'edit'){
         this.UserGroup = this.user_select;
         this.defaultItem = '';
+        this.LocalUserGrid = []; this.MenuGrid = [];
+        this.inputVal = ''; this.selectedUser = '';
         this.getRoles(mode);      
       }              
       this.getUserGroup();
@@ -215,6 +218,9 @@ export class UserAuthorizationComponent implements OnInit {
     this.isChangeTrue();
     this.UserGroup = $event.OPTM_GROUPCODE;
     this.getUserForLookup();
+    this.LocalUserGrid = [];
+    this.MenuGrid = []; this.oSaveUserScreenModel = []; 
+    this.inputVal = ''; this.selectedUser = '';        
   }
 
   getUserGroup(){
@@ -398,8 +404,7 @@ export class UserAuthorizationComponent implements OnInit {
       if(this.MenuGrid.length == 0){
         this.getMenuList('show');
       } 
-    }     
-      
+    } 
   }
 
   setCheckBoxVal(arr){
@@ -516,9 +521,11 @@ export class UserAuthorizationComponent implements OnInit {
           this.getSavedUser();        
           if(this.LocalUserGrid.length > 0){
             this.selectedUser = this.LocalUserGrid[0].UserCode;
-            let select = [];       
-            select.push(this.selectedUser);
-            this.isUserCodeSelected = (e: RowArgs) => select.indexOf(e.dataItem.UserCode) >=0 ;  
+            // let select = [];       
+            // select.push(this.selectedUser);
+            // this.isUserCodeSelected = (e: RowArgs) => select.indexOf(e.dataItem.UserCode) >=0 ;  
+            this.UserCodeSelected = [];
+            this.UserCodeSelected.push(this.selectedUser);
           }        
         } 
         this.getRoles('edit');  
@@ -787,9 +794,11 @@ selectCheckboxRole(checkvalue,rowdata,idx){
   this.MenuGrid =[];  
   this.selectedUser = $event.selectedRows[0].dataItem.UserCode;
      
-  let select = [];       
-  select.push(this.selectedUser);
-  this.isUserCodeSelected = (e: RowArgs) => select.indexOf(e.dataItem.UserCode) >=0 ;  
+  // let select = [];       
+  // select.push(this.selectedUser);
+  // this.isUserCodeSelected = (e: RowArgs) => select.indexOf(e.dataItem.UserCode) >=0 ;  
+  this.UserCodeSelected = [];
+  this.UserCodeSelected.push(this.selectedUser);
 
   if(this.isEdit){
     this.getMenuGridForSelectedUser();
@@ -810,9 +819,11 @@ selectCheckboxRole(checkvalue,rowdata,idx){
       }  
 
       if(this.LocalUserGrid.length > 0){
-        let select = [];       
-        select.push(this.selectedUser);
-        this.isUserCodeSelected = (e: RowArgs) => select.indexOf(e.dataItem.UserCode) >=0 ;  
+        // let select = [];       
+        // select.push(this.selectedUser);
+        // this.isUserCodeSelected = (e: RowArgs) => select.indexOf(e.dataItem.UserCode) >=0 ;
+        this.UserCodeSelected = [];
+        this.UserCodeSelected.push(this.selectedUser);  
       }
     }    
 
@@ -852,21 +863,17 @@ selectCheckboxRole(checkvalue,rowdata,idx){
     if(this.LocalUserGrid[rowIndex+1] == undefined){
       this.selectedUser = '';
       this.MenuGrid = [];
-      let select = [];
+      // let select = [];
       // if(this.selectedUser == dataItem.UserCode)
       // select.push(this.LocalUserGrid[0].UserCode);
       // else
       // select.push(this.selectedUser);
-      select.push(this.selectedUser);
-      this.isUserCodeSelected = (e: RowArgs) => select.indexOf(e.dataItem.UserCode) >=0 ;
-    }
 
-    // if(this.LocalUserGrid.length > 10){
-    //   this.showGridUserPage = true;
-    // }
-    // else{
-    //   this.showGridUserPage = true;
-    // }
+      // select.push(this.selectedUser);
+      // this.isUserCodeSelected = (e: RowArgs) => select.indexOf(e.dataItem.UserCode) >=0 ;
+      this.UserCodeSelected = [];
+      this.UserCodeSelected.push(this.selectedUser);
+    }    
   }
 
   onSelectAllChange($event){
