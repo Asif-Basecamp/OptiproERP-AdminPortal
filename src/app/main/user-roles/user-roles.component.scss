@@ -9,6 +9,10 @@
             max-height: 290px;
             overflow: auto;
         }
+        & .fuller-height{
+            height: 100%;
+            overflow: auto;
+        }
     }
     @media screen and (max-width:767px){
         max-height: calc(100vh - 118px) !important;        

@@ -82,6 +82,10 @@ export class UserManagementComponent implements OnInit {
   
   public SingleCompSelection:boolean=false;
   public SingleProductSelection:boolean=false;
+  public SingleWHSelection:boolean=false;
+  public SingleWCSelection:boolean=false;
+  
+  
   public IsCustomeVendorSelected:boolean=false;
   
   public IsEditMode:boolean=false;
@@ -328,7 +332,7 @@ export class UserManagementComponent implements OnInit {
   }
   BindProductWithCompany(ProductValue,index)
      {
-       debugger
+     
       const element = this.company_data[index];
       let products = JSON.parse(JSON.stringify(this.ddlProductList));
       for (let j = 0; j < products.length; j++) {      
@@ -357,13 +361,33 @@ export class UserManagementComponent implements OnInit {
      }
   /*-- get warehouse and workcenter list --*/
   FillDDlWarehouse(dbName, index){
+    //this.WH_WC_Data=[];
     this.Loading = true;
     this.gridRefresh = false;
+    let TmpDbName='';
+    let tempIndx;
     this.UserManagementService.FillDDlWarehouse(dbName, '').subscribe(
       warehousedata => {
         for(let i=0;i<warehousedata.Table.length; i++){
           warehousedata.Table[i]["uniqueId"] = index+''+i;
-          this.WHGetSelectiondata(warehousedata.Table[i], i); 
+          warehousedata.Table[i]["SingleWHSelection"] = false;
+              TmpDbName=this.dbName;
+              if(this.SubmitSave.Warehouse.length>0)
+                {
+                  let TmpWHId='';
+                  for(let m=0; m <this.SubmitSave.Warehouse.length; m++)
+                    {
+                      TmpWHId=this.SubmitSave.Warehouse[m].Id;
+                      if(this.SubmitSave.Warehouse[m].Company===TmpDbName 
+                        && warehousedata.Table[i].OPTM_WHSE===this.SubmitSave.Warehouse[m].Id)
+                         {
+                          warehousedata.Table[i].SingleWHSelection=true;
+                         }
+                    }
+                }
+           // }
+          
+           this.WHGetSelectiondata(warehousedata.Table[i], i); 
           this.UserManagementService.FillDDlWorkCenter(dbName, warehousedata.Table[i].OPTM_WHSE).subscribe(
             WorkCenterdata => {
               this.Loading = false;
@@ -373,7 +397,24 @@ export class UserManagementComponent implements OnInit {
                  {
                   if(warehousedata.Table[i].workcenter.length>0){
                     for (let j = 0; j < warehousedata.Table[i].workcenter.length; j++) {      
-                      warehousedata.Table[i].workcenter[j]["uniqueId"] = dbName+''+i+''+j;  
+                      warehousedata.Table[i].workcenter[j]["uniqueId"] = dbName+''+i+''+j;
+                      warehousedata.Table[i].workcenter[j]["SingleWCSelection"] = false;
+                        if(this.SubmitSave.WorkCenter.length>0)
+                        {
+                          for(let k = 0; k <this.SubmitSave.WorkCenter.length; k++)
+                            {
+                              if(this.SubmitSave.WorkCenter[k].Warehouse !='')
+                                 {
+                                  if(warehousedata.Table[i].workcenter[j].Warehouse===this.SubmitSave.WorkCenter[k].Warehouse
+                                    && this.SubmitSave.WorkCenter[k].Company===this.dbName && this.SubmitSave.WorkCenter[k].WorkCenterCode !="")
+                                  {
+                                    warehousedata.Table[i].workcenter[j]["SingleWCSelection"] = true;
+                                  }
+                                 }
+                              
+                            }
+                        }
+                       
                       this.WCGetSelectiondata(warehousedata.Table[i].workcenter[j], i);      
                      }
                   }
@@ -395,6 +436,7 @@ export class UserManagementComponent implements OnInit {
         }
       });  
           }
+         
         this.WH_WC_Data = warehousedata.Table;
       },
       error => {    
@@ -427,6 +469,20 @@ export class UserManagementComponent implements OnInit {
                 WHIndex: WHIndex,  bussPart:element2.OPTM_BPCODE});
               this.SubmitSave.Warehouse = this.removeDuplicatesValue(this.SubmitSave.Warehouse, 'Id');
               this.warehouseSelection.push(WHData.uniqueId);
+            //   debugger
+              // for(let i=0; i<this.SubmitSave.Warehouse; i++)
+              //  {
+              //    if(this.SubmitSave.Warehouse[i].Company===this.dbName 
+              //     && this.SubmitSave.Warehouse[i].Id===WHData.OPTM_WHSE) 
+              //     {
+              //       WHData.SingleWHSelection=true;
+              //     } 
+              //    else 
+              //    {WHData.SingleWHSelection=false;
+              //    }
+              //  }
+            
+              
             }
           }
         });  
@@ -459,7 +515,7 @@ export class UserManagementComponent implements OnInit {
   }
 
   companyClickHandler(e){
-    debugger
+    
     this.userType=e.dataItem.selectedUserType.value;
     //if(e.dataItem.selectedEmployeeType.empID != '' && this.userType !=''){
       this.dbName = e.dataItem.dbName;
@@ -482,7 +538,7 @@ export class UserManagementComponent implements OnInit {
    {
     if(this.SubmitSave.Product.length>0)
     {
-      debugger
+      
       for(let i=0; i <this.SubmitSave.Product.length; i++)
           {
           if(this.SubmitSave.Product[i].Company===e.dataItem.dbName)
@@ -493,7 +549,7 @@ export class UserManagementComponent implements OnInit {
     }
    }
   onExpandCompany(event){
-    debugger
+    
    
     if(event.dataItem.selectedCompany == 'blank'){
       this.MessageService.errormessage(this.translate.instant('UserMgmtCompanySelectMsg')); 
@@ -551,7 +607,7 @@ export class UserManagementComponent implements OnInit {
         }
       }); 
       this.SubmitSave.Company.splice(whatIndex, 1);  
-      debugger
+      
       if(this.IsEditMode)  
        {
         this.RemoveDataOnCompanyUncheck(companyData);
@@ -570,6 +626,9 @@ export class UserManagementComponent implements OnInit {
     this.SubmitSave.Product = this.SubmitSave.Product.filter(function (el) {
       return el.Company != companyData.dbName;
   });
+      this.SubmitSave.EmployeeId = this.SubmitSave.EmployeeId.filter(function (el) {
+        return el.Company != companyData.dbName;
+    });
     
     }
 
@@ -652,7 +711,6 @@ export class UserManagementComponent implements OnInit {
   }
 
   warehouseSelect(event, warehouseData, warehouseIndex){
-   
     if(this.IsEditMode)
      {
      this.IsUpdateForCheck=true;
@@ -667,19 +725,33 @@ export class UserManagementComponent implements OnInit {
       }
       
     }
+    let TempDBName='';
+    TempDBName=this.dbName;
+    var ProductCheck = this.SubmitSave.Product.filter(function (el) {
+      return el.Company == TempDBName;
+  });
+  
     if(event.target.checked === true){
       this.WH_WC_Data[warehouseIndex]["selectedWarehouse"] = warehouseData.OPTM_WHSE;
-    }else{
-      this.WH_WC_Data[warehouseIndex]["selectedWarehouse"] = 'blank';
-    }
+      this.WH_WC_Data[warehouseIndex]["SingleWHSelection"] = true;
+      if(ProductCheck.length===0)
+      {
+        this.MessageService.errormessage(this.translate.instant('UserMgmtProductSelectMsg'));
+        this.WH_WC_Data[warehouseIndex]["SingleWHSelection"] = false;
+        event.target.checked=false;
+        return;
+      }
+      
+      }else{
+        this.WH_WC_Data[warehouseIndex]["SingleWHSelection"] = false;
+        this.WH_WC_Data[warehouseIndex]["selectedWarehouse"] = 'blank';
+      }
     
     if(event.target.checked === true){
       this.WHCode = warehouseData.OPTM_WHSE;
       this.SubmitSave.Warehouse.push({Company: this.dbName, Id: this.WHCode, EmployeeId: this.EmpID, 
         WHIndex: warehouseIndex, bussPart: this.BPID});
     }else{
-
-
       let whatIndex3 = null;
       this.SubmitSave.Warehouse.forEach((value, index) => {
         if(value.Id === warehouseData.OPTM_WHSE){
@@ -780,23 +852,35 @@ export class UserManagementComponent implements OnInit {
        }
         if(this.IsEditWorkcenter===false)
          {
+           let TmpDbName='';
+           TmpDbName=this.dbName;
           if(event.target.checked === true){
+            var WareHouseCheck = this.SubmitSave.Warehouse.filter(function (el) {
+              return el.Company == TmpDbName;
+            });
+            if(WareHouseCheck.length===0)
+              {
+                this.MessageService.errormessage(this.translate.instant('UserMgmtWarehouseSelectMsg'));
+                event.target.checked=false;
+                return;
+              }
+            
             this.WCCode = workCenterData.WorkCenterCode;
-            if(this.EmpID==='' && this.BPID==='')
-                {
-                  this.MessageService.errormessage(this.translate.instant('EmployeeAndBPValidationmsg'));
-                  return;
-                }
-            if(this.dbClickProductName!='' && this.dbClickProductName!=undefined)
-               {
+            // if(this.EmpID==='' && this.BPID==='')
+            //     {
+            //       this.MessageService.errormessage(this.translate.instant('EmployeeAndBPValidationmsg'));
+            //       return;
+            //     }
+            // if(this.dbClickProductName!='' && this.dbClickProductName!=undefined)
+            //    {
                 this.SubmitSave.WorkCenter.push({Company: this.dbName, EmployeeId: this.EmpID, 
                   productCode: this.dbClickProductName, WorkCenterCode: this.WCCode, WCIndex: workCenterIndex, 
                   bussPart: this.BPID});
-               }
-               else {
-                this.MessageService.errormessage(this.translate.instant('UserMgmtProductSelectMsg'));
-                 return; 
-               }
+              //  }
+              //  else {
+              //   this.MessageService.errormessage(this.translate.instant('UserMgmtProductSelectMsg'));
+              //    return; 
+              //  }
            
           }else{
             let whatIndex4 = null;
@@ -818,7 +902,7 @@ export class UserManagementComponent implements OnInit {
   }
 
   onChangeEmployeeId(e, db, index){
-    debugger
+    
     if(this.IsEditMode)this.IsUpdateForCheck=true;
     this.company_data[index]["selectedEmployeeType"] = e;
     this.SubmitSave.EmployeeId.push({Company: db, 
@@ -827,7 +911,7 @@ export class UserManagementComponent implements OnInit {
   }
   onChangeBPID(e, db, index)
    {
-     debugger
+    
      this.BPID=e.CardCode;
     if(this.IsEditMode)this.IsUpdateForCheck=true;
     this.company_data[index]["selectedBP"] = e;
@@ -1506,7 +1590,7 @@ export class UserManagementComponent implements OnInit {
             
               if(productUniqueID.length>0){
                 this.productSelection.push(productUniqueID[0].UniqueId);
-                debugger
+             
                 productUniqueID[0].SingleProductSelection=true;
                 this.SubmitSave.Product.push({productCode: productSplitArray[j], pIndex: index, 
                   bussPart:  element2.OPTM_BPCODE,

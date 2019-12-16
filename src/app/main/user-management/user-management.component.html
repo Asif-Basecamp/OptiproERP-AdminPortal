@@ -327,7 +327,12 @@
                                     <kendo-grid-checkbox-column headerClass="text-center" class="text-center" [width]="40">
                                         <ng-template kendoGridCellTemplate let-dataItem let-warehouseIndex="rowIndex">
                                             <label class="custom-checkbox m-0">
-                                                <input type="checkbox" (change)="warehouseSelect($event, dataItem, warehouseIndex)" [kendoGridSelectionCheckbox]="warehouseIndex">
+                                                <!-- <input type="checkbox" 
+                                                (change)="warehouseSelect($event, dataItem, warehouseIndex)" [kendoGridSelectionCheckbox]="warehouseIndex"> -->
+
+                                                <input type="checkbox"  (change)="warehouseSelect($event, dataItem, warehouseIndex)" 
+                                                id="SingleWHSelection"  [checked]="dataItem.SingleWHSelection" name="SingleWHSelection">
+                                               
                                                 <span class="checkbox"></span>
                                             </label>
                                         </ng-template>
@@ -341,8 +346,10 @@
                                             <kendo-grid-checkbox-column headerClass="text-center" class="text-center" [width]="40">
                                                 <ng-template kendoGridCellTemplate let-dataItem let-workCenterIndex="rowIndex">
                                                     <label class="custom-checkbox m-0">
-                                                        <input type="checkbox" (change)="workCenterSelect($event, dataItem, workCentersIndex)" 
-                                                        [kendoGridSelectionCheckbox]="workCenterIndex">
+                                                        <!-- <input type="checkbox" (change)="workCenterSelect($event, dataItem, workCentersIndex)" 
+                                                        [kendoGridSelectionCheckbox]="workCenterIndex"> -->
+                                                        <input type="checkbox"  (change)="workCenterSelect($event, dataItem, workCentersIndex)" 
+                                                    id="SingleWCSelection"  [checked]="dataItem.SingleWCSelection" name="SingleWCSelection">
                                                         <span class="checkbox"></span>
                                                     </label>
                                                 </ng-template>
@@ -385,7 +392,7 @@
             </div>
         </form>           
         </div>
-    </div>
+    <!-- </div> -->
     
     <!-- Confirmation Dialouge -->
     

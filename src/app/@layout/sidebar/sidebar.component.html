@@ -1,5 +1,10 @@
 <div class="sidebar-inner" id="sidebar-inner" fxLayout="column" fxFlex>
-    <a class="navbar-brand ml-auto mr-auto my-2" routerLink="/"><img src="./assets/images/logo/OptiProERP.png" title="OptiPro-ERP-Admin Portal" /></a>
+    <a class="navbar-brand ml-auto mr-auto my-2" routerLink="/">
+        <img src="./assets/images/logo/OptiProERP.png" class="logo-img" title="OptiPro-ERP-Admin Portal" />
+        <svg viewBox="0 0 474.565 474.565" class="logo-icon-sm">
+            <use xlink:href="#admin"></use>
+        </svg>        
+    </a>
     <nav class="main-nav ">
         <ul>
             <ng-container *ngFor="let item of navList">
