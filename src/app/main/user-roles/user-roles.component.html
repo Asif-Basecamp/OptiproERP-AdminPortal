@@ -154,8 +154,8 @@
                      <div class="col-sm-12 col-md-5 col-lg-5 col-xl-4">
                             <kendo-grid [kendoGridBinding]="LocalProductGrid" [resizable]="true" [sortable]="true" [height]="190" lass="kendo-responsive-grid" 
                             [groupable]="false" [filterable]=screenGridFilter4 [columnMenu]="false"  [ngStyle]="{'cursor': 'pointer','max-height':'190px'}" 
-                            [selectable]="true" (selectionChange)="productSelection($event)" [rowSelected]="isProductIdSelected">  
-                                <!-- [selectable]="{ checkboxOnly: true, mode: 'multiple' }" -->
+                            [selectable]="true" (selectionChange)="productSelection($event)" kendoGridSelectBy="ProductId" [selectedKeys]="productSelected">  
+                                <!-- [selectable]="{ checkboxOnly: true, mode: 'multiple' }" [rowSelected]="isProductIdSelected" -->
   
                                   <ng-template kendoGridToolbarTemplate>
                                       <div class="d-flex align-items-center">

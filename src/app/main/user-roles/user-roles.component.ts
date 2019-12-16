@@ -47,8 +47,9 @@ export class UserRolesComponent implements OnInit {
   public LocalProductGrid: any [] = [];
   public ProductVal = '';
   public SelectedProduct = '';
-  public isProductIdSelected: any;
-  //public showGridProductPage:boolean = false;
+  public productSelected : any [] = [];
+  //public isProductIdSelected: any;
+ 
   public showProductMainPage: boolean = false;
   public IsUpdateForCheck :boolean = false;
   //public TableDataBinding: any[]=[];
@@ -86,12 +87,25 @@ export class UserRolesComponent implements OnInit {
     }
   }
 
+  private isProductIdSelected(row: RowArgs) {
+    // if(this.SelectedProduct != undefined){
+    //   let select = [];       
+    //   select.push(this.SelectedProduct);
+    //   alert(this.SelectedProduct);
+    //   var rowSelect = (e: RowArgs) => select.indexOf(e.dataItem.ProductId) >=0 
+    //   return rowSelect;
+    // }     
+  }
+
    //To get all screen list after product selection
    FillFridOnDropdownSelectedIndexChanged  (ProductName) { 
     this.SelectedProduct = ProductName;
-    let select = [];       
-    select.push(this.SelectedProduct);
-    this.isProductIdSelected = (e: RowArgs) => select.indexOf(e.dataItem.ProductId) >=0 ;   
+    this.productSelected = []; 
+    this.productSelected.push(this.SelectedProduct); 
+
+    //let select = [];       
+    //select.push(this.SelectedProduct);
+    //isProductIdSelected = (e: RowArgs) => select.indexOf(e.dataItem.ProductId) >=0 
     
     console.log(this.NewSelectedRowData);
 
@@ -128,8 +142,9 @@ export class UserRolesComponent implements OnInit {
         ProductName='';
       }
     this.RoleService.FillFridOnDropdownSelectedIndexChanged(ProductName).subscribe(    
-      data => {       
-      if(data.length > 0) {  
+      data => {
+      if(data != undefined && data != null){           
+       if(data.length > 0) {  
         this.CheckUncheckValueInsideFrid(data);   
         this.GridDataFormanupulation=data;
           // Set Checked Value 
@@ -156,7 +171,11 @@ export class UserRolesComponent implements OnInit {
     else{    
       this.gridData1 = [];
       //this.MessageService.errormessage(this.translate.instant('UserMgmtSomethimgWntWrngMsg'));
-    }    
+    } 
+  }
+  else{
+    this.gridData1 = [];
+  }   
    
   },    
   error => {  
@@ -176,14 +195,19 @@ export class UserRolesComponent implements OnInit {
   if(this.LocalProductGrid[rowIndex+1] == undefined){   
     this.SelectedProduct = ''; 
     this.gridData1 = [];
-    let select = [];
+    //let select = [];
 
     // if(this.SelectedProduct == dataItem.ProductId)
     // select.push(this.LocalProductGrid[0].ProductId);
     // else
     // select.push(this.SelectedProduct);
-    select.push(this.SelectedProduct);
-    this.isProductIdSelected = (e: RowArgs) => select.indexOf(e.dataItem.ProductId) >=0 ;
+
+    // select.push(this.SelectedProduct);
+    // this.isProductIdSelected = (e: RowArgs) => select.indexOf(e.dataItem.ProductId) >=0 ;
+   // this.isProductIdSelected();
+
+   this.productSelected = []; 
+   this.productSelected.push(this.SelectedProduct); 
   }  
   
   
@@ -245,12 +269,7 @@ export class UserRolesComponent implements OnInit {
     });
 
     this.FillFridOnDropdownSelectedIndexChanged(this.SelectedProduct);
-    this.ProductVal = '';
-
-    // if(this.LocalProductGrid.length > 10)
-    // this.showGridProductPage = true;
-    // else
-    // this.showGridProductPage = false;
+    this.ProductVal = '';   
   }
 
   productLookupSelection($event){
@@ -954,7 +973,7 @@ export class UserRolesComponent implements OnInit {
   }
 
   CancelData() {
-    debugger
+    
     if (this.EditMode) {
       if(this.IsUpdateForCheck)
       this.confirmationEditToggle();
