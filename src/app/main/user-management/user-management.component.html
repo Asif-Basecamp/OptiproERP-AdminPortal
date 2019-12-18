@@ -1,370 +1,368 @@
 <div class="layout-mode" fxFlex fxLayout="column">
-        <div class="page-header">
-            <h4>{{'User_Management'|translate}}</h4>
-        </div>
+    <div class="page-header">
+        <h4>{{'User_Management'|translate}}</h4>
+    </div>
 
-        <!-- display user list -->
-        <div class="card" fxFlex *ngIf="!addUserScreen">
-            <div class="card-body" fxFlex fxLayout="column">
-                <form>
-                    <div class="row">
-                        <div class="col-sm-6 col-md-4 mb-sm-0 mb-1">
-                            <div class="d-flex align-items-center">
-                                <div class="input-group">
-                                        <input type="text" class="form-control form-control-sm" id="search"
-                                        placeholder="{{'Search'|translate}}" (input)="onInput($event.target.value)">
-                                    <div class="input-group-append">
-                                        <button class="btn btn-primary btn-sm btn-icon" type="button">
-                                            <svg viewBox="0 0 410.23 410.23" class="icon">
-                                                <use xlink:href="#search"></use>
-                                            </svg>
-                                        </button>
-                                    </div>
+    <!-- display user list -->
+    <div class="card" fxFlex *ngIf="!addUserScreen">
+        <div class="card-body" fxFlex fxLayout="column">
+            <form>
+                <div class="row">
+                    <div class="col-sm-6 col-md-4 mb-sm-0 mb-1">
+                        <div class="d-flex align-items-center">
+                            <div class="input-group">
+                                    <input type="text" class="form-control form-control-sm" id="search"
+                                    placeholder="{{'Search'|translate}}" (input)="onInput($event.target.value)">
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary btn-sm btn-icon" type="button">
+                                        <svg viewBox="0 0 410.23 410.23" class="icon">
+                                            <use xlink:href="#search"></use>
+                                        </svg>
+                                    </button>
                                 </div>
-                                <button class="btn btn-success btn-sm ml-2 btn-icon" type="button" (click)="addUserScreenToggle()">
-                                    <svg viewBox="0 0 512 512" class="icon">
-                                        <use xlink:href="#add"></use>
-                                    </svg>
-                                </button>
                             </div>
+                            <button class="btn btn-success btn-sm ml-2 btn-icon" type="button" (click)="addUserScreenToggle()">
+                                <svg viewBox="0 0 512 512" class="icon">
+                                    <use xlink:href="#add"></use>
+                                </svg>
+                            </button>
                         </div>
                     </div>
-                </form>
-                    <div fxLayout="column" fxFlex="100%" class="kendo-grid-wrapper mt-3">
-    
-                    <kendo-grid [kendoGridBinding]="userData" [resizable]="true" [sortable]="true" class="full-height-grid kendo-responsive-grid" [filterable]=isColumnFilter [groupable]=isColumnGroup 
-                    [columnMenu]="false" (cellClick)="userClickHandler($event)" [pageable]="showGridUserMgmtPage" [pageSize]="15">
-    
-                        <ng-template kendoGridToolbarTemplate>
-                            <div class="d-flex align-items-center">
-    
-                                <label class="custom-checkbox mb-0 mr-2 filter-checkbox">
-                                    <input type="checkbox" [(ngModel)]="isColumnFilter" [ngModelOptions]="{standalone: true}">
-                                    <span class="checkbox"></span>
-                                    <span>{{'Enable_filter'|translate}}</span>
-                                </label>
-                                <label class="custom-checkbox mb-0 grouping-checkbox">
-                                    <input type="checkbox" [(ngModel)]="isColumnGroup" [ngModelOptions]="{standalone: true}">
-                                    <span class="checkbox"></span>
-                                    <span>{{'Enable_grouping'|translate}}</span>
-                                </label>
-                                <button type="button" kendoGridExcelCommand title="Export to excel file" class="ml-auto btn btn-link btn-sm btn-icon p-0">
-                                    <svg viewBox="0 0 512 512" class="icon">
-                                        <use xlink:href="#download"></use>
-                                    </svg>
-                                </button>
+                </div>
+            </form>
+                <div fxLayout="column" fxFlex="100%" class="kendo-grid-wrapper mt-3">
+
+                <kendo-grid [kendoGridBinding]="userData" [resizable]="true" [sortable]="true" class="full-height-grid kendo-responsive-grid" [filterable]=isColumnFilter [groupable]=isColumnGroup 
+                [columnMenu]="false" (cellClick)="userClickHandler($event)" [pageable]="showGridUserMgmtPage" [pageSize]="15">
+
+                    <ng-template kendoGridToolbarTemplate>
+                        <div class="d-flex align-items-center">
+
+                            <label class="custom-checkbox mb-0 mr-2 filter-checkbox">
+                                <input type="checkbox" [(ngModel)]="isColumnFilter" [ngModelOptions]="{standalone: true}">
+                                <span class="checkbox"></span>
+                                <span>{{'Enable_filter'|translate}}</span>
+                            </label>
+                            <label class="custom-checkbox mb-0 grouping-checkbox">
+                                <input type="checkbox" [(ngModel)]="isColumnGroup" [ngModelOptions]="{standalone: true}">
+                                <span class="checkbox"></span>
+                                <span>{{'Enable_grouping'|translate}}</span>
+                            </label>
+                            <button type="button" kendoGridExcelCommand title="Export to excel file" class="ml-auto btn btn-link btn-sm btn-icon p-0">
+                                <svg viewBox="0 0 512 512" class="icon">
+                                    <use xlink:href="#download"></use>
+                                </svg>
+                            </button>
+                        </div>
+                    </ng-template>
+
+                    <!-- Mobile view column -->
+                    <kendo-grid-column media="(max-width: 767px)" title="Items">
+                        <ng-template kendoGridCellTemplate let-dataItem>
+                            <div class="d-flex">
+                                <dl class="mb-0 w-50 pr-1">
+                                    <dt>{{'User_Code'|translate}}</dt>
+                                    <dd>{{ dataItem.OPTM_USERCODE }}</dd>
+
+                                    <dt>{{'User_Group'|translate}}</dt>
+                                    <dd class="mb-0">{{ dataItem.OPTM_GROUPCODE }}</dd>
+                                </dl>
+                                <dl class="mb-0 w-50">
+                                    <dt>{{'User_Name'|translate}}</dt>
+                                    <dd>{{ dataItem.OPTM_USERNAME }}</dd>
+
+                                    <dt>{{'Active'|translate}}</dt>
+                                    <dd class="mb-0">{{ dataItem.OPTM_ACTIVE }}</dd>
+                                </dl>
                             </div>
                         </ng-template>
-    
-                        <!-- Mobile view column -->
-                        <kendo-grid-column media="(max-width: 767px)" title="Items">
-                            <ng-template kendoGridCellTemplate let-dataItem>
-                                <div class="d-flex">
-                                    <dl class="mb-0 w-50 pr-1">
-                                        <dt>{{'User_Code'|translate}}</dt>
-                                        <dd>{{ dataItem.OPTM_USERCODE }}</dd>
-    
-                                        <dt>{{'User_Group'|translate}}</dt>
-                                        <dd class="mb-0">{{ dataItem.OPTM_GROUPCODE }}</dd>
-                                    </dl>
-                                    <dl class="mb-0 w-50">
-                                        <dt>{{'User_Name'|translate}}</dt>
-                                        <dd>{{ dataItem.OPTM_USERNAME }}</dd>
-    
-                                        <dt>{{'Active'|translate}}</dt>
-                                        <dd class="mb-0">{{ dataItem.OPTM_ACTIVE }}</dd>
-                                    </dl>
-                                </div>
-                            </ng-template>
-                        </kendo-grid-column>
-    
-                        <!-- columns for mid-size devices -->
-                        <kendo-grid-column media="(min-width: 768px)" field="OPTM_USERCODE" title="{{'User_Code'|translate}}"></kendo-grid-column>
-                        <kendo-grid-column media="(min-width: 768px)" field="OPTM_USERNAME" title="{{'User_Name'|translate}}"></kendo-grid-column>
-                        <kendo-grid-column media="(min-width: 768px)" field="OPTM_GROUPCODE" title="{{'User_Group'|translate}}"></kendo-grid-column>
-                        <kendo-grid-column media="(min-width: 768px)" field="OPTM_ACTIVE" title="{{'Active'|translate}}"></kendo-grid-column>
-                        <kendo-grid-excel fileName="User-management.xlsx"></kendo-grid-excel>
-                    </kendo-grid>
-                </div>
+                    </kendo-grid-column>
+
+                    <!-- columns for mid-size devices -->
+                    <kendo-grid-column media="(min-width: 768px)" field="OPTM_USERCODE" title="{{'User_Code'|translate}}"></kendo-grid-column>
+                    <kendo-grid-column media="(min-width: 768px)" field="OPTM_USERNAME" title="{{'User_Name'|translate}}"></kendo-grid-column>
+                    <kendo-grid-column media="(min-width: 768px)" field="OPTM_GROUPCODE" title="{{'User_Group'|translate}}"></kendo-grid-column>
+                    <kendo-grid-column media="(min-width: 768px)" field="OPTM_ACTIVE" title="{{'Active'|translate}}"></kendo-grid-column>
+                    <kendo-grid-excel fileName="User-management.xlsx"></kendo-grid-excel>
+                </kendo-grid>
             </div>
         </div>
-        <!-- end user list display div -->
+    </div>
+    <!-- end user list display div -->
 
 
-        <!-- add user screen div -->
-        <div class="card" fxFlex *ngIf="addUserScreen">
-            <form #addUserForm="ngForm">
-            <div class="card-body pb-2" fxFlex fxLayout="column">
-                <div class="addUserScreen" fxFlex="100%">
-                    <div class="user-detail">
-                        <div class="section-heading mb-2">
-                            <h5 class="m-0">{{'User_Details'|translate}}</h5>
-                        </div>
-                            <div class="row">
-                                <div class="col-sm-5 col-md-4 col-lg-4 col-xl-3">
-                                    <div class="row">
-                                        <div class="form-group col-md-12 mb-2">
-                                            <label class="mb-0" for="user_id">{{'User_Id'|translate}}<span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control form-control-sm" id="user_id" name="user_id" [(ngModel)]="user_id" #UserID=ngModel (change)="onBlurUserID()"
-                                            required autocomplete="off">
-                                            <span class="error" *ngIf="UserID.errors?.required && UserID.touched">
-                                                    {{'UsrMgtUsrIdErrMsg'|translate}}
-                                                
-                                            </span>
-                                        </div>
-                                        <div class="form-group col-md-12 mb-2">
-                                            <label class="mb-0" for="user_name">{{'User_Name'|translate}}</label>
-                                            <input type="text" class="form-control form-control-sm" id="user_name" name="user_name" [(ngModel)]="user_name" 
-                                            #UserName=ngModel required autocomplete="off" (change)="IsUpdate()">
-                                            <span class="error" *ngIf="UserName.errors?.required && UserName.touched">
-                                                    {{'UsrMgtUsrNameErrMsg'|translate}}
-                                                
-                                            </span>
-                                        </div>
-                                        <div class="form-group col-md-12 mb-2">
-                                            <label class="mb-0" for="password">{{'Password'|translate}}<span class="text-danger">*</span></label>
-                                            <input type="password" class="form-control form-control-sm" minlength="5" id="password" name="password" 
-                                            [(ngModel)]="password" #Password=ngModel required autocomplete="off" (change)="IsUpdate()">
-                                            <span class="error" *ngIf="Password.errors?.required && Password.touched">
-                                                    {{'UsrMgtPwdErrMsg'|translate}}
-                                               
-                                            </span>
-                                        </div>
-                                        <div class="form-group col-md-12 mb-2">
-                                            <label class="mb-0" for="re_password">{{'Re-Enter_Password'|translate}}<span class="text-danger">*</span></label>
-                                            <input type="password" class="form-control form-control-sm" id="re_password" minlength="5"
-                                             name="re_password" [(ngModel)]="re_password" #RePassword=ngModel (change)="setCustomValidity()"
-                                              required  autocomplete="off">
-                                             
-                                            <span class="error" *ngIf="RePassword.errors?.required && RePassword.touched">
-                                               
-                                                {{'UsrMgtCPwdErrMsg'|translate}}
-                                            </span>
-                                            <span class="error" *ngIf="!IsComparePassword">
-                                                    
-                                                    {{'UsrMgtNotMatchErrMsg'|translate}}
-                                                
-                                            </span>
-                                        </div>
-
-                                    </div>
+    <!-- add user screen div -->
+    <div class="card" fxFlex="0 1 100%" *ngIf="addUserScreen">
+        <form #addUserForm="ngForm" fxFlex="0 1 100%"> 
+            <div class="card-body pb-2" fxLayout="column" fxFlex="0 1 100%">
+                <div class="addUserScreen" fxFlex="0 1 100%">
+                    <kendo-splitter orientation="vertical" fxFlex="0 1 100%" fxLayout="column" class="border-0">
+                        <kendo-splitter-pane [collapsible]="true" size="275px">
+                            <div class="user-detail d-flex overflow-auto flex-column">
+                                <div class="section-heading mb-2">
+                                    <h5 class="m-0">{{'User_Details'|translate}}</h5>
                                 </div>
-                                <div class="col-sm-5 offset-sm-1 col-md-4 offset-md-1 col-lg-4 offset-lg-1 col-xl-3 offset-xl-1">
-                                    <div class="row">
-                                        <div class="form-group col-md-12 mb-2">
-                                            <label class="mb-0" for="user_group">{{'User_Group'|translate}}
-                                                <span class="text-danger">*</span></label>
-                                            <kendo-dropdownlist [data]="ddlUserGroup" id="user_group" name="user_group"
-                                             class="form-control-sm form-control w-100" textField="groupCode" (valueChange)="onChange($event)"
-                                             valueField="groupCode" [(ngModel)]="userGroup">
-                                            </kendo-dropdownlist>
+                                <div class="row no-gutters">
+                                    <div class="col-sm-5 col-md-4 col-lg-4 col-xl-3">
+                                        <div class="row">
+                                            <div class="form-group col-md-12 mb-2">
+                                                <label class="mb-0" for="user_id">{{'User_Id'|translate}}<span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control form-control-sm" id="user_id" name="user_id" [(ngModel)]="user_id" #UserID=ngModel (change)="onBlurUserID()"
+                                                required autocomplete="off">
+                                                <span class="error" *ngIf="UserID.errors?.required && UserID.touched">
+                                                        {{'UsrMgtUsrIdErrMsg'|translate}}
+                                                    
+                                                </span>
+                                            </div>
+                                            <div class="form-group col-md-12 mb-2">
+                                                <label class="mb-0" for="user_name">{{'User_Name'|translate}}</label>
+                                                <input type="text" class="form-control form-control-sm" id="user_name" name="user_name" [(ngModel)]="user_name" 
+                                                #UserName=ngModel required autocomplete="off" (change)="IsUpdate()">
+                                                <span class="error" *ngIf="UserName.errors?.required && UserName.touched">
+                                                        {{'UsrMgtUsrNameErrMsg'|translate}}
+                                                    
+                                                </span>
+                                            </div>
+                                            <div class="form-group col-md-12 mb-2">
+                                                <label class="mb-0" for="password">{{'Password'|translate}}<span class="text-danger">*</span></label>
+                                                <input type="password" class="form-control form-control-sm" minlength="5" id="password" name="password" 
+                                                [(ngModel)]="password" #Password=ngModel required autocomplete="off" (change)="IsUpdate()">
+                                                <span class="error" *ngIf="Password.errors?.required && Password.touched">
+                                                        {{'UsrMgtPwdErrMsg'|translate}}
+                                                    
+                                                </span>
+                                            </div>
+                                            <div class="form-group col-md-12 mb-2">
+                                                <label class="mb-0" for="re_password">{{'Re-Enter_Password'|translate}}<span class="text-danger">*</span></label>
+                                                <input type="password" class="form-control form-control-sm" id="re_password" minlength="5"
+                                                    name="re_password" [(ngModel)]="re_password" #RePassword=ngModel (change)="setCustomValidity()"
+                                                    required  autocomplete="off">
+                                                    
+                                                <span class="error" *ngIf="RePassword.errors?.required && RePassword.touched">
+                                                    
+                                                    {{'UsrMgtCPwdErrMsg'|translate}}
+                                                </span>
+                                                <span class="error" *ngIf="!IsComparePassword">
+                                                        
+                                                        {{'UsrMgtNotMatchErrMsg'|translate}}
+                                                    
+                                                </span>
+                                            </div>
+        
                                         </div>
-                                        <div class="form-group col-md-12 mb-2">
-                                            <label class="mb-0" for="mapped_user_id">{{'Mapped_SAP_B1_User'|translate}}<span class="text-danger">*</span></label>
-                                            <kendo-dropdownlist [data]="ddlSAPUser" id="mapped_user_id" name="mapped_user_id" 
-                                            class="form-control-sm form-control w-100"   textField="USER_CODE"
-                                             valueField="USER_CODE"  [(ngModel)]="mapped_user" (selectionChange)="IsUpdate()"></kendo-dropdownlist>
-
-                                        </div>
-                                        <div class="form-group col-md-12 mb-2">
-                                            <label class="mb-0" for="mapped_user_password">{{'Mapped_SAP_B1_User_Password'|translate}}<span class="text-danger">*</span></label>
-                                            <input type="password"  name="mapped_user_password" minlength="5" class="form-control form-control-sm" 
-                                            id="mapped_user_password" [(ngModel)]="mappedPass" #MapPassword=ngModel required autocomplete="off" (change)="IsUpdate()">
-                                            <span class="error" *ngIf="MapPassword.errors?.required && MapPassword.touched">
-                                               
-                                                {{'UsrMgtUsPwdErrMsg'|translate}}
-                                                
-                                            </span>
-                                        </div>
-                                        <div class="form-group col-md-12 mb-2">
-                                            <label class="mb-0" for="tenant">{{'Tenant'|translate}}</label>
-                                            <input type="text" id="tenant" name="tenant" [(ngModel)]="tenant" class="form-control-sm form-control w-100" 
-                                            autocomplete="off" (change)="IsUpdate()">
-                                        </div>
-                                        <div class="form-group col-md-12 mb-2">
-                                            <div class="custom-control custom-switch mt-1">
-                                                <input type="checkbox" class="custom-control-input" name="account_status" id="account_status" 
-                                                [(ngModel)]="accountStatus" (change)="IsUpdate()">
-                                                <label class="custom-control-label" for="account_status">{{ accountStatus ? 'Active': 'Inactive' }}</label>
+                                    </div>
+                                    <div class="col-sm-5 pl-3 offset-sm-1 col-md-4 offset-md-1 col-lg-4 offset-lg-1 col-xl-3 offset-xl-1">
+                                        <div class="row">
+                                            <div class="form-group col-md-12 mb-2">
+                                                <label class="mb-0" for="user_group">{{'User_Group'|translate}}
+                                                    <span class="text-danger">*</span></label>
+                                                <kendo-dropdownlist [data]="ddlUserGroup" id="user_group" name="user_group"
+                                                    class="form-control-sm form-control w-100" textField="groupCode" (valueChange)="onChange($event)"
+                                                    valueField="groupCode" [(ngModel)]="userGroup">
+                                                </kendo-dropdownlist>
+                                            </div>
+                                            <div class="form-group col-md-12 mb-2">
+                                                <label class="mb-0" for="mapped_user_id">{{'Mapped_SAP_B1_User'|translate}}<span class="text-danger">*</span></label>
+                                                <kendo-dropdownlist [data]="ddlSAPUser" id="mapped_user_id" name="mapped_user_id" 
+                                                class="form-control-sm form-control w-100"   textField="USER_CODE"
+                                                    valueField="USER_CODE"  [(ngModel)]="mapped_user" (selectionChange)="IsUpdate()"></kendo-dropdownlist>
+        
+                                            </div>
+                                            <div class="form-group col-md-12 mb-2">
+                                                <label class="mb-0" for="mapped_user_password">{{'Mapped_SAP_B1_User_Password'|translate}}<span class="text-danger">*</span></label>
+                                                <input type="password"  name="mapped_user_password" minlength="5" class="form-control form-control-sm" 
+                                                id="mapped_user_password" [(ngModel)]="mappedPass" #MapPassword=ngModel required autocomplete="off" (change)="IsUpdate()">
+                                                <span class="error" *ngIf="MapPassword.errors?.required && MapPassword.touched">
+                                                    
+                                                    {{'UsrMgtUsPwdErrMsg'|translate}}
+                                                    
+                                                </span>
+                                            </div>
+                                            <div class="form-group col-md-12 mb-2">
+                                                <label class="mb-0" for="tenant">{{'Tenant'|translate}}</label>
+                                                <input type="text" id="tenant" name="tenant" [(ngModel)]="tenant" class="form-control-sm form-control w-100" 
+                                                autocomplete="off" (change)="IsUpdate()">
+                                            </div>
+                                            <div class="form-group col-md-12 mb-2">
+                                                <div class="custom-control custom-switch mt-1">
+                                                    <input type="checkbox" class="custom-control-input" name="account_status" id="account_status" 
+                                                    [(ngModel)]="accountStatus" (change)="IsUpdate()">
+                                                    <label class="custom-control-label" for="account_status">{{ accountStatus ? 'Active': 'Inactive' }}</label>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                    </div>
-                    <div class="company-company-details border-top py-3 mt-2">
-                        <div class="row">
-    
-                            <!-- Company Kendo Grid -->
-    
-                            <div class="company col-sm-8">
-                                <div class="section-heading mb-2">
-                                    <h5 class="m-0">{{'Company'|translate}}</h5>
-                                </div>
-                                <kendo-grid [kendoGridBinding]="company_data" [resizable]="true" [sortable]="true" class="custom-height-grid" 
-                                [filterable]=isColumnFilter14 (cellClick)="companyClickHandler($event)" (detailExpand)="onExpandCompany($event)" [groupable]=isColumnGroup14 [kendoGridSelectBy]="'dbName'" [selectedKeys]="companySelection" [columnMenu]="false" 
-                                [selectable]="{ checkboxOnly: true, mode: 'multiple' }">
-                                    <ng-template kendoGridToolbarTemplate>
-                                        <div class="d-flex align-items-center">
-                                            <label class="custom-checkbox mb-0 mr-2 filter-checkbox">
-                                                <input type="checkbox" [(ngModel)]="isColumnFilter14" [ngModelOptions]="{standalone: true}">
-                                                <span class="checkbox"></span>
-                                                <span>{{'Enable_filter'|translate}}</span>
-                                            </label>
-                                            <label class="custom-checkbox mb-0 grouping-checkbox">
-                                                <input type="checkbox" [(ngModel)]="isColumnGroup14" [ngModelOptions]="{standalone: true}">
-                                                <span class="checkbox"></span>
-                                                <span>{{'Enable_grouping'|translate}}</span>
-                                            </label>
-                                            <button type="button" kendoGridExcelCommand title="{{'Export_to_excel_file'|translate}}" class="ml-auto btn btn-link btn-sm btn-icon p-0">
-                                                <svg viewBox="0 0 512 512" class="icon">
-                                                    <use xlink:href="#download"></use>
-                                                </svg>
-                                            </button>
+                        </kendo-splitter-pane>
+            
+                        <kendo-splitter-pane min="450px" fxFlex="1 1 100%" fxLayout="column">
+                            <div class="company-company-details pt-3 pb-2 overflow-auto flex-column h-100" fxFlex="0 1 100%">
+                                <div class="row no-gutters h-100" fxFlex="0 1 100%">    
+                                    <!-- Company Kendo Grid -->            
+                                    <div class="company col-sm-8 pr-3 h-100">
+                                        <div class="section-heading mb-2">
+                                            <h5 class="m-0">{{'Company'|translate}}</h5>
                                         </div>
-                                    </ng-template>
-                                    <kendo-grid-checkbox-column headerClass="text-center" class="text-center" [width]="40">
-                                        <ng-template kendoGridCellTemplate let-dataItem let-companyRowIndex="rowIndex">
-                                            <label class="custom-checkbox m-0">
-                                                <!-- <input type="checkbox" (change)="companySelect($event, dataItem, companyRowIndex)" [kendoGridSelectionCheckbox]="companyRowIndex" 
-                                                > -->
-                                                <input type="checkbox"  (change)="companySelect($event,dataItem,companyRowIndex)" 
-                                                id="SingleCompSelection"  [checked]="dataItem.SingleCompSelection" name="SingleCompSelection">
-                                                <span class="checkbox"></span>
-                                            </label>
-                                        </ng-template>
-                                    </kendo-grid-checkbox-column>
-                                    <kendo-grid-column field="dbName" title="{{'UsrMgtDB'|translate}}" [width]="100"></kendo-grid-column>
-                                    <kendo-grid-column field="cmpName" title="{{'Company'|translate}}" [width]="100"></kendo-grid-column>
-                                    <kendo-grid-column title="{{'User_Type'|translate}}" [width]="100">
-                                        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-                                            <kendo-dropdownlist [data]="dataItem.UserType" [(ngModel)]="dataItem.selectedUserType" 
-                                            (valueChange)="onChangeUserType($event, rowIndex, company_data)" [ngModelOptions]="{standalone: true}"  
-                                            class="form-control-sm form-control w-100" textField="text" valueField="text"></kendo-dropdownlist>
-                                        </ng-template>
-                                    </kendo-grid-column>
-                                    <kendo-grid-column title="{{'EmpName'|translate}}" [width]="100">
-                                        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-                                            
-                                            <kendo-dropdownlist  [data]="dataItem.Employee" textField="MergrEmpName"
-                                            valueField="empID" [(ngModel)]="dataItem.selectedEmployeeType" 
-                                            (valueChange)="onChangeEmployeeId($event, dataItem.dbName, rowIndex)" 
-                                            [ngModelOptions]="{standalone: true}" class="form-control-sm form-control w-100" 
-                                            [disabled]="dataItem.selectedUserType.value!='E' "
-                                            ></kendo-dropdownlist>
-
-                                            <!-- <kendo-dropdownlist  [data]="listItems" class="form-control-sm form-control w-100" [defaultItem]="'BP ID'">
-
-                                            </kendo-dropdownlist> -->
-                                        </ng-template>
-                                    </kendo-grid-column>
-
-                                    <kendo-grid-column title="{{'BPCode'|translate}}" [width]="100" >
-                                        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-
-                                            <kendo-dropdownlist  [data]="dataItem.listItems" textField="CardName" 
-                                            valueField="CardCode" [(ngModel)]="dataItem.selectedBP" 
-                                            (valueChange)="onChangeBPID($event, dataItem.dbName, rowIndex)" 
-                                            [ngModelOptions]="{standalone: true}" class="form-control-sm form-control w-100" 
-                                            [disabled]="dataItem.selectedUserType.value!='V' && dataItem.selectedUserType.value!='C' "
-                                            ></kendo-dropdownlist>
-
-                                            <!-- <kendo-dropdownlist  [data]="listItems" class="form-control-sm form-control w-100" [defaultItem]="'BP ID'"> -->
-
-                                            
-                                        </ng-template>
-                                    </kendo-grid-column>
-
-
-                                    <ng-template kendoGridDetailTemplate let-dataItem let-productRowIndex="rowIndex">
-                                        <kendo-grid *ngIf="dataItem.selectedCompany != 'blank'"
-
-                                        [kendoGridBinding]="dataItem.product" [resizable]="true" [sortable]="true" class="" [filterable]=false [groupable]=false 
-                                        [kendoGridSelectBy]="'UniqueId'" [selectedKeys]="productSelection" [columnMenu]="false" 
+                                        <kendo-grid [kendoGridBinding]="company_data" [resizable]="true" [sortable]="true" class="custom-height-grid" 
+                                        [filterable]=isColumnFilter14 (cellClick)="companyClickHandler($event)" (detailExpand)="onExpandCompany($event)" [groupable]=isColumnGroup14 [kendoGridSelectBy]="'dbName'" [selectedKeys]="companySelection" [columnMenu]="false" 
                                         [selectable]="{ checkboxOnly: true, mode: 'multiple' }">
+                                            <ng-template kendoGridToolbarTemplate>
+                                                <div class="d-flex align-items-center">
+                                                    <label class="custom-checkbox mb-0 mr-2 filter-checkbox">
+                                                        <input type="checkbox" [(ngModel)]="isColumnFilter14" [ngModelOptions]="{standalone: true}">
+                                                        <span class="checkbox"></span>
+                                                        <span>{{'Enable_filter'|translate}}</span>
+                                                    </label>
+                                                    <label class="custom-checkbox mb-0 grouping-checkbox">
+                                                        <input type="checkbox" [(ngModel)]="isColumnGroup14" [ngModelOptions]="{standalone: true}">
+                                                        <span class="checkbox"></span>
+                                                        <span>{{'Enable_grouping'|translate}}</span>
+                                                    </label>
+                                                    <button type="button" kendoGridExcelCommand title="{{'Export_to_excel_file'|translate}}" class="ml-auto btn btn-link btn-sm btn-icon p-0">
+                                                        <svg viewBox="0 0 512 512" class="icon">
+                                                            <use xlink:href="#download"></use>
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            </ng-template>
                                             <kendo-grid-checkbox-column headerClass="text-center" class="text-center" [width]="40">
-                                                <ng-template kendoGridCellTemplate let-pidx="rowIndex" let-dataItem>
+                                                <ng-template kendoGridCellTemplate let-dataItem let-companyRowIndex="rowIndex">
                                                     <label class="custom-checkbox m-0">
-                                                        <input type="checkbox"  (change)="productSelect($event, dataItem.ProductId, pidx, 
-                                                        productRowIndex)" id="SingleProductSelection"  [checked]="dataItem.SingleProductSelection" name="SingleProductSelection">
+                                                        <!-- <input type="checkbox" (change)="companySelect($event, dataItem, companyRowIndex)" [kendoGridSelectionCheckbox]="companyRowIndex" 
+                                                        > -->
+                                                        <input type="checkbox"  (change)="companySelect($event,dataItem,companyRowIndex)" 
+                                                        id="SingleCompSelection"  [checked]="dataItem.SingleCompSelection" name="SingleCompSelection">
                                                         <span class="checkbox"></span>
                                                     </label>
                                                 </ng-template>
                                             </kendo-grid-checkbox-column>
-                                            <kendo-grid-column field="ProductId" title="{{'ProductName'|translate}}"></kendo-grid-column>
-                                            <kendo-grid-column field="OPTM_PRODDESC" title="{{'ProductDescription'|translate}}"></kendo-grid-column>
+                                            <kendo-grid-column field="dbName" title="{{'UsrMgtDB'|translate}}" [width]="100"></kendo-grid-column>
+                                            <kendo-grid-column field="cmpName" title="{{'Company'|translate}}" [width]="100"></kendo-grid-column>
+                                            <kendo-grid-column title="{{'User_Type'|translate}}" [width]="100">
+                                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                                    <kendo-dropdownlist [data]="dataItem.UserType" [(ngModel)]="dataItem.selectedUserType" 
+                                                    (valueChange)="onChangeUserType($event, rowIndex, company_data)" [ngModelOptions]="{standalone: true}"  
+                                                    class="form-control-sm form-control w-100" textField="text" valueField="text"></kendo-dropdownlist>
+                                                </ng-template>
+                                            </kendo-grid-column>
+                                            <kendo-grid-column title="{{'EmpName'|translate}}" [width]="100">
+                                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+        
+                                                    <kendo-dropdownlist  [data]="dataItem.Employee" textField="MergrEmpName" 
+                                                    valueField="empID" [(ngModel)]="dataItem.selectedEmployeeType" 
+                                                    (valueChange)="onChangeEmployeeId($event, dataItem.dbName, rowIndex)" 
+                                                    [ngModelOptions]="{standalone: true}" class="form-control-sm form-control w-100" 
+                                                    [disabled]="dataItem.selectedUserType.value!='E' "
+                                                    ></kendo-dropdownlist>
+        
+                                                    <!-- <kendo-dropdownlist  [data]="listItems" class="form-control-sm form-control w-100" [defaultItem]="'BP ID'">
+        
+                                                    </kendo-dropdownlist> -->
+                                                </ng-template>
+                                            </kendo-grid-column>
+        
+                                            <kendo-grid-column title="{{'BPCode'|translate}}" [width]="100" >
+                                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+        
+                                                    <kendo-dropdownlist  [data]="dataItem.listItems" textField="CardName" 
+                                                    valueField="CardCode" [(ngModel)]="dataItem.selectedBP" 
+                                                    (valueChange)="onChangeBPID($event, dataItem.dbName, rowIndex)" 
+                                                    [ngModelOptions]="{standalone: true}" class="form-control-sm form-control w-100" 
+                                                    [disabled]="dataItem.selectedUserType.value!='V' && dataItem.selectedUserType.value!='C' "
+                                                    ></kendo-dropdownlist>
+        
+                                                    <!-- <kendo-dropdownlist  [data]="listItems" class="form-control-sm form-control w-100" [defaultItem]="'BP ID'"> -->
+        
+                                                    
+                                                </ng-template>
+                                            </kendo-grid-column>
+        
+        
+                                            <ng-template kendoGridDetailTemplate let-dataItem let-productRowIndex="rowIndex">
+                                                <kendo-grid *ngIf="dataItem.selectedCompany != 'blank'" [kendoGridBinding]="dataItem.product" [resizable]="true" [sortable]="true" class="" [filterable]=false [groupable]=false 
+                                                [kendoGridSelectBy]="'UniqueId'" [selectedKeys]="productSelection" [columnMenu]="false" 
+                                                [selectable]="{ checkboxOnly: true, mode: 'multiple' }">
+                                                    <kendo-grid-checkbox-column headerClass="text-center" class="text-center" [width]="40">
+                                                        <ng-template kendoGridCellTemplate let-pidx="rowIndex" let-dataItem>
+                                                            <label class="custom-checkbox m-0">
+                                                                <input type="checkbox" (change)="productSelect($event, dataItem.ProductId, pidx,
+                                                    productRowIndex)" id="SingleProductSelection" [checked]="dataItem.SingleProductSelection" name="SingleProductSelection">
+                                                                <span class="checkbox"></span>
+                                                            </label>
+                                                        </ng-template>
+                                                    </kendo-grid-checkbox-column>
+                                                    <kendo-grid-column field="ProductId" title="{{'ProductName'|translate}}"></kendo-grid-column>
+                                                    <kendo-grid-column field="OPTM_PRODDESC" title="{{'ProductDescription'|translate}}"></kendo-grid-column>
+                                                </kendo-grid>
+                                            </ng-template>
+                                            <kendo-grid-excel fileName="User-management.xlsx"></kendo-grid-excel>
                                         </kendo-grid>
-                                    </ng-template>
-                                    <kendo-grid-excel fileName="User-management.xlsx"></kendo-grid-excel>
-                                </kendo-grid>
-                            </div>
-    
-                            <!-- warehouse grid -->
-                            <div class="company-details col-sm-4 mt-3 mt-sm-0">
-                                <div class="section-heading mb-2">
-                                    <h5 class="m-0">{{'UsrMgtDB'|translate}}: {{ShowDBName}}({{ShowCompanyName}})</h5>
-                                </div>
-                                <kendo-grid [kendoGridBinding]="WH_WC_Data" [resizable]="true" 
-                                [sortable]="true" class="custom-height-grid" 
-                                [filterable]=isColumnFilter33 [groupable]=false [columnMenu]="false" 
-                                [kendoGridSelectBy]="'uniqueId'" (detailExpand)="onExpandWarehouse($event)"
-                                [selectedKeys]="warehouseSelection" [selectable]="{ checkboxOnly: true, mode: 'multiple' }">
-                                    <ng-template kendoGridToolbarTemplate>
-                                        <div class="d-flex align-items-center">
-                                            <label class="custom-checkbox mb-0 mr-2 filter-checkbox">
-                                                <input type="checkbox" [(ngModel)]="isColumnFilter33" [ngModelOptions]="{standalone: true}"
-                                               >
-                                                <span class="checkbox"></span>
-                                                <span>{{'Enable_filter'|translate}}</span>
-                                            </label>
-                                            <button type="button" kendoGridExcelCommand title="{{'Export_to_excel_file'|translate}}" class="ml-auto btn btn-link btn-sm btn-icon p-0">
-                                                <svg viewBox="0 0 512 512" class="icon">
-                                                    <use xlink:href="#download"></use>
-                                                </svg>
-                                            </button>
+                                    </div>            
+                                    <!-- warehouse grid -->
+                                    <div class="company-details col-sm-4 mt-3 mt-sm-0  h-100">
+                                        <div class="section-heading mb-2">
+                                            <h5 class="m-0">{{'UsrMgtDB'|translate}}: {{ShowDBName}}({{ShowCompanyName}})</h5>
                                         </div>
-                                    </ng-template>
-                                    <kendo-grid-checkbox-column headerClass="text-center" class="text-center" [width]="40">
-                                        <ng-template kendoGridCellTemplate let-dataItem let-warehouseIndex="rowIndex">
-                                            <label class="custom-checkbox m-0">
-                                                <!-- <input type="checkbox" 
-                                                (change)="warehouseSelect($event, dataItem, warehouseIndex)" [kendoGridSelectionCheckbox]="warehouseIndex"> -->
-
-                                                <input type="checkbox"  (change)="warehouseSelect($event, dataItem, warehouseIndex)" 
-                                                id="SingleWHSelection"  [checked]="dataItem.SingleWHSelection" name="SingleWHSelection">
-                                               
-                                                <span class="checkbox"></span>
-                                            </label>
-                                        </ng-template>
-                                    </kendo-grid-checkbox-column>
-                                    <kendo-grid-column field="OPTM_WHSE" title="Warehouse"></kendo-grid-column>
-                                    <ng-template kendoGridDetailTemplate let-dataItem let-workCentersIndex="rowIndex">
-                                        <kendo-grid [kendoGridBinding]="dataItem.workcenter" [resizable]="true" [sortable]="true" 
-                                        class="" [filterable]=false [groupable]=false [columnMenu]="false" 
-                                        [kendoGridSelectBy]="'uniqueId'" [selectedKeys]="workcenterSelection" 
-                                        [selectable]="{ checkboxOnly: true, mode: 'multiple' }">
+                                        <kendo-grid [kendoGridBinding]="WH_WC_Data" [resizable]="true" [sortable]="true" class="custom-height-grid" [filterable]=isColumnFilter33 [groupable]=false [columnMenu]="false" [ngStyle]="{'height':'calc(100% - 35px)'}" [kendoGridSelectBy]="'uniqueId'" (detailExpand)="onExpandWarehouse($event)" [selectedKeys]="warehouseSelection" [selectable]="{ checkboxOnly: true, mode: 'multiple' }">
+                                            <ng-template kendoGridToolbarTemplate>
+                                                <div class="d-flex align-items-center">
+                                                    <label class="custom-checkbox mb-0 mr-2 filter-checkbox">
+                                                        <input type="checkbox" [(ngModel)]="isColumnFilter33" [ngModelOptions]="{standalone: true}"
+                                                        >
+                                                        <span class="checkbox"></span>
+                                                        <span>{{'Enable_filter'|translate}}</span>
+                                                    </label>
+                                                    <button type="button" kendoGridExcelCommand title="{{'Export_to_excel_file'|translate}}" class="ml-auto btn btn-link btn-sm btn-icon p-0">
+                                                        <svg viewBox="0 0 512 512" class="icon">
+                                                            <use xlink:href="#download"></use>
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            </ng-template>
                                             <kendo-grid-checkbox-column headerClass="text-center" class="text-center" [width]="40">
-                                                <ng-template kendoGridCellTemplate let-dataItem let-workCenterIndex="rowIndex">
+                                                <ng-template kendoGridCellTemplate let-dataItem let-warehouseIndex="rowIndex">
                                                     <label class="custom-checkbox m-0">
-                                                        <!-- <input type="checkbox" (change)="workCenterSelect($event, dataItem, workCentersIndex)" 
-                                                        [kendoGridSelectionCheckbox]="workCenterIndex"> -->
-                                                        <input type="checkbox"  (change)="workCenterSelect($event, dataItem, workCentersIndex)" 
-                                                    id="SingleWCSelection"  [checked]="dataItem.SingleWCSelection" name="SingleWCSelection">
+                                                        <!-- <input type="checkbox"
+(change)="warehouseSelect($event, dataItem, warehouseIndex)" [kendoGridSelectionCheckbox]="warehouseIndex"> -->
+
+                                                        <input type="checkbox" (change)="warehouseSelect($event, dataItem, warehouseIndex)"
+                                                               id="SingleWHSelection" [checked]="dataItem.SingleWHSelection" name="SingleWHSelection">
+
                                                         <span class="checkbox"></span>
                                                     </label>
                                                 </ng-template>
                                             </kendo-grid-checkbox-column>
-                                            <kendo-grid-column field="WorkCenterCode" title="Work Center"></kendo-grid-column>
+                                            <kendo-grid-column field="OPTM_WHSE" title="Warehouse"></kendo-grid-column>
+                                            <ng-template kendoGridDetailTemplate let-dataItem let-workCentersIndex="rowIndex">
+                                                <kendo-grid [kendoGridBinding]="dataItem.workcenter" [resizable]="true" [sortable]="true" 
+                                                class="" [filterable]=false [groupable]=false [columnMenu]="false" 
+                                                [kendoGridSelectBy]="'uniqueId'" [selectedKeys]="workcenterSelection" 
+                                                [selectable]="{ checkboxOnly: true, mode: 'multiple' }">
+                                                    <kendo-grid-checkbox-column headerClass="text-center" class="text-center" [width]="40">
+                                                        <ng-template kendoGridCellTemplate let-dataItem let-workCenterIndex="rowIndex">
+                                                            <label class="custom-checkbox m-0">
+                                                                <!-- <input type="checkbox" (change)="workCenterSelect($event, dataItem, workCentersIndex)"
+[kendoGridSelectionCheckbox]="workCenterIndex"> -->
+                                                                <input type="checkbox" (change)="workCenterSelect($event, dataItem, workCentersIndex)"
+                                                                       id="SingleWCSelection" [checked]="dataItem.SingleWCSelection" name="SingleWCSelection">
+                                                                <span class="checkbox"></span>
+                                                            </label>
+                                                        </ng-template>
+                                                    </kendo-grid-checkbox-column>
+                                                    <kendo-grid-column field="WorkCenterCode" title="Work Center"></kendo-grid-column>
+                                                </kendo-grid>
+                                            </ng-template>
+                                            <kendo-grid-excel fileName="Warehouse-info.xlsx"></kendo-grid-excel>
                                         </kendo-grid>
-                                    </ng-template>
-                                    <kendo-grid-excel fileName="Warehouse-info.xlsx"></kendo-grid-excel>
-                                </kendo-grid>
-    
+            
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-    
+                        </kendo-splitter-pane>
+
+                    </kendo-splitter>
+                </div>    
                 <!-- user detail save/cancel option -->
                 <div class="sticky-bottom-toolbar d-flex align-items-center justify-content-start border-top pt-2">
                     <button class="btn btn-primary btn-sm d-flex align-items-center mr-2" type="button" *ngIf="addscreenmode == 'edit'" (click)="saveRecord('edit')">
@@ -391,66 +389,42 @@
                 </div>
             </div>
         </form>           
-        </div>
-    <!-- </div> -->
-    
-    <!-- Confirmation Dialouge -->
-    
-    <kendo-dialog *ngIf="confirmationOpened" (close)="confirmationToggle()" [minWidth]="250" [width]="450">
-        <kendo-dialog-titlebar>
-            <div> {{'Please_Confirm'|translate}}</div>
-        </kendo-dialog-titlebar>
-        <div class="">{{'Do_you_want_to_delete_record'|translate}}</div>
-        <kendo-dialog-actions class="p-2 align-items-start justify-content-end">
-            <button class="btn btn-success btn-sm d-flex align-items-center mr-2" type="button" (click)="userRefrenceCheck('delete')">{{'Yes'|translate}}</button>
-            <button class="btn btn-danger btn-sm d-flex align-items-center" type="button" (click)="confirmationToggle()">{{'No'|translate}}</button>
-        </kendo-dialog-actions>
-    </kendo-dialog>
-    
-    <!-- Confirmation Dialouge at the time of edit -->
+    </div>
+</div>
 
-<!-- <kendo-dialog *ngIf="confirmationOpenedEdit" (close)="confirmationEditToggle()" [minWidth]="250" [width]="450">
+<!-- Confirmation Dialouge -->
+
+<kendo-dialog *ngIf="confirmationOpened" (close)="confirmationToggle()" [minWidth]="250" [width]="450">
+    <kendo-dialog-titlebar>
+        <div> {{'Please_Confirm'|translate}}</div>
+    </kendo-dialog-titlebar>
+    <div class="">{{'Do_you_want_to_delete_record'|translate}}</div>
+    <kendo-dialog-actions class="p-2 align-items-start justify-content-end">
+        <button class="btn btn-success btn-sm d-flex align-items-center mr-2" type="button" (click)="userRefrenceCheck('delete')">{{'Yes'|translate}}</button>
+        <button class="btn btn-danger btn-sm d-flex align-items-center" type="button" (click)="confirmationToggle()">{{'No'|translate}}</button>
+    </kendo-dialog-actions>
+</kendo-dialog>
+
+
+<kendo-dialog *ngIf="confirmationOpenedEdit" (close)="confirmationEditToggle()" [minWidth]="250" [width]="450">
         <kendo-dialog-titlebar>
             <div> {{'Please_Confirm'|translate}}</div>
         </kendo-dialog-titlebar>
         <div class="">
+            <!-- {{'Do_you_want_to_delete_record'|translate}} -->
            
             {{'UsrMgtDataLostErrMsg'|translate}}
+            
         </div>
-        <kendo-dialog-actions class="p-2 align-items-start justify-content-start">
+        <kendo-dialog-actions class="p-2 align-items-start justify-content-end">
             <button class="btn btn-success btn-sm d-flex align-items-center mr-2" id='btnCancelEdit' type="button" 
-            (click)="userRefrenceCheck('edit')">  > 
-                <svg viewBox="0 0 55.25 55.25" class="icon mr-2">
-                    <use xlink:href="#edit"></use>
-                </svg> {{'Yes'|translate}}
-            </button>  
-            <button class="btn btn-danger btn-sm ml-auto d-flex align-items-center" type="button"
-            (click)="cancel()" >
-                <svg viewBox="0 0 512 512" class="icon mr-2">
-                    <use xlink:href="#saveDisk"></use>
-                </svg> {{'No'|translate}}
+            (click)="saveRecord('edit')">{{'Yes'|translate}}</button>           
+    
+    
+            <button class="btn btn-danger btn-sm d-flex align-items-center" type="button"
+            (click)="cancel()">{{'No'|translate}}
             </button>
         </kendo-dialog-actions>
-    </kendo-dialog> -->
-    <kendo-dialog *ngIf="confirmationOpenedEdit" (close)="confirmationEditToggle()" [minWidth]="250" [width]="450">
-            <kendo-dialog-titlebar>
-                <div> {{'Please_Confirm'|translate}}</div>
-            </kendo-dialog-titlebar>
-            <div class="">
-                <!-- {{'Do_you_want_to_delete_record'|translate}} -->
-               
-                {{'UsrMgtDataLostErrMsg'|translate}}
-                
-            </div>
-            <kendo-dialog-actions class="p-2 align-items-start justify-content-end">
-                <button class="btn btn-success btn-sm d-flex align-items-center mr-2" id='btnCancelEdit' type="button" 
-                (click)="saveRecord('edit')">{{'Yes'|translate}}</button>           
-        
-        
-                <button class="btn btn-danger btn-sm d-flex align-items-center" type="button"
-                (click)="cancel()">{{'No'|translate}}
-                </button>
-            </kendo-dialog-actions>
-        </kendo-dialog>
+    </kendo-dialog>
 
-    <div *ngIf="Loading" class="k-i-loading"></div>
+<div *ngIf="Loading" class="k-i-loading"></div>

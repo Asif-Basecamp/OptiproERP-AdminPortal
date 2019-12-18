@@ -71,7 +71,7 @@ export class ConnectedUsersComponent implements OnInit {
       },    
       error => { 
         if(error.error != null && error.error != undefined){
-          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          if(error.error == "401"){
             this.commonService.unauthorizedToken(error);               
           }
         }
@@ -138,7 +138,7 @@ export class ConnectedUsersComponent implements OnInit {
       },    
       error => {  
         if(error.error != null && error.error != undefined){
-          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          if(error.error == "401"){
             this.commonService.unauthorizedToken(error);               
           }
         }
@@ -161,7 +161,7 @@ export class ConnectedUsersComponent implements OnInit {
       },    
       error => {  
         if(error.error != null && error.error != undefined){
-          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          if(error.error == "401"){
             this.commonService.unauthorizedToken(error);               
           }
         }

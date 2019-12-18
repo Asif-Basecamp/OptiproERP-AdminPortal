@@ -7,13 +7,13 @@ import { MessageService } from '../common/message.service';
 })
 export class CommonService {
 
-  public authTokenstr:string = "The remote server returned an error: (401) Unauthorized.";
+  public authTokenstr:string = "401";
 
   constructor(private MessageService: MessageService,private router: Router) { }
 
   public unauthorizedToken(Error){
-    this.MessageService.errormessage(Error.error.ExceptionMessage);
-    if(Error.error.ExceptionMessage == this.authTokenstr ){
+    this.MessageService.errormessage("Unauthorized Access");
+    if(Error.error == this.authTokenstr ){
       localStorage.removeItem('admin_user');
       localStorage.removeItem('access_token');
       localStorage.removeItem('token_type');

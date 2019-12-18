@@ -109,8 +109,8 @@ export class UserManagementComponent implements OnInit {
     this.SubmitSave.WorkCenter = [];
     this.SubmitSave.Values = [];
     this.SubmitSave.PreviousUserId = [];
-    this.EmpID=[]
-    this.BPID=''
+    this.EmpID='';
+    this.BPID='';
     this.tenant='';
     
     this.ddlUserType=[];
@@ -151,7 +151,7 @@ export class UserManagementComponent implements OnInit {
       error => { 
         this.Loading = false;  
         if(error.error != null && error.error != undefined){
-          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          if(error.error == "401"){
             this.commonService.unauthorizedToken(error);               
           }
          }
@@ -242,7 +242,7 @@ export class UserManagementComponent implements OnInit {
         //this.Loading = false;
         this.MessageService.errormessage(error.message); 
         if(error.error != null && error.error != undefined){
-          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          if(error.error == "401"){
             this.commonService.unauthorizedToken(error);               
           }
          }
@@ -266,7 +266,8 @@ export class UserManagementComponent implements OnInit {
           
           for(let i=0; i <employeedata.length; i++)
               {
-                this.employeeData[i]["MergrEmpName"] = employeedata[i].firstName+'   '+employeedata[i].empID;
+                //this.employeeData[i]["MergrEmpName"] = employeedata[i].firstName+'   '+employeedata[i].empID;
+                this.employeeData[i]["MergrEmpName"] =employeedata[i].empID +'   '+employeedata[i].firstName;
               }
           var findex =this.company_data.findIndex(function (x) { return x.dbName == DatabaseName });
           //data.CompanyList[i]["UserType"] = this.ddlUserType;
@@ -276,7 +277,7 @@ export class UserManagementComponent implements OnInit {
           //this.MessageService.errormessage(error.message);
           this.Loading=false;
           if(error.error != null && error.error != undefined){
-            if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            if(error.error == "401"){
               this.commonService.unauthorizedToken(error);               
             }
            }
@@ -308,7 +309,7 @@ export class UserManagementComponent implements OnInit {
         //this.MessageService.errormessage(error.message);
         this.Loading=false;
         if(error.error != null && error.error != undefined){
-          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          if(error.error == "401"){
             this.commonService.unauthorizedToken(error);               
           }
          }
@@ -439,7 +440,7 @@ export class UserManagementComponent implements OnInit {
         this.Loading=false;
         if(error.error != null && error.error != undefined){
           this.Loading=false;
-          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          if(error.error == "401"){
             this.commonService.unauthorizedToken(error);               
           }
          }
@@ -456,7 +457,7 @@ export class UserManagementComponent implements OnInit {
         //this.MessageService.errormessage(error.message);
         this.Loading=false;
         if(error.error != null && error.error != undefined){
-          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          if(error.error == "401"){
             this.commonService.unauthorizedToken(error);               
           }
          }
@@ -477,7 +478,7 @@ export class UserManagementComponent implements OnInit {
           //if(element.dbName === element2.OPTM_COMPID){
             if(this.ShowDBName === element2.OPTM_COMPID){
             if(WHData.OPTM_WHSE === element2.OPTM_WHSE){
-              debugger
+            
               this.SubmitSave.Warehouse.push({Company: element2.OPTM_COMPID, Id: element2.OPTM_WHSE, 
                 EmployeeId: element2.OPTM_EMPID, 
                 WHIndex: WHIndex,  bussPart:element2.OPTM_BPCODE});
@@ -504,9 +505,10 @@ export class UserManagementComponent implements OnInit {
       if(this.editUserData.length>0){
         //this.company_data.forEach((element, index) => {
           this.editUserData.forEach((element2, index2) => {
+          
             //if(element.dbName === element2.OPTM_COMPID){
               if(this.ShowDBName === element2.OPTM_COMPID){
-              if(WCData.WorkCenterCode === element2.OPTM_WORKCENTER){
+              if(WCData.WorkCenterCode === element2.OPTM_WORKCENTER && element2.OPTM_WHSE != ""){
                   this.SubmitSave.WorkCenter.push({Company:  element2.OPTM_COMPID, EmployeeId: element2.OPTM_EMPID, 
                     productCode: element2.OPTM_OPTIADDON, WorkCenterCode: element2.OPTM_WORKCENTER, WCIndex: WCIndex, 
                    bussPart:element2.OPTM_BPCODE});
@@ -534,10 +536,14 @@ export class UserManagementComponent implements OnInit {
       if(e.dataItem.BPCode){
          this.BPID=e.dataItem.selectedBP.CardCode;
       }
-      if(e.dataItem.selectedEmployeeType){
+      else {
         this.dbClickEmployeeName = e.dataItem.selectedEmployeeType.empID;
         this.EmpID = e.dataItem.selectedEmployeeType.empID;
       }
+      // if(e.dataItem.selectedEmployeeType){
+      //   this.dbClickEmployeeName = e.dataItem.selectedEmployeeType.empID;
+      //   this.EmpID = e.dataItem.selectedEmployeeType.empID;
+      // }
      if(this.IsEditMode===false)this.CheckIfProductIsChecked(e)
       this.FillDDlWarehouse(e.dataItem.dbName, e.rowIndex);
   } 
@@ -674,13 +680,18 @@ export class UserManagementComponent implements OnInit {
           ISWHEnable: FilterTmpProduct[0].OPTM_ISWHSEENABLED, ISWCEnable:FilterTmpProduct[0].OPTM_ISWRKCENTERENABLED,
           Company:this.dbName });
     }else{
-      let whatIndexTwo = null;
-      this.SubmitSave.Product.forEach((value, index) => {
-        if(value.productCode == product){
-            whatIndexTwo = index;
-        }
-      }); 
-      this.SubmitSave.Product.splice(whatIndexTwo, 1);    
+      // let whatIndexTwo = null;
+      // this.SubmitSave.Product.forEach((value, index) => {
+      //   if(value.productCode === product && value.Company===this.dbName){
+      //       whatIndexTwo = index;
+      //   }
+      // }); 
+      let Database=this.dbName;
+      var findex =this.SubmitSave.Product.findIndex(function (x) 
+        { 
+          return x.productCode === product && x.Company==Database
+        });
+      this.SubmitSave.Product.splice(findex, 1);    
     }
 
     // this.SubmitSave.Company.forEach((c, cindex) => {
@@ -706,6 +717,7 @@ export class UserManagementComponent implements OnInit {
     let array = [];
      for(let i=0; i <this.SubmitSave.Product.length; i++ )
         {
+          if(this.dbName===this.SubmitSave.Product[i].Company)
           array.push( this.SubmitSave.Product[i].productCode );
         }
       // this.SubmitSave.Product.forEach((value, index) => {
@@ -887,8 +899,9 @@ export class UserManagementComponent implements OnInit {
            
           if(event.target.checked === true){
             this.WCCode = workCenterData.WorkCenterCode;
+            workCenterData.Warehouse
                 this.SubmitSave.WorkCenter.push({Company: this.dbName, EmployeeId: this.EmpID, 
-                  productCode: this.dbClickProductName, WorkCenterCode: this.WCCode, WCIndex: workCenterIndex, 
+                  productCode: this.dbClickProductName,Warehouse:workCenterData.Warehouse ,WorkCenterCode: this.WCCode, WCIndex: workCenterIndex, 
                   bussPart: this.BPID});
           }else{
             let whatIndex4 = null;
@@ -910,7 +923,7 @@ export class UserManagementComponent implements OnInit {
   }
 
   onChangeEmployeeId(e, db, index){
-    
+    this.EmpID=e.empID;
     if(this.IsEditMode)this.IsUpdateForCheck=true;
     this.company_data[index]["selectedEmployeeType"] = e;
     this.SubmitSave.EmployeeId.push({Company: db, 
@@ -941,7 +954,10 @@ export class UserManagementComponent implements OnInit {
         }
       }
       else {
-        this.MessageService.errormessage(this.translate.instant('UserMgmtSomethimgWntWrngMsg'));
+        this.MessageService.errormessage(this.translate.instant('UserMgmtProductSelectMsg'));
+        this.FlagProduct=false;
+        this.IsValidate=false;
+        return;
       }
           
       if(this.SubmitSave.Product.length>0)
@@ -954,7 +970,7 @@ export class UserManagementComponent implements OnInit {
                     this.FlagProduct=true;
                   }
                   else {
-                    this.MessageService.errormessage(this.translate.instant('UserMgmtProductSelectMsg')+' '+c.company);
+                    this.MessageService.errormessage(this.translate.instant('UserMgmtProductSelectMsg'));
                     this.FlagProduct=false;
                     this.IsValidate=false;
                     return;
@@ -969,25 +985,11 @@ export class UserManagementComponent implements OnInit {
             }
             elemntProduct="";
       }
-  // EmployeeValidation()
-  //   {
-      
-  //     this.FlagEmployee=true;
-  //     for(let i=0; i <this.SubmitSave.Product.length; i++)
-  //        {
-  //          if(this.SubmitSave.Product[i].EmployeeId==='' && this.SubmitSave.Product[i].bussPart==='' || this.SubmitSave.Product[i].EmployeeId===undefined)
-  //            {
-  //             this.MessageService.errormessage(this.translate.instant('EmployeeAndBPValidationmsg'));
-  //             this.FlagEmployee=false;
-  //             this.IsValidate=false;
-  //             return;
-  //            }
-  //        }
-  //   }    
+  
 
   Validation()
    {
-     debugger
+     
     this.IsValidate=true;
     let elmnt="";
     let elmntWorkCenter="";
@@ -1017,23 +1019,35 @@ export class UserManagementComponent implements OnInit {
 
                if(p.ISWCEnable==="Y")
                 {
-                for(let i=0; i <this.SubmitSave.WorkCenter.length; i ++)
-                {
-                  if(this.SubmitSave.WorkCenter[i].Company===c.Company && this.SubmitSave.WorkCenter[i].WorkCenterCode ==="")
-                     {
-                      this.MessageService.errormessage(this.translate.instant('UserMgmtWorkcenterSelectMsg')+' '+c.Company);
-                      this.FlagWC=false;
-                      this.IsValidate=false;
-                      return;
-                     }
-                }
-              //     var filterWorkcenterValidation = this.SubmitSave.WorkCenter.filter(function (el) {
-              //       return el.Company == c.Company && el.WorkCenterCode ==='' && p.Company===el.Company;
-              //   });
-              //  if(filterWorkcenterValidation.length===0)
-              //       {
-                     
-              //       }
+                  
+                    if(this.SubmitSave.WorkCenter.length>0)
+                       {
+                        var filterWCRow = this.SubmitSave.WorkCenter.filter(function (el) {
+                          return el.Company === p.Company && el.WorkCenterCode !="";
+                      });
+                      if(filterWCRow.length===0)
+                           {
+                            this.MessageService.errormessage(this.translate.instant('UserMgmtWorkcenterSelectMsg')+' '+c.Company);
+                            this.FlagWC=false;
+                            this.IsValidate=false;
+                            return;
+                           }
+                       }
+                       else{
+                        this.MessageService.errormessage(this.translate.instant('UserMgmtWorkcenterSelectMsg')+' '+c.Company);
+                        this.FlagWC=false;
+                        this.IsValidate=false;
+                        return;
+                       }
+
+                // for(let i=0; i <this.SubmitSave.WorkCenter.length; i ++)
+                //     {
+                //       if(this.SubmitSave.WorkCenter[i].Company===c.Company 
+                //         && this.SubmitSave.WorkCenter[i].WorkCenterCode ==="" && p.Company !="")
+                //         {
+                          
+                //         }
+                //     }
                 
                     }
                   }
@@ -1261,8 +1275,10 @@ export class UserManagementComponent implements OnInit {
         }
     
     
-    if(this.FlagWC===true && this.FlagWH===true && this.FlagProduct===true && this.FlagEmployee===true) 
+    if(this.FlagWC===true && this.FlagWH===true && this.FlagProduct===true) 
       {
+        this.SubmitSave.Values=[];
+        this.SubmitSave.PreviousUserId=[];
         this.SubmitSave.Values.push({
           UserId: this.user_id,
           Username: this.user_name,
@@ -1281,7 +1297,7 @@ export class UserManagementComponent implements OnInit {
       }
       else {
 
-        this.MessageService.errormessage(this.translate.instant('UserMgmtCheckSelectionMsg'));
+        //this.MessageService.errormessage(this.translate.instant('UserMgmtCheckSelectionMsg'));
         return;
       }
     this.Loading = false; 
@@ -1308,7 +1324,7 @@ export class UserManagementComponent implements OnInit {
             this.Loading = false; 
             //this.MessageService.errormessage(error.message);
             if(error.error != null && error.error != undefined){
-              if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+              if(error.error == "401"){
                 this.commonService.unauthorizedToken(error);               
               }
              }
@@ -1336,7 +1352,7 @@ export class UserManagementComponent implements OnInit {
             this.Loading = false;   
             //this.MessageService.errormessage(error.message);
             if(error.error != null && error.error != undefined){
-              if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+              if(error.error == "401"){
                 this.commonService.unauthorizedToken(error);               
               }
              }
@@ -1380,7 +1396,7 @@ export class UserManagementComponent implements OnInit {
     this.SubmitSave.WorkCenter = [];
     this.SubmitSave.Values = [];
     this.SubmitSave.PreviousUserId = [];
-    this.EmpID=[]
+    this.EmpID='';
      this.Loading=true;
     this.UserManagementService.getEditDetail(userId).subscribe(    
       data => { 
@@ -1447,7 +1463,7 @@ export class UserManagementComponent implements OnInit {
             {
               for(let i=0; i <employeedata.length; i++)
               {
-                this.employeeData[i]["MergrEmpName"] = employeedata[i].firstName+'   '+employeedata[i].empID;
+                this.employeeData[i]["MergrEmpName"] = employeedata[i].empID+'    '+employeedata[i].firstName;
               }
               this.company_data[index]["Employee"] = employeedata;
               empID = this.company_data[index].Employee.filter(function (el) {
@@ -1555,7 +1571,7 @@ export class UserManagementComponent implements OnInit {
           //this.MessageService.errormessage(error.message); 
           this.Loading=false;
           if(error.error != null && error.error != undefined){
-            if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            if(error.error == "401"){
               this.commonService.unauthorizedToken(error);               
             }
            }
@@ -1570,7 +1586,7 @@ export class UserManagementComponent implements OnInit {
     }, error => {
       this.Loading = false;    
       if(error.error != null && error.error != undefined){
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+        if(error.error == "401"){
           this.commonService.unauthorizedToken(error);               
         }
        }
@@ -1600,7 +1616,7 @@ export class UserManagementComponent implements OnInit {
           //this.MessageService.errormessage(error.message); 
           this.Loading=false;
           if(error.error != null && error.error != undefined){
-            if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            if(error.error == "401"){
               this.commonService.unauthorizedToken(error);               
             }
            }
@@ -1633,7 +1649,7 @@ export class UserManagementComponent implements OnInit {
         //console.log('e')
         this.Loading=false;
         if(error.error != null && error.error != undefined){
-          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          if(error.error == "401"){
             this.commonService.unauthorizedToken(error);               
           }
          }
@@ -1658,7 +1674,7 @@ export class UserManagementComponent implements OnInit {
         this.Loading = false;  
         //this.MessageService.errormessage(error.message); 
         if(error.error != null && error.error != undefined){
-          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          if(error.error == "401"){
             this.commonService.unauthorizedToken(error);               
           }
          }
@@ -1685,7 +1701,7 @@ export class UserManagementComponent implements OnInit {
         //this.MessageService.errormessage(error.message); 
         this.Loading=false;
         if(error.error != null && error.error != undefined){
-          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          if(error.error == "401"){
             this.commonService.unauthorizedToken(error);               
           }
          }

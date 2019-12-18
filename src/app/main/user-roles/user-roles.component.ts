@@ -180,7 +180,7 @@ export class UserRolesComponent implements OnInit {
   },    
   error => {  
     if(error.error != null && error.error != undefined){
-      if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+      if(error.error == "401"){
         this.commonService.unauthorizedToken(error);               
       }
      }
@@ -235,7 +235,7 @@ export class UserRolesComponent implements OnInit {
       },    
       error => {  
         if(error.error != null && error.error != undefined){
-          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          if(error.error == "401"){
             this.commonService.unauthorizedToken(error);               
           }
          }
@@ -384,11 +384,13 @@ export class UserRolesComponent implements OnInit {
           }    
         },    
         error => { 
-          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-            this.commonService.unauthorizedToken(error);               
-          }
-          else{ 
-            this.MessageService.errormessage(error.message);  
+          if(error.error != null && error.error != undefined){
+            if(error.error == "401"){
+              this.commonService.unauthorizedToken(error);               
+            }
+           }
+          else{
+            this.MessageService.errormessage(error.message);
           }
         });
     }
@@ -601,7 +603,7 @@ export class UserRolesComponent implements OnInit {
       },
       error => {
         if(error.error != null && error.error != undefined){
-          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          if(error.error == "401"){
             this.commonService.unauthorizedToken(error);               
           }
          }
@@ -686,7 +688,7 @@ export class UserRolesComponent implements OnInit {
       error => {
         this.Loading=false;
         if(error.error != null && error.error != undefined){
-          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          if(error.error == "401"){
             this.commonService.unauthorizedToken(error);               
           }         
         }
@@ -724,7 +726,7 @@ export class UserRolesComponent implements OnInit {
           },
           error => {
            if(error.error != null && error.error != undefined){
-            if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            if(error.error == "401"){
               this.commonService.unauthorizedToken(error);               
             }
            }
@@ -928,7 +930,7 @@ export class UserRolesComponent implements OnInit {
       error => {
         this.Loading=false;
         if(error.error != null && error.error != undefined){
-          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          if(error.error == "401"){
             this.commonService.unauthorizedToken(error);               
           }
          }
@@ -958,7 +960,7 @@ export class UserRolesComponent implements OnInit {
       error => {
         this.Loading=false;
         if(error.error != null && error.error != undefined){
-          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          if(error.error == "401"){
             this.commonService.unauthorizedToken(error);               
           }
          }
