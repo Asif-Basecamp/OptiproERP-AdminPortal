@@ -363,95 +363,89 @@ export class UserManagementComponent implements OnInit {
   /*-- get warehouse and workcenter list --*/
   FillDDlWarehouse(dbName, index){
     //this.WH_WC_Data=[];
-    this.Loading = true;
+    //this.Loading = true;
     this.gridRefresh = false;
     let TmpDbName='';
     let tempIndx;
     this.UserManagementService.FillDDlWarehouse(dbName, '').subscribe(
       warehousedata => {
-        for(let i=0;i<warehousedata.Table.length; i++){
-          warehousedata.Table[i]["uniqueId"] = index+''+i;
-          warehousedata.Table[i]["SingleWHSelection"] = false;
-              TmpDbName=this.dbName;
-              if(this.SubmitSave.Warehouse.length>0)
-                {
-                  let TmpWHId='';
-                  for(let m=0; m <this.SubmitSave.Warehouse.length; m++)
-                    {
-                      TmpWHId=this.SubmitSave.Warehouse[m].Id;
-                      if(this.SubmitSave.Warehouse[m].Company===TmpDbName 
-                        && warehousedata.Table[i].OPTM_WHSE===this.SubmitSave.Warehouse[m].Id)
-                         {
-                          warehousedata.Table[i].SingleWHSelection=true;
-                         }
-                    }
+        if(warehousedata !=null && warehousedata !='')
+             {
+              for(let i=0;i<warehousedata.Table.length; i++){
+                warehousedata.Table[i]["uniqueId"] = index+''+i;
+                warehousedata.Table[i]["SingleWHSelection"] = false;
+                    TmpDbName=this.dbName;
+                    if(this.SubmitSave.Warehouse.length>0)
+                      {
+                        let TmpWHId='';
+                        for(let m=0; m <this.SubmitSave.Warehouse.length; m++)
+                          {
+                            TmpWHId=this.SubmitSave.Warehouse[m].Id;
+                            if(this.SubmitSave.Warehouse[m].Company===TmpDbName 
+                              && warehousedata.Table[i].OPTM_WHSE===this.SubmitSave.Warehouse[m].Id)
+                               {
+                                warehousedata.Table[i].SingleWHSelection=true;
+                               }
+                          }
+                      }
+                 // }
+                
+                 this.WHGetSelectiondata(warehousedata.Table[i], i); 
+                this.UserManagementService.FillDDlWorkCenter(dbName, warehousedata.Table[i].OPTM_WHSE).subscribe(
+                  WorkCenterdata => {
+                    this.Loading = false;
+                    warehousedata.Table[i]["workcenter"] = WorkCenterdata;
+                   //this.delay(5000).then(any=>{
+                     if(warehousedata.Table[i].workcenter !=null && warehousedata.Table[i].workcenter !=undefined)
+                       {
+                        if(warehousedata.Table[i].workcenter.length>0){
+                          for (let j = 0; j < warehousedata.Table[i].workcenter.length; j++) {      
+                            warehousedata.Table[i].workcenter[j]["uniqueId"] = dbName+''+i+''+j;
+                            warehousedata.Table[i].workcenter[j]["SingleWCSelection"] = false;
+                           let tempdb='';
+                           tempdb=this.dbName;
+                           var TempWCFilter;
+                              if(this.SubmitSave.WorkCenter.length>0)
+                              {
+                                 TempWCFilter = this.SubmitSave.WorkCenter.filter(function (el) {
+                                  return el.Company == tempdb && el.Warehouse===warehousedata.Table[i].OPTM_WHSE
+                                     && el.WorkCenterCode===warehousedata.Table[i].workcenter[j].WorkCenterCode;
+                              });
+                            if( TempWCFilter.length>0)
+                              {
+                                
+                                warehousedata.Table[i].SingleWHSelection=true;
+                                warehousedata.Table[i].workcenter[j]["SingleWCSelection"] = true;
+                              }
+                               
+                              }
+                             
+                            this.WCGetSelectiondata(warehousedata.Table[i].workcenter[j], i);      
+                           }
+                        }
+                       }
+                  },
+                 
+            error => {    
+              //this.MessageService.errormessage(error.message);
+              this.Loading=false;
+              if(error.error != null && error.error != undefined){
+                this.Loading=false;
+                if(error.error == "401"){
+                  this.commonService.unauthorizedToken(error);               
                 }
-           // }
-          
-           this.WHGetSelectiondata(warehousedata.Table[i], i); 
-          this.UserManagementService.FillDDlWorkCenter(dbName, warehousedata.Table[i].OPTM_WHSE).subscribe(
-            WorkCenterdata => {
-              this.Loading = false;
-              warehousedata.Table[i]["workcenter"] = WorkCenterdata;
-             //this.delay(5000).then(any=>{
-               if(warehousedata.Table[i].workcenter !=null && warehousedata.Table[i].workcenter !=undefined)
-                 {
-                  if(warehousedata.Table[i].workcenter.length>0){
-                    for (let j = 0; j < warehousedata.Table[i].workcenter.length; j++) {      
-                      warehousedata.Table[i].workcenter[j]["uniqueId"] = dbName+''+i+''+j;
-                      warehousedata.Table[i].workcenter[j]["SingleWCSelection"] = false;
-                     let tempdb='';
-                     tempdb=this.dbName;
-                     var TempWCFilter;
-                        if(this.SubmitSave.WorkCenter.length>0)
-                        {
-                           TempWCFilter = this.SubmitSave.WorkCenter.filter(function (el) {
-                            return el.Company == tempdb && el.Warehouse===warehousedata.Table[i].OPTM_WHSE
-                               && el.WorkCenterCode===warehousedata.Table[i].workcenter[j].WorkCenterCode;
-                        });
-                      if( TempWCFilter.length>0)
-                        {
-                          
-                          warehousedata.Table[i].SingleWHSelection=true;
-                          warehousedata.Table[i].workcenter[j]["SingleWCSelection"] = true;
-                        }
-                          // for(let k = 0; k <this.SubmitSave.WorkCenter.length; k++)
-                          //   {
-                          //     if(this.SubmitSave.WorkCenter[k].Warehouse !='')
-                          //        {
-                          //         if(warehousedata.Table[i].workcenter[j].Warehouse===this.SubmitSave.WorkCenter[k].Warehouse
-                          //           && this.SubmitSave.WorkCenter[k].Company===this.dbName && this.SubmitSave.WorkCenter[k].WorkCenterCode !="")
-                          //         {
-                          //           warehousedata.Table[i].workcenter[j]["SingleWCSelection"] = true;
-                          //         }
-                          //        }
-                              
-                          //   }
-                        }
-                       
-                      this.WCGetSelectiondata(warehousedata.Table[i].workcenter[j], i);      
-                     }
-                  }
-                 }
-            },
-           
-      error => {    
-        //this.MessageService.errormessage(error.message);
-        this.Loading=false;
-        if(error.error != null && error.error != undefined){
-          this.Loading=false;
-          if(error.error == "401"){
-            this.commonService.unauthorizedToken(error);               
-          }
-         }
-        else{
-          this.Loading=false;
-          this.MessageService.errormessage(error.message);
-        }
-      });  
-          }
+               }
+              else{
+                this.Loading=false;
+                this.MessageService.errormessage(error.message);
+              }
+            });  
+                }
+                this.WH_WC_Data = warehousedata.Table;
+             }
+        
          
-        this.WH_WC_Data = warehousedata.Table;
+       
       },
       error => {    
         //this.MessageService.errormessage(error.message);

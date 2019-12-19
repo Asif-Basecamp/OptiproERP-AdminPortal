@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { MessageService } from '../common/message.service';
-
+import { TranslateService } from '@ngx-translate/core';
 @Injectable({
   providedIn: 'root'
 })
@@ -9,10 +9,11 @@ export class CommonService {
 
   public authTokenstr:string = "401";
 
-  constructor(private MessageService: MessageService,private router: Router) { }
+  constructor(private translate: TranslateService, private MessageService: MessageService,private router: Router) { }
 
   public unauthorizedToken(Error){
-    this.MessageService.errormessage("Unauthorized Access");
+  
+    this.MessageService.errormessage(this.translate.instant('AuthorizationFailed'));
     if(Error.error == this.authTokenstr ){
       localStorage.removeItem('admin_user');
       localStorage.removeItem('access_token');

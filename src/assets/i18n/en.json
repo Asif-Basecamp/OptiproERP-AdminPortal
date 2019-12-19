@@ -100,6 +100,7 @@
    "RecordDelete":"Record Deleted",
    "DisableUpdatePermission":"You cannot update this record.",
    "Unauthorized":"Unauthorized",
+   "AuthorizationFailed":"Authorization Failed",
 
    "UserMgmtInsertSuccessMsg":"Record Created",
    "UserMgmtUpdateSuccessMsg":"Record Updated",
