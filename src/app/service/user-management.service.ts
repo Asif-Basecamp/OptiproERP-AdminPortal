@@ -6,10 +6,12 @@ import {HttpHeaders} from '@angular/common/http';
   providedIn: 'root'
 })
 export class UserManagementService {
-  Url :string;  
+ // Url :string;  
   token : string;  
   header : any; 
-  constructor(private http : HttpClient) { this.Url= localStorage.getItem('arrConfigData');}
+  constructor(private http : HttpClient) { 
+    //this.Url= localStorage.getItem('arrConfigData');
+  }
 
 FillCompNGrpNSAPUsrNProd()
     { 
@@ -17,10 +19,12 @@ FillCompNGrpNSAPUsrNProd()
         'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
       };  
       this.header = new HttpHeaders(headerSettings); 
-      return this.http.get<any>(this.Url+'/api/UserManagement/GetCompNGrpNSAPUsrNProd',{ headers: this.header});
+      let url=localStorage.getItem('arrConfigData');
+      return this.http.get<any>(url+'/api/UserManagement/GetCompNGrpNSAPUsrNProd',{ headers: this.header});
     }
 FillDDlEmployee(selDataBase:string,BPCode:string)
     { 
+      let url=localStorage.getItem('arrConfigData');
       const headerSettings: {[name: string]: string | string[]; } = {
         'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
       };  
@@ -28,7 +32,7 @@ FillDDlEmployee(selDataBase:string,BPCode:string)
      if(BPCode==='' || BPCode===null || BPCode===undefined)
        {
         var jObject = { CompanyName: JSON.stringify([{ CompanyDBId: selDataBase }]) };
-        return this.http.post<any>(this.Url+'/api/UserManagement/GetEmployee',jObject,{ headers: this.header})
+        return this.http.post<any>(url+'/api/UserManagement/GetEmployee',jObject,{ headers: this.header})
        }
        else {
         if(BPCode==="V")
@@ -36,32 +40,17 @@ FillDDlEmployee(selDataBase:string,BPCode:string)
           BPCode="S"
         }
       var jObject = { CompanyName: JSON.stringify([{ CompanyDBId: selDataBase , bpType: BPCode}]) };
-      return this.http.post<any>(this.Url+'/api/UserManagement/GetBusinessPartner',jObject,{ headers: this.header})
+      return this.http.post<any>(url+'/api/UserManagement/GetBusinessPartner',jObject,{ headers: this.header})
        }
-
-      
     }
-    
-  // FillBusinessPartnerData(selDataBase:string,BPCode:string)
-  //   { 
-  //     const headerSettings: {[name: string]: string | string[]; } = {
-  //       'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
-  //     };  
-  //     this.header = new HttpHeaders(headerSettings); 
-  //     if(BPCode==="V")
-  //       {
-  //         BPCode="S"
-  //       }
-  //     var jObject = { CompanyName: JSON.stringify([{ CompanyDBId: selDataBase , bpType: BPCode}]) };
-  //     return this.http.post<any>(this.Url+'/api/UserManagement/GetBusinessPartner',jObject,{ headers: this.header})
-  //   }
 FillGridData()
     { 
       const headerSettings: {[name: string]: string | string[]; } = {
         'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
       };  
       this.header = new HttpHeaders(headerSettings); 
-      return this.http.get<any>(this.Url+'/api/UserManagement/UserDetail',{ headers: this.header});
+      let url=localStorage.getItem('arrConfigData');
+      return this.http.get<any>(url+'/api/UserManagement/UserDetail',{ headers: this.header});
     }
    
     FillFridOnDropdownSelectedIndexChanged(model : any)
@@ -72,8 +61,8 @@ FillGridData()
       };  
       this.header = new HttpHeaders(headerSettings); 
       var jObject = { RoleDetails: JSON.stringify([{ Product: model.Product}]) };
-       
-    return this.http.post<any>(this.Url+'/api/DefineRole/GetOperationalMenuList',jObject,{ headers: this.header});
+      let url=localStorage.getItem('arrConfigData');
+    return this.http.post<any>(url+'/api/DefineRole/GetOperationalMenuList',jObject,{ headers: this.header});
     }
     AddUserRole(model : any,SelectedRowData :string[]=[])
     {
@@ -90,7 +79,8 @@ FillGridData()
         'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
       };  
       this.header = new HttpHeaders(headerSettings); 
-      return this.http.post<any>(this.Url+'/api/DefineRole/OnAddPress',jObject,{ headers: this.header});
+      let url=localStorage.getItem('arrConfigData');
+      return this.http.post<any>(url+'/api/DefineRole/OnAddPress',jObject,{ headers: this.header});
     }
 
     UpdateUserRole(model : any,SelectedRowData :string[]=[])
@@ -108,7 +98,8 @@ FillGridData()
         'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
       };  
       this.header = new HttpHeaders(headerSettings); 
-      return this.http.post<any>(this.Url+'/api/DefineRole/OnUpdatePress',jObject,{ headers: this.header});
+      let url=localStorage.getItem('arrConfigData');
+      return this.http.post<any>(url+'/api/DefineRole/OnUpdatePress',jObject,{ headers: this.header});
     }
     
     CheckDuplicateUserGroup(UserId :string)
@@ -119,7 +110,8 @@ FillGridData()
      
       this.header = new HttpHeaders(headerSettings);   
         var jObject = { UserDetails: JSON.stringify([{ UserId:UserId}]) };
-       return this.http.post<any>(this.Url+'/api/UserManagement/CheckDuplicity',jObject,{ headers: this.header});
+        let url=localStorage.getItem('arrConfigData');
+       return this.http.post<any>(url+'/api/UserManagement/CheckDuplicity',jObject,{ headers: this.header});
     }
     GetDataByRoleId(RoleId :string)
     {
@@ -128,7 +120,8 @@ FillGridData()
       };  
       this.header = new HttpHeaders(headerSettings);   
         var jObject = { RoleDetails: JSON.stringify([{ RoleId: RoleId }]) };
-       return this.http.post<any>(this.Url+'/api/DefineRole/GetDefineRolesByRoleId',jObject,{ headers: this.header});
+        let url=localStorage.getItem('arrConfigData');
+       return this.http.post<any>(url+'/api/DefineRole/GetDefineRolesByRoleId',jObject,{ headers: this.header});
     }
 
     chkIfGroupIdisAssociate(RoleId :string){
@@ -137,7 +130,8 @@ FillGridData()
         };  
         this.header = new HttpHeaders(headerSettings);   
         var jObject = { RoleDetails: JSON.stringify([{ RoleId: RoleId }]) };
-       return this.http.post<any>(this.Url+'/api/DefineRole/ReferalCheck',jObject,{ headers: this.header});
+        let url=localStorage.getItem('arrConfigData');
+       return this.http.post<any>(url+'/api/DefineRole/ReferalCheck',jObject,{ headers: this.header});
     }
 
     FillDDlWarehouse(dbname:string, EmpId:string){ 
@@ -146,7 +140,8 @@ FillGridData()
       };  
       this.header = new HttpHeaders(headerSettings); 
       var jObject = { CompanyName: JSON.stringify([{ CompanyDBId: dbname,EmpId: EmpId }]) };
-      return this.http.post<any>(this.Url+'/api/UserManagement/GetWHS',jObject,{ headers: this.header})
+      let url=localStorage.getItem('arrConfigData');
+      return this.http.post<any>(url+'/api/UserManagement/GetWHS',jObject,{ headers: this.header})
     } 
 
     FillDDlWorkCenter(dbname:string, warehouse:string){ 
@@ -155,7 +150,8 @@ FillGridData()
       };  
       this.header = new HttpHeaders(headerSettings); 
       var jObject = { CompanyName: JSON.stringify([{ Company: dbname, Warehouse: "'"+warehouse+"'" }]) };
-      return this.http.post<any>(this.Url+'/api/UserManagement/GetWorkCenterByWarehouse',jObject,{ headers: this.header})
+      let url=localStorage.getItem('arrConfigData');
+      return this.http.post<any>(url+'/api/UserManagement/GetWorkCenterByWarehouse',jObject,{ headers: this.header})
     } 
 
     AddUserManagement(SubmitSave:any){ 
@@ -163,8 +159,9 @@ FillGridData()
         'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
       };  
       this.header = new HttpHeaders(headerSettings);  
-      var jObject = { SubmitSave: JSON.stringify(SubmitSave) };   
-      return this.http.post<any>(this.Url+'/api/UserManagement/OnSavePress',jObject,{ headers: headerSettings});
+      var jObject = { SubmitSave: JSON.stringify(SubmitSave) }; 
+      let url=localStorage.getItem('arrConfigData');  
+      return this.http.post<any>(url+'/api/UserManagement/OnSavePress',jObject,{ headers: headerSettings});
     }
 
     userRefrenceCheck(userId : any){
@@ -172,8 +169,9 @@ FillGridData()
         'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
       };  
       this.header = new HttpHeaders(headerSettings); 
-      var jObject = { UserDetails: JSON.stringify([{ UserId: userId }]) };        
-      return this.http.post<any>(this.Url+'/api/UserManagement/UserReferalCheck',jObject,{ headers: this.header});
+      var jObject = { UserDetails: JSON.stringify([{ UserId: userId }]) };     
+      let url=localStorage.getItem('arrConfigData');     
+      return this.http.post<any>(url+'/api/UserManagement/UserReferalCheck',jObject,{ headers: this.header});
     }
 
     DeleteUserManagement(userId : any){
@@ -181,8 +179,9 @@ FillGridData()
         'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
       };  
       this.header = new HttpHeaders(headerSettings); 
-      var jObject = { UserDetails: JSON.stringify([{ PreviousUserId: userId }]) };        
-      return this.http.post<any>(this.Url+'/api/UserManagement/DeleteUserRecord',jObject,{ headers: this.header});
+      var jObject = { UserDetails: JSON.stringify([{ PreviousUserId: userId }]) };    
+      let url=localStorage.getItem('arrConfigData');    
+      return this.http.post<any>(url+'/api/UserManagement/DeleteUserRecord',jObject,{ headers: this.header});
     }
 
     getEditDetail(userId : any){
@@ -190,8 +189,9 @@ FillGridData()
         'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
       };  
       this.header = new HttpHeaders(headerSettings); 
-      var jObject = { SubmitSave: JSON.stringify([{ UserId: userId }]) };        
-      return this.http.post<any>(this.Url+'/api/UserManagement/PopulateRecord',jObject,{ headers: this.header});
+      var jObject = { SubmitSave: JSON.stringify([{ UserId: userId }]) }; 
+      let url=localStorage.getItem('arrConfigData');       
+      return this.http.post<any>(url+'/api/UserManagement/PopulateRecord',jObject,{ headers: this.header});
     }
 
     EditUserManagement(SubmitSave:any){ 
@@ -200,7 +200,8 @@ FillGridData()
       };  
       this.header = new HttpHeaders(headerSettings);  
       var jObject = { SubmitSave: JSON.stringify(SubmitSave) };   
-      return this.http.post<any>(this.Url+'/api/UserManagement/SubmitUpdate',jObject,{ headers: headerSettings});
+      let url=localStorage.getItem('arrConfigData'); 
+      return this.http.post<any>(url+'/api/UserManagement/SubmitUpdate',jObject,{ headers: headerSettings});
     }
 
     GetSAPUserByGrpId(User:any){ 
@@ -211,7 +212,8 @@ FillGridData()
       
      // UserDetails: [{"UserGroupId":"sfes"}]
       var jObject = {UserDetails: JSON.stringify(User) }
-      return this.http.post<any>(this.Url+'/api/UserManagement/GetSAPUserByGrpId',jObject,{ headers: headerSettings});
+      let url=localStorage.getItem('arrConfigData'); 
+      return this.http.post<any>(url+'/api/UserManagement/GetSAPUserByGrpId',jObject,{ headers: headerSettings});
     }
 
 }

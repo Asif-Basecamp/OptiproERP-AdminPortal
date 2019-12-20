@@ -15,10 +15,12 @@ export class CommonService {
   
     this.MessageService.errormessage(this.translate.instant('AuthorizationFailed'));
     if(Error.error == this.authTokenstr ){
+      
       localStorage.removeItem('admin_user');
       localStorage.removeItem('access_token');
       localStorage.removeItem('token_type');
-      localStorage.removeItem('expires_in');       
+      localStorage.removeItem('expires_in'); 
+      localStorage.removeItem('arrConfigData')      
       //localStorage.clear();
       this.router.navigate(['/login']);              
     }

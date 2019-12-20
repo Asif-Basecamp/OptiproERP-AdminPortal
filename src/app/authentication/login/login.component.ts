@@ -27,10 +27,16 @@ export class LoginComponent {
     }    
     ngOnInit() {     
     sessionStorage.removeItem('UserName');    
-    sessionStorage.clear();    
+    sessionStorage.clear();
+    this.arrConfigData=[];
+    localStorage.removeItem('arrConfigData');  
+    localStorage.removeItem('admin_user');
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('token_type');
+    localStorage.removeItem('expires_in');  
     this.httpClientSer.get('./assets/config.json').subscribe(
       data => {
-        
+       
         this.arrConfigData = data as string[];
         localStorage.setItem('arrConfigData', this.arrConfigData[0].service_url); 
       },
@@ -40,11 +46,7 @@ export class LoginComponent {
     );
   }  
 
-  login(){     
-       localStorage.removeItem('admin_user');
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('token_type');
-        localStorage.removeItem('expires_in');
+  login(){ 
     this.selectedItem = this.translate.instant("Login_Username");
     this.Loading=true;
     this.LoginService.Login(this.model).subscribe(    

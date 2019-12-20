@@ -14,6 +14,7 @@ export class AuthService {
   }
   logout() {
     localStorage.removeItem("access_token");
+    localStorage.removeItem('arrConfigData');  
     this.myRoute.navigate(["Login"]);
   }
 }

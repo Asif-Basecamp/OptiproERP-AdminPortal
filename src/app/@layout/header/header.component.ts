@@ -37,6 +37,7 @@ export class HeaderComponent implements OnInit {
         localStorage.removeItem('access_token');
         localStorage.removeItem('token_type');
         localStorage.removeItem('expires_in');
+        localStorage.removeItem('arrConfigData');  
          
         //localStorage.clear();
         this.router.navigate(['/login']); 
