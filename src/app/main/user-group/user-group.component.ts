@@ -105,7 +105,7 @@ export class UserGroupComponent implements OnInit {
         
         this.Loading=false;
         if(error.error != null && error.error != undefined){
-          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          if(error.error == "401"){
             this.commonService.unauthorizedToken(error);               
           }
          }
@@ -136,7 +136,7 @@ export class UserGroupComponent implements OnInit {
       error => {
         this.Loading=false;  
         if(error.error != null && error.error != undefined){
-          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          if(error.error == "401"){
             this.commonService.unauthorizedToken(error);               
           }
          }
@@ -166,7 +166,7 @@ export class UserGroupComponent implements OnInit {
       error => {
         this.Loading=false;
         if(error.error != null && error.error != undefined){
-          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          if(error.error == "401"){
             this.commonService.unauthorizedToken(error);               
           }
          }
@@ -234,7 +234,7 @@ export class UserGroupComponent implements OnInit {
         //this.MessageService.errormessage(error.message);   
         this.Loading=false;
         if(error.error != null && error.error != undefined){
-          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          if(error.error == "401"){
             this.commonService.unauthorizedToken(error);               
           }
          }
@@ -265,7 +265,7 @@ export class UserGroupComponent implements OnInit {
         //this.MessageService.errormessage(error.message); 
         this.Loading=false;  
         if(error.error != null && error.error != undefined){
-          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          if(error.error == "401"){
             this.commonService.unauthorizedToken(error);               
           }
          }
@@ -315,7 +315,7 @@ export class UserGroupComponent implements OnInit {
         //this.MessageService.errormessage(error.message);
         this.Loading=false;
         if(error.error != null && error.error != undefined){
-          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          if(error.error == "401"){
             this.commonService.unauthorizedToken(error);               
           }
          }
@@ -340,7 +340,7 @@ FillDropdownList()
       },    
       error => {  
         if(error.error != null && error.error != undefined){
-          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          if(error.error == "401"){
             this.commonService.unauthorizedToken(error);               
           }
          }
@@ -415,7 +415,7 @@ FillDropdownList()
         //this.MessageService.errormessage(error.message);   
         this.Loading=false;
         if(error.error != null && error.error != undefined){
-          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          if(error.error == "401"){
             this.commonService.unauthorizedToken(error);               
           }
          }

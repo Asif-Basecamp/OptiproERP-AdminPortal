@@ -81,7 +81,12 @@ export class UserManagementComponent implements OnInit {
   public isColumnFilter33:boolean=false;
   
   public SingleCompSelection:boolean=false;
+  public SingleProductSelection:boolean=false;
+  public SingleWHSelection:boolean=false;
+  public SingleWCSelection:boolean=false;
   
+  
+  public IsCustomeVendorSelected:boolean=false;
   
   public IsEditMode:boolean=false;
   public IsEditWorkcenter:boolean=false;
@@ -104,8 +109,8 @@ export class UserManagementComponent implements OnInit {
     this.SubmitSave.WorkCenter = [];
     this.SubmitSave.Values = [];
     this.SubmitSave.PreviousUserId = [];
-    this.EmpID=[]
-    this.BPID=''
+    this.EmpID='';
+    this.BPID='';
     this.tenant='';
     
     this.ddlUserType=[];
@@ -146,7 +151,7 @@ export class UserManagementComponent implements OnInit {
       error => { 
         this.Loading = false;  
         if(error.error != null && error.error != undefined){
-          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          if(error.error == "401"){
             this.commonService.unauthorizedToken(error);               
           }
          }
@@ -210,19 +215,21 @@ export class UserManagementComponent implements OnInit {
             const element = data.CompanyList[i];
             let products = JSON.parse(JSON.stringify(this.ddlProductList));
             for (let j = 0; j < products.length; j++) {      
-              products[j]["UniqueId"] = i+''+j;       
+              products[j]["UniqueId"] = i+''+j;
+              products[j]["SingleProductSelection"]=false;       
             }
             element["product"] = products;
             data.CompanyList[i]["UserType"] = this.ddlUserType;
             //data.CompanyList[i]["Employee"] = employeedata;
             data.CompanyList[i]["selectedEmployeeType"] = {empID: '', firstName: "--Select--"};
             data.CompanyList[i]["selectedBP"] = {CardCode: '', CardName: "--Select--"};
-            data.CompanyList[i]["selectedUserType"] = { text: "--Select--", value: '' };
+            data.CompanyList[i]["selectedUserType"] = { text: "Employee", value: 'E' };
             data.CompanyList[i]["selectedCompany"] = 'blank';
             data.CompanyList[i]["SingleCompSelection"] = false;
+
            // this.SingleCompSelection[index].checked
             this.company_data = data.CompanyList;
-           
+            this.Loading = false;
           }
         }
         }    
@@ -235,7 +242,7 @@ export class UserManagementComponent implements OnInit {
         //this.Loading = false;
         this.MessageService.errormessage(error.message); 
         if(error.error != null && error.error != undefined){
-          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          if(error.error == "401"){
             this.commonService.unauthorizedToken(error);               
           }
          }
@@ -245,19 +252,23 @@ export class UserManagementComponent implements OnInit {
       });
   }
    //Get Employee Data
-   FillEmployee(e, index, CPdata)
+   FillEmployee(CPdata)
      {
-       
       // alert(index);
        this.Loading=true;
       // let DatabaseName=CPdata[index].dbName;
-      let DatabaseName=this.dbName
+      let DatabaseName=CPdata
 
        this.UserManagementService.FillDDlEmployee(DatabaseName,"").subscribe(
         employeedata => {
           this.Loading = false;
           this.employeeData = employeedata;
-        
+          
+          for(let i=0; i <employeedata.length; i++)
+              {
+                //this.employeeData[i]["MergrEmpName"] = employeedata[i].firstName+'   '+employeedata[i].empID;
+                this.employeeData[i]["MergrEmpName"] =employeedata[i].empID +'   '+employeedata[i].firstName;
+              }
           var findex =this.company_data.findIndex(function (x) { return x.dbName == DatabaseName });
           //data.CompanyList[i]["UserType"] = this.ddlUserType;
           this.company_data[findex]["Employee"] = employeedata;
@@ -266,7 +277,7 @@ export class UserManagementComponent implements OnInit {
           //this.MessageService.errormessage(error.message);
           this.Loading=false;
           if(error.error != null && error.error != undefined){
-            if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            if(error.error == "401"){
               this.commonService.unauthorizedToken(error);               
             }
            }
@@ -298,7 +309,7 @@ export class UserManagementComponent implements OnInit {
         //this.MessageService.errormessage(error.message);
         this.Loading=false;
         if(error.error != null && error.error != undefined){
-          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          if(error.error == "401"){
             this.commonService.unauthorizedToken(error);               
           }
          }
@@ -313,107 +324,134 @@ export class UserManagementComponent implements OnInit {
   onChangeUserType(e, index, CPdata){
 
     if(this.IsEditMode)this.IsUpdateForCheck=true;
-    
-    if(this.dbClickUserType===undefined || this.dbClickUserType==='')
-       {
-
-       }
-       else if(this.dbClickUserType!=CPdata[index].selectedUserType.value)
-         {
-          this.MessageService.errormessage(this.translate.instant('UserSameUserTypeErrMsg')); 
-           CPdata[index]["selectedUserType"] = { text: "--Select--", value: '' };
-           return
-         }
-    //if(CPdata[index].selectedUserType.value===undefined )
-    
     if(e.value==="C" || e.value==="V")
      {
       this.FillBusinessPartnerData(e, index, CPdata)
      }
-     else {
-      this.FillEmployee(e, index, CPdata);
-     }
-   
- 
-    const element = this.company_data[index];
-    let products = JSON.parse(JSON.stringify(this.ddlProductList));
-    for (let j = 0; j < products.length; j++) {      
-      products[j]["UniqueId"] = index+''+j;       
-    }
-    element["product"] = products;
-    if(e.value === 'C'){
-      let productByStoreID = element.product.filter(product => product.ProductId === 'CVP');
-      this.company_data[index]["product"] = productByStoreID;
-      this.company_data[index]["BPCode"] = true;
-    }
-    if(e.value === 'V'){
-      let productByStoreID = element.product.filter(product => product.ProductId === 'CVP' 
-      ||  product.ProductId === 'MMO');
-      this.company_data[index]["product"] = productByStoreID;
-      this.company_data[index]["BPCode"] = true;
-    }
-
-    if(e.value === 'E'){
-      // let productByStoreID = element.product.filter(product => product.ProductId === 'ATD' 
-      // ||  product.ProductId === 'SFES' || product.ProductId === 'WMS' || product.ProductId === 'CNF'
-      // ||  product.ProductId === 'MMO' || product.ProductId === 'DSB' || product.ProductId === 'TDC');
-      let productByStoreID = element.product.filter(product => product.ProductId != 'CVP');
-      
-      this.company_data[index]["product"] = productByStoreID;
-      this.company_data[index]["BPCode"] = false;
-    }
+    this.BindProductWithCompany(e.value,index);
     this.userType = e.value;
   }
-//    delay(ms: number) {
-//     return new Promise( resolve => setTimeout(resolve, ms) );
-// }
+  BindProductWithCompany(ProductValue,index)
+     {
+     
+      const element = this.company_data[index];
+      let products = JSON.parse(JSON.stringify(this.ddlProductList));
+      for (let j = 0; j < products.length; j++) {      
+        products[j]["UniqueId"] = index+''+j;
+        products[j]["SingleProductSelection"] = false;  
+              
+      }
+      element["product"] = products;
+      if(ProductValue === 'C'){
+        let productByStoreID = element.product.filter(product => product.ProductId === 'CVP');
+        this.company_data[index]["product"] = productByStoreID;
+        this.company_data[index]["BPCode"] = true;
+      }
+      if(ProductValue === 'V'){
+        let productByStoreID = element.product.filter(product => product.ProductId === 'CVP' 
+        ||  product.ProductId === 'MMO');
+        this.company_data[index]["product"] = productByStoreID;
+        this.company_data[index]["BPCode"] = true;
+      }
+  
+      if(ProductValue === 'E'){
+        let productByStoreID = element.product.filter(product => product.ProductId != 'CVP');
+        this.company_data[index]["product"] = productByStoreID;
+        this.company_data[index]["BPCode"] = false;
+      }
+     }
   /*-- get warehouse and workcenter list --*/
   FillDDlWarehouse(dbName, index){
-    this.Loading = true;
+    //this.WH_WC_Data=[];
+    //this.Loading = true;
     this.gridRefresh = false;
+    let TmpDbName='';
+    let tempIndx;
     this.UserManagementService.FillDDlWarehouse(dbName, '').subscribe(
       warehousedata => {
-        for(let i=0;i<warehousedata.Table.length; i++){
-          warehousedata.Table[i]["uniqueId"] = index+''+i;
-          this.WHGetSelectiondata(warehousedata.Table[i], i); 
-          this.UserManagementService.FillDDlWorkCenter(dbName, warehousedata.Table[i].OPTM_WHSE).subscribe(
-            WorkCenterdata => {
-              this.Loading = false;
-              warehousedata.Table[i]["workcenter"] = WorkCenterdata;
-             //this.delay(5000).then(any=>{
-               if(warehousedata.Table[i].workcenter !=null && warehousedata.Table[i].workcenter !=undefined)
-                 {
-                  if(warehousedata.Table[i].workcenter.length>0){
-                    for (let j = 0; j < warehousedata.Table[i].workcenter.length; j++) {      
-                      warehousedata.Table[i].workcenter[j]["uniqueId"] = dbName+''+i+''+j;  
-                      this.WCGetSelectiondata(warehousedata.Table[i].workcenter[j], i);      
-                     }
-                  }
-                 }
-            },
-           
-      error => {    
-        //this.MessageService.errormessage(error.message);
-        this.Loading=false;
-        if(error.error != null && error.error != undefined){
-          this.Loading=false;
-          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-            this.commonService.unauthorizedToken(error);               
-          }
-         }
-        else{
-          this.Loading=false;
-          this.MessageService.errormessage(error.message);
-        }
-      });  
-          }
-        this.WH_WC_Data = warehousedata.Table;
+        if(warehousedata !=null && warehousedata !='')
+             {
+              for(let i=0;i<warehousedata.Table.length; i++){
+                warehousedata.Table[i]["uniqueId"] = index+''+i;
+                warehousedata.Table[i]["SingleWHSelection"] = false;
+                    TmpDbName=this.dbName;
+                    if(this.SubmitSave.Warehouse.length>0)
+                      {
+                        let TmpWHId='';
+                        for(let m=0; m <this.SubmitSave.Warehouse.length; m++)
+                          {
+                            TmpWHId=this.SubmitSave.Warehouse[m].Id;
+                            if(this.SubmitSave.Warehouse[m].Company===TmpDbName 
+                              && warehousedata.Table[i].OPTM_WHSE===this.SubmitSave.Warehouse[m].Id)
+                               {
+                                warehousedata.Table[i].SingleWHSelection=true;
+                               }
+                          }
+                      }
+                 // }
+                
+                 this.WHGetSelectiondata(warehousedata.Table[i], i); 
+                this.UserManagementService.FillDDlWorkCenter(dbName, warehousedata.Table[i].OPTM_WHSE).subscribe(
+                  WorkCenterdata => {
+                    this.Loading = false;
+                    warehousedata.Table[i]["workcenter"] = WorkCenterdata;
+                   //this.delay(5000).then(any=>{
+                     if(warehousedata.Table[i].workcenter !=null && warehousedata.Table[i].workcenter !=undefined)
+                       {
+                        if(warehousedata.Table[i].workcenter.length>0){
+                          for (let j = 0; j < warehousedata.Table[i].workcenter.length; j++) {      
+                            warehousedata.Table[i].workcenter[j]["uniqueId"] = dbName+''+i+''+j;
+                            warehousedata.Table[i].workcenter[j]["SingleWCSelection"] = false;
+                           let tempdb='';
+                           tempdb=this.dbName;
+                           var TempWCFilter;
+                              if(this.SubmitSave.WorkCenter.length>0)
+                              {
+                                 TempWCFilter = this.SubmitSave.WorkCenter.filter(function (el) {
+                                  return el.Company == tempdb && el.Warehouse===warehousedata.Table[i].OPTM_WHSE
+                                     && el.WorkCenterCode===warehousedata.Table[i].workcenter[j].WorkCenterCode;
+                              });
+                            if( TempWCFilter.length>0)
+                              {
+                                
+                                warehousedata.Table[i].SingleWHSelection=true;
+                                warehousedata.Table[i].workcenter[j]["SingleWCSelection"] = true;
+                              }
+                               
+                              }
+                             
+                            this.WCGetSelectiondata(warehousedata.Table[i].workcenter[j], i);      
+                           }
+                        }
+                       }
+                  },
+                 
+            error => {    
+              //this.MessageService.errormessage(error.message);
+              this.Loading=false;
+              if(error.error != null && error.error != undefined){
+                this.Loading=false;
+                if(error.error == "401"){
+                  this.commonService.unauthorizedToken(error);               
+                }
+               }
+              else{
+                this.Loading=false;
+                this.MessageService.errormessage(error.message);
+              }
+            });  
+                }
+                this.WH_WC_Data = warehousedata.Table;
+             }
+        
+         
+       
       },
       error => {    
         //this.MessageService.errormessage(error.message);
         this.Loading=false;
         if(error.error != null && error.error != undefined){
-          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          if(error.error == "401"){
             this.commonService.unauthorizedToken(error);               
           }
          }
@@ -434,11 +472,19 @@ export class UserManagementComponent implements OnInit {
           //if(element.dbName === element2.OPTM_COMPID){
             if(this.ShowDBName === element2.OPTM_COMPID){
             if(WHData.OPTM_WHSE === element2.OPTM_WHSE){
+            
               this.SubmitSave.Warehouse.push({Company: element2.OPTM_COMPID, Id: element2.OPTM_WHSE, 
                 EmployeeId: element2.OPTM_EMPID, 
                 WHIndex: WHIndex,  bussPart:element2.OPTM_BPCODE});
-              this.SubmitSave.Warehouse = this.removeDuplicatesValue(this.SubmitSave.Warehouse, 'Id');
-              this.warehouseSelection.push(WHData.uniqueId);
+                this.SubmitSave.Warehouse = this.SubmitSave.Warehouse.filter((thing, index, self) =>
+              index === self.findIndex((t) => (
+              t.Company === thing.Company && t.Id === thing.Id && t.EmployeeId===thing.EmployeeId
+            )))
+            this.warehouseSelection.push(WHData.uniqueId);
+            
+             // this.SubmitSave.Warehouse = this.removeDuplicatesValue(this.SubmitSave.Warehouse, 'Id');
+            
+              
             }
           }
         });  
@@ -453,9 +499,10 @@ export class UserManagementComponent implements OnInit {
       if(this.editUserData.length>0){
         //this.company_data.forEach((element, index) => {
           this.editUserData.forEach((element2, index2) => {
+          
             //if(element.dbName === element2.OPTM_COMPID){
               if(this.ShowDBName === element2.OPTM_COMPID){
-              if(WCData.WorkCenterCode === element2.OPTM_WORKCENTER){
+              if(WCData.WorkCenterCode === element2.OPTM_WORKCENTER && element2.OPTM_WHSE != ""){
                   this.SubmitSave.WorkCenter.push({Company:  element2.OPTM_COMPID, EmployeeId: element2.OPTM_EMPID, 
                     productCode: element2.OPTM_OPTIADDON, WorkCenterCode: element2.OPTM_WORKCENTER, WCIndex: WCIndex, 
                    bussPart:element2.OPTM_BPCODE});
@@ -471,6 +518,7 @@ export class UserManagementComponent implements OnInit {
   }
 
   companyClickHandler(e){
+    
     this.userType=e.dataItem.selectedUserType.value;
     //if(e.dataItem.selectedEmployeeType.empID != '' && this.userType !=''){
       this.dbName = e.dataItem.dbName;
@@ -482,18 +530,50 @@ export class UserManagementComponent implements OnInit {
       if(e.dataItem.BPCode){
          this.BPID=e.dataItem.selectedBP.CardCode;
       }
-      if(e.dataItem.selectedEmployeeType){
+      else {
         this.dbClickEmployeeName = e.dataItem.selectedEmployeeType.empID;
         this.EmpID = e.dataItem.selectedEmployeeType.empID;
       }
+      // if(e.dataItem.selectedEmployeeType){
+      //   this.dbClickEmployeeName = e.dataItem.selectedEmployeeType.empID;
+      //   this.EmpID = e.dataItem.selectedEmployeeType.empID;
+      // }
+     if(this.IsEditMode===false)this.CheckIfProductIsChecked(e)
       this.FillDDlWarehouse(e.dataItem.dbName, e.rowIndex);
-   
   } 
-
+  CheckIfProductIsChecked(e)
+   {
+    if(this.SubmitSave.Product.length>0)
+    {
+      
+      for(let i=0; i <this.SubmitSave.Product.length; i++)
+          {
+          if(this.SubmitSave.Product[i].Company===e.dataItem.dbName)
+             {
+              e.dataItem.product[i].SingleProductSelection=true;
+             }
+          }
+    }
+   }
   onExpandCompany(event){
+    
+   
     if(event.dataItem.selectedCompany == 'blank'){
       this.MessageService.errormessage(this.translate.instant('UserMgmtCompanySelectMsg')); 
     }
+    if(event.dataItem.selectedUserType.value==="")this.MessageService.errormessage(this.translate.instant('UserTypeValidationmsg')); 
+    if(event.dataItem.selectedUserType.value==="E")
+    {
+      if(event.dataItem.selectedEmployeeType.empID===""){}
+      //this.MessageService.errormessage(this.translate.instant('EmployeeValidationmsg')); 
+    }
+    else {
+      if(event.dataItem.selectedBP.CardCode!="" && event.dataItem.selectedBP.CardCode !=null){
+       this.IsCustomeVendorSelected=true;
+      }
+      //this.MessageService.errormessage(this.translate.instant('BPCodeValidationmsg')); 
+    }
+    if(this.IsEditMode===false)this.CheckIfProductIsChecked(event)
   }
 
   onExpandWarehouse(event){
@@ -506,55 +586,22 @@ export class UserManagementComponent implements OnInit {
    
     
     if(this.IsEditMode)this.IsUpdateForCheck=true;
+    this.FillEmployee (companyData.dbName)
     var index = this.company_data.findIndex(function (x) { return x.dbName == companyData.dbName });
-    if(companyData.selectedUserType.value==='')
-       {
-        event.target.checked=false;
-        this.MessageService.errormessage(this.translate.instant('UserTypeValidationmsg'));
-         return;
-       }
+    
     if(event.target.checked === true){
       if(index>0)
+      this.BindProductWithCompany(companyData.selectedUserType.value,index)
       this.company_data[index]["selectedCompany"] = companyData.dbName;
+    
+     
     }else{
       this.company_data[index]["selectedCompany"] = 'blank';
     }
     
     /*-- employee array --*/
    // this.BPID=companyData.selectedBP.CardCode;
-    if(event.target.checked === true){
-      if(companyData.selectedUserType.value==='E')
-         {
-           if(companyData.selectedEmployeeType.empID ==='' || companyData.selectedEmployeeType.empID===undefined)
-              {
-                event.target.checked=false;
-                this.company_data[index]["selectedCompany"] = 'blank';
-                this.MessageService.errormessage(this.translate.instant('EmployeeValidationmsg'));
-                return;
-              }
-         }
-        else {
-          if(companyData.selectedBP.CardCode ==='' || companyData.selectedBP.CardCode===undefined)
-              {
-                event.target.checked=false;
-                this.company_data[index]["selectedCompany"] = 'blank';
-                this.MessageService.errormessage(this.translate.instant('BPCodeValidationmsg'));
-                return;
-              }
-        }
-      this.SubmitSave.EmployeeId.push({Company: companyData.dbName, 
-        empID: companyData.selectedEmployeeType.empID,
-        bussPart: companyData.selectedBP.CardCode, eIndex: companyIndex});
-    }else{
-      let whatIndex = null;
-      this.SubmitSave.EmployeeId.forEach((value, index) => {
-        if(value.Company == companyData.dbName){
-            whatIndex = index;
-        }
-      }); 
-      this.SubmitSave.EmployeeId.splice(whatIndex, 1);    
-    }    
-
+    
     /*-- company array --*/
    // console.log(this.SubmitSave.Company);
     if(event.target.checked === true){
@@ -567,6 +614,7 @@ export class UserManagementComponent implements OnInit {
         }
       }); 
       this.SubmitSave.Company.splice(whatIndex, 1);  
+      
       if(this.IsEditMode)  
        {
         this.RemoveDataOnCompanyUncheck(companyData);
@@ -575,7 +623,7 @@ export class UserManagementComponent implements OnInit {
   }
   RemoveDataOnCompanyUncheck(companyData)
     {
-    
+   
         this.SubmitSave.WorkCenter = this.SubmitSave.WorkCenter.filter(function (el) {
           return el.Company != companyData.dbName;
       });
@@ -585,31 +633,68 @@ export class UserManagementComponent implements OnInit {
     this.SubmitSave.Product = this.SubmitSave.Product.filter(function (el) {
       return el.Company != companyData.dbName;
   });
+      this.SubmitSave.EmployeeId = this.SubmitSave.EmployeeId.filter(function (el) {
+        return el.Company != companyData.dbName;
+    });
     
     }
 
   productSelect(event: any, product, productIndex, rowIndex){
     
+    let EmployeeCheck='';
+    if(this.IsCustomeVendorSelected===false)
+        {
+          if(this.SubmitSave.EmployeeId.length===0)
+          {
+            this.MessageService.errormessage(this.translate.instant('EmployeeAndBPValidationmsg'));
+            event.target.checked=false; 
+            return
+          }
+          else {
+            let DatabaseName=this.dbName;
+            EmployeeCheck = this.SubmitSave.EmployeeId.filter(function (el) {
+              return el.Company == DatabaseName;
+          });
+          if(EmployeeCheck.length==0){
+            this.MessageService.errormessage(this.translate.instant('EmployeeValidationmsg')); 
+            event.target.checked=false;
+            return
+          }
+          
+          }
+        }
+    
     if(event.target.checked === true){
       this.productID = product;
-          this.SubmitSave.Product.push({productCode: this.productID, pIndex: rowIndex, bussPart: this.BPID});
+      var TmpProduct =this.ddlProductList;
+       var  FilterTmpProduct= TmpProduct.filter(function (el) {
+          return el.ProductId == product;
+      });
+          this.SubmitSave.Product.push({productCode: this.productID, pIndex: rowIndex, bussPart: this.BPID,
+          ISWHEnable: FilterTmpProduct[0].OPTM_ISWHSEENABLED, ISWCEnable:FilterTmpProduct[0].OPTM_ISWRKCENTERENABLED,
+          Company:this.dbName });
     }else{
-      let whatIndexTwo = null;
-      this.SubmitSave.Product.forEach((value, index) => {
-        if(value.productCode == product){
-            whatIndexTwo = index;
-        }
-      }); 
-      this.SubmitSave.Product.splice(whatIndexTwo, 1);    
+      // let whatIndexTwo = null;
+      // this.SubmitSave.Product.forEach((value, index) => {
+      //   if(value.productCode === product && value.Company===this.dbName){
+      //       whatIndexTwo = index;
+      //   }
+      // }); 
+      let Database=this.dbName;
+      var findex =this.SubmitSave.Product.findIndex(function (x) 
+        { 
+          return x.productCode === product && x.Company==Database
+        });
+      this.SubmitSave.Product.splice(findex, 1);    
     }
 
-    this.SubmitSave.Company.forEach((c, cindex) => {
-      this.SubmitSave.Product.forEach((p, pindex) => {
-        if(c.cIndex === p.pIndex){
-           this.SubmitSave.Product[pindex]["Company"] =  c.Company;
-        }
-      });
-    });
+    // this.SubmitSave.Company.forEach((c, cindex) => {
+    //   this.SubmitSave.Product.forEach((p, pindex) => {
+    //     if(c.cIndex === p.pIndex){
+    //        this.SubmitSave.Product[pindex]["Company"] =  c.Company;
+    //     }
+    //   });
+    // });
 
     this.SubmitSave.EmployeeId.forEach((e, eindex) => {
       this.SubmitSave.Product.forEach((p, pindex) => {
@@ -624,27 +709,34 @@ export class UserManagementComponent implements OnInit {
   ))
 )
     let array = [];
-      this.SubmitSave.Product.forEach((value, index) => {
-        if(value.pIndex === rowIndex){
-          array.push( value.productCode );
+     for(let i=0; i <this.SubmitSave.Product.length; i++ )
+        {
+          if(this.dbName===this.SubmitSave.Product[i].Company)
+          array.push( this.SubmitSave.Product[i].productCode );
         }
-      });
+      // this.SubmitSave.Product.forEach((value, index) => {
+      //   if(value.pIndex === rowIndex){
+      //     array.push( value.productCode );
+      //   }
+      // });
       this.dbClickProductName = array.toString();
+      if(this.SubmitSave.WorkCenter.length>0)
+        {
+          for(let i=0; i <this.SubmitSave.WorkCenter.length; i++)
+          {
+           if(this.dbName===this.SubmitSave.WorkCenter[i].Company)
+             {
+               this.SubmitSave.WorkCenter[i].productCode=this.dbClickProductName;
+             }
+          }
+        }
        if(this.IsEditMode===true)
            {
-             for(let i=0; i <this.SubmitSave.WorkCenter.length; i++)
-                 {
-                  if(this.dbName===this.SubmitSave.WorkCenter[i].Company)
-                    {
-                      this.SubmitSave.WorkCenter[i].productCode=this.dbClickProductName;
-                    }
-                 }
                  this.IsUpdateForCheck=true;
            }
   }
 
   warehouseSelect(event, warehouseData, warehouseIndex){
-   
     if(this.IsEditMode)
      {
      this.IsUpdateForCheck=true;
@@ -659,19 +751,33 @@ export class UserManagementComponent implements OnInit {
       }
       
     }
+    let TempDBName='';
+    TempDBName=this.dbName;
+    var ProductCheck = this.SubmitSave.Product.filter(function (el) {
+      return el.Company == TempDBName;
+  });
+  
     if(event.target.checked === true){
       this.WH_WC_Data[warehouseIndex]["selectedWarehouse"] = warehouseData.OPTM_WHSE;
-    }else{
-      this.WH_WC_Data[warehouseIndex]["selectedWarehouse"] = 'blank';
-    }
+      this.WH_WC_Data[warehouseIndex]["SingleWHSelection"] = true;
+      if(ProductCheck.length===0)
+      {
+        this.MessageService.errormessage(this.translate.instant('UserMgmtProductSelectMsg'));
+        this.WH_WC_Data[warehouseIndex]["SingleWHSelection"] = false;
+        event.target.checked=false;
+        return;
+      }
+      
+      }else{
+        this.WH_WC_Data[warehouseIndex]["SingleWHSelection"] = false;
+        this.WH_WC_Data[warehouseIndex]["selectedWarehouse"] = 'blank';
+      }
     
     if(event.target.checked === true){
       this.WHCode = warehouseData.OPTM_WHSE;
       this.SubmitSave.Warehouse.push({Company: this.dbName, Id: this.WHCode, EmployeeId: this.EmpID, 
         WHIndex: warehouseIndex, bussPart: this.BPID});
     }else{
-
-
       let whatIndex3 = null;
       this.SubmitSave.Warehouse.forEach((value, index) => {
         if(value.Id === warehouseData.OPTM_WHSE){
@@ -685,7 +791,8 @@ export class UserManagementComponent implements OnInit {
           {
             if(this.SubmitSave.WorkCenter[j].Warehouse==warehouseData.OPTM_WHSE)
               {
-                this.SubmitSave.WorkCenter[j].Warehouse="";
+                this.SubmitSave.WorkCenter.splice(j, 1); 
+                //this.SubmitSave.WorkCenter[j].Warehouse="";
               }
           }
     }
@@ -763,33 +870,33 @@ export class UserManagementComponent implements OnInit {
             //alert('Selecrt ProductName');
         
          }
-  workCenterSelect(event, workCenterData, workCenterIndex){
-    this.IsEditWorkcenter=false;
-    if(this.IsEditMode)
-        { 
-          this.IsUpdateForCheck=true;
-         this.WorkCenterSelectEditMode(event, workCenterData, workCenterIndex);
-       }
+    workCenterSelect(event, workCenterData, workCenterIndex){
+          let TmpDbName='';
+           TmpDbName=this.dbName;
+            var WareHouseCheck = this.SubmitSave.Warehouse.filter(function (el) {
+              return el.Company === TmpDbName && el.Id===workCenterData.Warehouse;
+            });
+            if(WareHouseCheck.length===0)
+              {
+                this.MessageService.errormessage(this.translate.instant('UserMgmtWarehouseSelectMsg'));
+                event.target.checked=false;
+                return;
+              }
+          this.IsEditWorkcenter=false;
+          if(this.IsEditMode)
+              { 
+                this.IsUpdateForCheck=true;
+              this.WorkCenterSelectEditMode(event, workCenterData, workCenterIndex);
+            }
         if(this.IsEditWorkcenter===false)
          {
+           
           if(event.target.checked === true){
             this.WCCode = workCenterData.WorkCenterCode;
-            if(this.EmpID==='' && this.BPID==='')
-                {
-                  this.MessageService.errormessage(this.translate.instant('EmployeeAndBPValidationmsg'));
-                  return;
-                }
-            if(this.dbClickProductName!='' && this.dbClickProductName!=undefined)
-               {
+            workCenterData.Warehouse
                 this.SubmitSave.WorkCenter.push({Company: this.dbName, EmployeeId: this.EmpID, 
-                  productCode: this.dbClickProductName, WorkCenterCode: this.WCCode, WCIndex: workCenterIndex, 
+                  productCode: this.dbClickProductName,Warehouse:workCenterData.Warehouse ,WorkCenterCode: this.WCCode, WCIndex: workCenterIndex, 
                   bussPart: this.BPID});
-               }
-               else {
-                this.MessageService.errormessage(this.translate.instant('UserMgmtProductSelectMsg'));
-                 return; 
-               }
-           
           }else{
             let whatIndex4 = null;
             this.SubmitSave.WorkCenter.forEach((value, index) => {
@@ -810,13 +917,22 @@ export class UserManagementComponent implements OnInit {
   }
 
   onChangeEmployeeId(e, db, index){
+    this.EmpID=e.empID;
     if(this.IsEditMode)this.IsUpdateForCheck=true;
     this.company_data[index]["selectedEmployeeType"] = e;
+    this.SubmitSave.EmployeeId.push({Company: db, 
+      empID: e.empID,
+      bussPart:"", eIndex: index});
   }
   onChangeBPID(e, db, index)
    {
+    
+     this.BPID=e.CardCode;
     if(this.IsEditMode)this.IsUpdateForCheck=true;
     this.company_data[index]["selectedBP"] = e;
+    this.SubmitSave.EmployeeId.push({Company: db, 
+      empID: "",
+      bussPart:e.CardCode, eIndex: index});
     
    }
 
@@ -832,7 +948,10 @@ export class UserManagementComponent implements OnInit {
         }
       }
       else {
-        this.MessageService.errormessage(this.translate.instant('UserMgmtSomethimgWntWrngMsg'));
+        this.MessageService.errormessage(this.translate.instant('UserMgmtProductSelectMsg'));
+        this.FlagProduct=false;
+        this.IsValidate=false;
+        return;
       }
           
       if(this.SubmitSave.Product.length>0)
@@ -845,7 +964,7 @@ export class UserManagementComponent implements OnInit {
                     this.FlagProduct=true;
                   }
                   else {
-                    this.MessageService.errormessage(this.translate.instant('UserMgmtProductSelectMsg')+' '+c.company);
+                    this.MessageService.errormessage(this.translate.instant('UserMgmtProductSelectMsg'));
                     this.FlagProduct=false;
                     this.IsValidate=false;
                     return;
@@ -860,154 +979,80 @@ export class UserManagementComponent implements OnInit {
             }
             elemntProduct="";
       }
-  EmployeeValidation()
-    {
-      
-      this.FlagEmployee=true;
-      for(let i=0; i <this.SubmitSave.Product.length; i++)
-         {
-           if(this.SubmitSave.Product[i].EmployeeId==='' && this.SubmitSave.Product[i].bussPart==='' || this.SubmitSave.Product[i].EmployeeId===undefined)
-             {
-              this.MessageService.errormessage(this.translate.instant('EmployeeAndBPValidationmsg'));
-              this.FlagEmployee=false;
-              this.IsValidate=false;
-              return;
-             }
-         }
-    }    
+  
 
   Validation()
    {
+     
     this.IsValidate=true;
     let elmnt="";
     let elmntWorkCenter="";
     let elemntProduct="";
-   for(let j=0; j<this.SubmitSave.Warehouse.length; j++)
-       {
-         elmnt = elmnt + ','+ this.SubmitSave.Warehouse[j].Company
-       }
-    // Work Center Company
-     if(this.SubmitSave.WorkCenter.length>0)
-       {
-         for(let j=0; j<this.SubmitSave.WorkCenter.length; j++)
-         {
-         elmntWorkCenter = elmntWorkCenter + ','+ this.SubmitSave.WorkCenter[j].Company
-         }
-       }
-  
       this.SubmitSave.Company.forEach((c, cindex) => {
       this.SubmitSave.Product.forEach((p, pindex) => {
         if(c.Company===p.Company)
          {
             this.FlagWC=true;
             this.FlagWH=true;
-            let WhValidation="";
-            let WCValidation="";
-            let WhName="";
-            let TempEmpName="";
-            let WHTempValue="";
-            let SelectedProduct=[];
-            let array = [];
-            let Localarray = [];
-                 this.SubmitSave.Product.forEach((value, index) => {
-                   if(value.Company === c.Company){
-                     array.push( value.productCode );
-                     Localarray.push( value.productCode );
-                     TempEmpName=value.EmployeeId
-                   }
-                 });
-
-           for(let i=0; i <this.ddlProductList.length; i++)
-             {
-               if(this.ddlProductList[i].ProductId===p.productCode)
-               {
-                 WhValidation=this.ddlProductList[i].OPTM_ISWHSEENABLED;
-                  WCValidation=this.ddlProductList[i].OPTM_ISWRKCENTERENABLED;   
-               }
-             }
+            
              // Warehouse validation
-             if(WhValidation==="Y")
+             if(p.ISWHEnable==="Y")
                {
-                 if(this.SubmitSave.Warehouse.length>0)
-                 {
-                   for(let j=0; j <this.SubmitSave.Warehouse.length; j++)
-                   {
-                     if(elmnt.includes(c.Company))
-                       {
-                         if(this.SubmitSave.Warehouse[j].Id===null || this.SubmitSave.Warehouse[j].Id==="")
-                         {
-                          
-                           this.MessageService.errormessage(this.translate.instant('UserMgmtWarehouseSelectMsg')+' '+c.Company);
+                var filterWareHouseValidation = this.SubmitSave.Warehouse.filter(function (el) {
+                  return el.Company == c.Company;
+              });
+               if(filterWareHouseValidation.length===0)
+                  {
+                    this.MessageService.errormessage(this.translate.instant('UserMgmtWarehouseSelectMsg')+' '+c.Company);
                            this.FlagWH=false;
                            this.IsValidate=false;
                            return;
-                         }
-                         else {
-                           WhName=this.SubmitSave.Warehouse[j].Id;
-                         }
- 
-                       }
-                       else {
-                         this.MessageService.errormessage(this.translate.instant('UserMgmtWarehouseSelectMsg')+' '+c.Company);
-                         this.FlagWH=false;
-                         this.IsValidate=false;
-                         return;
-                       }}}
-                 else {
-                   
-                   this.MessageService.errormessage(this.translate.instant('UserMgmtWarehouseSelectMsg')+' '+c.Company);
-                   this.IsValidate=false;
-                   this.FlagWH=false;
-                   return;
-                 } }
+                  }
+                
+              }
 
-               if(WCValidation==="Y")
-               {
-                 if(this.SubmitSave.WorkCenter.length>0)
-                 {
-                   for(let j=0; j <this.SubmitSave.WorkCenter.length; j++)
-                     {
-                       if(elmntWorkCenter.includes(c.Company))
-                         {
-                           if(this.SubmitSave.WorkCenter[j].WorkCenterCode==="" && this.SubmitSave.WorkCenter[j].Company===c.Company )
-                            {
-                              this.MessageService.errormessage(this.translate.instant('UserMgmtWorkcenterSelectMsg')+' '+c.Company);
-                              this.FlagWC=false;
-                              this.IsValidate=false;
-                              return;
-                            }
-                            else {
-                              var TempAssignWareHouse=[];
-                              let TempLocalVarCompany='';
-                              TempLocalVarCompany=this.SubmitSave.WorkCenter[j].Company;
-                              TempAssignWareHouse=this.SubmitSave.Warehouse;
-                              if(this.SubmitSave.WorkCenter[j].Warehouse==="" && this.SubmitSave.WorkCenter[j].Company===c.Company )
-                                {
-                                  let WHCompany='';
-                                  WHCompany=this.SubmitSave.WorkCenter[j].Company;
-                                  var TempData = TempAssignWareHouse.filter(function (el) {
-                                    return el.Company == WHCompany;
-                                });
-                                if(TempData.length>0)
-                                 {
-                                  this.SubmitSave.WorkCenter[j].Warehouse=TempData[0].Id;
-                                 }}}}
-                         else {
-                           this.MessageService.errormessage(this.translate.instant('UserMgmtWorkcenterSelectMsg')+' '+c.Company);
-                           this.FlagWC=false;
-                           this.IsValidate=false;
-                              return;
-                         }} }
-                      else {
+               if(p.ISWCEnable==="Y")
+                {
+                  
+                    if(this.SubmitSave.WorkCenter.length>0)
+                       {
+                        var filterWCRow = this.SubmitSave.WorkCenter.filter(function (el) {
+                          return el.Company === p.Company && el.WorkCenterCode !="";
+                      });
+                      if(filterWCRow.length===0)
+                           {
+                            this.MessageService.errormessage(this.translate.instant('UserMgmtWorkcenterSelectMsg')+' '+c.Company);
+                            this.FlagWC=false;
+                            this.IsValidate=false;
+                            return;
+                           }
+                       }
+                       else{
                         this.MessageService.errormessage(this.translate.instant('UserMgmtWorkcenterSelectMsg')+' '+c.Company);
                         this.FlagWC=false;
                         this.IsValidate=false;
-                                      return;
-                      }
-                      }}});});
+                        return;
+                       }
+
+                // for(let i=0; i <this.SubmitSave.WorkCenter.length; i ++)
+                //     {
+                //       if(this.SubmitSave.WorkCenter[i].Company===c.Company 
+                //         && this.SubmitSave.WorkCenter[i].WorkCenterCode ==="" && p.Company !="")
+                //         {
+                          
+                //         }
+                //     }
+                
+                    }
+                  }
+                 
+                  
+                    });
+                  });
             }
     CheckWorkCenterExist()
              {
+
               this.SubmitSave.Company.forEach((c, cindex) => {
                 var filterWCRow = this.SubmitSave.WorkCenter.filter(function (el) {
                     return el.Company === c.Company ;
@@ -1209,9 +1254,10 @@ export class UserManagementComponent implements OnInit {
       delete Emp['eIndex'];
       return Emp; 
     });
-   this.EmployeeValidation();
-    this.Validation();
     this.ProductValidation();
+   //this.EmployeeValidation();
+    this.Validation();
+    //
     
      if(this.IsValidate===true)
         {this.CreaeWorkCenterForBlankWorkcenterSelection();
@@ -1223,8 +1269,10 @@ export class UserManagementComponent implements OnInit {
         }
     
     
-    if(this.FlagWC===true && this.FlagWH===true && this.FlagProduct===true && this.FlagEmployee===true) 
+    if(this.FlagWC===true && this.FlagWH===true && this.FlagProduct===true) 
       {
+        this.SubmitSave.Values=[];
+        this.SubmitSave.PreviousUserId=[];
         this.SubmitSave.Values.push({
           UserId: this.user_id,
           Username: this.user_name,
@@ -1243,7 +1291,7 @@ export class UserManagementComponent implements OnInit {
       }
       else {
 
-        this.MessageService.errormessage(this.translate.instant('UserMgmtCheckSelectionMsg'));
+        //this.MessageService.errormessage(this.translate.instant('UserMgmtCheckSelectionMsg'));
         return;
       }
     this.Loading = false; 
@@ -1270,7 +1318,7 @@ export class UserManagementComponent implements OnInit {
             this.Loading = false; 
             //this.MessageService.errormessage(error.message);
             if(error.error != null && error.error != undefined){
-              if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+              if(error.error == "401"){
                 this.commonService.unauthorizedToken(error);               
               }
              }
@@ -1298,7 +1346,7 @@ export class UserManagementComponent implements OnInit {
             this.Loading = false;   
             //this.MessageService.errormessage(error.message);
             if(error.error != null && error.error != undefined){
-              if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+              if(error.error == "401"){
                 this.commonService.unauthorizedToken(error);               
               }
              }
@@ -1342,7 +1390,7 @@ export class UserManagementComponent implements OnInit {
     this.SubmitSave.WorkCenter = [];
     this.SubmitSave.Values = [];
     this.SubmitSave.PreviousUserId = [];
-    this.EmpID=[]
+    this.EmpID='';
      this.Loading=true;
     this.UserManagementService.getEditDetail(userId).subscribe(    
       data => { 
@@ -1407,6 +1455,10 @@ export class UserManagementComponent implements OnInit {
           //data.CompanyList[i]["UserType"] = this.ddlUserType;
           if(Val==="")
             {
+              for(let i=0; i <employeedata.length; i++)
+              {
+                this.employeeData[i]["MergrEmpName"] = employeedata[i].empID+'    '+employeedata[i].firstName;
+              }
               this.company_data[index]["Employee"] = employeedata;
               empID = this.company_data[index].Employee.filter(function (el) {
                 return el.empID == element2.OPTM_EMPID;
@@ -1437,7 +1489,8 @@ export class UserManagementComponent implements OnInit {
           const element = this.company_data[index];
           let products = JSON.parse(JSON.stringify(this.ddlProductList));
           for (let j = 0; j < products.length; j++) {      
-            products[j]["UniqueId"] = index+''+j;       
+            products[j]["UniqueId"] = index+''+j; 
+            products[j]["SingleProductSelection"] =false;     
           }
        
           element["product"] = products;
@@ -1484,10 +1537,18 @@ export class UserManagementComponent implements OnInit {
             
               if(productUniqueID.length>0){
                 this.productSelection.push(productUniqueID[0].UniqueId);
-
+             
+                productUniqueID[0].SingleProductSelection=true;
+                var TmpProduct =this.ddlProductList;
+                let TmpProductName='';
+                 TmpProductName=productSplitArray[j]
+                  var  FilterTmpProduct= TmpProduct.filter(function (el) {
+                      return el.ProductId == TmpProductName;
+                  });
                 this.SubmitSave.Product.push({productCode: productSplitArray[j], pIndex: index, 
                   bussPart:  element2.OPTM_BPCODE,
-                  Company: this.company_data[index].dbName, EmployeeId: element2.OPTM_EMPID});
+                  Company: this.company_data[index].dbName, EmployeeId: element2.OPTM_EMPID,
+                  ISWHEnable: FilterTmpProduct[0].OPTM_ISWHSEENABLED, ISWCEnable:FilterTmpProduct[0].OPTM_ISWRKCENTERENABLED});
 //pIndex
                 //this.SubmitSave.Product = this.removeDuplicatesValue(this.SubmitSave.Product, 'productCode');
               // this.SubmitSave.Product = this.removeDuplicatesValue(this.SubmitSave.Product, 'pIndex');
@@ -1504,7 +1565,7 @@ export class UserManagementComponent implements OnInit {
           //this.MessageService.errormessage(error.message); 
           this.Loading=false;
           if(error.error != null && error.error != undefined){
-            if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            if(error.error == "401"){
               this.commonService.unauthorizedToken(error);               
             }
            }
@@ -1519,7 +1580,7 @@ export class UserManagementComponent implements OnInit {
     }, error => {
       this.Loading = false;    
       if(error.error != null && error.error != undefined){
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+        if(error.error == "401"){
           this.commonService.unauthorizedToken(error);               
         }
        }
@@ -1549,7 +1610,7 @@ export class UserManagementComponent implements OnInit {
           //this.MessageService.errormessage(error.message); 
           this.Loading=false;
           if(error.error != null && error.error != undefined){
-            if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            if(error.error == "401"){
               this.commonService.unauthorizedToken(error);               
             }
            }
@@ -1582,7 +1643,7 @@ export class UserManagementComponent implements OnInit {
         //console.log('e')
         this.Loading=false;
         if(error.error != null && error.error != undefined){
-          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          if(error.error == "401"){
             this.commonService.unauthorizedToken(error);               
           }
          }
@@ -1607,7 +1668,7 @@ export class UserManagementComponent implements OnInit {
         this.Loading = false;  
         //this.MessageService.errormessage(error.message); 
         if(error.error != null && error.error != undefined){
-          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          if(error.error == "401"){
             this.commonService.unauthorizedToken(error);               
           }
          }
@@ -1634,7 +1695,7 @@ export class UserManagementComponent implements OnInit {
         //this.MessageService.errormessage(error.message); 
         this.Loading=false;
         if(error.error != null && error.error != undefined){
-          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          if(error.error == "401"){
             this.commonService.unauthorizedToken(error);               
           }
          }

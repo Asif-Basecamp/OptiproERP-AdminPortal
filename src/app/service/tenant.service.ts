@@ -7,11 +7,11 @@ import {HttpHeaders} from '@angular/common/http';
 })
 export class TenantService {
 
-  Url :string;  
+  //Url :string;  
   header : any;
 
   constructor(private http : HttpClient) { 
-    this.Url= localStorage.getItem('arrConfigData');
+    //this.Url= localStorage.getItem('arrConfigData');
   }
 
   GetTenantList(){
@@ -19,8 +19,9 @@ export class TenantService {
       'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
     };  
     this.header = new HttpHeaders(headerSettings);
-    //let jObject:any={ ItemList: JSON.stringify([{ CompanyId: ''}]) };       
-    return this.http.get<any>(this.Url+'/LicenseAssignment/GetTenantList',{ headers: headerSettings});  
+    //let jObject:any={ ItemList: JSON.stringify([{ CompanyId: ''}]) }; 
+    let url=localStorage.getItem('arrConfigData');      
+    return this.http.get<any>(url+'/LicenseAssignment/GetTenantList',{ headers: headerSettings});  
    
   }
 
@@ -29,8 +30,9 @@ export class TenantService {
       'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
     };  
     this.header = new HttpHeaders(headerSettings);
-    let jObject:any={ ItemList: JSON.stringify([{ Tenant:Tenant}]) };       
-    return this.http.post<any>(this.Url+'/LicenseAssignment/GetTenantListByName', jObject,{ headers: headerSettings}); 
+    let jObject:any={ ItemList: JSON.stringify([{ Tenant:Tenant}]) }; 
+    let url=localStorage.getItem('arrConfigData');      
+    return this.http.post<any>(url+'/LicenseAssignment/GetTenantListByName', jObject,{ headers: headerSettings}); 
   }
 
   GetUserbyProductList(Tenant:string,Products:string){
@@ -38,8 +40,9 @@ export class TenantService {
       'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
     };  
     this.header = new HttpHeaders(headerSettings);
-    let jObject:any={ ItemList: JSON.stringify([{ TenantKey: Tenant, Products: Products}]) };       
-    return this.http.post<any>(this.Url+'/LicenseAssignment/GetUserbyProductList', jObject,{ headers: headerSettings}); 
+    let jObject:any={ ItemList: JSON.stringify([{ TenantKey: Tenant, Products: Products}]) };   
+    let url=localStorage.getItem('arrConfigData');    
+    return this.http.post<any>(url+'/LicenseAssignment/GetUserbyProductList', jObject,{ headers: headerSettings}); 
   }
  
   GetProductsList(){
@@ -47,8 +50,9 @@ export class TenantService {
       'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
     };  
     this.header = new HttpHeaders(headerSettings);
-    let jObject:any={ ItemList: JSON.stringify([{ CompanyDBId: '' }]) };       
-    return this.http.post<any>(this.Url+'/LicenseAssignment/GetProductsList', jObject,{ headers: headerSettings}); 
+    let jObject:any={ ItemList: JSON.stringify([{ CompanyDBId: '' }]) };     
+    let url=localStorage.getItem('arrConfigData');   
+    return this.http.post<any>(url+'/LicenseAssignment/GetProductsList', jObject,{ headers: headerSettings}); 
   }
 
   GetUserList(TenantKey:string){
@@ -56,8 +60,9 @@ export class TenantService {
       'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
     };  
     this.header = new HttpHeaders(headerSettings);
-    let jObject:any={ ItemList: JSON.stringify([{ TenantKey: TenantKey }]) };       
-    return this.http.post<any>(this.Url+'/LicenseAssignment/GetUserList', jObject,{ headers: headerSettings}); 
+    let jObject:any={ ItemList: JSON.stringify([{ TenantKey: TenantKey }]) };    
+    let url=localStorage.getItem('arrConfigData');     
+    return this.http.post<any>(url+'/LicenseAssignment/GetUserList', jObject,{ headers: headerSettings}); 
   }
 
   SaveTenant(ProductArr:any[],UserArr:any[]){
@@ -65,8 +70,9 @@ export class TenantService {
       'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
     };  
     this.header = new HttpHeaders(headerSettings);
-    let jObject:any={ ItemList: JSON.stringify(ProductArr), GetData: JSON.stringify(UserArr)};      
-    return this.http.post<any>(this.Url+'/LicenseAssignment/SaveTenantList', jObject,{ headers: headerSettings}); 
+    let jObject:any={ ItemList: JSON.stringify(ProductArr), GetData: JSON.stringify(UserArr)};  
+    let url=localStorage.getItem('arrConfigData');     
+    return this.http.post<any>(url+'/LicenseAssignment/SaveTenantList', jObject,{ headers: headerSettings}); 
   }
 
   DeleteTenantListByName(TenantKey:string){
@@ -74,7 +80,8 @@ export class TenantService {
       'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
     };  
     this.header = new HttpHeaders(headerSettings);
-    let jObject:any={ ItemList: JSON.stringify([{ Tenant: TenantKey }]) };       
-    return this.http.post<any>(this.Url+'/LicenseAssignment/DeleteTenantListByName', jObject,{ headers: headerSettings}); 
+    let jObject:any={ ItemList: JSON.stringify([{ Tenant: TenantKey }]) };
+    let url=localStorage.getItem('arrConfigData');            
+    return this.http.post<any>(url+'/LicenseAssignment/DeleteTenantListByName', jObject,{ headers: headerSettings}); 
   }
 }

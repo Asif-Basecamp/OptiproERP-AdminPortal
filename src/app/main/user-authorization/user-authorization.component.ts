@@ -109,7 +109,7 @@ export class UserAuthorizationComponent implements OnInit {
       error => { 
         this.Loading = false; 
         if(error.error != null && error.error != undefined){
-          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          if(error.error == "401"){
             this.commonService.unauthorizedToken(error);               
           }
         }
@@ -127,7 +127,7 @@ export class UserAuthorizationComponent implements OnInit {
       },    
       error => {  
         if(error.error != null && error.error != undefined){
-          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          if(error.error == "401"){
             this.commonService.unauthorizedToken(error);               
           }
         }
@@ -148,7 +148,7 @@ export class UserAuthorizationComponent implements OnInit {
       error => {  
         this.Loading = false;    
         if(error.error != null && error.error != undefined){
-          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          if(error.error == "401"){
             this.commonService.unauthorizedToken(error);               
           }
         }
@@ -241,7 +241,7 @@ export class UserAuthorizationComponent implements OnInit {
       },    
       error => { 
         if(error.error != null && error.error != undefined){
-          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          if(error.error == "401"){
             this.commonService.unauthorizedToken(error);               
           }
         }
@@ -285,7 +285,7 @@ export class UserAuthorizationComponent implements OnInit {
       error => {  
         this.Loading = false;    
         if(error.error != null && error.error != undefined){
-          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          if(error.error == "401"){
             this.commonService.unauthorizedToken(error);               
           }
         }
@@ -348,7 +348,7 @@ export class UserAuthorizationComponent implements OnInit {
       },    
     error => {
       if(error.error != null && error.error != undefined){
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+        if(error.error == "401"){
           this.commonService.unauthorizedToken(error);               
         }
       }
@@ -481,7 +481,7 @@ export class UserAuthorizationComponent implements OnInit {
       error => {  
         this.Loading = false;
         if(error.error != null && error.error != undefined){
-          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          if(error.error == "401"){
             this.commonService.unauthorizedToken(error);               
           }
         }
@@ -533,7 +533,7 @@ export class UserAuthorizationComponent implements OnInit {
     error => {
       this.Loading = false;  
       if(error.error != null && error.error != undefined){
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+        if(error.error == "401"){
           this.commonService.unauthorizedToken(error);               
         }
       }
@@ -636,7 +636,7 @@ getSavedUser(){
        error => {
          this.Loading = false;
          if (error.error != null && error.error != undefined) {
-           if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          if(error.error == "401"){
              this.commonService.unauthorizedToken(error);
            }
          }
@@ -701,7 +701,7 @@ getSavedUser(){
       error => { 
         this.Loading = false;     
         if(error.error != null && error.error != undefined){
-          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          if(error.error == "401"){
             this.commonService.unauthorizedToken(error);               
           }
         }
@@ -735,7 +735,7 @@ deleteRecord(){
       this.dialogOpened=false; 
       this.Loading = false;
       if(error.error != null && error.error != undefined){
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+        if(error.error == "401"){
           this.commonService.unauthorizedToken(error);               
         }
       }

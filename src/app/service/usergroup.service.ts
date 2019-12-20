@@ -8,12 +8,12 @@ import { from, Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class UsergroupService {
-  Url :string;  
+  //Url :string;  
   token : string;  
   header : any;
   
   constructor(private http : HttpClient) {
-    this.Url= localStorage.getItem('arrConfigData');
+    //this.Url= localStorage.getItem('arrConfigData');
   }
 GetUserGroupGridData(model : any)
 {
@@ -22,9 +22,9 @@ GetUserGroupGridData(model : any)
     'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
 };  
 this.header = new HttpHeaders(headerSettings);  
-var a =this.Url;  
+let url=localStorage.getItem('arrConfigData');
 //return this.http.post<any>(this.Url+'UserLogin',model,{ headers: this.header});
-return this.http.get<any>(this.Url+'/api/UserGroup/GetAllUserGroupRecords',{ headers: headerSettings});
+return this.http.get<any>(url+'/api/UserGroup/GetAllUserGroupRecords',{ headers: headerSettings});
 }
 FillDropDownList()
 { 
@@ -32,9 +32,9 @@ FillDropDownList()
     'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
 };  
 this.header = new HttpHeaders(headerSettings);  
-var a =this.Url;  
+let url=localStorage.getItem('arrConfigData');
 //return this.http.post<any>(this.Url+'UserLogin',model,{ headers: this.header});
-return this.http.get<any>(this.Url+'/api/UserGroup/GetSAPUser',{ headers: headerSettings});
+return this.http.get<any>(url+'/api/UserGroup/GetSAPUser',{ headers: headerSettings});
 }
 
 AddUser(model : any){ 
@@ -42,21 +42,21 @@ AddUser(model : any){
     'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
   };  
     this.header = new HttpHeaders(headerSettings);   
- 
+    let url=localStorage.getItem('arrConfigData');
   var jObject = { UserGroupValues: JSON.stringify([{ UserGroupId: model.UserGroupId, 
     UserGroupDesc: model.UserGroupDesc, IsAdminEnabled: model.IsAdminEnabled, SAPUser: model.mapped_user, SAPPass: model.mapped_Password }]) };
- return this.http.post<any>(this.Url+'/api/UserGroup/AddUserGroup',jObject,{ headers: this.header});
+ return this.http.post<any>(url+'/api/UserGroup/AddUserGroup',jObject,{ headers: this.header});
 }
 UpdateUser(model : any){ 
   const headerSettings: {[name: string]: string | string[]; } = {
     'Authorization': localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token')
   };  
     this.header = new HttpHeaders(headerSettings);   
- 
+    let url=localStorage.getItem('arrConfigData');
   var jObject = { UserGroupValues: JSON.stringify([{ UserGroupId: model.UserGroupId,isGrpIdEditable:model.isGrpIdEditable=true,
     UserGroupDesc: model.UserGroupDesc, IsAdminEnabled: model.IsAdminEnabled, SAPUser: model.mapped_user,
     PreviousGrpId:model.PreviousGrpId, SAPPassword: model.mapped_Password }]) };
-    return this.http.post<any>(this.Url+'/api/UserGroup/UpdateUserGroupRecord',jObject,{ headers: this.header});
+    return this.http.post<any>(url+'/api/UserGroup/UpdateUserGroupRecord',jObject,{ headers: this.header});
 }
 ChkUserGroupAssociativity(model : any)
 {
@@ -67,7 +67,8 @@ ChkUserGroupAssociativity(model : any)
     this.header = new HttpHeaders(headerSettings);    
  
   var jObject = { UserGroupValues: JSON.stringify([{ UserGroupId: model.UserGroupId }]) };
-    return this.http.post<any>(this.Url+'/api/UserGroup/ChkUserGroupAssociativity',jObject,{ headers: this.header});
+  let url=localStorage.getItem('arrConfigData');
+    return this.http.post<any>(url+'/api/UserGroup/ChkUserGroupAssociativity',jObject,{ headers: this.header});
 }
 DeleteUser(model : any){ 
   
@@ -78,7 +79,8 @@ DeleteUser(model : any){
  
   var jObject = { UserGroupValues: JSON.stringify([{ UserGroupId: model.UserGroupId, 
     UserGroupDesc: model.UserGroupDesc, IsAdminEnabled: model.IsAdminEnabled }]) };
-    return this.http.post<any>(this.Url+'/api/UserGroup/DeleteUserGroupRecordById',jObject,{ headers: this.header});
+    let url=localStorage.getItem('arrConfigData');
+    return this.http.post<any>(url+'/api/UserGroup/DeleteUserGroupRecordById',jObject,{ headers: this.header});
 }
 GetDataByUserId(UserGroupId:string)
 {
@@ -87,7 +89,8 @@ GetDataByUserId(UserGroupId:string)
     };  
     this.header = new HttpHeaders(headerSettings);   
     var jObject = { UserGroupValues: JSON.stringify([{ UserGroupId: UserGroupId }]) };
-    return this.http.post<any>(this.Url+'/api/UserGroup/SelectUserGroupRecordById',jObject,{ headers: this.header});
+    let url=localStorage.getItem('arrConfigData');
+    return this.http.post<any>(url+'/api/UserGroup/SelectUserGroupRecordById',jObject,{ headers: this.header});
 }
 CheckDuplicateUserGroup(UserGrpId:string) {
   
@@ -96,7 +99,8 @@ CheckDuplicateUserGroup(UserGrpId:string) {
   };  
     this.header = new HttpHeaders(headerSettings);   
   var jObject = { UserGroupValues: JSON.stringify([{ UserGroupId: UserGrpId.toUpperCase() }]) };
- return this.http.post<any>(this.Url+'/api/UserGroup/CheckUserGroupIdDuplicity',jObject,{ headers: this.header});
+  let url=localStorage.getItem('arrConfigData');
+ return this.http.post<any>(url+'/api/UserGroup/CheckUserGroupIdDuplicity',jObject,{ headers: this.header});
   
   }
 }
