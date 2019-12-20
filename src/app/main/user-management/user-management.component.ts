@@ -1099,13 +1099,13 @@ export class UserManagementComponent implements OnInit {
           // this.FlagProduct=true;
            if(c.Company===p.Company)
               {
-                    let TempWorkCenterElmnt="";
-                    let TempWCCompany="";
-                    for(let j=0; j<this.SubmitSave.WorkCenter.length; j++)
-                     {
-                      TempWorkCenterElmnt=TempWorkCenterElmnt+','+this.SubmitSave.WorkCenter[j].Warehouse
-                      TempWCCompany=TempWCCompany+','+this.SubmitSave.WorkCenter[j].Company
-                     }
+                    // let TempWorkCenterElmnt="";
+                    // let TempWCCompany="";
+                    // for(let j=0; j<this.SubmitSave.WorkCenter.length; j++)
+                    //  {
+                    //   TempWorkCenterElmnt=TempWorkCenterElmnt+','+this.SubmitSave.WorkCenter[j].Warehouse
+                    //   TempWCCompany=TempWCCompany+','+this.SubmitSave.WorkCenter[j].Company
+                    //  }
                       if(this.SubmitSave.Warehouse.length>0)
                           {
                             for(let i=0; i<this.SubmitSave.Warehouse.length; i++)
@@ -1120,8 +1120,16 @@ export class UserManagementComponent implements OnInit {
                                        TempEmpName=value.EmployeeId
                                        TempBussPart=value.bussPart
                                      }})
-                             
-                                if(TempWorkCenterElmnt.includes(this.SubmitSave.Warehouse[i].Id) && TempWCCompany.includes(this.SubmitSave.Warehouse[i].Company))
+                                     let TempWRName='';
+                                     let TempWCName='';
+                                     TempWRName=this.SubmitSave.Warehouse[i].Id;
+                                     TempWCName=this.SubmitSave.Warehouse[i].Company;
+                                  var filterWCData = this.SubmitSave.WorkCenter.filter(function (el) {
+                                      return el.Company === TempWCName && el.Warehouse === TempWRName;
+                                  });
+                                // if(TempWorkCenterElmnt.includes(this.SubmitSave.Warehouse[i].Id) &&
+                                //  TempWCCompany.includes(this.SubmitSave.Warehouse[i].Company))
+                                if(filterWCData.length!=0)
                                   {}
                                   else {
                                     this.SubmitSave.WorkCenter.push({
@@ -1130,7 +1138,7 @@ export class UserManagementComponent implements OnInit {
                                        bussPart: TempBussPart
                                        //TempEmpName="";
                                    })
-                                   TempWorkCenterElmnt=TempWorkCenterElmnt+','+this.SubmitSave.Warehouse[i].Id
+                                  // TempWorkCenterElmnt=TempWorkCenterElmnt+','+this.SubmitSave.Warehouse[i].Id
                                    TempEmpName='';
                                    TempBussPart='';
 
@@ -1160,7 +1168,15 @@ export class UserManagementComponent implements OnInit {
                                       {
                                           for(let i=0; i< this.SubmitSave.WorkCenter.length; i++)
                                             {
-                                              if(TempWCCompany.includes(this.SubmitSave.WorkCenter[i].Company))
+                                              let TempWRName='';
+                                                let TempWCName='';
+                                               // TempWRName=this.SubmitSave.Warehouse[i].Id;
+                                                TempWCName=this.SubmitSave.WorkCenter[i].Company;
+                                              var filterWCData = this.SubmitSave.WorkCenter.filter(function (el) {
+                                                  return el.Company === TempWCName && el.Warehouse === TempWRName;
+                                              });
+                                              // if(TempWCCompany.includes(this.SubmitSave.WorkCenter[i].Company))
+                                              if(filterWCData.lengt!=0)
                                                {}
                                                else
                                                 {
@@ -1169,7 +1185,7 @@ export class UserManagementComponent implements OnInit {
                                                      productCode: array.toString(), WorkCenterCode: "",  Warehouse: "",
                                                      bussPart: Tempbusspart
                                                     })
-                                                    TempWCCompany=TempWCCompany+','+this.SubmitSave.WorkCenter[i].Company
+                                                    //TempWCCompany=TempWCCompany+','+this.SubmitSave.WorkCenter[i].Company
                                                 }
                                             }
                                       }
@@ -1452,30 +1468,34 @@ export class UserManagementComponent implements OnInit {
         employeedata => {
           //this.Loading = false;
           this.employeeData = employeedata;
-          //data.CompanyList[i]["UserType"] = this.ddlUserType;
-          if(Val==="")
-            {
-              for(let i=0; i <employeedata.length; i++)
+          if(employeedata !=null && employeedata !='')
+             {
+              if(Val==="")
               {
-                this.employeeData[i]["MergrEmpName"] = employeedata[i].empID+'    '+employeedata[i].firstName;
-              }
-              this.company_data[index]["Employee"] = employeedata;
-              empID = this.company_data[index].Employee.filter(function (el) {
-                return el.empID == element2.OPTM_EMPID;
-            });
-              //empID = this.company_data[index].Employee.filter(i => i.empID == element2.OPTM_EMPID);
-              if(empID.length>0)
-             this.company_data[index]["selectedEmployeeType"] = empID[0];
-            }
-            else {
-              this.company_data[index]["listItems"]= employeedata;
-              BPID = this.company_data[index].listItems.filter(function (el) {
-                return el.CardCode == element2.OPTM_BPCODE;
+                for(let i=0; i <employeedata.length; i++)
+                {
+                  this.employeeData[i]["MergrEmpName"] = employeedata[i].empID+'    '+employeedata[i].firstName;
+                }
+                this.company_data[index]["Employee"] = employeedata;
+                empID = this.company_data[index].Employee.filter(function (el) {
+                  return el.empID == element2.OPTM_EMPID;
               });
-              //BPID = this.company_data[index].listItems.filter(i => i.CardCode == element2.OPTM_BPCODE);
-              if(BPID.length>0)
-             this.company_data[index]["selectedBP"] = BPID[0];
-            }
+                //empID = this.company_data[index].Employee.filter(i => i.empID == element2.OPTM_EMPID);
+                if(empID.length>0)
+               this.company_data[index]["selectedEmployeeType"] = empID[0];
+              }
+              else {
+                this.company_data[index]["listItems"]= employeedata;
+                BPID = this.company_data[index].listItems.filter(function (el) {
+                  return el.CardCode == element2.OPTM_BPCODE;
+                });
+                //BPID = this.company_data[index].listItems.filter(i => i.CardCode == element2.OPTM_BPCODE);
+                if(BPID.length>0)
+               this.company_data[index]["selectedBP"] = BPID[0];
+              }
+             }
+          //data.CompanyList[i]["UserType"] = this.ddlUserType;
+          
           
 
           this.SubmitSave.Warehouse= Warehouse;    
