@@ -221,7 +221,7 @@ export class UserManagementComponent implements OnInit {
             element["product"] = products;
             data.CompanyList[i]["UserType"] = this.ddlUserType;
             //data.CompanyList[i]["Employee"] = employeedata;
-            data.CompanyList[i]["selectedEmployeeType"] = {empID: '', firstName: "--Select--"};
+            data.CompanyList[i]["selectedEmployeeType"] = {empID: '', MergrEmpName: "--Select--"};
             data.CompanyList[i]["selectedBP"] = {CardCode: '', CardName: "--Select--"};
             data.CompanyList[i]["selectedUserType"] = { text: "Employee", value: 'E' };
             data.CompanyList[i]["selectedCompany"] = 'blank';
@@ -263,8 +263,9 @@ export class UserManagementComponent implements OnInit {
         employeedata => {
           this.Loading = false;
           this.employeeData = employeedata;
-          
-          for(let i=0; i <employeedata.length; i++)
+          if(employeedata !=null && employeedata !='')
+            {
+              for(let i=0; i <employeedata.length; i++)
               {
                 //this.employeeData[i]["MergrEmpName"] = employeedata[i].firstName+'   '+employeedata[i].empID;
                 this.employeeData[i]["MergrEmpName"] =employeedata[i].empID +'   '+employeedata[i].firstName;
@@ -272,7 +273,7 @@ export class UserManagementComponent implements OnInit {
           var findex =this.company_data.findIndex(function (x) { return x.dbName == DatabaseName });
           //data.CompanyList[i]["UserType"] = this.ddlUserType;
           this.company_data[findex]["Employee"] = employeedata;
-         
+            }
         },  error => {    
           //this.MessageService.errormessage(error.message);
           this.Loading=false;
@@ -293,17 +294,18 @@ export class UserManagementComponent implements OnInit {
      this.Loading=true
      //let DatabaseName=CPdata[index].dbName;
      let DatabaseName=this.dbName;
-
     this.UserManagementService.FillDDlEmployee(DatabaseName,e.value).subscribe(
       BPData => {
         this.Loading = false;
-        this.BPData = BPData;
-        //data.CompanyList[i]["UserType"] = this.ddlUserType;
-       // this.company_data[index]["listItems"] = BPData;
-       var findex =this.company_data.findIndex(function (x) { return x.dbName == DatabaseName });
-       //data.CompanyList[i]["UserType"] = this.ddlUserType;
-       this.company_data[findex]["listItems"] = BPData;
-       
+        if(BPData !=null && BPData !='')
+            {
+              this.BPData = BPData;
+              //data.CompanyList[i]["UserType"] = this.ddlUserType;
+             // this.company_data[index]["listItems"] = BPData;
+             var findex =this.company_data.findIndex(function (x) { return x.dbName == DatabaseName });
+             //data.CompanyList[i]["UserType"] = this.ddlUserType;
+             this.company_data[findex]["listItems"] = BPData;
+            }
       },
       error => {    
         //this.MessageService.errormessage(error.message);
@@ -333,7 +335,6 @@ export class UserManagementComponent implements OnInit {
   }
   BindProductWithCompany(ProductValue,index)
      {
-     
       const element = this.company_data[index];
       let products = JSON.parse(JSON.stringify(this.ddlProductList));
       for (let j = 0; j < products.length; j++) {      
@@ -545,14 +546,18 @@ export class UserManagementComponent implements OnInit {
    {
     if(this.SubmitSave.Product.length>0)
     {
-      
       for(let i=0; i <this.SubmitSave.Product.length; i++)
-          {
-          if(this.SubmitSave.Product[i].Company===e.dataItem.dbName)
-             {
-              e.dataItem.product[i].SingleProductSelection=true;
-             }
-          }
+      {
+      if(this.SubmitSave.Product[i].Company===e.dataItem.dbName)
+         {
+           let TempProduct=this.SubmitSave.Product[i].productCode;
+           var index = e.dataItem.product.findIndex(function (x)
+                { 
+                  return x.ProductId == TempProduct 
+                })
+          e.dataItem.product[index].SingleProductSelection=true;
+         }
+      }
     }
    }
   onExpandCompany(event){
@@ -573,7 +578,11 @@ export class UserManagementComponent implements OnInit {
       }
       //this.MessageService.errormessage(this.translate.instant('BPCodeValidationmsg')); 
     }
-    if(this.IsEditMode===false)this.CheckIfProductIsChecked(event)
+    if(this.IsEditMode===false)
+     { debugger
+       this.CheckIfProductIsChecked(event)
+      }
+   
   }
 
   onExpandWarehouse(event){
@@ -583,8 +592,7 @@ export class UserManagementComponent implements OnInit {
   }
  
   companySelect(event: any, companyData, companyIndex){
-   
-    
+
     if(this.IsEditMode)this.IsUpdateForCheck=true;
     this.FillEmployee (companyData.dbName)
     var index = this.company_data.findIndex(function (x) { return x.dbName == companyData.dbName });
@@ -592,38 +600,30 @@ export class UserManagementComponent implements OnInit {
     if(event.target.checked === true){
       if(index>0)
       this.BindProductWithCompany(companyData.selectedUserType.value,index)
-      this.company_data[index]["selectedCompany"] = companyData.dbName;
-    
-     
+      this.company_data[index]["selectedCompany"] = companyData.dbName;     
     }else{
       this.company_data[index]["selectedCompany"] = 'blank';
     }
-    
-    /*-- employee array --*/
-   // this.BPID=companyData.selectedBP.CardCode;
-    
-    /*-- company array --*/
-   // console.log(this.SubmitSave.Company);
     if(event.target.checked === true){
       this.SubmitSave.Company.push({Company: companyData.dbName, cIndex: companyIndex});            
     }else{
-      let whatIndex = null;
-      this.SubmitSave.Company.forEach((value, index) => {
-        if(value.Company == companyData.dbName){
-            whatIndex = index;
-        }
-      }); 
-      this.SubmitSave.Company.splice(whatIndex, 1);  
+      this.RemoveDataOnCompanyUncheck(companyData);
+      companyData.selectedEmployeeType.empID='';
+      companyData.selectedEmployeeType.MergrEmpName='--Select--';
+      companyData.selectedEmployeeType.firstName='--Select--';
+      companyData.selectedBP.CardCode='';
+      companyData.selectedBP.CardName=='--Select--';
+      this.dbName = '';
+      this.ShowDBName='';
+      this.ShowCompanyName='';
       
-      if(this.IsEditMode)  
-       {
-        this.RemoveDataOnCompanyUncheck(companyData);
-       }
     } 
   }
   RemoveDataOnCompanyUncheck(companyData)
     {
-   
+      this.SubmitSave.Company = this.SubmitSave.Company.filter(function (el) {
+        return el.Company != companyData.dbName;
+    });
         this.SubmitSave.WorkCenter = this.SubmitSave.WorkCenter.filter(function (el) {
           return el.Company != companyData.dbName;
       });
