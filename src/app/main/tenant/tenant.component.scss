@@ -28,8 +28,8 @@
     }
 }
 .custom-height-grid{
-    max-height: calc(100vh - 572px) !important;
-    min-height: 250px;
+    max-height: calc(100% - 50%) !important;
+    min-height: calc(50% - 10px) !important;
     @media screen and (max-width:991px){
         max-height: calc(100vh - 576px) !important;
     }

@@ -29,7 +29,8 @@
                     </div>
                 </form>
                 <div class="row" fxFlex="0 1 100%">
-                    <div class="col-md-12 col-lg-8 col-xl-6">
+                    <!-- <div class="col-md-12 col-lg-8 col-xl-6"> -->
+                    <div class="col-md-12">
                         <div fxLayout="column" fxFlex="100%" class="kendo-grid-wrapper mt-3">
                             <kendo-grid [kendoGridBinding]="TenantList" [resizable]="true" [sortable]="true" class="full-height-grid kendo-responsive-grid" [filterable]=isColumnFilter [groupable]=isColumnGroup [columnMenu]="false"
                              [selectable]="true" (selectionChange)="editTenant($event)" [pageable]="showTenantMainPage" [pageSize]="15">
@@ -81,11 +82,11 @@
             </div>
         </div>
 
-        <div class="card" fxFlex *ngIf="addTenantScreen">
-           <form #TenantForm="ngForm">
+        <div class="card" fxFlex="0 1 100%" *ngIf="addTenantScreen">
+           <form #TenantForm="ngForm" fxFlex="0 1 100%">
             <div class="card-body pb-2" fxFlex fxLayout="column">            
-                <div class="tenantScreen pb-3" fxFlex="100%" fxLayout="column">
-                    <form>
+                <div class="tenantScreen pb-3" fxFlex="0 1 100%" fxLayout="column">
+                    <form class="mb-3">
                         <div class="form-group row mb-0">
                             <div class="col-sm-12 col-md-8 col-lg-6 col-xl-5">
                                 <div class="row align-items-center">
@@ -103,7 +104,7 @@
                     </form>
         
                     <!-- Kendo Grid Start -->
-                    <div fxLayout="column" fxFlex="100%" class="kendo-grid-wrapper mt-3">    
+                    <div [ngStyle]="{'max-height': 'calc(100% - 40px)', 'height':'100%'}" class="kendo-grid-wrapper d-flex flex-column">    
                         <kendo-grid [kendoGridBinding]="ProductData" [resizable]="true" [pageable]="showViewGridPage" [pageSize]="15" [sortable]="true" class="custom-height-grid kendo-responsive-grid" [filterable]=isColumnFilterView
                             [groupable]=isColumnGroup [columnMenu]="false" [selectable]="{ checkboxOnly: true, mode: 'multiple' }">
                             
