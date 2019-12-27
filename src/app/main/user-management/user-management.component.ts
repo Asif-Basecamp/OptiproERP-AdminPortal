@@ -176,7 +176,7 @@ export class UserManagementComponent implements OnInit {
     this.productSelection = [];
     this.warehouseSelection = [];
     this.workcenterSelection = [];
-    this.accountStatus = 'true'; 
+    this.accountStatus = true; 
     this.SubmitSave.EmployeeId=[];
     this.SubmitSave.EmployeeId =[];
     this.SubmitSave.Company = [];
@@ -579,7 +579,7 @@ export class UserManagementComponent implements OnInit {
       //this.MessageService.errormessage(this.translate.instant('BPCodeValidationmsg')); 
     }
     if(this.IsEditMode===false)
-     { debugger
+     { 
        this.CheckIfProductIsChecked(event)
       }
    
@@ -1433,10 +1433,10 @@ export class UserManagementComponent implements OnInit {
                 this.tenant=data[0].OPTM_TENANTKEY;
                 this.dbClickUserType=data[0].OPTM_USERTYPE
                 if(data[0].OPTM_ACTIVE == 1){
-                  this.accountStatus = 'true';
-               }else{
-                  this.accountStatus = 'false';
-               }  
+                  this.accountStatus = true;
+                }else{
+                  this.accountStatus = false;
+                }  
               }
               this.company_data.forEach((element, index) => {
                 this.editUserData.forEach((element2, index2) => {
@@ -1457,9 +1457,7 @@ export class UserManagementComponent implements OnInit {
                    EmployeeId: element2.OPTM_EMPID,
                    bussPart:element2.OPTM_BPCODE
                 })
-      
             }
-           
             let empID="";
             let BPID="";
             let Val="";
@@ -1472,6 +1470,7 @@ export class UserManagementComponent implements OnInit {
               employeedata => {
                 //this.Loading = false;
                 this.employeeData = employeedata;
+                
                 if(employeedata !=null && employeedata !='')
                    {
                     if(Val==="")
@@ -1600,8 +1599,16 @@ export class UserManagementComponent implements OnInit {
                   }
                    /*-- get warehouse and workcenter list --*/
                 });  
-              }) 
-             
+              })
+              
+            this.dbClickUserType=this.company_data[0].selectedUserType.value
+            this.BPID=this.company_data[0].selectedBP.CardCode; 
+            this.EmpID = this.company_data[0].selectedEmployeeType.empID;
+            this.dbClickEmployeeName=this.company_data[0].selectedEmployeeType.empID;
+            this.ShowCompanyName=this.company_data[0].cmpName
+            this.dbName=this.company_data[0].dbName;
+            this.ShowDBName=this.company_data[0].dbName;
+            this.FillDDlWarehouse(this.company_data[0].dbName,0);
             }
     }, error => {
       this.Loading = false;    
