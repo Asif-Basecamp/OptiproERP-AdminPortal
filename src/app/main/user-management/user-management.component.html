@@ -31,7 +31,7 @@
                 </div>
             </form>
                 <div fxLayout="column" fxFlex="100%" class="kendo-grid-wrapper mt-3">
-
+                
                 <kendo-grid [kendoGridBinding]="userData" [resizable]="true" [sortable]="true" class="full-height-grid kendo-responsive-grid" [filterable]=isColumnFilter [groupable]=isColumnGroup 
                 [columnMenu]="false" (cellClick)="userClickHandler($event)" [pageable]="showGridUserMgmtPage" [pageSize]="15">
 
@@ -79,10 +79,10 @@
                     </kendo-grid-column>
 
                     <!-- columns for mid-size devices -->
-                    <kendo-grid-column media="(min-width: 768px)" field="OPTM_USERCODE" title="{{'User_Code'|translate}}"></kendo-grid-column>
-                    <kendo-grid-column media="(min-width: 768px)" field="OPTM_USERNAME" title="{{'User_Name'|translate}}"></kendo-grid-column>
-                    <kendo-grid-column media="(min-width: 768px)" field="OPTM_GROUPCODE" title="{{'User_Group'|translate}}"></kendo-grid-column>
-                    <kendo-grid-column media="(min-width: 768px)" field="OPTM_ACTIVE" title="{{'Active'|translate}}"></kendo-grid-column>
+                    <kendo-grid-column media="(min-width: 768px)" field="OPTM_USERCODE" class="cursor-pointer" title="{{'User_Code'|translate}}"></kendo-grid-column>
+                    <kendo-grid-column media="(min-width: 768px)" field="OPTM_USERNAME" class="cursor-pointer" title="{{'User_Name'|translate}}"></kendo-grid-column>
+                    <kendo-grid-column media="(min-width: 768px)" field="OPTM_GROUPCODE" class="cursor-pointer" title="{{'User_Group'|translate}}"></kendo-grid-column>
+                    <kendo-grid-column media="(min-width: 768px)" field="OPTM_ACTIVE" class="cursor-pointer" title="{{'Active'|translate}}"></kendo-grid-column>
                     <kendo-grid-excel fileName="User-management.xlsx"></kendo-grid-excel>
                 </kendo-grid>
             </div>
@@ -197,7 +197,7 @@
                             </div>
                         </kendo-splitter-pane>
             
-                        <kendo-splitter-pane min="450px" fxFlex="1 1 100%" fxLayout="column">
+                        <kendo-splitter-pane fxFlex="1 1 100%" fxLayout="column">
                             <div class="company-company-details pt-3 pb-2 overflow-auto flex-column h-100" fxFlex="0 1 100%">
                                 <div class="row no-gutters h-100" fxFlex="0 1 100%">    
                                     <!-- Company Kendo Grid -->            

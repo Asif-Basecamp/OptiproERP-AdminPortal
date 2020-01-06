@@ -165,9 +165,11 @@ export class UserAuthorizationComponent implements OnInit {
        mode = 'Cancel';    
 
     if(mode == 'confirm' && this.isChange){
+      //in case of Edit record and to open Confirm box if any change is done
       this.confirmationEditToggle();
     }
     else if(mode == 'Cancel'){
+      //in case of Cancel of Confirm Box of Edit & in case of Cancel of Add
       this.confirmationOpenedEdit = false;
       this.addAuthScreen = !this.addAuthScreen;
       this.oSaveUserScreenModel = [];
@@ -181,13 +183,15 @@ export class UserAuthorizationComponent implements OnInit {
       this.MenuGrid = [];
       this.LocalUserGrid = [];
     }
-    else{
+    else{  
+    //in case of Add/Edit record                             
     this.addAuthScreen = !this.addAuthScreen;
     this.oSaveUserScreenModel = [];
     this.inputRole = [];   
-
-    if(this.addAuthScreen){
+    
+    if(this.addAuthScreen){                
       if(mode != 'edit'){
+        //in case of Edit and Open Screen    
         this.UserGroup = this.user_select;
         this.defaultItem = '';
         this.LocalUserGrid = []; this.MenuGrid = [];
@@ -196,8 +200,11 @@ export class UserAuthorizationComponent implements OnInit {
       }              
       this.getUserGroup();
     }
+    else{      
+      //in case of Add/Edit and clicked on Cancel to close screen                  
+      this.isEdit = false;
+    }
    }    
-    
   }
 
   /*-- select user screen on click search icon --*/

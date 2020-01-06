@@ -215,6 +215,11 @@ export class UserRolesComponent implements OnInit {
     this.NewSelectedRowData = this.NewSelectedRowData.filter(val => val.OPTM_PROD !== dataItem.ProductId);   
   }
 
+  if(this.gridData1 != undefined && this.gridData1 != null){
+    if(this.gridData1.length > 0){
+      this.gridData1 = this.gridData1.filter(val => val.OPTM_PROD !== dataItem.ProductId);   
+    }
+  } 
   this.LocalProductGrid.splice(rowIndex,1); 
  }
 
@@ -849,6 +854,12 @@ export class UserRolesComponent implements OnInit {
     //  var oModel = oCurrentController.getView().getModel();
 
     //Check if the Source is empty or not
+    if(this.LocalProductGrid != undefined && this.LocalProductGrid != null){
+      if(this.LocalProductGrid.length == 0){
+        this.MessageService.errormessage(this.translate.instant('Select_Product'));
+        return;
+      }      
+    }
 
     //Check if TableDataBinding array is present or not
     if (this.gridData1 != null) {
@@ -907,8 +918,13 @@ export class UserRolesComponent implements OnInit {
        }     
      }
 
+    if(this.NewSelectedRowData.length == 0){        
+      this.MessageService.errormessage(this.translate.instant('NoRows'));
+      return;
+    }
+    
     this.Loading=true;
-
+  
     this.RoleService.UpdateUserRole(this.model, this.NewSelectedRowData).subscribe(
       data => {
 

@@ -1377,10 +1377,15 @@ export class UserManagementComponent implements OnInit {
     if(this.IsEditMode)
     this.IsUpdateForCheck=true;
   }
-  userClickHandler({dataItem}){
-    this.Loading = true;
+  userClickHandler({dataItem}){   
+    
+    //this.Loading = true;
     this.addscreenmode = 'edit'; 
-    this.userId = dataItem.OPTM_USERCODE;
+    this.userId = dataItem.OPTM_USERCODE;    
+    if(this.userId ==='admin'){
+      this.MessageService.errormessage(this.translate.instant('DisableUpdatePermission'));
+      return;
+    }
     this.getEditDetailById(this.userId);
     this.addUserScreen = !this.addUserScreen; 
   }
@@ -1394,6 +1399,7 @@ export class UserManagementComponent implements OnInit {
   }
 
   getEditDetailById(userId){
+
     var Warehouse=[];
     var WorkCenter=[];
     var TempCompany=[];
@@ -1498,9 +1504,6 @@ export class UserManagementComponent implements OnInit {
                     }
                    }
                 //data.CompanyList[i]["UserType"] = this.ddlUserType;
-                
-                
-      
                 this.SubmitSave.Warehouse= Warehouse;    
                 this.SubmitSave.Company.push({Company: this.company_data[index].dbName, cIndex: index}); 
                // this.SingleCompSelection[index].checked=true;
@@ -1610,6 +1613,10 @@ export class UserManagementComponent implements OnInit {
             this.ShowDBName=this.company_data[0].dbName;
             this.FillDDlWarehouse(this.company_data[0].dbName,0);
             }
+            else{
+              this.Loading = false;
+            }
+           
     }, error => {
       this.Loading = false;    
       if(error.error != null && error.error != undefined){
@@ -1619,8 +1626,7 @@ export class UserManagementComponent implements OnInit {
        }
       else{
         this.MessageService.errormessage(error.message);
-      }
-      //this.MessageService.errormessage(error.message);   
+      }   
     });    
   }
  

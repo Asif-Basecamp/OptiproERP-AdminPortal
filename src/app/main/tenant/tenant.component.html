@@ -104,6 +104,7 @@
                     </form>
         
                     <!-- Kendo Grid Start -->
+                    <div class="mb-1"><b>{{'Products'|translate}}</b></div>    
                     <div [ngStyle]="{'max-height': 'calc(100% - 40px)', 'height':'100%'}" class="kendo-grid-wrapper d-flex flex-column">    
                         <kendo-grid [kendoGridBinding]="ProductData" [resizable]="true" [pageable]="showViewGridPage" [pageSize]="15" [sortable]="true" class="custom-height-grid kendo-responsive-grid" [filterable]=isColumnFilterView
                             [groupable]=isColumnGroup [columnMenu]="false" [selectable]="{ checkboxOnly: true, mode: 'multiple' }">
@@ -207,8 +208,9 @@
                             <kendo-grid-excel fileName="Tenant.xlsx"></kendo-grid-excel>
                             <!-- xlsx template end -->
                         </kendo-grid>
-    
-                        <kendo-grid [kendoGridBinding]="UserData" [resizable]="true" [sortable]="true" class="custom-height-grid mt-3" [filterable]=isColumnFilterUser
+
+                        <div class="mt-3 mb-1"><b>{{'Users'|translate}}</b></div>    
+                        <kendo-grid [kendoGridBinding]="UserData" [resizable]="true" [sortable]="true" class="custom-height-grid" [filterable]=isColumnFilterUser
                             [groupable]=false [columnMenu]="false" [pageable]="showUserGridPage" [pageSize]="15" [selectable]="{ checkboxOnly: true, mode: 'multiple' }">
                             <!-- [pageSize]="10" 
                             [pageable]="{
